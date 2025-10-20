@@ -1,30 +1,21 @@
 @import url("./fonts.css");
 
 :root {
-  --bg: #c3e4f7;
+  --bg: #ffffff;
   --fg: #213547;
   --link: #2e404c;
 
-  color-scheme: light dark;
-  font-family: "Paperlogy", sans-serif;
+  color-scheme: light;
+  font-family: "Paperlogy", system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Arial, sans-serif;
   line-height: 1.55;
   font-weight: 400;
 
   color: var(--fg);
   background-color: var(--bg);
 
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #ffffff;
-    --fg: #213547;
-    --link: #2e404c;
-  }
 }
 
 *,
@@ -33,9 +24,7 @@
   box-sizing: border-box;
 }
 
-html,
-body,
-#root {
+html, body, #root {
   height: 100%;
 }
 
@@ -54,15 +43,13 @@ a:hover {
   text-underline-offset: 2px;
 }
 
-h1,
-h2,
-h3 {
+h1, h2, h3 {
   line-height: 1.2;
+  margin: 0;
 }
 
 code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   padding: 0.1em 0.3em;
   border-radius: 6px;
   border: 1px solid color-mix(in oklab, currentColor 18%, transparent);
