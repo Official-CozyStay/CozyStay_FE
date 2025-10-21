@@ -201,7 +201,7 @@ const LandingPage: React.FC = () => {
         <CardGrid>
           {["게스트 선호", "게스트 선호", "게스트 선호", "슈퍼호스트"].map(
             (badge, i) => (
-              <Card key={i}>
+              <Card key={`room-${i}`}>
                 <Badge>{badge}</Badge>
                 <CardImg
                   src={`https://picsum.photos/seed/room${i}/600/400`}
