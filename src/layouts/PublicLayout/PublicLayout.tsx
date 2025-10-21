@@ -8,7 +8,7 @@ import {
   Main,
   Footer,
 } from "./publicLayout.styles";
-import logo from "../../assets/images/Logo.png";
+import logo from "@/assets/images/Logo.png";
 
 export default function PublicLayout() {
   return (
