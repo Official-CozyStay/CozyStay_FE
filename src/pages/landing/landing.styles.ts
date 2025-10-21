@@ -22,7 +22,7 @@ export const HeroCard = styled.div`
   max-width: 520px;
   border-radius: ${({ theme }) => theme.radius.lg};
   padding: 24px;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadow.md};
   z-index: 2;
 `;
@@ -122,7 +122,7 @@ export const Submit = styled.button`
     ${({ theme }) => theme.colors.primary},
     ${({ theme }) => theme.colors.primaryHover}
   );
-  color: #fff;
+  background: ${({ theme }) => theme.colors.white};
   margin-top: 4px;
   transition: 0.15s ease;
 
@@ -202,7 +202,7 @@ export const Card = styled.article`
   position: relative;
   border-radius: ${({ theme }) => theme.radius.lg};
   overflow: hidden;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadow.sm};
 `;
 
@@ -212,7 +212,7 @@ export const Badge = styled.div`
   top: 10px;
   z-index: 2;
   font-size: ${({ theme }) => theme.font.size.xs};
-  background: #fff;
+  background: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.radius.full};
   padding: 6px 10px;
   box-shadow: ${({ theme }) => theme.shadow.sm};
@@ -253,7 +253,7 @@ export const LearnMoreButton = styled.button`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
   box-shadow: ${({ theme }) => theme.shadow.sm};
-  background: #fff;
+  background: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.text};
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.medium};

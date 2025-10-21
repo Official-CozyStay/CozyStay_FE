@@ -9,6 +9,7 @@ export const theme = {
     border: "#afb0afff",
     borderLight: "#eee",
     text: "#222",
+    white: "#fff",
   },
   radius,
   shadow,

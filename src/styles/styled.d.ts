@@ -10,6 +10,7 @@ declare module "styled-components" {
       border: string;
       borderLight: string;
       text: string;
+      white: string;
     };
     radius: {
       sm: string;
