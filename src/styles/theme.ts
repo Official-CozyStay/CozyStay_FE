@@ -7,6 +7,7 @@ export const theme = {
     primaryHover: "#15400e",
     primaryLight: "#e8f5e9",
     border: "#afb0afff",
+    borderLight: "#eee",
     text: "#222",
   },
   radius,

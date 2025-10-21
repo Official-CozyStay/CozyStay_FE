@@ -12,7 +12,7 @@ export const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
 `;
 
 export const Brand = styled.div`
@@ -36,7 +36,7 @@ export const Nav = styled.nav`
   gap: 20px;
   a {
     text-decoration: none;
-    color: #555;
+    color: ${({ theme }) => theme.colors.text};
     font-weight: 500;
     &:hover {
       text-decoration: underline;
@@ -49,9 +49,10 @@ export const Main = styled.main`
 `;
 
 export const Footer = styled.footer`
-  border-top: 1px solid #eee;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
   text-align: center;
-  color: #777;
+  color: ${({ theme }) => theme.colors.text};
+  opacity: 0.7;
   font-size: 13px;
   padding: 16px 0;
 `;

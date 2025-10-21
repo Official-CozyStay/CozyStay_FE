@@ -8,6 +8,7 @@ declare module "styled-components" {
       primaryHover: string;
       primaryLight: string;
       border: string;
+      borderLight: string;
       text: string;
     };
     radius: {
