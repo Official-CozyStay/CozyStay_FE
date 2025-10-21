@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import {
   Layout,
   Header,
@@ -18,8 +18,8 @@ export default function PublicLayout() {
           <Logo src={logo} alt="logo" />
         </Brand>
         <Nav>
-          <a href="#">가입하기</a>
-          <a href="#">로그인</a>
+          <Link to="/signup">가입하기</Link>
+          <Link to="/login">로그인</Link>
         </Nav>
       </Header>
 
