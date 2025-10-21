@@ -6,7 +6,7 @@ export const theme = {
     primary: "#14540d",
     primaryHover: "#15400e",
     primaryLight: "#e8f5e9",
-    border: "#cde3cd",
+    border: "#afb0afff",
     text: "#222",
   },
   radius,

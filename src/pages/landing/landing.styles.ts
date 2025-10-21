@@ -23,7 +23,6 @@ export const HeroCard = styled.div`
   border-radius: ${({ theme }) => theme.radius.lg};
   padding: 24px;
   background: #fff;
-  border: 1px solid ${({ theme }) => theme.colors.border};
   box-shadow: ${({ theme }) => theme.shadow.md};
   z-index: 2;
 `;
@@ -201,7 +200,6 @@ export const CardGrid = styled.div`
 
 export const Card = styled.article`
   position: relative;
-  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg};
   overflow: hidden;
   background: #fff;
@@ -252,7 +250,7 @@ export const LearnMoreButton = styled.button`
   display: block;
   margin: 40px 0 0 0;
   padding: 10px 22px;
-  border: 1.5px solid ${({ theme }) => theme.colors.text};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
   box-shadow: ${({ theme }) => theme.shadow.sm};
   background: #fff;
