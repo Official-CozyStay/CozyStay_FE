@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.main`
   --max: 1440px;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const Hero = styled.section`
@@ -22,7 +22,7 @@ export const HeroCard = styled.div`
   max-width: 520px;
   border-radius: ${({ theme }) => theme.radius.lg};
   padding: 24px;
-  background: ${({ theme }) => theme.colors.white};
+  background: ${({ theme }) => theme.colors.common.white};
   box-shadow: ${({ theme }) => theme.shadow.md};
   z-index: 2;
 `;
@@ -36,7 +36,7 @@ export const HeroTitle = styled.h1`
 `;
 
 export const HeroDesc = styled.p`
-  color: #666;
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.sm};
   line-height: ${({ theme }) => theme.font.lineHeight.normal};
   margin-bottom: 16px;
@@ -53,7 +53,7 @@ export const HeroImage = styled.img`
   height: 542px;
   border-radius: ${({ theme }) => theme.radius.lg};
   object-fit: cover;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
   display: block;
 `;
 
@@ -71,36 +71,36 @@ export const Field = styled.label`
 
 export const FieldLabel = styled.span`
   font-size: ${({ theme }) => theme.font.size.xs};
-  color: #666;
+  color: ${({ theme }) => theme.colors.text.secondary};
 `;
 
 export const Input = styled.input`
   height: 40px;
   padding: 0 12px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   outline: none;
   font-size: ${({ theme }) => theme.font.size.sm};
   transition: border 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}33;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.main}33;
   }
 `;
 
 export const Select = styled.select`
   height: 40px;
   padding: 0 12px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   outline: none;
   font-size: ${({ theme }) => theme.font.size.sm};
   transition: border 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}33;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.main}33;
   }
 `;
 
@@ -117,12 +117,13 @@ export const Submit = styled.button`
   cursor: pointer;
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.bold};
+
   background: linear-gradient(
     180deg,
-    ${({ theme }) => theme.colors.primary},
-    ${({ theme }) => theme.colors.primaryHover}
+    ${({ theme }) => theme.colors.primary.main},
+    ${({ theme }) => theme.colors.primary.hover}
   );
-  background: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.common.white};
   margin-top: 4px;
   transition: 0.15s ease;
 
@@ -155,7 +156,7 @@ export const FeatureIcon = styled.div`
     width: 28px;
     height: 28px;
     stroke-width: 2;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary.main};
   }
 `;
 
@@ -168,7 +169,7 @@ export const FeatureTitle = styled.h3`
 
 export const FeatureDesc = styled.p`
   margin: 0;
-  color: #666;
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.sm};
   line-height: ${({ theme }) => theme.font.lineHeight.relaxed};
 `;
@@ -187,7 +188,7 @@ export const ListTitle = styled.h2`
 `;
 
 export const ListDesc = styled.p`
-  color: #666;
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.sm};
   margin-bottom: 18px;
 `;
@@ -202,7 +203,7 @@ export const Card = styled.article`
   position: relative;
   border-radius: ${({ theme }) => theme.radius.lg};
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.white};
+  background: ${({ theme }) => theme.colors.common.white};
   box-shadow: ${({ theme }) => theme.shadow.sm};
 `;
 
@@ -212,7 +213,7 @@ export const Badge = styled.div`
   top: 10px;
   z-index: 2;
   font-size: ${({ theme }) => theme.font.size.xs};
-  background: ${({ theme }) => theme.colors.white};
+  background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.full};
   padding: 6px 10px;
   box-shadow: ${({ theme }) => theme.shadow.sm};
@@ -236,7 +237,7 @@ export const CardTitle = styled.h4`
 `;
 
 export const CardMeta = styled.p`
-  color: #666;
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.sm};
   margin: 0 0 4px;
 `;
@@ -250,11 +251,11 @@ export const LearnMoreButton = styled.button`
   display: block;
   margin: 40px 0 0 0;
   padding: 10px 22px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   box-shadow: ${({ theme }) => theme.shadow.sm};
-  background: ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.common.white};
+  color: ${({ theme }) => theme.colors.text.primary};
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.medium};
   cursor: pointer;
@@ -267,15 +268,6 @@ export const LearnMoreButton = styled.button`
   &:active {
     background: #eaeaea;
   }
-`;
-
-export const Footer = styled.footer`
-  max-width: var(--max);
-  margin: 48px auto 24px;
-  padding: 16px 16px 0;
-  color: #777;
-  font-size: ${({ theme }) => theme.font.size.sm};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 export const Faq = styled.section`
@@ -299,7 +291,7 @@ export const FaqHeading = styled.h2`
 `;
 
 export const FaqItems = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border.primary};
 `;
 
 export const FaqQuestion = styled.button`
@@ -315,11 +307,10 @@ export const FaqQuestion = styled.button`
   font-size: ${({ theme }) => theme.font.size.lg};
   font-weight: ${({ theme }) => theme.font.weight.medium};
   line-height: ${({ theme }) => theme.font.lineHeight.normal};
-  color: ${({ theme }) => theme.colors.text};
-  transition: color 0.2s ease;
+  color: ${({ theme }) => theme.colors.text.primary};
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary.main};
   }
 
   svg {
@@ -327,14 +318,10 @@ export const FaqQuestion = styled.button`
     height: 22px;
     transition: transform 0.25s ease;
   }
-
-  &.open svg {
-    transform: rotate(180deg);
-  }
 `;
 
 export const FaqItem = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border.primary};
   padding: 0;
 
   &:last-child {
@@ -348,7 +335,7 @@ export const FaqItem = styled.div`
 
 export const FaqAnswer = styled.div`
   padding: 0 4px 24px 4px;
-  color: #555;
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.md};
   line-height: ${({ theme }) => theme.font.lineHeight.relaxed};
 `;

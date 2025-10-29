@@ -4,13 +4,26 @@ import "styled-components";
 declare module "styled-components" {
   export interface DefaultTheme {
     colors: {
-      primary: string;
-      primaryHover: string;
-      primaryLight: string;
-      border: string;
-      borderLight: string;
-      text: string;
-      white: string;
+      primary: {
+        main: string;
+        hover: string;
+        light: string;
+      };
+      text: {
+        primary: string;
+        secondary: string;
+      };
+      border: {
+        primary: string;
+        light: string;
+      };
+      background: {
+        default: string;
+      };
+      common: {
+        white: string;
+        black: string;
+      };
     };
     radius: {
       sm: string;

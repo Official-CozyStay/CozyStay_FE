@@ -3,19 +3,21 @@ import {
   Layout,
   Header,
   Brand,
+  BrandTitle,
   Logo,
   Nav,
   Main,
   Footer,
 } from "./publicLayout.styles";
-import logo from "@/assets/images/Logo.png";
+import logo from "@/assets/images/logo.svg";
 
 export default function PublicLayout() {
   return (
     <Layout>
       <Header>
-        <Brand>
-          <Logo src={logo} alt="logo" />
+        <Brand to="/">
+          <Logo src={logo} alt="CozyStay Logo" />
+          <BrandTitle>CozyStay</BrandTitle>
         </Brand>
         <Nav>
           <Link to="/signup">가입하기</Link>
@@ -28,7 +30,7 @@ export default function PublicLayout() {
       </Main>
 
       <Footer>
-        © {new Date().getFullYear()} TeamName — Inspired by Airbnb
+        © {new Date().getFullYear()} CozyStay — Inspired by Airbnb
       </Footer>
     </Layout>
   );

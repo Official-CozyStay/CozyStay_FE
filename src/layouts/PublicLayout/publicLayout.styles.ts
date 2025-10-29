@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Layout = styled.div`
   display: flex;
@@ -12,23 +13,26 @@ export const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
 `;
 
-export const Brand = styled.div`
+export const Brand = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 10px;
+  text-decoration: none;
 `;
 
 export const Logo = styled.img`
   width: 105px;
-  height: 60px;
+  height: 70px;
+  margin-right: -18px;
 `;
 
 export const BrandTitle = styled.h1`
-  font-size: 18px;
-  font-weight: 700;
+  font-family: "Pacifico";
+  font-size: 26px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.primary.main};
 `;
 
 export const Nav = styled.nav`
@@ -36,7 +40,7 @@ export const Nav = styled.nav`
   gap: 20px;
   a {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.primary.main};
     font-weight: 500;
     &:hover {
       text-decoration: underline;
@@ -49,9 +53,9 @@ export const Main = styled.main`
 `;
 
 export const Footer = styled.footer`
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  border-top: 1px solid ${({ theme }) => theme.colors.border.primary};
   text-align: center;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.primary.main};
   opacity: 0.7;
   font-size: 13px;
   padding: 16px 0;
