@@ -1,0 +1,30 @@
+export type AccommodationType = 'entire_place' | 'private_room' | 'shared_room';
+
+export type AccommodationDetailDTO = {
+    accommodationId: number;
+    hostId: number;
+    title: string;
+    description: string;
+    accommodationType: AccommodationType;
+    address: string;
+    city: string;
+    state?: string | null;
+    country: string;
+    postalCode?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    maxGuests: number;
+    bedrooms: number;
+    beds: number;
+    bathrooms: number;
+    pricePerNight: number;
+    cleaningFee: number;
+    serviceFeePercentage: number;
+    instantBooking: boolean;
+    checkInTime?: string | null;
+    checkOutTime?: string | null;
+    images: {imageId: number; imageUrl: string; isPrimary: boolean; displayOrder: number;}[];
+    amenities: {amenityId: number; name: string; icon?: string | null; category?: string | null;}[];
+    reviewSummary: {average: number; count: number;};
+    host: {userId: number; nickName: string; profileImageUrl?: string | null;};
+};
