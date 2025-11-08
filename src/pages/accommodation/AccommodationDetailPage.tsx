@@ -1,233 +1,113 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAccommodationStore } from "../../store/accommodationStore.ts";
-import styled from "styled-components";
+import * as S from "./accommodationDetail.styles.ts";
+import BookingDatePicker from "../../components/accommodation/BookingDatePicker.tsx";
 
 export default function AccommodationDetailPage(){
     const { id = "1" } = useParams();
-    const { detail, loading, error, load} = useAccommodationStore();
 
-    // 페이지 진입/ID 변경 시 데이터 로드
-    useEffect(() => { load(id); }, [id, load]);
+    // 필요 상태/액션 가져오기
+    const { detail, loading, error, load,
+            checkIn, checkOut, guests,
+            setDates, setGuests,} = useAccommodationStore();
 
-    if(loading) return <div style={{ padding : 20 }}>불러오는 중...</div>;
-    if(error) return <div style={{ padding: 20 }}> 에러 : {error}</div>;
-    if(!detail) return <div style={{padding: 20}}>데이터 없음</div>;
+    useEffect(()=>{
+        load(id);
+    }, [id, load]);
 
-    // 갤러리용 데이터 가공
+    if(loading) return <S.Container> 불러오는 중...</S.Container>;
+    if(error) return <S.Container>에러 : {error}</S.Container>;
+    if(!detail) return <S.Container> 데이터 없음 </S.Container>;
+
     const primary =
-        detail.images.find(i => i.isPrimary)?.imageUrl ??
+        detail.images.find((i) => i.isPrimary)?.imageUrl ??
         detail.images[0]?.imageUrl;
     const thumbs = detail.images
-        .filter(i=>!i.isPrimary)
-        .slice(0,4)
-        .map(i => i.imageUrl);
+        .filter((i) => !i.isPrimary)
+        .slice(0, 4)
+        .map((i) => i.imageUrl);
 
     return (
-        <Container>
-            <Header>
-                <Title>{detail.title}</Title>
-                <SubMeta>
+        <S.Container>
+            <S.Header>
+                <S.Title>{detail.title}</S.Title>
+                <S.SubMeta>
                     <span>★ {detail.reviewSummary.average.toFixed(2)}</span>
-                    <Dot>·</Dot>
+                    <S.Dot>.</S.Dot>
                     <a href="#reviews">후기 {detail.reviewSummary.count}개</a>
-                    <Dot>·</Dot>
+                    <S.Dot>.</S.Dot>
                     <span>
-            {detail.city}, {detail.country}
-          </span>
-                </SubMeta>
-            </Header>
+                        {detail.city}, {detail.country}
+                    </span>
+                </S.SubMeta>
+            </S.Header>
 
-            {/* 이미지 갤러리 */}
-            <Gallery>
-                <MainImage>
-                    {primary && <Img src={primary} alt="대표 이미지" />}
-                </MainImage>
+            {/*  이미지 갤러리  */}
+            <S.Gallery>
+                <S.MainImage>{primary && <S.Img src={primary} alt="대표 이미지"></S.Img>}</S.MainImage>
                 {thumbs.map((src, idx) => (
-                    <Thumb key={idx}>
-                        <Img src={src} alt={`이미지 ${idx + 1}`} />
-                    </Thumb>
+                    <S.Thumb key={idx}>
+                        <S.Img src={src} alt={`이미지 ${idx + 1}`}/>
+                    </S.Thumb>
                 ))}
-            </Gallery>
+            </S.Gallery>
 
-            <Main>
-                <Left>
-                    {/* 숙소 기본 정보 */}
-                    <Section>
-                        <H2>호스트: {detail.host.nickName}</H2>
-                        <Meta>
-                            최대 {detail.maxGuests}명 · 침실 {detail.bedrooms}개 · 침대{" "}
-                            {detail.beds}개 · 욕실 {detail.bathrooms}개
-                        </Meta>
-                        <P>{detail.description}</P>
-                    </Section>
+            <S.Main>
+                <S.Left>
+                {/* 숙소 정보 */}
+                    <S.Section>
+                        <S.H2>호스트 : {detail.host.nickName}</S.H2>
+                        <S.Meta>
+                            최대 {detail.maxGuests}명 · 침실 {detail.bedrooms}개 · 침대 {detail.beds}개 · 욕실 {detail.bathrooms}개
+                        </S.Meta>
+                        <S.P>{detail.description}</S.P>
+                    </S.Section>
 
-                    {/* 편의시설 */}
-                    <Section>
-                        <H3>편의시설</H3>
-                        <AmenityList>
+                {/* 편의시설 */}
+                    <S.Section>
+                        <S.H3>편의시설</S.H3>
+                        <S.AmenityList>
                             {detail.amenities.map((a) => (
                                 <li key={a.amenityId}>{a.name}</li>
                             ))}
-                        </AmenityList>
-                    </Section>
+                        </S.AmenityList>
+                    </S.Section>
+                </S.Left>
+            {/* 예약 카드 자리 */}
+                <S.Right>
+                    <S.StickyCard>
+                        <S.Price>
+                            ₩{detail.pricePerNight.toLocaleString()} <span>/박</span>
+                        </S.Price>
 
-                    {/* TODO: 리뷰 섹션, 지도 섹션 등 추가 */}
-                </Left>
+                    {/* 임시 입력 ( 나중에 컴포넌트 분리 예정) */}
+                    {/*  달력 입력 + 인원 입력  */}
+                        <div style={{ display: "flex, gap: 8, marginTop: 12"}}>
+                            {/* 달력 */}
+                            <div style={{marginTop : 12}}>
+                                <BookingDatePicker
+                                    checkIn={checkIn}
+                                    checkOut={checkOut}
+                                    onChange={(ci, co) => setDates(ci, co)}
+                                    />
+                            </div>
+                            <input
+                                type="number"
+                                min={1}
+                                value={guests}
+                                onChange={(e) => setGuests(Number(e.target.value))}
+                                style={{ width: 80 }}
+                            />
+                        </div>
 
-                <Right>
-                    {/* TODO: 이후 가격/예약 카드 컴포넌트 자리 */}
-                    <StickyCard>
-                        <Price>
-                            ₩{detail.pricePerNight.toLocaleString()}{" "}
-                            <span>/박</span>
-                        </Price>
-                        <Small>가격 카드/예약 위젯은 다음 단계에서 연결</Small>
-                    </StickyCard>
-                </Right>
-            </Main>
-        </Container>
-    );
+                        <S.Small>총액 계산/예약 버튼은 커밍쑨</S.Small>
+                    </S.StickyCard>
+                </S.Right>
+            </S.Main>
+        </S.Container>
+
+
+    )
+
 }
-
-/* ========== styled-components ========== */
-
-const Container = styled.div`
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 24px 20px;
-  color: #222;
-`;
-
-const Header = styled.header`
-  margin-bottom: 14px;
-`;
-
-const Title = styled.h1`
-  margin: 0 0 6px;
-  font-size: 28px;
-  line-height: 1.25;
-`;
-
-const SubMeta = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  color: #6b6b6b;
-
-  a {
-    color: inherit;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-`;
-
-const Dot = styled.span`
-  color: #aaa;
-`;
-
-const Gallery = styled.section`
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: 220px 220px;
-  gap: 6px;
-  margin-bottom: 24px;
-
-  @media (min-width: 900px) {
-    grid-template-rows: 260px 260px;
-  }
-`;
-
-const MainImage = styled.div`
-  grid-row: 1 / 3;
-  overflow: hidden;
-  border-radius: 12px;
-`;
-
-const Thumb = styled.div`
-  overflow: hidden;
-  border-radius: 12px;
-`;
-
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-`;
-
-const Main = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 32px;
-  align-items: start;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const Left = styled.div``;
-
-const Right = styled.aside``;
-
-const Section = styled.section`
-  border-top: 1px solid #eee;
-  padding: 18px 0;
-`;
-
-const H2 = styled.h2`
-  margin: 0 0 8px;
-  font-size: 22px;
-`;
-
-const H3 = styled.h3`
-  margin: 0 0 10px;
-  font-size: 18px;
-`;
-
-const Meta = styled.div`
-  color: #6b6b6b;
-  margin-bottom: 12px;
-`;
-
-const P = styled.p`
-  white-space: pre-wrap;
-  margin: 0;
-`;
-
-const AmenityList = styled.ul`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`;
-
-const StickyCard = styled.div`
-  position: sticky;
-  top: 24px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-`;
-
-const Price = styled.div`
-  font-size: 20px;
-  font-weight: 700;
-
-  span {
-    font-weight: 400;
-    font-size: 14px;
-    color: #6b6b6b;
-  }
-`;
-
-const Small = styled.div`
-  color: #6b6b6b;
-  font-size: 12px;
-  margin-top: 8px;
-`;
-
