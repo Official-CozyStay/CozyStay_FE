@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAccommodationStore } from "../../store/accommodationStore.ts";
 import * as S from "./accommodationDetail.styles.ts";
@@ -6,6 +6,20 @@ import BookingDatePicker from "../../components/accommodation/BookingDatePicker.
 
 export default function AccommodationDetailPage(){
     const { id = "1" } = useParams();
+
+    // 이미지 확대 부분 => 어떤 이미지 클릭했는지 + 모달 열고/닫기
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
+
+    const openLightbox = (index: number) =>{
+        setActiveImageIndex(index);
+        setLightboxOpen(true);
+    };
+
+    const closeLightbox = () => {
+        setLightboxOpen(false);
+        setActiveImageIndex(null);
+    }
 
     // 필요 상태/액션 가져오기
     const { detail, loading, error, load,
@@ -20,13 +34,38 @@ export default function AccommodationDetailPage(){
     if(error) return <S.Container>에러 : {error}</S.Container>;
     if(!detail) return <S.Container> 데이터 없음 </S.Container>;
 
-    const primary =
-        detail.images.find((i) => i.isPrimary)?.imageUrl ??
-        detail.images[0]?.imageUrl;
-    const thumbs = detail.images
-        .filter((i) => !i.isPrimary)
-        .slice(0, 4)
-        .map((i) => i.imageUrl);
+    // 이미지 객체 + index
+    const images = detail.images;
+    const totalImages = images.length;
+
+    // 대표 이미지 인덱스 찾기 ( 없으면 0번)
+    const primaryIndexRaw = images.findIndex((i) => i.isPrimary);
+    const primaryIndex = primaryIndexRaw === -1 ? 0 : primaryIndexRaw;
+    const primary = images[primaryIndex];
+
+    // 썸네일용 : index를 같이 들고 있음
+    const thumbs = images
+        .map((img, idx) => ({...img, idx}))
+        .filter((item) => item.idx !== primaryIndex)
+        .slice(0, 4);
+
+    const showPrevImage = (e : React.MouseEvent) => {
+        e.stopPropagation();
+        setActiveImageIndex((current) => {
+            if(current === null) return 0;
+            return current === 0 ? totalImages - 1 : current - 1;
+        });
+    };
+
+    const showNextImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setActiveImageIndex((current) => {
+            if(current === null) return 0;
+            return current === totalImages -1 ? 0 : current + 1;
+        });
+    };
+
+
 
     return (
         <S.Container>
@@ -45,10 +84,25 @@ export default function AccommodationDetailPage(){
 
             {/*  이미지 갤러리  */}
             <S.Gallery>
-                <S.MainImage>{primary && <S.Img src={primary} alt="대표 이미지"></S.Img>}</S.MainImage>
-                {thumbs.map((src, idx) => (
-                    <S.Thumb key={idx}>
-                        <S.Img src={src} alt={`이미지 ${idx + 1}`}/>
+                <S.MainImage>
+                    {primary && (
+                        <S.Img
+                            src = {primary.imageUrl}
+                            alt = "대표 이미지"
+                            onClick = {() => openLightbox(primaryIndex)}
+                            style={{ cursor : "pointer" }}
+                        />
+                    )}
+                </S.MainImage>
+
+                {thumbs.map((item) => (
+                    <S.Thumb key={item.imageId}>
+                        <S.Img
+                            src = {item.imageUrl}
+                            alt = {`이미지 ${item.idx + 1}`}
+                            onClick={() => openLightbox(item.idx)}
+                            style={{ cursor : "pointer" }}
+                        />
                     </S.Thumb>
                 ))}
             </S.Gallery>
@@ -105,6 +159,22 @@ export default function AccommodationDetailPage(){
                     </S.StickyCard>
                 </S.Right>
             </S.Main>
+
+        {/*  확대 이미지 모달  */}
+            {lightboxOpen && activeImageIndex !== null && (
+                <S.LightboxOverlay onClick={closeLightbox}>
+                    <S.LightboxInner onClick={(e) => e.stopPropagation()}>
+                        <S.LightboxClose onClick={closeLightbox}>x</S.LightboxClose>
+                        {/* 좌우 화살표 */}
+                        <S.LightboxPrev onClick={showPrevImage}> ‹ </S.LightboxPrev>
+                        <S.LightboxNext onClick={showNextImage}> › </S.LightboxNext>
+                        <S.LightboxImage
+                            src={detail.images[activeImageIndex].imageUrl}
+                            alt={detail.title}
+                        />
+                    </S.LightboxInner>
+                </S.LightboxOverlay>
+            )}
         </S.Container>
 
 

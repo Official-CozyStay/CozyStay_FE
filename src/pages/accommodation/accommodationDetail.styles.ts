@@ -137,3 +137,76 @@ export const Small = styled.div`
   font-size: 12px;
   margin-top: 8px;
 `;
+
+export const LightboxOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const LightboxInner = styled.div`
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const LightboxImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+`;
+
+export const LightboxClose = styled.button`
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+`;
+
+const arrowBase = `
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+`;
+
+export const LightboxPrev = styled.button`
+  ${arrowBase};
+  left: 12px;
+`;
+
+export const LightboxNext = styled.button`
+  ${arrowBase};
+  right: 12px;
+`;
