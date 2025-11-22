@@ -2,6 +2,7 @@
 
 import * as S from "../accommodationDetail.styles";
 import type { AccommodationImageDTO } from "../../../api/types";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 type Props = {
     isOpen: boolean;
@@ -27,9 +28,9 @@ export default function LightboxModal({
     return (
         <S.LightboxOverlay onClick={onClose}>
             <S.LightboxInner onClick={(e) => e.stopPropagation()}>
-                <S.LightboxClose onClick={onClose}>x</S.LightboxClose>
-                <S.LightboxPrev onClick={onPrev}>‹</S.LightboxPrev>
-                <S.LightboxNext onClick={onNext}>›</S.LightboxNext>
+                <S.LightboxClose onClick={onClose}><X /></S.LightboxClose>
+                <S.LightboxPrev onClick={onPrev}><ChevronLeft /></S.LightboxPrev>
+                <S.LightboxNext onClick={onNext}><ChevronRight /></S.LightboxNext>
                 <S.LightboxImage src={images[activeIndex].imageUrl} alt={title} />
             </S.LightboxInner>
         </S.LightboxOverlay>
