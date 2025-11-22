@@ -1,14 +1,14 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 24px 20px;
-    color: #222;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const Header = styled.header`
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 `;
 
 export const Title = styled.h1`
@@ -21,7 +21,7 @@ export const SubMeta = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  color: #6b6b6b;
+  color: ${({ theme }) => theme.colors.text.secondary};
 
   a {
     color: inherit;
@@ -49,12 +49,12 @@ export const Gallery = styled.section`
 export const MainImage = styled.div`
   grid-row: 1 / 3;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.radius.md};
 `;
 
 export const Thumb = styled.div`
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.radius.md};
 `;
 
 export const Img = styled.img`
@@ -79,7 +79,7 @@ export const Left = styled.div``;
 export const Right = styled.aside``;
 
 export const Section = styled.section`
-  border-top: 1px solid #eee;
+  border-top: 1px solid ${({ theme }) => theme.colors.border.light};
   padding: 18px 0;
 `;
 
@@ -115,10 +115,10 @@ export const AmenityList = styled.ul`
 export const StickyCard = styled.div`
   position: sticky;
   top: 24px;
-  border: 1px solid #eee;
-  border-radius: 12px;
+  border: 1px solid ${({ theme }) => theme.colors.border.light};
+  border-radius: ${({ theme }) => theme.radius.md};
   padding: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  box-shadow: ${({ theme }) => theme.shadow.md};
 `;
 
 export const Price = styled.div`
@@ -136,6 +136,83 @@ export const Small = styled.div`
   color: #6b6b6b;
   font-size: 12px;
   margin-top: 8px;
+`;
+
+export const FormSection = styled.div`
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const Label = styled.div`
+  font-size: 12px;
+  color: #666;
+`;
+
+export const NumberInput = styled.input`
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+
+  &:focus {
+    border-color: #222;
+  }
+`;
+
+export const HelperText = styled.div`
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+`;
+
+export const Summary = styled.div`
+  margin-top: 16px;
+  font-size: 14px;
+`;
+
+export const SummaryRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+`;
+
+export const SummaryTotal = styled(SummaryRow)`
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  font-weight: 700;
+`;
+
+export const ErrorText = styled.div<{ $compact?: boolean }>`
+  margin-top: ${({ $compact }) => ($compact ? '4px' : '8px')};
+  font-size: 12px;
+  color: #c03434;
+`;
+
+export const ReserveButton = styled.button`
+  margin-top: 12px;
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  background-color: #ff385c;
+  color: #fff;
+  cursor: pointer;
+
+  &:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
 `;
 
 export const LightboxOverlay = styled.div`
