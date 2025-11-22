@@ -3,18 +3,18 @@ import { fetchAccommodationDetail } from "../api/accommodation.ts";
 import type { AccommodationDetailDTO } from "../api/types";
 
 type State = {
-    detail?: AccommodationDetailDTO;
-    loading?: boolean;
-    error?: string;
+    detail: AccommodationDetailDTO | undefined;
+    loading: boolean;
+    error: string | undefined;
 
-    checkIn?: string; // 'YYYY-MM-DD'
-    checkOut?: string; //'YYYY-MM-DD'
+    checkIn: string | null; // 'YYYY-MM-DD'
+    checkOut: string | null; //'YYYY-MM-DD'
     guests: number;
 };
 
 type Actions = {
     load: (id: string) => Promise<void>;
-    setDates: (checkIn?: string, checkOut?: string) => void;
+    setDates: (checkIn: string | null, checkOut: string | null) => void;
     setGuests: (n: number) => void;
     reset: () => void;
 };
@@ -24,8 +24,8 @@ export const useAccommodationStore = create<State & Actions>((set)=>({
     loading: false, // 정보를 가져오는 중인지 표시
     error: undefined, // 가져오다가 문제가 생겼는지 표시
 
-    checkIn: undefined,
-    checkOut: undefined,
+    checkIn: null,
+    checkOut: null,
     guests: 1,
 
     // 서버(목업)에서 상세 불러오기
@@ -52,8 +52,8 @@ export const useAccommodationStore = create<State & Actions>((set)=>({
             detail: undefined,
             loading: false,
             error: undefined,
-            checkIn: undefined,
-            checkOut: undefined,
+            checkIn: null,
+            checkOut: null,
             guests: 1,
         }),
 }));

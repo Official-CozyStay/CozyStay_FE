@@ -104,8 +104,8 @@ export default function AccommodationDetailPage() {
 
           <BookingCard
               detail={detail}
-              checkIn={checkIn ?? null}
-              checkOut={checkOut ?? null}
+              checkIn={checkIn}
+              checkOut={checkOut}
               guests={guests}
               setDates={(ci, co) => setDates(ci ?? undefined, co ?? undefined)}
               setGuests={setGuests}
