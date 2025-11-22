@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Layout = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ export const Logo = styled.img`
 `;
 
 export const BrandTitle = styled.h1`
-  font-family: "Pacifico";
+  font-family: 'Pacifico';
   font-size: 26px;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.primary.main};
@@ -38,10 +38,14 @@ export const BrandTitle = styled.h1`
 export const Nav = styled.nav`
   display: flex;
   gap: 20px;
-  a {
+  a,
+  button {
     text-decoration: none;
     color: ${({ theme }) => theme.colors.primary.main};
     font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
     &:hover {
       text-decoration: underline;
     }
@@ -55,7 +59,7 @@ export const Main = styled.main`
 export const Footer = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.colors.border.primary};
   text-align: center;
-  color: ${({ theme }) => theme.colors.primary.main};
+  color: ${({ theme }) => theme.colors.text.primary};
   opacity: 0.7;
   font-size: 13px;
   padding: 16px 0;

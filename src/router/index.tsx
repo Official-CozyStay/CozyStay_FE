@@ -1,10 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
-import PublicLayout from "../layouts/PublicLayout/PublicLayout";
-import LandingPage from "../pages/landing/LandingPage";
+import { createBrowserRouter } from 'react-router-dom';
+import PublicLayout from '../layouts/PublicLayout/PublicLayout';
+import LandingPage from '../pages/landing/LandingPage';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <PublicLayout />,
     children: [{ index: true, element: <LandingPage /> }],
   },

@@ -1,4 +1,5 @@
-import { Outlet, Link } from "react-router-dom";
+import { useState } from 'react';
+import { Outlet, Link } from 'react-router-dom';
 import {
   Layout,
   Header,
@@ -8,10 +9,13 @@ import {
   Nav,
   Main,
   Footer,
-} from "./publicLayout.styles";
-import logo from "@/assets/images/logo.svg";
+} from './publicLayout.styles';
+import logo from '@/assets/images/logo.svg';
+import LoginModal from '@/pages/auth/LoginPage';
 
 export default function PublicLayout() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
   return (
     <Layout>
       <Header>
@@ -21,7 +25,9 @@ export default function PublicLayout() {
         </Brand>
         <Nav>
           <Link to="/signup">가입하기</Link>
-          <Link to="/login">로그인</Link>
+          <button type="button" onClick={() => setIsLoginOpen(true)}>
+            로그인
+          </button>
         </Nav>
       </Header>
 
@@ -32,6 +38,8 @@ export default function PublicLayout() {
       <Footer>
         © {new Date().getFullYear()} CozyStay — Inspired by Airbnb
       </Footer>
+
+      <LoginModal open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </Layout>
   );
 }
