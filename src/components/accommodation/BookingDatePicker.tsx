@@ -5,6 +5,8 @@ import { ko } from "date-fns/locale";
 import { DayPicker, type DateRange, type Matcher } from "react-day-picker";
 import { format, parse, addDays, startOfDay } from "date-fns";
 
+import * as S from "./BookingDatePicker.styles";
+
 type Props = {
     checkIn?: string;
     checkOut?: string;
@@ -14,7 +16,7 @@ type Props = {
 
 const FMT = "yyyy-MM-dd";
 const toDate = (s?: string) => (s ? parse(s, FMT, new Date()) : undefined);
-const toStr  = (d?: Date)   => (d ? format(d, FMT) : undefined);
+const toStr = (d?: Date) => (d ? format(d, FMT) : undefined);
 
 export default function BookingDatePicker({
                                               checkIn,
@@ -31,13 +33,13 @@ export default function BookingDatePicker({
 
     const [range, setRange] = useState<DateRange | undefined>(() => {
         const from = toDate(checkIn);
-        const to   = toDate(checkOut);
+        const to = toDate(checkOut);
         return from || to ? { from, to } : undefined;
     });
 
     useEffect(() => {
         const from = toDate(checkIn);
-        const to   = toDate(checkOut);
+        const to = toDate(checkOut);
         setRange(from || to ? { from, to } : undefined);
     }, [checkIn, checkOut]);
 
@@ -47,11 +49,11 @@ export default function BookingDatePicker({
 
         function updatePosition() {
             if (buttonRef.current) {
-                const rect = buttonRef.current.getBoundingClientRect();
-                setButtonRect(rect);
+                setButtonRect(buttonRef.current.getBoundingClientRect());
             }
         }
 
+        updatePosition();
         window.addEventListener("scroll", updatePosition, true);
         window.addEventListener("resize", updatePosition);
 
@@ -66,16 +68,11 @@ export default function BookingDatePicker({
         if (!open) return;
 
         function handleEscape(e: KeyboardEvent) {
-            if (e.key === "Escape") {
-                setOpen(false);
-            }
+            if (e.key === "Escape") setOpen(false);
         }
 
         document.addEventListener("keydown", handleEscape);
-
-        return () => {
-            document.removeEventListener("keydown", handleEscape);
-        };
+        return () => document.removeEventListener("keydown", handleEscape);
     }, [open]);
 
     const label =
@@ -89,28 +86,20 @@ export default function BookingDatePicker({
         setRange(newRange);
         onChange(toStr(newRange?.from), toStr(newRange?.to));
 
-        // 양쪽 날짜가 모두 선택되고, 서로 다른 날짜일 때만 닫기
         if (newRange?.from && newRange?.to) {
             const isSameDay = newRange.from.getTime() === newRange.to.getTime();
-
-            if (!isSameDay) {
-                setTimeout(() => {
-                    setOpen(false);
-                }, 200);
-            }
+            if (!isSameDay) setTimeout(() => setOpen(false), 200);
         }
     };
 
     const toggleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (!open) {
-            // [추가] 달력을 열 때 선택 초기화
             setRange(undefined);
             onChange(undefined, undefined);
         }
 
-        const rect = e.currentTarget.getBoundingClientRect();
-        setButtonRect(rect);
-        setOpen(v => !v);
+        setButtonRect(e.currentTarget.getBoundingClientRect());
+        setOpen((v) => !v);
     };
 
     const isPickingEnd = !!(range?.from && !range?.to);
@@ -126,61 +115,40 @@ export default function BookingDatePicker({
         return base;
     }, [isPickingEnd, range?.from, minStart]);
 
-    // 팝오버 컴포넌트
-    const popover = open && buttonRect && createPortal(
-        <div
-            style={{
-                position: "absolute",
-                top: buttonRect.top + buttonRect.height + 8 + window.scrollY,
-                left: buttonRect.left + window.scrollX,
-                zIndex: 99999,
-                background: "#fff",
-                border: "1px solid #eee",
-                borderRadius: 12,
-                boxShadow: "0 8px 24px rgba(0,0,0,.12)",
-                padding: 8,
-                minWidth: 660,
-            }}
-        >
-            <DayPicker
-                mode="range"
-                numberOfMonths={2}
-                selected={range}
-                onSelect={handleSelect}
-                locale={ko}
-                fromDate={minStart}
-                disabled={disabledMatchers}
-                pagedNavigation
-                styles={{
-                    months: { display: "flex", flexWrap: "nowrap" },
-                    month: { width: 320, margin: "0 8px" },
+    const popover =
+        open &&
+        buttonRect &&
+        createPortal(
+            <S.PopoverContainer
+                style={{
+                    top: buttonRect.top + buttonRect.height + 8 + window.scrollY,
+                    left: buttonRect.left + window.scrollX,
                 }}
-            />
-        </div>,
-        document.body
-    );
+            >
+                <DayPicker
+                    mode="range"
+                    numberOfMonths={2}
+                    selected={range}
+                    onSelect={handleSelect}
+                    locale={ko}
+                    fromDate={minStart}
+                    disabled={disabledMatchers}
+                    pagedNavigation
+                    styles={S.dayPickerStyles}
+                />
+            </S.PopoverContainer>,
+            document.body
+        );
 
     return (
         <>
-            <div style={{ position: "relative" }}>
-                <button
-                    ref={buttonRef}
-                    type="button"
-                    onClick={toggleOpen}
-                    style={{
-                        width: "100%",
-                        textAlign: "left",
-                        border: "1px solid #ddd",
-                        borderRadius: 12,
-                        padding: "12px 14px",
-                        background: "#fff",
-                        cursor: "pointer",
-                    }}
-                >
-                    <div style={{ fontSize: 12, color: "#6b6b6b" }}>날짜</div>
-                    <div style={{ fontWeight: 600 }}>{label}</div>
-                </button>
-            </div>
+            <S.Wrapper>
+                <S.TriggerButton ref={buttonRef} type="button" onClick={toggleOpen}>
+                    <S.TriggerLabel>날짜</S.TriggerLabel>
+                    <S.TriggerValue>{label}</S.TriggerValue>
+                </S.TriggerButton>
+            </S.Wrapper>
+
             {popover}
         </>
     );
