@@ -1,9 +1,12 @@
 import * as S from "../accommodationDetail.styles";
+import type { AccommodationImageDTO } from "../../../api/types";
+
+type ThumbImage = AccommodationImageDTO & { idx: number };
 
 type Props = {
-    primary: { imageUrl: string };
+    primary: AccommodationImageDTO;
     primaryIndex: number;
-    thumbs: Array<{ imageId: number; imageUrl: string; idx: number }>;
+    thumbs: ThumbImage[];
     onOpen: (index: number) => void;
 };
 

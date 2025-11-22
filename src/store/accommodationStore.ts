@@ -33,7 +33,7 @@ export const useAccommodationStore = create<State & Actions>((set)=>({
         set({loading: true, error: undefined});
         try {
             const data = await fetchAccommodationDetail(id);
-            set({ detail: data, loading: false });
+            set({ detail: data });
         }
         catch(e: unknown){
             let message = "불러오기 실패";

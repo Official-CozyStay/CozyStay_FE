@@ -9,10 +9,13 @@ import BookingCard from "./components/BookingCard";
 import LightboxModal from "./components/LightboxModal";
 import { useLightbox } from "./hooks/useLightbox";
 
+import type { AccommodationImageDTO } from "../../api/types";
+
+type ThumbImage = AccommodationImageDTO & { idx: number };
+
 export default function AccommodationDetailPage() {
   const { id = "1" } = useParams();
 
-  // store에서 state/actions 가져오기
   const {
     detail,
     loading,
@@ -29,24 +32,19 @@ export default function AccommodationDetailPage() {
     load(id);
   }, [id, load]);
 
-  type AccommodationImage = {
-    imageId: number;
-    imageUrl: string;
-    isPrimary: boolean;
-    displayOrder: number;
-  };
-
-  type ThumbImage = AccommodationImage & { idx: number };
-
-  const images: AccommodationImage[] = detail?.images ?? [];
+  const images: AccommodationImageDTO[] = detail?.images ?? [];
   const totalImages = images.length;
 
-  const { primary, primaryIndex, thumbs } = useMemo(() => {
+  const { primary, primaryIndex, thumbs } = useMemo<{
+    primary: AccommodationImageDTO | null;
+    primaryIndex: number;
+    thumbs: ThumbImage[];
+  }>(() => {
     if (images.length === 0) {
       return {
-        primary: null as AccommodationImage | null,
+        primary: null,
         primaryIndex: 0,
-        thumbs: [] as ThumbImage[],
+        thumbs: [],
       };
     }
 
@@ -56,7 +54,7 @@ export default function AccommodationDetailPage() {
     const primary = images[primaryIndex];
 
     const thumbs = images
-        .map((img, idx) => ({ ...img, idx })) // idx가 필요하면 아래 타입 살짝 확장
+        .map((img, idx) => ({ ...img, idx }))
         .filter((item) => item.idx !== primaryIndex)
         .slice(0, 4);
 
@@ -102,10 +100,8 @@ export default function AccommodationDetailPage() {
         )}
 
         <S.Main>
-          {/* 왼쪽 숙소 정보 */}
           <InfoSection detail={detail} />
 
-          {/* 오른쪽 예약 카드 */}
           <BookingCard
               detail={detail}
               checkIn={checkIn ?? null}
@@ -116,7 +112,6 @@ export default function AccommodationDetailPage() {
           />
         </S.Main>
 
-        {/* 라이트박스 모달 */}
         <LightboxModal
             isOpen={lightboxOpen}
             activeIndex={activeImageIndex}

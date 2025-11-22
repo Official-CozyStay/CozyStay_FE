@@ -2,12 +2,12 @@ import * as S from "../accommodationDetail.styles";
 import BookingDatePicker from "../../../components/accommodation/BookingDatePicker";
 import { nightsBetween, calcTotal, formatKRW } from "../../../utils/price";
 
-type BookingDetail = {
-    pricePerNight: number;
-    cleaningFee: number;
-    serviceFeePercentage: number;
-    maxGuests: number;
-};
+import type { AccommodationDetailDTO } from "../../../api/types.ts";
+
+type BookingDetail = Pick<
+    AccommodationDetailDTO,
+    "pricePerNight" | "cleaningFee" | "serviceFeePercentage" | "maxGuests"
+>;
 
 type Props = {
     detail: BookingDetail;

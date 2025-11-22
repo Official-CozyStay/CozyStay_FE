@@ -1,11 +1,12 @@
 // 이미지 확대해서 보여주는 UI 컴포넌트
 
 import * as S from "../accommodationDetail.styles";
+import type { AccommodationImageDTO } from "../../../api/types";
 
 type Props = {
     isOpen: boolean;
     activeIndex: number | null;
-    images: Array<{ imageUrl: string }>;
+    images: AccommodationImageDTO[];
     title: string;
     onClose: () => void;
     onPrev: (e: React.MouseEvent) => void;

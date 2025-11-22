@@ -1,24 +1,8 @@
 import * as S from "../accommodationDetail.styles";
-
-type Amenity = {
-    amenityId: number;
-    name: string;
-};
-
-type InfoDetail = {
-    host: {
-        nickName: string;
-    };
-    maxGuests: number;
-    bedrooms: number;
-    beds: number;
-    bathrooms: number;
-    description: string;
-    amenities: Amenity[];
-};
+import type { AccommodationDetailDTO } from "../../../api/types";
 
 type Props = {
-    detail: InfoDetail;
+    detail: AccommodationDetailDTO;
 };
 
 export default function InfoSection({ detail }: Props) {
