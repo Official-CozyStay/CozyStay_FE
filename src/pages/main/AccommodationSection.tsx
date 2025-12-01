@@ -5,6 +5,7 @@ import {
   SectionHeader,
   SectionTitle,
   SectionArrow,
+  CardListWrapper,
   CardList,
   ScrollButton,
 } from "./MainPage.styles";
@@ -49,7 +50,7 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
         <SectionTitle>{title}</SectionTitle>
         <SectionArrow>›</SectionArrow>
       </SectionHeader>
-      <div style={{ position: "relative" }}>
+      <CardListWrapper>
         <CardList ref={listRef}>
           {accommodations.map((accommodation) => (
             <AccommodationCard
@@ -70,7 +71,7 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
         <ScrollButton $position="right" onClick={() => scrollList("right")}>
           <ChevronRight size={20} />
         </ScrollButton>
-      </div>
+      </CardListWrapper>
     </Section>
   );
 };

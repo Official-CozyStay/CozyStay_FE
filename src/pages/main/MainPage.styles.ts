@@ -73,6 +73,10 @@ export const SectionArrow = styled.span`
   }
 `;
 
+export const CardListWrapper = styled.div`
+  position: relative;
+`;
+
 export const CardList = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
