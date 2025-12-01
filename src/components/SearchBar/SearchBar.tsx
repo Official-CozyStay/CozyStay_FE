@@ -91,12 +91,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
       >
         {!isCompact && <SearchFieldLabel>여행자</SearchFieldLabel>}
         <SearchFieldContent>
-          {!isCompact && (
-            <span>{totalGuests > 0 ? `게스트 ${totalGuests}명` : "게스트 추가"}</span>
-          )}
-          {isCompact && (
-            <span>{totalGuests > 0 ? `게스트 ${totalGuests}명` : "게스트 추가"}</span>
-          )}
+          <span>{totalGuests > 0 ? `게스트 ${totalGuests}명` : "게스트 추가"}</span>
         </SearchFieldContent>
         {showGuestPopup && (
           <GuestPopup ref={popupRef}>
