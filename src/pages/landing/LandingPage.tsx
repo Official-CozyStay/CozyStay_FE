@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Hero,
@@ -50,7 +51,7 @@ import heroImg from "../../assets/images/hero.png";
 
 const faqData = [
   {
-    q: "에어비앤비는 무엇이며 어떻게 이용할 수 있나요?",
+    q: "CozyStay는 무엇이며 어떻게 이용할 수 있나요?",
     a: "원하는 도시와 날짜, 인원을 입력해 숙소를 검색하고 예약할 수 있습니다. 예약 전 숙소 규정과 취소 정책을 꼭 확인하세요.",
   },
   {
@@ -91,6 +92,13 @@ const FaqItemWithState = ({ q, a }: { q: string; a: string }) => {
 };
 
 const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate("/search");
+  };
+
   return (
     <Container>
       <Hero>
@@ -102,16 +110,10 @@ const LandingPage: React.FC = () => {
           </HeroTitle>
           <HeroDesc>
             나만을 위한 숙소부터 편리한 숙박에 유용한 넉넉한 공간까지,
-            에어비앤비에서 다음 여행을 계획해 보세요.
+            CozyStay에서 다음 여행을 계획해 보세요.
           </HeroDesc>
 
-          <SearchForm
-            onSubmit={(e) => {
-              e.preventDefault();
-              // TODO: 검색폼 api 연결
-              alert("api 미연결 상태");
-            }}
-          >
+          <SearchForm onSubmit={handleSearch}>
             <Field>
               <FieldLabel>행선지</FieldLabel>
               <Input
@@ -166,7 +168,7 @@ const LandingPage: React.FC = () => {
           </FeatureIcon>
           <FeatureTitle>안심하고 예약하기</FeatureTitle>
           <FeatureDesc>
-            에어비앤비 고객지원 서비스가 연중무휴 제공되며, 실제 숙박한 게스트의
+            CozyStay 고객지원 서비스가 연중무휴 제공되며, 실제 숙박한 게스트의
             후기를 통해 숙소 결정에 도움이 되는 유용한 정보를 확인하실 수
             있습니다.
           </FeatureDesc>
