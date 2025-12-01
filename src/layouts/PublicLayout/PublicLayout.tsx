@@ -45,7 +45,7 @@ export default function PublicLayout() {
                 onClick={toggleProfile}
               >
                 <ProfilePlaceholder>
-                  {user.nickname.charAt(0).toUpperCase()}
+                  {user.nickname?.charAt(0)?.toUpperCase() || '?'}
                 </ProfilePlaceholder>
               </ProfileButton>
               {isProfileOpen && (

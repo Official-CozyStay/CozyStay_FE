@@ -25,7 +25,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 type ProfileDropdownProps = {
   onClose: () => void;
-  buttonRef?: React.RefObject<HTMLButtonElement>;
+  buttonRef?: React.RefObject<HTMLButtonElement | null>;
 };
 
 // 메뉴 텍스트 상수 (향후 i18n 적용 시 쉽게 교체 가능)
