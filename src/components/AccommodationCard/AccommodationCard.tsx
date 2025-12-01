@@ -10,7 +10,7 @@ import {
   CardPrice,
   CardRating,
 } from "./AccommodationCard.styles";
-import { Heart } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 
 export interface AccommodationCardProps {
   image: string;
@@ -48,7 +48,10 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({
         <CardPrice>
           {price} · {nights}
         </CardPrice>
-        <CardRating>★{rating.toFixed(2)}</CardRating>
+        <CardRating>
+          <Star size={14} fill="currentColor" />
+          {rating.toFixed(2)}
+        </CardRating>
       </CardBody>
     </CardContainer>
   );
