@@ -14,7 +14,7 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   background: ${({ theme }) => theme.colors.common.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
-  transition: height ${({ theme }) => theme.transition.slow};
+  transition: height ${({ theme }) => theme.transition.slow}, box-shadow ${({ theme }) => theme.transition.slow};
   box-shadow: ${({ $isScrolled }) =>
     $isScrolled ? "0 2px 8px rgba(0,0,0,0.1)" : "none"};
 
