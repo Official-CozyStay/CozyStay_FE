@@ -18,6 +18,20 @@ import {
 import { Minus, Plus } from 'lucide-react';
 import type { FilterState } from '../SearchPage';
 
+// 게스트 연령 범위 텍스트 상수 (향후 i18n 적용 시 쉽게 교체 가능)
+const GUEST_AGE_RANGES = {
+  adult: '13세 이상',
+  child: '2~12세',
+  infant: '2세 미만',
+} as const;
+
+// 게스트 타입 라벨 상수
+const GUEST_LABELS = {
+  adult: '성인',
+  child: '어린이',
+  infant: '유아',
+} as const;
+
 type FilterDropdownPanelProps = {
   activeFilter: string;
   filters: FilterState;
@@ -164,8 +178,8 @@ const FilterDropdownPanel = ({
     <>
       <GuestCounter>
         <GuestLabel>
-          <span>성인</span>
-          <small>13세 이상</small>
+          <span>{GUEST_LABELS.adult}</span>
+          <small>{GUEST_AGE_RANGES.adult}</small>
         </GuestLabel>
         <CounterControls>
           <CounterButton
@@ -187,8 +201,8 @@ const FilterDropdownPanel = ({
 
       <GuestCounter>
         <GuestLabel>
-          <span>어린이</span>
-          <small>2~12세</small>
+          <span>{GUEST_LABELS.child}</span>
+          <small>{GUEST_AGE_RANGES.child}</small>
         </GuestLabel>
         <CounterControls>
           <CounterButton
@@ -210,8 +224,8 @@ const FilterDropdownPanel = ({
 
       <GuestCounter>
         <GuestLabel>
-          <span>유아</span>
-          <small>2세 미만</small>
+          <span>{GUEST_LABELS.infant}</span>
+          <small>{GUEST_AGE_RANGES.infant}</small>
         </GuestLabel>
         <CounterControls>
           <CounterButton
