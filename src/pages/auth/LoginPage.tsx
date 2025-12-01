@@ -20,13 +20,15 @@ import {
   ContinueButton,
 } from './login.styles';
 
-const countries = [
+// 국가/지역 목록 (향후 i18n 또는 외부 설정 파일로 관리 가능)
+const COUNTRIES = [
   { value: '+82', label: '한국 (+82)' },
   { value: '+81', label: '일본 (+81)' },
   { value: '+1', label: '미국/캐나다 (+1)' },
 ] as const;
 
-const disabledProvider = {
+// 비활성화된 로그인 제공자 정보 (향후 i18n 또는 외부 설정 파일로 관리 가능)
+const DISABLED_PROVIDER = {
   id: 'google',
   label: '구글로 로그인하기',
   badge: 'G',
@@ -38,11 +40,11 @@ type LoginModalProps = {
   onClose: () => void;
 };
 
-type CountryCode = (typeof countries)[number]['value'];
+type CountryCode = (typeof COUNTRIES)[number]['value'];
 
 const LoginModal = ({ open, onClose }: LoginModalProps) => {
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(
-    countries[0].value
+    COUNTRIES[0].value
   );
   const [phone, setPhone] = useState('');
 
@@ -93,7 +95,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
                 setSelectedCountry(event.target.value as CountryCode)
               }
             >
-              {countries.map((country) => (
+              {COUNTRIES.map((country) => (
                 <option key={country.value} value={country.value}>
                   {country.label}
                 </option>
@@ -127,8 +129,8 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
             카카오로 로그인하기
           </AuthButton>
           <AuthButton type="button" disabled>
-            <ProviderIcon>{disabledProvider.badge}</ProviderIcon>
-            {disabledProvider.label}
+            <ProviderIcon>{DISABLED_PROVIDER.badge}</ProviderIcon>
+            {DISABLED_PROVIDER.label}
           </AuthButton>
         </AuthButtons>
 
