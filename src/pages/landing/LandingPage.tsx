@@ -109,7 +109,7 @@ const LandingPage: React.FC = () => {
             onSubmit={(e) => {
               e.preventDefault();
               // TODO: 검색폼 api 연결
-              alert("api 미연결 상태");
+              // alert("api 미연결 상태");
             }}
           >
             <Field>
