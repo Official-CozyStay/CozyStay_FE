@@ -253,13 +253,15 @@ export const MapPriceMarker = styled.button<{ $selected?: boolean }>`
   }
 `;
 
-// 카카오맵 마커 스타일 상수 (MapPriceMarker와 일치하도록 유지)
+// 카카오맵 마커 스타일 상수
+// MapPriceMarker styled component와 동일한 스타일을 유지합니다.
 // 카카오맵 CustomOverlay는 DOM 요소를 직접 받기 때문에 styled-components를 사용할 수 없어
 // 인라인 스타일로 적용하기 위한 상수입니다.
+// MapPriceMarker의 스타일이 변경되면 이 상수도 함께 업데이트해야 합니다.
 export const MAP_MARKER_STYLES = {
   base: `
     padding: 6px 10px;
-    border-radius: 20px;
+    border-radius: 9999px;
     border: none;
     background: #fff;
     color: #222;
@@ -274,12 +276,14 @@ export const MAP_MARKER_STYLES = {
     background: #222;
     color: #fff;
     transform: scale(1.05);
+    z-index: 10;
   `,
 } as const;
 
 // Filter Dropdown Styles
 export const FilterDropdown = styled.div`
   position: absolute;
+  /* left와 top은 FilterDropdownPanel에서 동적으로 계산하여 인라인 스타일로 설정 */
   min-width: 320px;
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.lg};

@@ -329,7 +329,6 @@ const FilterDropdownPanel = ({
     <FilterDropdown
       ref={dropdownRef}
       style={{
-        position: 'absolute',
         top: `${dropdownPosition.top}px`,
         left: `${dropdownPosition.left}px`,
       }}
