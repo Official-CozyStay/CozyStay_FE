@@ -1,6 +1,10 @@
 // 색상 변수 추가시 styled.d.ts 파일에 타입 선언 후 사용
 import { radius } from "./tokens/radius";
 import { shadow } from "./tokens/shadow";
+import { spacing } from "./tokens/spacing";
+import { zIndex } from "./tokens/zIndex";
+import { transition } from "./tokens/transition";
+import { fontSize, fontWeight, lineHeight } from "./tokens/typography";
 
 export const theme = {
   colors: {
@@ -39,26 +43,12 @@ export const theme = {
   },
   radius,
   shadow,
+  spacing,
+  zIndex,
+  transition,
   font: {
-    size: {
-      xs: "12px",
-      sm: "14px",
-      md: "16px",
-      lg: "20px",
-      xl: "24px",
-      xxl: "32px",
-      display: "40px",
-    },
-    weight: {
-      regular: 400,
-      medium: 500,
-      bold: 700,
-      extrabold: 800,
-    },
-    lineHeight: {
-      tight: 1.2,
-      normal: 1.5,
-      relaxed: 1.7,
-    },
+    size: fontSize,
+    weight: fontWeight,
+    lineHeight,
   },
 };

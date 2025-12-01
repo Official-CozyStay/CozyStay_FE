@@ -26,6 +26,7 @@ declare module "styled-components" {
       };
     };
     radius: {
+      xs: string;
       sm: string;
       md: string;
       lg: string;
@@ -36,6 +37,50 @@ declare module "styled-components" {
       sm: string;
       md: string;
       lg: string;
+    };
+    spacing: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      "2xl": string;
+      "3xl": string;
+      "4xl": string;
+      "5xl": string;
+      "6xl": string;
+    };
+    zIndex: {
+      base: number;
+      dropdown: number;
+      sticky: number;
+      fixed: number;
+      modalBackdrop: number;
+      modal: number;
+      popover: number;
+      tooltip: number;
+      searchBar: number;
+      header: number;
+    };
+    transition: {
+      fast: string;
+      normal: string;
+      slow: string;
+      all: {
+        fast: string;
+        normal: string;
+        slow: string;
+      };
+      transform: {
+        fast: string;
+        normal: string;
+        slow: string;
+      };
+      colors: {
+        fast: string;
+        normal: string;
+        slow: string;
+      };
     };
     font: {
       size: {
