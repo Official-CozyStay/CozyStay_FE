@@ -27,6 +27,7 @@ import {
   PaginationWrapper,
   PaginationButton,
   PaginationEllipsis,
+  MAP_MARKER_STYLES,
 } from './search.styles';
 import {
   Calendar,
@@ -349,18 +350,7 @@ const SearchPage = () => {
           const markerElement = document.createElement('div');
           markerElement.className = 'map-price-marker';
           markerElement.dataset.id = acc.id;
-          markerElement.style.cssText = `
-            padding: 6px 10px;
-            border-radius: 20px;
-            background: #fff;
-            color: #222;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.15s ease;
-          `;
+          markerElement.style.cssText = MAP_MARKER_STYLES.base;
           markerElement.textContent = `₩${acc.price.toLocaleString()}`;
 
           // Add click event
@@ -368,17 +358,13 @@ const SearchPage = () => {
             handleMarkerClick(acc.id);
           });
 
-          // Add hover effects
+          // Add hover effects using style constants
           markerElement.addEventListener('mouseenter', () => {
-            markerElement.style.background = '#222';
-            markerElement.style.color = '#fff';
-            markerElement.style.transform = 'scale(1.05)';
+            markerElement.style.cssText = MAP_MARKER_STYLES.base + MAP_MARKER_STYLES.hover;
           });
 
           markerElement.addEventListener('mouseleave', () => {
-            markerElement.style.background = '#fff';
-            markerElement.style.color = '#222';
-            markerElement.style.transform = 'scale(1)';
+            markerElement.style.cssText = MAP_MARKER_STYLES.base;
           });
 
           const overlay = new window.kakao.maps.CustomOverlay({
