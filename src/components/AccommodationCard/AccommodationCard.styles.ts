@@ -6,8 +6,7 @@ export const CardContainer = styled.article`
   overflow: hidden;
   background: ${({ theme }) => theme.colors.common.white};
   cursor: pointer;
-  transition: ${({ theme }) => theme.transition.transform.normal}, ${({ theme }) =>
-    theme.transition.normal};
+  transition: transform ${({ theme }) => theme.transition.normal}, box-shadow ${({ theme }) => theme.transition.normal};
 
   &:hover {
     transform: translateY(-4px);
