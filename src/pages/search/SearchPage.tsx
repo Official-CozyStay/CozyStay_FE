@@ -288,6 +288,10 @@ const SearchPage = () => {
   const mapInstanceRef = useRef<KakaoMap | null>(null);
   const overlaysRef = useRef<KakaoOverlay[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
+  const locationButtonRef = useRef<HTMLButtonElement>(null);
+  const datesButtonRef = useRef<HTMLButtonElement>(null);
+  const guestsButtonRef = useRef<HTMLButtonElement>(null);
+  const filtersButtonRef = useRef<HTMLButtonElement>(null);
 
   const totalGuests = filters.adults + filters.children;
 
@@ -506,9 +510,10 @@ const SearchPage = () => {
   };
 
   return (
-    <SearchPageContainer>
-      <FilterBar>
+    <SearchPageContainer data-search-container>
+      <FilterBar data-filter-bar>
         <FilterButton
+          ref={locationButtonRef}
           $active={activeFilter === 'location'}
           onClick={() =>
             setActiveFilter(activeFilter === 'location' ? null : 'location')
@@ -519,6 +524,7 @@ const SearchPage = () => {
         </FilterButton>
 
         <FilterButton
+          ref={datesButtonRef}
           $active={activeFilter === 'dates'}
           onClick={() =>
             setActiveFilter(activeFilter === 'dates' ? null : 'dates')
@@ -531,6 +537,7 @@ const SearchPage = () => {
         </FilterButton>
 
         <FilterButton
+          ref={guestsButtonRef}
           $active={activeFilter === 'guests'}
           onClick={() =>
             setActiveFilter(activeFilter === 'guests' ? null : 'guests')
@@ -543,6 +550,7 @@ const SearchPage = () => {
         <FilterDivider />
 
         <FilterButton
+          ref={filtersButtonRef}
           $active={activeFilter === 'filters'}
           onClick={() =>
             setActiveFilter(activeFilter === 'filters' ? null : 'filters')
@@ -561,6 +569,12 @@ const SearchPage = () => {
           filters={filters}
           onFilterChange={handleFilterChange}
           onClose={() => setActiveFilter(null)}
+          buttonRefs={{
+            location: locationButtonRef,
+            dates: datesButtonRef,
+            guests: guestsButtonRef,
+            filters: filtersButtonRef,
+          }}
         />
       )}
 

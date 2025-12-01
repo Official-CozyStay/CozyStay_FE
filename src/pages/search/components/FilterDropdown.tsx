@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import {
   FilterDropdown,
   FilterSection,
@@ -23,6 +23,12 @@ type FilterDropdownPanelProps = {
   filters: FilterState;
   onFilterChange: (key: keyof FilterState, value: unknown) => void;
   onClose: () => void;
+  buttonRefs: {
+    location: React.RefObject<HTMLButtonElement>;
+    dates: React.RefObject<HTMLButtonElement>;
+    guests: React.RefObject<HTMLButtonElement>;
+    filters: React.RefObject<HTMLButtonElement>;
+  };
 };
 
 const FilterDropdownPanel = ({
@@ -30,8 +36,10 @@ const FilterDropdownPanel = ({
   filters,
   onFilterChange,
   onClose,
+  buttonRefs,
 }: FilterDropdownPanelProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<{ left: number; top: number } | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,6 +54,48 @@ const FilterDropdownPanel = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
+
+  useEffect(() => {
+    // activeFilter가 변경되면 위치를 초기화하고 다시 계산
+    setDropdownPosition(null);
+
+    const calculatePosition = () => {
+      const activeButtonRef = buttonRefs[activeFilter as keyof typeof buttonRefs];
+      if (activeButtonRef?.current) {
+        const buttonRect = activeButtonRef.current.getBoundingClientRect();
+        const filterBar = activeButtonRef.current.closest('[data-filter-bar]') as HTMLElement;
+        if (filterBar) {
+          const barRect = filterBar.getBoundingClientRect();
+          const searchContainer = filterBar.closest('[data-search-container]') as HTMLElement;
+          
+          if (searchContainer) {
+            const containerRect = searchContainer.getBoundingClientRect();
+            // FilterBar 기준으로 left 위치 계산
+            const left = buttonRect.left - barRect.left;
+            // FilterBar의 bottom 기준으로 top 위치 계산 (FilterBar 아래 8px 간격)
+            const top = barRect.bottom - containerRect.top + 8;
+            setDropdownPosition({ left, top });
+          }
+        }
+      }
+    };
+
+    // 다음 프레임에서 위치 계산 (DOM 업데이트 후)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        calculatePosition();
+      });
+    });
+
+    // 리사이즈 및 스크롤 이벤트 리스너
+    window.addEventListener('resize', calculatePosition);
+    window.addEventListener('scroll', calculatePosition, true);
+
+    return () => {
+      window.removeEventListener('resize', calculatePosition);
+      window.removeEventListener('scroll', calculatePosition, true);
+    };
+  }, [activeFilter, buttonRefs]);
 
   const renderLocationFilter = () => (
     <>
@@ -256,20 +306,18 @@ const FilterDropdownPanel = ({
     }
   };
 
+  // 위치가 계산되기 전에는 렌더링하지 않음
+  if (!dropdownPosition) {
+    return null;
+  }
+
   return (
     <FilterDropdown
       ref={dropdownRef}
       style={{
         position: 'absolute',
-        top: '120px',
-        left:
-          activeFilter === 'location'
-            ? '24px'
-            : activeFilter === 'dates'
-              ? '160px'
-              : activeFilter === 'guests'
-                ? '300px'
-                : '440px',
+        top: `${dropdownPosition.top}px`,
+        left: `${dropdownPosition.left}px`,
       }}
     >
       {renderContent()}

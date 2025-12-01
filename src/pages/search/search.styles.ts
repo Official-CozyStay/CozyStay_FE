@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const SearchPageContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 64px);
@@ -255,8 +256,6 @@ export const MapPriceMarker = styled.button<{ $selected?: boolean }>`
 // Filter Dropdown Styles
 export const FilterDropdown = styled.div`
   position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
   min-width: 320px;
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.lg};
