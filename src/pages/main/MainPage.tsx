@@ -1,21 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "@/components/Header/Header";
 import SearchBar from "@/components/SearchBar/SearchBar";
-import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
-import {
-  MainContainer,
-  SearchBarWrapper,
-  Section,
-  SectionHeader,
-  SectionTitle,
-  SectionArrow,
-  CardList,
-  ScrollButton,
-  Footer,
-} from "./MainPage.styles";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import AccommodationSection from "./AccommodationSection";
+import { MainContainer, SearchBarWrapper, Footer } from "./MainPage.styles";
 
-// 임시 데이터 (나중에 API로 대체)
+// TODO: 임시 데이터 (나중에 API로 대체)
 const mockAccommodations = [
   {
     id: 1,
@@ -271,10 +260,6 @@ const osakaAccommodations = [
 const MainPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
-  const seoulListRef = useRef<HTMLDivElement>(null);
-  const busanListRef = useRef<HTMLDivElement>(null);
-  const tokyoListRef = useRef<HTMLDivElement>(null);
-  const osakaListRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -301,19 +286,6 @@ const MainPage: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollList = (
-    ref: React.RefObject<HTMLDivElement | null>,
-    direction: "left" | "right"
-  ) => {
-    if (ref.current) {
-      const scrollAmount = 400;
-      ref.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
-
   return (
     <MainContainer ref={containerRef}>
       <Header isScrolled={isScrolled} />
@@ -322,145 +294,25 @@ const MainPage: React.FC = () => {
         <SearchBar isCompact={isScrolled} />
       </SearchBarWrapper>
 
-      <Section>
-        <SectionHeader>
-          <SectionTitle>서울의 인기 숙소</SectionTitle>
-          <SectionArrow>›</SectionArrow>
-        </SectionHeader>
-        <div style={{ position: "relative" }}>
-          <CardList ref={seoulListRef}>
-            {mockAccommodations.map((accommodation) => (
-              <AccommodationCard
-                key={accommodation.id}
-                image={accommodation.image}
-                badge={accommodation.badge}
-                title={accommodation.title}
-                date={accommodation.date}
-                price={accommodation.price}
-                nights={accommodation.nights}
-                rating={accommodation.rating}
-              />
-            ))}
-          </CardList>
-          <ScrollButton
-            $position="left"
-            onClick={() => scrollList(seoulListRef, "left")}
-          >
-            <ChevronLeft size={20} />
-          </ScrollButton>
-          <ScrollButton
-            $position="right"
-            onClick={() => scrollList(seoulListRef, "right")}
-          >
-            <ChevronRight size={20} />
-          </ScrollButton>
-        </div>
-      </Section>
+      <AccommodationSection
+        title="서울의 인기 숙소"
+        accommodations={mockAccommodations}
+      />
 
-      <Section>
-        <SectionHeader>
-          <SectionTitle>다음 주말에 예약 가능한 부산 숙소</SectionTitle>
-          <SectionArrow>›</SectionArrow>
-        </SectionHeader>
-        <div style={{ position: "relative" }}>
-          <CardList ref={busanListRef}>
-            {busanAccommodations.map((accommodation) => (
-              <AccommodationCard
-                key={accommodation.id}
-                image={accommodation.image}
-                badge={accommodation.badge}
-                title={accommodation.title}
-                date={accommodation.date}
-                price={accommodation.price}
-                nights={accommodation.nights}
-                rating={accommodation.rating}
-              />
-            ))}
-          </CardList>
-          <ScrollButton
-            $position="left"
-            onClick={() => scrollList(busanListRef, "left")}
-          >
-            <ChevronLeft size={20} />
-          </ScrollButton>
-          <ScrollButton
-            $position="right"
-            onClick={() => scrollList(busanListRef, "right")}
-          >
-            <ChevronRight size={20} />
-          </ScrollButton>
-        </div>
-      </Section>
+      <AccommodationSection
+        title="다음 주말에 예약 가능한 부산 숙소"
+        accommodations={busanAccommodations}
+      />
 
-      <Section>
-        <SectionHeader>
-          <SectionTitle>도쿄의 숙소</SectionTitle>
-          <SectionArrow>›</SectionArrow>
-        </SectionHeader>
-        <div style={{ position: "relative" }}>
-          <CardList ref={tokyoListRef}>
-            {tokyoAccommodations.map((accommodation) => (
-              <AccommodationCard
-                key={accommodation.id}
-                image={accommodation.image}
-                badge={accommodation.badge}
-                title={accommodation.title}
-                date={accommodation.date}
-                price={accommodation.price}
-                nights={accommodation.nights}
-                rating={accommodation.rating}
-              />
-            ))}
-          </CardList>
-          <ScrollButton
-            $position="left"
-            onClick={() => scrollList(tokyoListRef, "left")}
-          >
-            <ChevronLeft size={20} />
-          </ScrollButton>
-          <ScrollButton
-            $position="right"
-            onClick={() => scrollList(tokyoListRef, "right")}
-          >
-            <ChevronRight size={20} />
-          </ScrollButton>
-        </div>
-      </Section>
+      <AccommodationSection
+        title="도쿄의 숙소"
+        accommodations={tokyoAccommodations}
+      />
 
-      <Section>
-        <SectionHeader>
-          <SectionTitle>다음 달에 예약 가능한 오사카시 숙소</SectionTitle>
-          <SectionArrow>›</SectionArrow>
-        </SectionHeader>
-        <div style={{ position: "relative" }}>
-          <CardList ref={osakaListRef}>
-            {osakaAccommodations.map((accommodation) => (
-              <AccommodationCard
-                key={accommodation.id}
-                image={accommodation.image}
-                badge={accommodation.badge}
-                title={accommodation.title}
-                date={accommodation.date}
-                price={accommodation.price}
-                nights={accommodation.nights}
-                rating={accommodation.rating}
-              />
-            ))}
-          </CardList>
-          <ScrollButton
-            $position="left"
-            onClick={() => scrollList(osakaListRef, "left")}
-          >
-            <ChevronLeft size={20} />
-          </ScrollButton>
-          <ScrollButton
-            $position="right"
-            onClick={() => scrollList(osakaListRef, "right")}
-          >
-            <ChevronRight size={20} />
-          </ScrollButton>
-        </div>
-      </Section>
+      <AccommodationSection
+        title="다음 달에 예약 가능한 오사카시 숙소"
+        accommodations={osakaAccommodations}
+      />
 
       {showFooter && (
         <Footer>
