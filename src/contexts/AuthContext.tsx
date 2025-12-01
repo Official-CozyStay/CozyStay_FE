@@ -148,7 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (storedToken && !user) {
       loadUserInfo(storedToken);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loadUserInfo, user]);
 
   const login = async (token: string) => {
     localStorage.setItem('accessToken', token);
