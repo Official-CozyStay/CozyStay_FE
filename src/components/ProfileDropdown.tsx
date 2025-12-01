@@ -28,6 +28,22 @@ type ProfileDropdownProps = {
   buttonRef?: React.RefObject<HTMLButtonElement>;
 };
 
+// 메뉴 텍스트 상수 (향후 i18n 적용 시 쉽게 교체 가능)
+const MENU_LABELS = {
+  wishlist: '위시리스트',
+  trips: '여행',
+  messages: '메시지',
+  profile: '프로필',
+  accountSettings: '계정 관리',
+  languageAndCurrency: '언어 및 통화',
+  helpCenter: '도움말 센터',
+  hosting: '호스팅 하기',
+  hostingDescription: '간단하게 호스팅을 시작하고 부수입을 올릴 수 있습니다.',
+  recommendHost: '호스트 추천하기',
+  findCoHost: '공동 호스트 찾기',
+  logout: '로그아웃',
+} as const;
+
 const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
   const { logout } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -57,19 +73,19 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
       <DropdownSection>
         <DropdownItem>
           <Heart />
-          위시리스트
+          {MENU_LABELS.wishlist}
         </DropdownItem>
         <DropdownItem>
           <Home />
-          여행
+          {MENU_LABELS.trips}
         </DropdownItem>
         <DropdownItem>
           <MessageCircle />
-          메시지
+          {MENU_LABELS.messages}
         </DropdownItem>
         <DropdownItem>
           <User />
-          프로필
+          {MENU_LABELS.profile}
         </DropdownItem>
       </DropdownSection>
 
@@ -78,15 +94,15 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
       <DropdownSection>
         <DropdownItem>
           <Settings />
-          계정 관리
+          {MENU_LABELS.accountSettings}
         </DropdownItem>
         <DropdownItem>
           <Globe />
-          언어 및 통화
+          {MENU_LABELS.languageAndCurrency}
         </DropdownItem>
         <DropdownItem>
           <HelpCircle />
-          도움말 센터
+          {MENU_LABELS.helpCenter}
         </DropdownItem>
       </DropdownSection>
 
@@ -98,9 +114,9 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
             <Home />
           </DropdownHeaderImage>
           <div>
-            <DropdownHeaderTitle>호스팅 하기</DropdownHeaderTitle>
+            <DropdownHeaderTitle>{MENU_LABELS.hosting}</DropdownHeaderTitle>
             <DropdownHeaderDesc>
-              간단하게 호스팅을 시작하고 부수입을 올릴 수 있습니다.
+              {MENU_LABELS.hostingDescription}
             </DropdownHeaderDesc>
           </div>
         </DropdownHeader>
@@ -111,11 +127,11 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
       <DropdownSection>
         <DropdownItem>
           <UserPlus />
-          호스트 추천하기
+          {MENU_LABELS.recommendHost}
         </DropdownItem>
         <DropdownItem>
           <Users />
-          공동 호스트 찾기
+          {MENU_LABELS.findCoHost}
         </DropdownItem>
       </DropdownSection>
 
@@ -124,7 +140,7 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
       <DropdownSection>
         <DropdownItem onClick={handleLogout}>
           <LogOut />
-          로그아웃
+          {MENU_LABELS.logout}
         </DropdownItem>
       </DropdownSection>
     </DropdownMenu>
