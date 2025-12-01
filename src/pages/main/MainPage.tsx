@@ -257,6 +257,8 @@ const osakaAccommodations = [
   },
 ];
 
+const SCROLL_THRESHOLD = 100;
+
 const MainPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
@@ -265,7 +267,7 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 100);
+      setIsScrolled(scrollY > SCROLL_THRESHOLD);
 
       // 스크롤이 끝에 도달했는지 확인
       const windowHeight = window.innerHeight;

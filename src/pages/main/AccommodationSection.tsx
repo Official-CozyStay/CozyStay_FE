@@ -26,6 +26,8 @@ interface AccommodationSectionProps {
   accommodations: Accommodation[];
 }
 
+const SCROLL_AMOUNT = 400;
+
 const AccommodationSection: React.FC<AccommodationSectionProps> = ({
   title,
   accommodations,
@@ -34,9 +36,8 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
 
   const scrollList = (direction: "left" | "right") => {
     if (listRef.current) {
-      const scrollAmount = 400;
       listRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
+        left: direction === "left" ? -SCROLL_AMOUNT : SCROLL_AMOUNT,
         behavior: "smooth",
       });
     }
