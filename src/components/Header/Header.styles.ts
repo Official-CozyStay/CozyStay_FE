@@ -14,7 +14,8 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   background: ${({ theme }) => theme.colors.common.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
-  transition: height ${({ theme }) => theme.transition.slow}, box-shadow ${({ theme }) => theme.transition.slow};
+  transition: height ${({ theme }) => theme.transition.slow},
+    box-shadow ${({ theme }) => theme.transition.slow};
   box-shadow: ${({ $isScrolled }) =>
     $isScrolled ? "0 2px 8px rgba(0,0,0,0.1)" : "none"};
 
@@ -33,22 +34,37 @@ export const HeaderLeft = styled.div`
 `;
 
 export const Logo = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 60px;
+  height: 60px;
+
+  ${media.mobile} {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 export const LogoText = styled.span`
   font-size: ${({ theme }) => theme.font.size.lg};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.primary.main};
+
+  ${media.mobile} {
+    font-size: ${({ theme }) => theme.font.size.md};
+  }
 `;
 
-export const HeaderCenter = styled.nav`
+export const HeaderCenter = styled.nav<{ $isScrolled?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing["2xl"]};
   justify-content: center;
   justify-self: center;
+
+  ${({ $isScrolled }) =>
+    $isScrolled &&
+    `
+    display: none;
+  `}
 
   ${media.mobile} {
     display: none;
@@ -92,15 +108,6 @@ export const NavItem = styled.button<{ $active?: boolean }>`
   }
 `;
 
-export const NavBadge = styled.span`
-  background: ${({ theme }) => theme.colors.primary.main};
-  color: ${({ theme }) => theme.colors.common.white};
-  font-size: ${({ theme }) => theme.font.size.xs};
-  padding: 2px ${({ theme }) => theme.spacing.md};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  font-weight: ${({ theme }) => theme.font.weight.bold};
-`;
-
 export const HeaderRight = styled.div`
   display: flex;
   align-items: center;
@@ -132,21 +139,41 @@ export const HostModeButton = styled.button`
   }
 `;
 
-export const HostModeToggle = styled.button<{ $active?: boolean }>`
-  width: 48px;
-  height: 24px;
+export const UserProfileButton = styled.button`
+  width: 42px;
+  height: 42px;
   border-radius: ${({ theme }) => theme.radius.full};
-  border: none;
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  background: ${({ theme }) => theme.colors.common.white};
   cursor: pointer;
-  background: ${({ theme, $active }) =>
-    $active ? theme.colors.primary.main : theme.colors.border.primary};
-  color: ${({ theme }) => theme.colors.common.white};
-  font-size: ${({ theme }) => theme.font.size.xs};
-  font-weight: ${({ theme }) => theme.font.weight.bold};
-  transition: ${({ theme }) => theme.transition.colors.normal};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: ${({ theme }) => theme.transition.all.normal};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadow.md};
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
+
+  svg {
+    width: 30px;
+    height: 30px;
+    background: ${({ theme }) => theme.colors.border.light};
+    border-radius: ${({ theme }) => theme.radius.full};
+    padding: ${({ theme }) => theme.spacing.xs};
+  }
 
   ${media.mobile} {
-    display: none;
+    width: 32px;
+    height: 32px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 `;
 
@@ -165,5 +192,9 @@ export const MenuButton = styled.button`
   &:hover {
     box-shadow: ${({ theme }) => theme.shadow.sm};
   }
-`;
 
+  ${media.mobile} {
+    width: 36px;
+    height: 36px;
+  }
+`;
