@@ -81,7 +81,7 @@ export const NavItem = styled.button<{ $active?: boolean }>`
     bottom: 0;
     left: ${({ theme }) => theme.spacing.lg};
     right: ${({ theme }) => theme.spacing.lg};
-    height: 2px;
+    height: ${({ theme }) => theme.spacing.xs};
     background: ${({ theme }) => theme.colors.primary.main};
     opacity: ${({ $active }) => ($active ? 1 : 0)};
     transition: ${({ theme }) => theme.transition.normal};
