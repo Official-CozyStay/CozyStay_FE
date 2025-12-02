@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { useTheme } from "styled-components";
 import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
 import {
   Section,
@@ -28,18 +27,18 @@ interface AccommodationSectionProps {
   accommodations: Accommodation[];
 }
 
+const SCROLL_AMOUNT = 400;
+
 const AccommodationSection: React.FC<AccommodationSectionProps> = ({
   title,
   accommodations,
 }) => {
-  const theme = useTheme();
   const listRef = useRef<HTMLDivElement>(null);
 
   const scrollList = (direction: "left" | "right") => {
     if (listRef.current) {
-      const scrollAmount = theme.size.scrollAmount;
       listRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
+        left: direction === "left" ? -SCROLL_AMOUNT : SCROLL_AMOUNT,
         behavior: "smooth",
       });
     }
@@ -78,4 +77,3 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
 };
 
 export default AccommodationSection;
-

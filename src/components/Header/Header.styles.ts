@@ -134,9 +134,12 @@ export const HostModeButton = styled.button`
   }
 `;
 
+const TOGGLE_WIDTH = "48px";
+const TOGGLE_HEIGHT = "24px";
+
 export const HostModeToggle = styled.button<{ $active?: boolean }>`
-  width: ${({ theme }) => theme.size.toggleWidth};
-  height: ${({ theme }) => theme.size.toggleHeight};
+  width: ${TOGGLE_WIDTH};
+  height: ${TOGGLE_HEIGHT};
   border-radius: ${({ theme }) => theme.radius.full};
   border: none;
   cursor: pointer;

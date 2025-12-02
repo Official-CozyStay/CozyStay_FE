@@ -51,17 +51,7 @@ declare module "styled-components" {
       "5xl": string;
       "6xl": string;
     };
-    size: {
-      toggleWidth: string;
-      toggleHeight: string;
-      guestPopupMinWidth: string;
-      counterButton: string;
-      counterValueMinWidth: string;
-      cardWidth: string;
-      cardWidthMobile: string;
-      scrollButton: string;
-      scrollAmount: number;
-    };
+    size: Record<string, never>; // 컴포넌트 특정적인 크기 값은 각 컴포넌트 내부 상수로 관리
     layout: {
       maxWidth: string;
     };

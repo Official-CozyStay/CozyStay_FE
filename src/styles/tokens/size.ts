@@ -1,13 +1,4 @@
-// 컴포넌트 크기
-export const size = {
-  toggleWidth: "48px",
-  toggleHeight: "24px",
-  guestPopupMinWidth: "280px",
-  counterButton: "32px",
-  counterValueMinWidth: "24px",
-  cardWidth: "300px",
-  cardWidthMobile: "260px",
-  scrollButton: "40px",
-  scrollAmount: 400,
-};
+// 컴포넌트 크기 (프로젝트 전반에서 재사용되는 값만 유지)
+// 컴포넌트 특정적인 값은 각 컴포넌트 파일 내부의 상수로 관리
+export const size = {};
 

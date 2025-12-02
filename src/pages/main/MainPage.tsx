@@ -4,6 +4,8 @@ import SearchBar from "@/components/SearchBar/SearchBar";
 import AccommodationSection from "./AccommodationSection";
 import { MainContainer, SearchBarWrapper, Footer } from "./MainPage.styles";
 
+const SCROLL_THRESHOLD = 100;
+
 // TODO: 임시 데이터 (나중에 API로 대체)
 const mockAccommodations = [
   {
@@ -257,8 +259,6 @@ const osakaAccommodations = [
   },
 ];
 
-const SCROLL_THRESHOLD = 100;
-
 const MainPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
@@ -274,8 +274,8 @@ const MainPage: React.FC = () => {
       const documentHeight = document.documentElement.scrollHeight;
       const scrollPosition = scrollY + windowHeight;
 
-      // 끝에서 100px 이내에 도달하면 Footer 표시
-      if (scrollPosition >= documentHeight - 100) {
+      // 끝에서 SCROLL_THRESHOLD 이내에 도달하면 Footer 표시
+      if (scrollPosition >= documentHeight - SCROLL_THRESHOLD) {
         setShowFooter(true);
       } else {
         setShowFooter(false);

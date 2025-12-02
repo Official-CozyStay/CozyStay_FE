@@ -103,6 +103,8 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   }
 `;
 
+const GUEST_POPUP_MIN_WIDTH = "280px";
+
 export const GuestPopup = styled.div`
   position: absolute;
   top: calc(100% + ${({ theme }) => theme.spacing.sm});
@@ -112,7 +114,7 @@ export const GuestPopup = styled.div`
   border-radius: ${({ theme }) => theme.radius.lg};
   box-shadow: ${({ theme }) => theme.shadow.lg};
   padding: ${({ theme }) => theme.spacing.lg};
-  min-width: ${({ theme }) => theme.size.guestPopupMinWidth};
+  min-width: ${GUEST_POPUP_MIN_WIDTH};
   z-index: ${({ theme }) => theme.zIndex.searchBar};
 `;
 
@@ -145,9 +147,11 @@ export const GuestCounter = styled.div`
   gap: ${({ theme }) => theme.spacing.lg};
 `;
 
+const COUNTER_BUTTON_SIZE = "32px";
+
 export const CounterButton = styled.button`
-  width: ${({ theme }) => theme.size.counterButton};
-  height: ${({ theme }) => theme.size.counterButton};
+  width: ${COUNTER_BUTTON_SIZE};
+  height: ${COUNTER_BUTTON_SIZE};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.common.white};
@@ -168,10 +172,12 @@ export const CounterButton = styled.button`
   }
 `;
 
+const COUNTER_VALUE_MIN_WIDTH = "24px";
+
 export const CounterValue = styled.span`
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.medium};
-  min-width: ${({ theme }) => theme.size.counterValueMinWidth};
+  min-width: ${COUNTER_VALUE_MIN_WIDTH};
   text-align: center;
 `;
 

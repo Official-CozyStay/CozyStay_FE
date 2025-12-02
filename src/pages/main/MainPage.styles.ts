@@ -77,6 +77,9 @@ export const CardListWrapper = styled.div`
   position: relative;
 `;
 
+const CARD_WIDTH = "300px";
+const CARD_WIDTH_MOBILE = "260px";
+
 export const CardList = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
@@ -93,7 +96,7 @@ export const CardList = styled.div`
 
   > * {
     flex-shrink: 0;
-    width: ${({ theme }) => theme.size.cardWidth};
+    width: ${CARD_WIDTH};
   }
 
   ${media.mobile} {
@@ -101,10 +104,12 @@ export const CardList = styled.div`
     padding: ${({ theme }) => theme.spacing.xs} 0;
 
     > * {
-      width: ${({ theme }) => theme.size.cardWidthMobile};
+      width: ${CARD_WIDTH_MOBILE};
     }
   }
 `;
+
+const SCROLL_BUTTON_SIZE = "40px";
 
 export const ScrollButton = styled.button<{ $position: "left" | "right" }>`
   position: absolute;
@@ -112,8 +117,8 @@ export const ScrollButton = styled.button<{ $position: "left" | "right" }>`
     $position === "left" ? `left: -${theme.spacing.xl}` : `right: -${theme.spacing.xl}`};
   top: 50%;
   transform: translateY(-50%);
-  width: ${({ theme }) => theme.size.scrollButton};
-  height: ${({ theme }) => theme.size.scrollButton};
+  width: ${SCROLL_BUTTON_SIZE};
+  height: ${SCROLL_BUTTON_SIZE};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
