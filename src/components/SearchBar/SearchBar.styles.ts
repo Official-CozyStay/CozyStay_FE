@@ -12,7 +12,7 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
       ? `${theme.spacing.sm} ${theme.spacing.lg}`
       : `14px ${theme.spacing.sm} 14px ${theme.spacing.xl}`};
   box-shadow: ${({ theme }) => theme.shadow.md};
-  max-width: ${({ $isCompact }) => ($isCompact ? "300px" : "850px")};
+  max-width: ${({ $isCompact }) => ($isCompact ? "420px" : "850px")};
   width: 100%;
   transition: ${({ theme }) => theme.transition.all.slow};
   gap: ${({ $isCompact, theme }) => ($isCompact ? theme.spacing.sm : "0")};
@@ -22,7 +22,7 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
       $isCompact
         ? `6px ${theme.spacing.md}`
         : `10px ${theme.spacing.md} 10px ${theme.spacing.lg}`};
-    max-width: ${({ $isCompact }) => ($isCompact ? "280px" : "100%")};
+    max-width: ${({ $isCompact }) => ($isCompact ? "320px" : "100%")};
   }
 `;
 
@@ -50,7 +50,7 @@ export const SearchField = styled.div<{ $isCompact?: boolean }>`
 `;
 
 export const SearchFieldLabel = styled.span`
-  font-size: ${({ theme }) => theme.font.size.xs};
+  font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
@@ -82,8 +82,9 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   color: ${({ theme }) => theme.colors.common.white};
   border: none;
   border-radius: ${({ theme }) => theme.radius.full};
-  padding: ${({ $isCompact, theme }) =>
-    $isCompact ? `${theme.spacing.sm}` : `${theme.spacing.md} 20px`};
+  width: ${({ $isCompact }) => ($isCompact ? "32px" : "48px")};
+  height: ${({ $isCompact }) => ($isCompact ? "32px" : "48px")};
+  padding: 0;
   cursor: pointer;
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -97,8 +98,8 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   }
 
   ${media.mobile} {
-    padding: ${({ $isCompact, theme }) =>
-      $isCompact ? theme.spacing.sm : `${theme.spacing.sm} ${theme.spacing.lg}`};
+    width: ${({ $isCompact }) => ($isCompact ? "32px" : "40px")};
+    height: ${({ $isCompact }) => ($isCompact ? "32px" : "40px")};
     font-size: ${({ theme }) => theme.font.size.sm};
   }
 `;
@@ -114,6 +115,11 @@ export const GuestPopup = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
   min-width: 280px;
   z-index: ${({ theme }) => theme.zIndex.searchBar};
+
+  ${media.mobile} {
+    padding: ${({ theme }) => theme.spacing.md};
+    min-width: 240px;
+  }
 `;
 
 export const GuestSection = styled.div`
@@ -166,6 +172,11 @@ export const CounterButton = styled.button`
     opacity: 0.4;
     cursor: not-allowed;
   }
+
+  ${media.mobile} {
+    width: 28px;
+    height: 28px;
+  }
 `;
 
 export const CounterValue = styled.span`
@@ -174,4 +185,3 @@ export const CounterValue = styled.span`
   min-width: 24px;
   text-align: center;
 `;
-

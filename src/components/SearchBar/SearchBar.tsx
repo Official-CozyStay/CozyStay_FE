@@ -14,7 +14,7 @@ import {
   CounterButton,
   CounterValue,
 } from "./SearchBar.styles";
-import { Home, Search, Minus, Plus } from "lucide-react";
+import { Search, Minus, Plus } from "lucide-react";
 
 interface SearchBarProps {
   isCompact?: boolean;
@@ -63,10 +63,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
-      <SearchField onClick={() => {}} $isCompact={isCompact}>
+      <SearchField $isCompact={isCompact}>
         {!isCompact && <SearchFieldLabel>여행지</SearchFieldLabel>}
         <SearchFieldContent>
-          <Home size={16} />
           {!isCompact && <span>여행지 검색</span>}
           {isCompact && <span>어디든지</span>}
         </SearchFieldContent>
@@ -74,7 +73,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
       <SearchDivider $isCompact={isCompact} />
 
-      <SearchField onClick={() => {}} $isCompact={isCompact}>
+      <SearchField $isCompact={isCompact}>
         {!isCompact && <SearchFieldLabel>날짜</SearchFieldLabel>}
         <SearchFieldContent>
           {!isCompact && <span>날짜 추가</span>}
@@ -86,7 +85,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
       <SearchField
         onClick={() => setShowGuestPopup(!showGuestPopup)}
-        style={{ position: "relative" }}
         $isCompact={isCompact}
       >
         {!isCompact && <SearchFieldLabel>여행자</SearchFieldLabel>}
@@ -208,7 +206,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
       <SearchButton type="button" $isCompact={isCompact}>
         <Search size={18} />
-        {!isCompact && <span>검색</span>}
       </SearchButton>
     </SearchBarContainer>
   );
