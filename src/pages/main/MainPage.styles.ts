@@ -14,22 +14,33 @@ export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
   display: flex;
   justify-content: center;
   padding: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.spacing.sm : `${theme.spacing.xl} ${theme.spacing["3xl"]}`};
+    $isScrolled
+      ? theme.spacing.sm
+      : `${theme.spacing.xl} ${theme.spacing["3xl"]}`};
   background: ${({ $isScrolled, theme }) =>
     $isScrolled ? "transparent" : theme.colors.common.white};
   position: ${({ $isScrolled }) => ($isScrolled ? "fixed" : "static")};
-  top: ${({ $isScrolled, theme }) => ($isScrolled ? `${theme.spacing["5xl"]}` : "auto")};
+  top: ${({ $isScrolled }) => ($isScrolled ? "0" : "auto")};
   left: ${({ $isScrolled }) => ($isScrolled ? "50%" : "auto")};
-  transform: ${({ $isScrolled }) => ($isScrolled ? "translateX(-50%)" : "none")};
+  transform: ${({ $isScrolled }) =>
+    $isScrolled ? "translateX(-50%)" : "none"};
   z-index: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.zIndex.searchBar : "auto"};
+    $isScrolled ? theme.zIndex.header + 1 : "auto"};
   width: ${({ $isScrolled }) => ($isScrolled ? "auto" : "100%")};
   transition: ${({ theme }) => theme.transition.all.slow};
+  height: ${({ $isScrolled }) => ($isScrolled ? "64px" : "auto")};
+  align-items: center;
+  pointer-events: ${({ $isScrolled }) => ($isScrolled ? "none" : "auto")};
+
+  > * {
+    pointer-events: auto;
+  }
 
   ${media.mobile} {
     padding: ${({ $isScrolled, theme }) =>
       $isScrolled ? `6px ${theme.spacing.lg}` : theme.spacing.lg};
-    top: ${({ $isScrolled }) => ($isScrolled ? "56px" : "auto")};
+    top: ${({ $isScrolled }) => ($isScrolled ? "0" : "auto")};
+    height: ${({ $isScrolled }) => ($isScrolled ? "56px" : "auto")};
   }
 `;
 
@@ -59,17 +70,6 @@ export const SectionTitle = styled.h2`
 
   ${media.mobile} {
     font-size: ${({ theme }) => theme.font.size.lg};
-  }
-`;
-
-export const SectionArrow = styled.span`
-  font-size: ${({ theme }) => theme.font.size.xxl};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  cursor: pointer;
-  transition: ${({ theme }) => theme.transition.colors.normal};
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.text.primary};
   }
 `;
 
@@ -106,36 +106,51 @@ export const CardList = styled.div`
   }
 `;
 
-export const ScrollButton = styled.button<{ $position: "left" | "right" }>`
+export const ScrollButtonGroup = styled.div`
   position: absolute;
-  ${({ $position, theme }) =>
-    $position === "left" ? `left: -${theme.spacing.xl}` : `right: -${theme.spacing.xl}`};
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
+  right: ${({ theme }) => theme.spacing.md};
+  top: -${({ theme }) => theme.spacing["2xl"]};
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.xs};
+  z-index: ${({ theme }) => theme.zIndex.fixed};
+
+  ${media.mobile} {
+    display: none;
+  }
+`;
+
+export const ScrollButton = styled.button<{
+  $position: "left" | "right";
+  $disabled?: boolean;
+}>`
+  width: 32px;
+  height: 32px;
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: ${({ theme }) => theme.shadow.md};
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: ${({ theme }) => theme.zIndex.dropdown};
   transition: ${({ theme }) => theme.transition.all.normal};
+  color: ${({ theme, $disabled }) =>
+    $disabled ? theme.colors.text.secondary : theme.colors.text.primary};
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 
-  &:hover {
+  &:hover:not(:disabled) {
     box-shadow: ${({ theme }) => theme.shadow.lg};
-    transform: translateY(-50%) scale(1.1);
+    transform: scale(1.1);
+    border-color: ${({ theme }) => theme.colors.primary.main};
+    color: ${({ theme }) => theme.colors.primary.main};
   }
 
-  &:active {
-    transform: translateY(-50%) scale(0.95);
+  &:active:not(:disabled) {
+    transform: scale(0.95);
   }
 
-  ${media.mobile} {
-    display: none;
+  &:disabled {
+    cursor: not-allowed;
   }
 `;
 
@@ -144,9 +159,14 @@ export const Footer = styled.footer`
   text-align: center;
   color: ${({ theme }) => theme.colors.primary.main};
   opacity: 0.7;
-  font-size: 13px;
+  font-size: ${({ theme }) => theme.font.size.xs};
   padding: ${({ theme }) => theme.spacing["3xl"]} 0;
   margin-top: ${({ theme }) => theme.spacing["6xl"]};
   background: ${({ theme }) => theme.colors.common.white};
-`;
 
+  ${media.mobile} {
+    padding: ${({ theme }) => theme.spacing.xl} 0;
+    margin-top: ${({ theme }) => theme.spacing["4xl"]};
+    font-size: ${({ theme }) => theme.font.size.xs};
+  }
+`;

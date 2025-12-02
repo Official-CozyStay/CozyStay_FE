@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/Header/Header";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import AccommodationSection from "./AccommodationSection";
@@ -262,7 +262,6 @@ const SCROLL_THRESHOLD = 100;
 const MainPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -289,7 +288,7 @@ const MainPage: React.FC = () => {
   }, []);
 
   return (
-    <MainContainer ref={containerRef}>
+    <MainContainer>
       <Header isScrolled={isScrolled} />
 
       <SearchBarWrapper $isScrolled={isScrolled}>
