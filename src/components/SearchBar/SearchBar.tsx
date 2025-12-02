@@ -59,7 +59,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
     }));
   };
 
-  const totalGuests = guests.adults + guests.children + guests.infants;
+  const totalGuests = guests.adults + guests.children + guests.infants + guests.pets;
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
