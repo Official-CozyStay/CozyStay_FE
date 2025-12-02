@@ -14,7 +14,8 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   background: ${({ theme }) => theme.colors.common.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
-  transition: height ${({ theme }) => theme.transition.slow}, box-shadow ${({ theme }) => theme.transition.slow};
+  transition: height ${({ theme }) => theme.transition.slow},
+    box-shadow ${({ theme }) => theme.transition.slow};
   box-shadow: ${({ $isScrolled }) =>
     $isScrolled ? "0 2px 8px rgba(0,0,0,0.1)" : "none"};
 
@@ -96,7 +97,8 @@ export const NavBadge = styled.span`
   background: ${({ theme }) => theme.colors.primary.main};
   color: ${({ theme }) => theme.colors.common.white};
   font-size: ${({ theme }) => theme.font.size.xs};
-  padding: 2px ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.xxs}
+    ${({ theme }) => theme.spacing.md};
   border-radius: ${({ theme }) => theme.radius.sm};
   font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
@@ -133,8 +135,8 @@ export const HostModeButton = styled.button`
 `;
 
 export const HostModeToggle = styled.button<{ $active?: boolean }>`
-  width: 48px;
-  height: 24px;
+  width: ${({ theme }) => theme.size.toggleWidth};
+  height: ${({ theme }) => theme.size.toggleHeight};
   border-radius: ${({ theme }) => theme.radius.full};
   border: none;
   cursor: pointer;
@@ -166,4 +168,3 @@ export const MenuButton = styled.button`
     box-shadow: ${({ theme }) => theme.shadow.sm};
   }
 `;
-

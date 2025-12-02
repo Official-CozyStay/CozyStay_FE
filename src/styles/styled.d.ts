@@ -39,6 +39,7 @@ declare module "styled-components" {
       lg: string;
     };
     spacing: {
+      xxs: string;
       xs: string;
       sm: string;
       md: string;
@@ -49,6 +50,10 @@ declare module "styled-components" {
       "4xl": string;
       "5xl": string;
       "6xl": string;
+    };
+    size: {
+      toggleWidth: string;
+      toggleHeight: string;
     };
     zIndex: {
       base: number;
