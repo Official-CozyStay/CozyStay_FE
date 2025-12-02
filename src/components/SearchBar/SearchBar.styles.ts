@@ -10,7 +10,7 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
   padding: ${({ $isCompact, theme }) =>
     $isCompact
       ? `${theme.spacing.sm} ${theme.spacing.lg}`
-      : `14px ${theme.spacing.sm} 14px ${theme.spacing.xl}`};
+      : `${theme.spacing.md} ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.xl}`};
   box-shadow: ${({ theme }) => theme.shadow.md};
   max-width: ${({ $isCompact }) => ($isCompact ? "300px" : "850px")};
   width: 100%;
@@ -68,7 +68,7 @@ export const SearchFieldContent = styled.div`
 
 export const SearchDivider = styled.div<{ $isCompact?: boolean }>`
   width: 1px;
-  height: ${({ $isCompact }) => ($isCompact ? "16px" : "24px")};
+  height: ${({ $isCompact, theme }) => ($isCompact ? theme.spacing.lg : theme.spacing.xl)};
   background: ${({ theme }) => theme.colors.border.primary};
   flex-shrink: 0;
 `;
@@ -83,7 +83,7 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   border: none;
   border-radius: ${({ theme }) => theme.radius.full};
   padding: ${({ $isCompact, theme }) =>
-    $isCompact ? `${theme.spacing.sm}` : `${theme.spacing.md} 20px`};
+    $isCompact ? `${theme.spacing.sm}` : `${theme.spacing.md} ${theme.spacing.xl}`};
   cursor: pointer;
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -112,7 +112,7 @@ export const GuestPopup = styled.div`
   border-radius: ${({ theme }) => theme.radius.lg};
   box-shadow: ${({ theme }) => theme.shadow.lg};
   padding: ${({ theme }) => theme.spacing.lg};
-  min-width: 280px;
+  min-width: ${({ theme }) => theme.size.guestPopupMinWidth};
   z-index: ${({ theme }) => theme.zIndex.searchBar};
 `;
 
@@ -146,8 +146,8 @@ export const GuestCounter = styled.div`
 `;
 
 export const CounterButton = styled.button`
-  width: 32px;
-  height: 32px;
+  width: ${({ theme }) => theme.size.counterButton};
+  height: ${({ theme }) => theme.size.counterButton};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.common.white};
@@ -171,7 +171,7 @@ export const CounterButton = styled.button`
 export const CounterValue = styled.span`
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.medium};
-  min-width: 24px;
+  min-width: ${({ theme }) => theme.size.counterValueMinWidth};
   text-align: center;
 `;
 

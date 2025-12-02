@@ -54,6 +54,9 @@ declare module "styled-components" {
     size: {
       toggleWidth: string;
       toggleHeight: string;
+      guestPopupMinWidth: string;
+      counterButton: string;
+      counterValueMinWidth: string;
     };
     zIndex: {
       base: number;
