@@ -30,7 +30,7 @@ export const CardBadge = styled.div`
   font-weight: ${({ theme }) => theme.font.weight.bold};
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.full};
-  padding: ${({ theme }) => theme.spacing.md} 10px;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.sm};
   box-shadow: ${({ theme }) => theme.shadow.sm};
 `;
 
