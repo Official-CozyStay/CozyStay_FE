@@ -57,6 +57,13 @@ declare module "styled-components" {
       guestPopupMinWidth: string;
       counterButton: string;
       counterValueMinWidth: string;
+      cardWidth: string;
+      cardWidthMobile: string;
+      scrollButton: string;
+      scrollAmount: number;
+    };
+    layout: {
+      maxWidth: string;
     };
     zIndex: {
       base: number;
