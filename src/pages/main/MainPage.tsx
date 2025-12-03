@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import { useTheme } from "styled-components";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import AccommodationSection from "./AccommodationSection";
 import {
@@ -10,26 +11,33 @@ import {
 } from "@/data/mockAccommodations";
 import { MainContainer, SearchBarWrapper, Footer } from "./MainPage.styles";
 
-const SCROLL_THRESHOLD = 100;
+// spacing 토큰을 기반으로 스크롤 임계값 계산 (5xl + 2xl = 64px + 32px = 96px, 100px에 근접)
+const getScrollThreshold = (spacing5xl: string, spacing2xl: string) => {
+  const value5xl = parseInt(spacing5xl.replace("px", ""), 10);
+  const value2xl = parseInt(spacing2xl.replace("px", ""), 10);
+  return value5xl + value2xl; // 96px
+};
 
 const MainPage: React.FC = () => {
+  const theme = useTheme();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollThreshold = getScrollThreshold(theme.spacing["5xl"], theme.spacing["2xl"]);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsScrolled(scrollY > SCROLL_THRESHOLD);
+      setIsScrolled(scrollY > scrollThreshold);
 
       // 스크롤이 끝에 도달했는지 확인
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollPosition = scrollY + windowHeight;
 
-      // 끝에서 SCROLL_THRESHOLD 이내에 도달하면 Footer 표시
-      if (scrollPosition >= documentHeight - SCROLL_THRESHOLD) {
+      // 끝에서 scrollThreshold 이내에 도달하면 Footer 표시
+      if (scrollPosition >= documentHeight - scrollThreshold) {
         setShowFooter(true);
       } else {
         setShowFooter(false);
