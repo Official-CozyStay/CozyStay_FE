@@ -20,6 +20,38 @@ interface SearchBarProps {
   isCompact?: boolean;
 }
 
+interface GuestCounterRowProps {
+  label: string;
+  age: string;
+  count: number;
+  onIncrease: (e: React.MouseEvent) => void;
+  onDecrease: (e: React.MouseEvent) => void;
+}
+
+const GuestCounterRow: React.FC<GuestCounterRowProps> = React.memo(({
+  label,
+  age,
+  count,
+  onIncrease,
+  onDecrease,
+}) => (
+  <GuestSection>
+    <div>
+      <GuestLabel>{label}</GuestLabel>
+      <GuestAge>{age}</GuestAge>
+    </div>
+    <GuestCounter>
+      <CounterButton onClick={onDecrease} disabled={count === 0}>
+        <Minus size={16} />
+      </CounterButton>
+      <CounterValue>{count}</CounterValue>
+      <CounterButton onClick={onIncrease}>
+        <Plus size={16} />
+      </CounterButton>
+    </GuestCounter>
+  </GuestSection>
+));
+
 const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
   const [showGuestPopup, setShowGuestPopup] = useState(false);
   const [guests, setGuests] = useState({
@@ -60,38 +92,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
   };
 
   const totalGuests = guests.adults + guests.children + guests.infants + guests.pets;
-
-  interface GuestCounterRowProps {
-    label: string;
-    age: string;
-    count: number;
-    onIncrease: (e: React.MouseEvent) => void;
-    onDecrease: (e: React.MouseEvent) => void;
-  }
-
-  const GuestCounterRow: React.FC<GuestCounterRowProps> = ({
-    label,
-    age,
-    count,
-    onIncrease,
-    onDecrease,
-  }) => (
-    <GuestSection>
-      <div>
-        <GuestLabel>{label}</GuestLabel>
-        <GuestAge>{age}</GuestAge>
-      </div>
-      <GuestCounter>
-        <CounterButton onClick={onDecrease} disabled={count === 0}>
-          <Minus size={16} />
-        </CounterButton>
-        <CounterValue>{count}</CounterValue>
-        <CounterButton onClick={onIncrease}>
-          <Plus size={16} />
-        </CounterButton>
-      </GuestCounter>
-    </GuestSection>
-  );
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
