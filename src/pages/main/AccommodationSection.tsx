@@ -10,6 +10,7 @@ import {
   CardListWrapper,
   CardList,
   ScrollButton,
+  CARD_WIDTH,
 } from "./MainPage.styles";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -19,10 +20,10 @@ interface AccommodationSectionProps {
 }
 
 // 카드 너비 + gap을 기반으로 스크롤 양 계산
-const CARD_WIDTH = 300; // MainPage.styles.ts의 CARD_WIDTH와 동일
-const getScrollAmount = (gap: string) => {
+const getScrollAmount = (cardWidth: string, gap: string) => {
+  const cardWidthValue = parseInt(cardWidth.replace("px", ""), 10);
   const gapValue = parseInt(gap.replace("px", ""), 10);
-  return CARD_WIDTH + gapValue;
+  return cardWidthValue + gapValue;
 };
 
 const AccommodationSection: React.FC<AccommodationSectionProps> = ({
@@ -31,7 +32,7 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
 }) => {
   const theme = useTheme();
   const listRef = useRef<HTMLDivElement>(null);
-  const scrollAmount = getScrollAmount(theme.spacing.xl); // CardList의 gap과 동일
+  const scrollAmount = getScrollAmount(CARD_WIDTH, theme.spacing.xl); // CardList의 gap과 동일
 
   const scrollList = (direction: "left" | "right") => {
     if (listRef.current) {

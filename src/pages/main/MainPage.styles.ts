@@ -77,7 +77,7 @@ export const CardListWrapper = styled.div`
   position: relative;
 `;
 
-const CARD_WIDTH = "300px";
+export const CARD_WIDTH = "300px";
 const CARD_WIDTH_MOBILE = "260px";
 
 export const CardList = styled.div`
