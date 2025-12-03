@@ -114,26 +114,6 @@ export const HeaderRight = styled.div`
   }
 `;
 
-export const HostModeButton = styled.button`
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.font.size.sm};
-  font-weight: ${({ theme }) => theme.font.weight.medium};
-  border-radius: ${({ theme }) => theme.radius.md};
-  transition: ${({ theme }) => theme.transition.colors.normal};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.border.light};
-  }
-
-  ${media.mobile} {
-    display: none;
-  }
-`;
-
 const TOGGLE_WIDTH = "48px";
 const TOGGLE_HEIGHT = "24px";
 
@@ -149,10 +129,6 @@ export const HostModeToggle = styled.button<{ $active?: boolean }>`
   font-size: ${({ theme }) => theme.font.size.xs};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   transition: ${({ theme }) => theme.transition.colors.normal};
-
-  ${media.mobile} {
-    display: none;
-  }
 `;
 
 export const MenuButton = styled.button`
