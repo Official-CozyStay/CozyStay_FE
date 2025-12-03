@@ -8,11 +8,11 @@ export const Layout = styled.div`
 `;
 
 export const Header = styled.header`
-  height: 64px;
+  height: ${({ theme }) => theme.spacing["4xl"]};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 ${({ theme }) => theme.spacing.xl};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
 `;
 
@@ -37,7 +37,7 @@ export const BrandTitle = styled.h1`
 
 export const Nav = styled.nav`
   display: flex;
-  gap: 20px;
+  gap: ${({ theme }) => theme.spacing.xl};
   a {
     text-decoration: none;
     color: ${({ theme }) => theme.colors.primary.main};
@@ -57,6 +57,6 @@ export const Footer = styled.footer`
   text-align: center;
   color: ${({ theme }) => theme.colors.primary.main};
   opacity: 0.7;
-  font-size: 13px;
-  padding: 16px 0;
+  font-size: ${({ theme }) => theme.font.size.xs};
+  padding: ${({ theme }) => theme.spacing.lg} 0;
 `;

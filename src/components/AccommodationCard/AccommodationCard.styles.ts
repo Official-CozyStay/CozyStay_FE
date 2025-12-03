@@ -39,8 +39,8 @@ export const CardHeartButton = styled.button<{ $isFavorite?: boolean }>`
   right: ${({ theme }) => theme.spacing.md};
   top: ${({ theme }) => theme.spacing.md};
   z-index: ${({ theme }) => theme.zIndex.dropdown};
-  width: 32px;
-  height: 32px;
+  width: ${({ theme }) => theme.spacing["2xl"]};
+  height: ${({ theme }) => theme.spacing["2xl"]};
   border: none;
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.full};
