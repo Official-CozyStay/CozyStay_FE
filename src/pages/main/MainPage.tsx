@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
 import { useTheme } from "styled-components";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import AccommodationSection from "./AccommodationSection";
@@ -20,7 +19,6 @@ const getScrollThreshold = (spacing5xl: string, spacing2xl: string) => {
 
 const MainPage: React.FC = () => {
   const theme = useTheme();
-  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
