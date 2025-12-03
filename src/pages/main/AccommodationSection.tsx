@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
+import { Accommodation } from "@/types/accommodation";
 import {
   Section,
   SectionHeader,
@@ -10,17 +11,6 @@ import {
   ScrollButton,
 } from "./MainPage.styles";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-interface Accommodation {
-  id: number;
-  image: string;
-  badge: string;
-  title: string;
-  date: string;
-  price: string;
-  nights: string;
-  rating: number;
-}
 
 interface AccommodationSectionProps {
   title: string;

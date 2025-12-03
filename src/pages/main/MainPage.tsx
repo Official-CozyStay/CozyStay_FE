@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Header from "@/components/Header/Header";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import AccommodationSection from "./AccommodationSection";
+import { Accommodation } from "@/types/accommodation";
 import { MainContainer, SearchBarWrapper, Footer } from "./MainPage.styles";
 
 const SCROLL_THRESHOLD = 100;
 
 // TODO: 임시 데이터 (나중에 API로 대체)
-const mockAccommodations = [
+const mockAccommodations: Accommodation[] = [
   {
     id: 1,
     image: "https://picsum.photos/seed/room1/400/300",
@@ -70,7 +71,7 @@ const mockAccommodations = [
   },
 ];
 
-const busanAccommodations = [
+const busanAccommodations: Accommodation[] = [
   {
     id: 7,
     image: "https://picsum.photos/seed/busan1/400/300",
@@ -133,7 +134,7 @@ const busanAccommodations = [
   },
 ];
 
-const tokyoAccommodations = [
+const tokyoAccommodations: Accommodation[] = [
   {
     id: 13,
     image: "https://picsum.photos/seed/tokyo1/400/300",
@@ -196,7 +197,7 @@ const tokyoAccommodations = [
   },
 ];
 
-const osakaAccommodations = [
+const osakaAccommodations: Accommodation[] = [
   {
     id: 19,
     image: "https://picsum.photos/seed/osaka1/400/300",
