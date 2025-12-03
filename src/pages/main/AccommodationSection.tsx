@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useTheme } from "styled-components";
 import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
 import { Accommodation } from "@/types/accommodation";
 import {
@@ -17,18 +18,25 @@ interface AccommodationSectionProps {
   accommodations: Accommodation[];
 }
 
-const SCROLL_AMOUNT = 400;
+// 카드 너비 + gap을 기반으로 스크롤 양 계산
+const CARD_WIDTH = 300; // MainPage.styles.ts의 CARD_WIDTH와 동일
+const getScrollAmount = (gap: string) => {
+  const gapValue = parseInt(gap.replace("px", ""), 10);
+  return CARD_WIDTH + gapValue;
+};
 
 const AccommodationSection: React.FC<AccommodationSectionProps> = ({
   title,
   accommodations,
 }) => {
+  const theme = useTheme();
   const listRef = useRef<HTMLDivElement>(null);
+  const scrollAmount = getScrollAmount(theme.spacing.xl); // CardList의 gap과 동일
 
   const scrollList = (direction: "left" | "right") => {
     if (listRef.current) {
       listRef.current.scrollBy({
-        left: direction === "left" ? -SCROLL_AMOUNT : SCROLL_AMOUNT,
+        left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
       });
     }
