@@ -32,7 +32,10 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
   }
 `;
 
-export const SearchField = styled.div<{ $isCompact?: boolean }>`
+export const SearchField = styled.div<{
+  $isCompact?: boolean;
+  $hasPopup?: boolean;
+}>`
   flex: ${({ $isCompact }) => ($isCompact ? "0 1 auto" : "1")};
   display: flex;
   flex-direction: ${({ $isCompact }) => ($isCompact ? "row" : "column")};
@@ -41,7 +44,7 @@ export const SearchField = styled.div<{ $isCompact?: boolean }>`
   cursor: pointer;
   padding: ${({ $isCompact, theme }) =>
     $isCompact ? `0 ${theme.spacing.sm}` : `0 ${theme.spacing.lg}`};
-  position: relative;
+  position: ${({ $hasPopup }) => ($hasPopup ? "relative" : "static")};
   white-space: nowrap;
 
   &:hover {
@@ -74,7 +77,8 @@ export const SearchFieldContent = styled.div`
 
 export const SearchDivider = styled.div<{ $isCompact?: boolean }>`
   width: 1px;
-  height: ${({ $isCompact, theme }) => ($isCompact ? theme.spacing.lg : theme.spacing.xl)};
+  height: ${({ $isCompact, theme }) =>
+    $isCompact ? theme.spacing.lg : theme.spacing.xl};
   background: ${({ theme }) => theme.colors.border.primary};
   flex-shrink: 0;
 `;
@@ -89,7 +93,9 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   border: none;
   border-radius: ${({ theme }) => theme.radius.full};
   padding: ${({ $isCompact, theme }) =>
-    $isCompact ? `${theme.spacing.sm}` : `${theme.spacing.md} ${theme.spacing.xl}`};
+    $isCompact
+      ? `${theme.spacing.sm}`
+      : `${theme.spacing.md} ${theme.spacing.xl}`};
   cursor: pointer;
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -104,7 +110,9 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
 
   ${media.mobile} {
     padding: ${({ $isCompact, theme }) =>
-      $isCompact ? theme.spacing.sm : `${theme.spacing.sm} ${theme.spacing.lg}`};
+      $isCompact
+        ? theme.spacing.sm
+        : `${theme.spacing.sm} ${theme.spacing.lg}`};
     font-size: ${({ theme }) => theme.font.size.sm};
   }
 `;
@@ -186,4 +194,3 @@ export const CounterValue = styled.span`
   min-width: ${COUNTER_VALUE_MIN_WIDTH};
   text-align: center;
 `;
-
