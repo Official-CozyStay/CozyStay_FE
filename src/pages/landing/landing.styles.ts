@@ -254,16 +254,16 @@ export const ListDesc = styled.p`
 export const CardGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  gap: ${({ theme }) => theme.spacing.lg};
 
   ${media.tablet} {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: ${({ theme }) => theme.spacing.lg};
   }
 
   ${media.mobile} {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: ${({ theme }) => theme.spacing.lg};
   }
 `;
 

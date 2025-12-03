@@ -109,16 +109,14 @@ export const CardList = styled.div`
   }
 `;
 
-const SCROLL_BUTTON_SIZE = "40px";
-
 export const ScrollButton = styled.button<{ $position: "left" | "right" }>`
   position: absolute;
   ${({ $position, theme }) =>
     $position === "left" ? `left: -${theme.spacing.xl}` : `right: -${theme.spacing.xl}`};
   top: 50%;
   transform: translateY(-50%);
-  width: ${SCROLL_BUTTON_SIZE};
-  height: ${SCROLL_BUTTON_SIZE};
+  width: ${({ theme }) => theme.spacing["3xl"]};
+  height: ${({ theme }) => theme.spacing["3xl"]};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
