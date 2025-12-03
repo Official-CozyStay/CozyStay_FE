@@ -3,9 +3,12 @@ export interface Accommodation {
   image: string;
   badge: string;
   title: string;
-  date: string;
-  price: string;
-  nights: string;
+  date: {
+    start: Date;
+    end: Date;
+  };
+  price: number;
+  nights: number;
   rating: number;
 }
 
