@@ -95,7 +95,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
-      <SearchField onClick={() => {}} $isCompact={isCompact}>
+      <SearchField
+        onClick={() => {
+          // TODO: 여행지 검색 기능 구현
+        }}
+        $isCompact={isCompact}
+      >
         {!isCompact && <SearchFieldLabel>여행지</SearchFieldLabel>}
         <SearchFieldContent>
           <Home size={16} />
@@ -106,7 +111,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
       <SearchDivider $isCompact={isCompact} />
 
-      <SearchField onClick={() => {}} $isCompact={isCompact}>
+      <SearchField
+        onClick={() => {
+          // TODO: 날짜 선택 기능 구현
+        }}
+        $isCompact={isCompact}
+      >
         {!isCompact && <SearchFieldLabel>날짜</SearchFieldLabel>}
         <SearchFieldContent>
           {!isCompact && <span>날짜 추가</span>}
