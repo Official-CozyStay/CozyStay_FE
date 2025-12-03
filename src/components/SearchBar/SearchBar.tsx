@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   SearchBarContainer,
   SearchField,
@@ -81,15 +81,83 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
     };
   }, [showGuestPopup]);
 
-  const updateGuest = (
-    type: keyof typeof guests,
-    delta: number
-  ) => {
-    setGuests((prev) => ({
-      ...prev,
-      [type]: Math.max(0, prev[type] + delta),
-    }));
-  };
+  const updateGuest = useCallback(
+    (type: keyof typeof guests, delta: number) => {
+      setGuests((prev) => ({
+        ...prev,
+        [type]: Math.max(0, prev[type] + delta),
+      }));
+    },
+    []
+  );
+
+  // 성인 수 조절 핸들러
+  const handleAdultsIncrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("adults", 1);
+    },
+    [updateGuest]
+  );
+
+  const handleAdultsDecrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("adults", -1);
+    },
+    [updateGuest]
+  );
+
+  // 어린이 수 조절 핸들러
+  const handleChildrenIncrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("children", 1);
+    },
+    [updateGuest]
+  );
+
+  const handleChildrenDecrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("children", -1);
+    },
+    [updateGuest]
+  );
+
+  // 유아 수 조절 핸들러
+  const handleInfantsIncrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("infants", 1);
+    },
+    [updateGuest]
+  );
+
+  const handleInfantsDecrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("infants", -1);
+    },
+    [updateGuest]
+  );
+
+  // 반려동물 수 조절 핸들러
+  const handlePetsIncrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("pets", 1);
+    },
+    [updateGuest]
+  );
+
+  const handlePetsDecrease = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      updateGuest("pets", -1);
+    },
+    [updateGuest]
+  );
 
   const totalGuests = guests.adults + guests.children + guests.infants + guests.pets;
 
@@ -141,53 +209,29 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
               label="성인"
               age="13세 이상"
               count={guests.adults}
-              onDecrease={(e) => {
-                e.stopPropagation();
-                updateGuest("adults", -1);
-              }}
-              onIncrease={(e) => {
-                e.stopPropagation();
-                updateGuest("adults", 1);
-              }}
+              onDecrease={handleAdultsDecrease}
+              onIncrease={handleAdultsIncrease}
             />
             <GuestCounterRow
               label="어린이"
               age="2~12세"
               count={guests.children}
-              onDecrease={(e) => {
-                e.stopPropagation();
-                updateGuest("children", -1);
-              }}
-              onIncrease={(e) => {
-                e.stopPropagation();
-                updateGuest("children", 1);
-              }}
+              onDecrease={handleChildrenDecrease}
+              onIncrease={handleChildrenIncrease}
             />
             <GuestCounterRow
               label="유아"
               age="2세 미만"
               count={guests.infants}
-              onDecrease={(e) => {
-                e.stopPropagation();
-                updateGuest("infants", -1);
-              }}
-              onIncrease={(e) => {
-                e.stopPropagation();
-                updateGuest("infants", 1);
-              }}
+              onDecrease={handleInfantsDecrease}
+              onIncrease={handleInfantsIncrease}
             />
             <GuestCounterRow
               label="반려동물"
               age="보조동물을 동반하시나요?"
               count={guests.pets}
-              onDecrease={(e) => {
-                e.stopPropagation();
-                updateGuest("pets", -1);
-              }}
-              onIncrease={(e) => {
-                e.stopPropagation();
-                updateGuest("pets", 1);
-              }}
+              onDecrease={handlePetsDecrease}
+              onIncrease={handlePetsIncrease}
             />
           </GuestPopup>
         )}
