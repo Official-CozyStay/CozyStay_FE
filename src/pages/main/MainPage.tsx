@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Header from "@/components/Header/Header";
+import { useLocation } from "react-router-dom";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import AccommodationSection from "./AccommodationSection";
 import {
@@ -13,6 +13,7 @@ import { MainContainer, SearchBarWrapper, Footer } from "./MainPage.styles";
 const SCROLL_THRESHOLD = 100;
 
 const MainPage: React.FC = () => {
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,8 +44,6 @@ const MainPage: React.FC = () => {
 
   return (
     <MainContainer ref={containerRef}>
-      <Header isScrolled={isScrolled} />
-
       <SearchBarWrapper $isScrolled={isScrolled}>
         <SearchBar isCompact={isScrolled} />
       </SearchBarWrapper>
