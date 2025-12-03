@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
   const [hostMode, setHostMode] = React.useState(false);
 
   // 경로에 따라 활성 네비게이션 결정
-  const getActiveNav = () => {
+  const activeNav = React.useMemo(() => {
     const path = location.pathname;
     if (path === "/" || path.startsWith("/accommodation")) {
       return "숙소";
@@ -36,10 +36,12 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
       return "서비스";
     }
     return "숙소"; // 기본값
-  };
+  }, [location.pathname]);
 
-  const activeNav = getActiveNav();
-  const toggleHostMode = () => setHostMode((prev) => !prev);
+  const toggleHostMode = React.useCallback(
+    () => setHostMode((prev) => !prev),
+    []
+  );
 
   return (
     <HeaderContainer $isScrolled={isScrolled}>
