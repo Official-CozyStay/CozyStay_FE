@@ -9,20 +9,18 @@ import {
   osakaAccommodations,
 } from "@/data/mockAccommodations";
 import { MainContainer, SearchBarWrapper, Footer } from "./MainPage.styles";
-
-// spacing 토큰을 기반으로 스크롤 임계값 계산 (5xl + 2xl = 64px + 32px = 96px, 100px에 근접)
-const getScrollThreshold = (spacing5xl: string, spacing2xl: string) => {
-  const value5xl = parseInt(spacing5xl.replace("px", ""), 10);
-  const value2xl = parseInt(spacing2xl.replace("px", ""), 10);
-  return value5xl + value2xl; // 96px
-};
+import { sumSpacingValues } from "@/utils/spacing";
 
 const MainPage: React.FC = () => {
   const theme = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollThreshold = getScrollThreshold(theme.spacing["5xl"], theme.spacing["2xl"]);
+  // spacing 토큰을 기반으로 스크롤 임계값 계산 (5xl + 2xl = 64px + 32px = 96px, 100px에 근접)
+  const scrollThreshold = sumSpacingValues(
+    theme.spacing["5xl"],
+    theme.spacing["2xl"]
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +44,7 @@ const MainPage: React.FC = () => {
     // 초기 로드 시에도 확인
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [scrollThreshold]);
 
   return (
     <MainContainer ref={containerRef}>
