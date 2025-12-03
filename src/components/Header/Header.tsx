@@ -40,6 +40,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
   };
 
   const activeNav = getActiveNav();
+  const toggleHostMode = () => setHostMode((prev) => !prev);
 
   return (
     <HeaderContainer $isScrolled={isScrolled}>
@@ -66,13 +67,10 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
       </HeaderCenter>
 
       <HeaderRight>
-        <HostModeButton onClick={() => setHostMode(!hostMode)}>
+        <HostModeButton onClick={toggleHostMode}>
           호스트 모드로 전환
         </HostModeButton>
-        <HostModeToggle
-          $active={hostMode}
-          onClick={() => setHostMode(!hostMode)}
-        >
+        <HostModeToggle $active={hostMode} onClick={toggleHostMode}>
           {hostMode ? "예" : "아니오"}
         </HostModeToggle>
         <MenuButton>
