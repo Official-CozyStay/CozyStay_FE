@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import { media } from "@/styles/media";
 
+const SEARCH_BAR_MAX_WIDTH_COMPACT = "300px";
+const SEARCH_BAR_MAX_WIDTH = "850px";
+const SEARCH_BAR_MAX_WIDTH_MOBILE = "280px";
+
 export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
   display: flex;
   align-items: center;
@@ -12,7 +16,8 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
       ? `${theme.spacing.sm} ${theme.spacing.lg}`
       : `${theme.spacing.md} ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.xl}`};
   box-shadow: ${({ theme }) => theme.shadow.md};
-  max-width: ${({ $isCompact }) => ($isCompact ? "300px" : "850px")};
+  max-width: ${({ $isCompact }) =>
+    $isCompact ? SEARCH_BAR_MAX_WIDTH_COMPACT : SEARCH_BAR_MAX_WIDTH};
   width: 100%;
   transition: ${({ theme }) => theme.transition.all.slow};
   gap: ${({ $isCompact, theme }) => ($isCompact ? theme.spacing.sm : "0")};
@@ -20,9 +25,10 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
   ${media.mobile} {
     padding: ${({ $isCompact, theme }) =>
       $isCompact
-        ? `6px ${theme.spacing.md}`
-        : `10px ${theme.spacing.md} 10px ${theme.spacing.lg}`};
-    max-width: ${({ $isCompact }) => ($isCompact ? "280px" : "100%")};
+        ? `${theme.spacing.xs} ${theme.spacing.md}`
+        : `${theme.spacing.md} ${theme.spacing.md} ${theme.spacing.md} ${theme.spacing.lg}`};
+    max-width: ${({ $isCompact }) =>
+      $isCompact ? SEARCH_BAR_MAX_WIDTH_MOBILE : "100%"};
   }
 `;
 
