@@ -28,8 +28,11 @@ export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
 
   ${media.mobile} {
     padding: ${({ $isScrolled, theme }) =>
-      $isScrolled ? `6px ${theme.spacing.lg}` : theme.spacing.lg};
-    top: ${({ $isScrolled }) => ($isScrolled ? "56px" : "auto")};
+      $isScrolled
+        ? `${theme.spacing.xs} ${theme.spacing.lg}`
+        : theme.spacing.lg};
+    top: ${({ $isScrolled, theme }) =>
+      $isScrolled ? `${theme.spacing["3xl"]}` : "auto"};
   }
 `;
 

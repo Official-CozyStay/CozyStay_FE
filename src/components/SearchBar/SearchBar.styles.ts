@@ -76,7 +76,7 @@ export const SearchFieldContent = styled.div`
 `;
 
 export const SearchDivider = styled.div<{ $isCompact?: boolean }>`
-  width: 1px;
+  width: 1px; // 1px divider는 border로 처리하기 어려워 하드코딩 유지
   height: ${({ $isCompact, theme }) =>
     $isCompact ? theme.spacing.lg : theme.spacing.xl};
   background: ${({ theme }) => theme.colors.border.primary};
@@ -161,11 +161,9 @@ export const GuestCounter = styled.div`
   gap: ${({ theme }) => theme.spacing.lg};
 `;
 
-const COUNTER_BUTTON_SIZE = "32px";
-
 export const CounterButton = styled.button`
-  width: ${COUNTER_BUTTON_SIZE};
-  height: ${COUNTER_BUTTON_SIZE};
+  width: ${({ theme }) => theme.spacing["2xl"]};
+  height: ${({ theme }) => theme.spacing["2xl"]};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.common.white};
@@ -186,11 +184,9 @@ export const CounterButton = styled.button`
   }
 `;
 
-const COUNTER_VALUE_MIN_WIDTH = "24px";
-
 export const CounterValue = styled.span`
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.medium};
-  min-width: ${COUNTER_VALUE_MIN_WIDTH};
+  min-width: ${({ theme }) => theme.spacing.xl};
   text-align: center;
 `;

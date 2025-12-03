@@ -6,7 +6,8 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   top: 0;
   left: 0;
   right: 0;
-  height: ${({ $isScrolled }) => ($isScrolled ? "64px" : "80px")};
+  height: ${({ $isScrolled, theme }) =>
+    $isScrolled ? `${theme.spacing["4xl"]}` : `${theme.spacing["5xl"]}`};
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -22,7 +23,8 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   ${media.mobile} {
     grid-template-columns: 1fr auto;
     padding: 0 ${({ theme }) => theme.spacing.lg};
-    height: ${({ $isScrolled }) => ($isScrolled ? "56px" : "64px")};
+    height: ${({ $isScrolled, theme }) =>
+      $isScrolled ? `${theme.spacing["3xl"]}` : `${theme.spacing["4xl"]}`};
   }
 `;
 
@@ -34,8 +36,8 @@ export const HeaderLeft = styled.div`
 `;
 
 export const Logo = styled.img`
-  width: 30px;
-  height: 30px;
+  width: ${({ theme }) => theme.spacing["2xl"]};
+  height: ${({ theme }) => theme.spacing["2xl"]};
 `;
 
 export const LogoText = styled.span`
@@ -114,12 +116,9 @@ export const HeaderRight = styled.div`
   }
 `;
 
-const TOGGLE_WIDTH = "48px";
-const TOGGLE_HEIGHT = "24px";
-
 export const HostModeToggle = styled.button<{ $active?: boolean }>`
-  width: ${TOGGLE_WIDTH};
-  height: ${TOGGLE_HEIGHT};
+  width: ${({ theme }) => theme.spacing["3xl"]};
+  height: ${({ theme }) => theme.spacing.xl};
   border-radius: ${({ theme }) => theme.radius.full};
   border: none;
   cursor: pointer;
@@ -132,8 +131,8 @@ export const HostModeToggle = styled.button<{ $active?: boolean }>`
 `;
 
 export const MenuButton = styled.button`
-  width: 42px;
-  height: 42px;
+  width: ${({ theme }) => theme.spacing["3xl"]};
+  height: ${({ theme }) => theme.spacing["3xl"]};
   border-radius: ${({ theme }) => theme.radius.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
