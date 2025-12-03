@@ -39,7 +39,13 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({
     <CardContainer>
       <CardImage src={image} alt={title} />
       {badge && <CardBadge>{badge}</CardBadge>}
-      <CardHeartButton onClick={onFavoriteClick} $isFavorite={isFavorite}>
+      <CardHeartButton
+        onClick={(e) => {
+          e.stopPropagation();
+          onFavoriteClick?.();
+        }}
+        $isFavorite={isFavorite}
+      >
         <Heart size={20} fill={isFavorite ? "currentColor" : "none"} />
       </CardHeartButton>
       <CardBody>
