@@ -1,7 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import { useTheme } from "styled-components";
 import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
-import { Accommodation } from "@/types/accommodation";
+import type { Accommodation } from "@/types/accommodation";
 import {
   Section,
   SectionHeader,
@@ -34,14 +34,17 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
   const listRef = useRef<HTMLDivElement>(null);
   const scrollAmount = getScrollAmount(CARD_WIDTH, theme.spacing.xl); // CardList의 gap과 동일
 
-  const scrollList = (direction: "left" | "right") => {
-    if (listRef.current) {
-      listRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  const scrollList = useCallback(
+    (direction: "left" | "right") => {
+      if (listRef.current) {
+        listRef.current.scrollBy({
+          left: direction === "left" ? -scrollAmount : scrollAmount,
+          behavior: "smooth",
+        });
+      }
+    },
+    [scrollAmount]
+  );
 
   return (
     <Section>
