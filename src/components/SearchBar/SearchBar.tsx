@@ -104,14 +104,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
     []
   );
 
-  // 게스트 수 조절 핸들러 (통합)
-  const handleGuestUpdate = useCallback(
-    (type: GuestType, delta: number) => {
-      updateGuest(type, delta);
-    },
-    [updateGuest]
-  );
-
   const totalGuests = guests.adults + guests.children + guests.infants + guests.pets;
 
   return (
@@ -163,28 +155,28 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
               age="13세 이상"
               count={guests.adults}
               guestType="adults"
-              onUpdate={handleGuestUpdate}
+              onUpdate={updateGuest}
             />
             <GuestCounterRow
               label="어린이"
               age="2~12세"
               count={guests.children}
               guestType="children"
-              onUpdate={handleGuestUpdate}
+              onUpdate={updateGuest}
             />
             <GuestCounterRow
               label="유아"
               age="2세 미만"
               count={guests.infants}
               guestType="infants"
-              onUpdate={handleGuestUpdate}
+              onUpdate={updateGuest}
             />
             <GuestCounterRow
               label="반려동물"
               age="보조동물을 동반하시나요?"
               count={guests.pets}
               guestType="pets"
-              onUpdate={handleGuestUpdate}
+              onUpdate={updateGuest}
             />
           </GuestPopup>
         )}
