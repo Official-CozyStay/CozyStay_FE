@@ -119,7 +119,7 @@ export const FieldLabel = styled.span`
 `;
 
 export const Input = styled.input`
-  height: 40px;
+  height: ${({ theme }) => theme.spacing["3xl"]};
   padding: 0 ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
@@ -135,7 +135,7 @@ export const Input = styled.input`
 `;
 
 export const Select = styled.select`
-  height: 40px;
+  height: ${({ theme }) => theme.spacing["3xl"]};
   padding: 0 ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
@@ -295,7 +295,7 @@ export const CardImg = styled.img`
 `;
 
 export const CardBody = styled.div`
-  padding: 12px;
+  padding: ${({ theme }) => theme.spacing.md};
 `;
 
 export const CardTitle = styled.h4`
@@ -340,23 +340,23 @@ export const LearnMoreButton = styled.button`
 
 export const Faq = styled.section`
   max-width: var(--max);
-  margin: 80px auto 120px;
+  margin: ${({ theme }) => theme.spacing["6xl"]} auto 120px;
   padding: 0 16px;
 `;
 
 export const FaqGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.6fr;
-  gap: 48px;
+  gap: ${({ theme }) => theme.spacing["4xl"]};
   align-items: start;
 
   ${media.tablet} {
-    gap: 32px;
+    gap: ${({ theme }) => theme.spacing["2xl"]};
   }
 
   ${media.mobile} {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: ${({ theme }) => theme.spacing.xl};
   }
 `;
 
