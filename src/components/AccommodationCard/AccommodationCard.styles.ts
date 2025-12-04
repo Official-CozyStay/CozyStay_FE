@@ -9,7 +9,7 @@ export const CardContainer = styled.article`
   transition: transform ${({ theme }) => theme.transition.normal}, box-shadow ${({ theme }) => theme.transition.normal};
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-${({ theme }) => theme.spacing.xs});
     box-shadow: ${({ theme }) => theme.shadow.lg};
   }
 `;
