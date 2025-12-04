@@ -19,7 +19,7 @@ export default function PublicLayout() {
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [SCROLL_THRESHOLD]);
+  }, []);
 
   return (
     <Layout>
