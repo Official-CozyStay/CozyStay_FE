@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { media } from "@/styles/media";
 
 export const Container = styled.main`
   --max: 1440px;
@@ -9,28 +10,50 @@ export const Hero = styled.section`
   position: relative;
   max-width: var(--max);
   margin: 60px auto 100px;
-  padding: 0 16px;
+  padding: 0 ${({ theme }) => theme.spacing.lg};
   min-height: 542px;
+
+  ${media.mobile} {
+    margin: ${({ theme }) => theme.spacing["3xl"]} auto
+      ${({ theme }) => theme.spacing["5xl"]};
+    min-height: auto;
+  }
 `;
 
 export const HeroCard = styled.div`
   position: absolute;
   top: 50%;
-  left: 32px;
+  left: ${({ theme }) => theme.spacing["2xl"]};
   transform: translateY(-50%);
   width: 420px;
   max-width: 520px;
   border-radius: ${({ theme }) => theme.radius.lg};
-  padding: 24px;
+  padding: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: ${({ theme }) => theme.shadow.md};
-  z-index: 2;
+  z-index: ${({ theme }) => theme.zIndex.dropdown};
+
+  ${media.tablet} {
+    width: 360px;
+    left: ${({ theme }) => theme.spacing.xl};
+    padding: ${({ theme }) => theme.spacing.xl};
+  }
+
+  ${media.mobile} {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: ${({ theme }) => theme.spacing.xl};
+  }
 `;
 
 export const HeroTitle = styled.h1`
   font-size: ${({ theme }) => theme.font.size.xxl};
   line-height: ${({ theme }) => theme.font.lineHeight.tight};
-  margin: 0 0 8px;
+  margin: 0 0 ${({ theme }) => theme.spacing.sm};
   font-weight: ${({ theme }) => theme.font.weight.extrabold};
   word-break: keep-all;
 `;
@@ -39,13 +62,21 @@ export const HeroDesc = styled.p`
   color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.sm};
   line-height: ${({ theme }) => theme.font.lineHeight.normal};
-  margin-bottom: 16px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const HeroImageWrap = styled.div`
   position: relative;
   margin-left: 330px;
-  z-index: 1;
+  z-index: ${({ theme }) => theme.zIndex.base};
+
+  ${media.tablet} {
+    margin-left: 280px;
+  }
+
+  ${media.mobile} {
+    margin-left: 0;
+  }
 `;
 
 export const HeroImage = styled.img`
@@ -55,18 +86,31 @@ export const HeroImage = styled.img`
   object-fit: cover;
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   display: block;
+
+  ${media.tablet} {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  ${media.mobile} {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
 `;
 
 export const SearchForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const Field = styled.label`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const FieldLabel = styled.span`
@@ -75,13 +119,14 @@ export const FieldLabel = styled.span`
 `;
 
 export const Input = styled.input`
-  height: 40px;
-  padding: 0 12px;
+  height: ${({ theme }) => theme.spacing["3xl"]};
+  padding: 0 ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   outline: none;
   font-size: ${({ theme }) => theme.font.size.sm};
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+  transition: ${({ theme }) => theme.transition.colors.normal},
+    ${({ theme }) => theme.transition.normal};
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary.main};
@@ -90,13 +135,14 @@ export const Input = styled.input`
 `;
 
 export const Select = styled.select`
-  height: 40px;
-  padding: 0 12px;
+  height: ${({ theme }) => theme.spacing["3xl"]};
+  padding: 0 ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   outline: none;
   font-size: ${({ theme }) => theme.font.size.sm};
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+  transition: ${({ theme }) => theme.transition.colors.normal},
+    ${({ theme }) => theme.transition.normal};
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary.main};
@@ -107,7 +153,7 @@ export const Select = styled.select`
 export const Grid2 = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const Submit = styled.button`
@@ -124,8 +170,8 @@ export const Submit = styled.button`
     ${({ theme }) => theme.colors.primary.hover}
   );
   color: ${({ theme }) => theme.colors.common.white};
-  margin-top: 4px;
-  transition: 0.15s ease;
+  margin-top: ${({ theme }) => theme.spacing.xs};
+  transition: ${({ theme }) => theme.transition.fast};
 
   &:hover {
     filter: brightness(1.05);
@@ -134,18 +180,30 @@ export const Submit = styled.button`
 
 export const Features = styled.section`
   max-width: var(--max);
-  margin: 48px auto 100px;
-  padding: 0 16px;
+  margin: ${({ theme }) => theme.spacing["4xl"]} auto 100px;
+  padding: 0 ${({ theme }) => theme.spacing.lg};
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 24px;
+  gap: ${({ theme }) => theme.spacing.xl};
+
+  ${media.tablet} {
+    grid-template-columns: 1fr 1fr;
+    gap: ${({ theme }) => theme.spacing.xl};
+  }
+
+  ${media.mobile} {
+    grid-template-columns: 1fr;
+    gap: ${({ theme }) => theme.spacing.xl};
+    margin: ${({ theme }) => theme.spacing["2xl"]} auto
+      ${({ theme }) => theme.spacing["5xl"]};
+  }
 `;
 
 export const Feature = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const FeatureIcon = styled.div`
@@ -196,7 +254,17 @@ export const ListDesc = styled.p`
 export const CardGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  gap: ${({ theme }) => theme.spacing.lg};
+
+  ${media.tablet} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: ${({ theme }) => theme.spacing.lg};
+  }
+
+  ${media.mobile} {
+    grid-template-columns: 1fr;
+    gap: ${({ theme }) => theme.spacing.lg};
+  }
 `;
 
 export const Card = styled.article`
@@ -227,7 +295,7 @@ export const CardImg = styled.img`
 `;
 
 export const CardBody = styled.div`
-  padding: 12px;
+  padding: ${({ theme }) => theme.spacing.md};
 `;
 
 export const CardTitle = styled.h4`
@@ -272,15 +340,24 @@ export const LearnMoreButton = styled.button`
 
 export const Faq = styled.section`
   max-width: var(--max);
-  margin: 80px auto 120px;
+  margin: ${({ theme }) => theme.spacing["6xl"]} auto 120px;
   padding: 0 16px;
 `;
 
 export const FaqGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.6fr;
-  gap: 48px;
+  gap: ${({ theme }) => theme.spacing["4xl"]};
   align-items: start;
+
+  ${media.tablet} {
+    gap: ${({ theme }) => theme.spacing["2xl"]};
+  }
+
+  ${media.mobile} {
+    grid-template-columns: 1fr;
+    gap: ${({ theme }) => theme.spacing.xl};
+  }
 `;
 
 export const FaqHeading = styled.h2`

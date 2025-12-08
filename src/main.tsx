@@ -5,7 +5,6 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 import { GlobalStyles } from "./styles/GlobalStyles";
 import { router } from "./router/index";
-
 import "./styles/fonts.css";
 
 createRoot(document.getElementById("root")!).render(
