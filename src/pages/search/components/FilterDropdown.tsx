@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import type { RefObject } from 'react';
 import {
   FilterDropdown,
   FilterSection,
@@ -38,10 +39,10 @@ type FilterDropdownPanelProps = {
   onFilterChange: (key: keyof FilterState, value: unknown) => void;
   onClose: () => void;
   buttonRefs: {
-    location: React.RefObject<HTMLButtonElement>;
-    dates: React.RefObject<HTMLButtonElement>;
-    guests: React.RefObject<HTMLButtonElement>;
-    filters: React.RefObject<HTMLButtonElement>;
+    location: RefObject<HTMLButtonElement | null>;
+    dates: RefObject<HTMLButtonElement | null>;
+    guests: RefObject<HTMLButtonElement | null>;
+    filters: RefObject<HTMLButtonElement | null>;
   };
 };
 

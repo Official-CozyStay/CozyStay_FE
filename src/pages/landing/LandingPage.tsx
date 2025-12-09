@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Hero,
@@ -39,36 +39,36 @@ import {
   FaqItem,
   FaqQuestion,
   FaqAnswer,
-} from "../landing/landing.styles";
+} from '../landing/landing.styles';
 import {
   ShieldCheck,
   Bath,
   CalendarFold,
   ChevronDown,
   ChevronUp,
-} from "lucide-react";
-import heroImg from "../../assets/images/hero.png";
+} from 'lucide-react';
+import heroImg from '../../assets/images/hero.png';
 
 const faqData = [
   {
-    q: "CozyStay는 무엇이며 어떻게 이용할 수 있나요?",
-    a: "원하는 도시와 날짜, 인원을 입력해 숙소를 검색하고 예약할 수 있습니다. 예약 전 숙소 규정과 취소 정책을 꼭 확인하세요.",
+    q: 'CozyStay는 무엇이며 어떻게 이용할 수 있나요?',
+    a: '원하는 도시와 날짜, 인원을 입력해 숙소를 검색하고 예약할 수 있습니다. 예약 전 숙소 규정과 취소 정책을 꼭 확인하세요.',
   },
   {
-    q: "검색 필터는 어떻게 이용하나요?",
-    a: "가격, 편의시설, 침대/침실 수, 즉시예약 가능 여부 등 다양한 조건으로 결과를 좁힐 수 있습니다.",
+    q: '검색 필터는 어떻게 이용하나요?',
+    a: '가격, 편의시설, 침대/침실 수, 즉시예약 가능 여부 등 다양한 조건으로 결과를 좁힐 수 있습니다.',
   },
   {
-    q: "호스트와 직접 만나야 하나요?",
-    a: "셀프 체크인이 가능한 숙소도 많습니다. 체크인 방식은 숙소 상세 페이지에서 확인할 수 있어요.",
+    q: '호스트와 직접 만나야 하나요?',
+    a: '셀프 체크인이 가능한 숙소도 많습니다. 체크인 방식은 숙소 상세 페이지에서 확인할 수 있어요.',
   },
   {
-    q: "리스팅이나 호스트에 문제가 있어 예약을 취소해야 할 경우에는 어떻게 하나요?",
-    a: "예약 내역에서 취소를 진행할 수 있습니다. 취소 수수료와 환불 규정은 숙소의 정책에 따라 달라집니다.",
+    q: '리스팅이나 호스트에 문제가 있어 예약을 취소해야 할 경우에는 어떻게 하나요?',
+    a: '예약 내역에서 취소를 진행할 수 있습니다. 취소 수수료와 환불 규정은 숙소의 정책에 따라 달라집니다.',
   },
   {
-    q: "더 자세히 알아보고 싶으세요?",
-    a: "고객센터 도움말 센터에서 더 많은 질문과 답변, 가이드를 확인하실 수 있습니다.",
+    q: '더 자세히 알아보고 싶으세요?',
+    a: '고객센터 도움말 센터에서 더 많은 질문과 답변, 가이드를 확인하실 수 있습니다.',
   },
 ] as const;
 
@@ -81,7 +81,7 @@ const FaqItemWithState = ({ q, a }: { q: string; a: string }) => {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className={open ? "open" : ""}
+        className={open ? 'open' : ''}
       >
         {q}
         {open ? <ChevronUp /> : <ChevronDown />}
@@ -96,7 +96,7 @@ const LandingPage: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/search");
+    navigate('/search');
   };
 
   return (
@@ -201,7 +201,7 @@ const LandingPage: React.FC = () => {
           주방, 와이파이, 대형 욕조 등이 완비된 숙소를 찾아보세요.
         </ListDesc>
         <CardGrid>
-          {["게스트 선호", "게스트 선호", "게스트 선호", "슈퍼호스트"].map(
+          {['게스트 선호', '게스트 선호', '게스트 선호', '슈퍼호스트'].map(
             (badge, i) => (
               <Card key={`room-${i}`}>
                 <Badge>{badge}</Badge>
@@ -228,7 +228,7 @@ const LandingPage: React.FC = () => {
         </ListDesc>
 
         <CardGrid>
-          {["게스트 선호", "게스트 선호", "게스트 선호", "슈퍼호스트"].map(
+          {['게스트 선호', '게스트 선호', '게스트 선호', '슈퍼호스트'].map(
             (badge, i) => (
               <Card key={`hotel-${i}`}>
                 <Badge>{badge}</Badge>

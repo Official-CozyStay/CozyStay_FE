@@ -6,7 +6,6 @@ import { theme } from './styles/theme';
 import { GlobalStyles } from './styles/GlobalStyles';
 import { router } from './router/index';
 import { AuthProvider } from './contexts/AuthContext';
-
 import './styles/fonts.css';
 
 createRoot(document.getElementById('root')!).render(
