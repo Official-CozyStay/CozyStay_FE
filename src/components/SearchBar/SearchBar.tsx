@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   SearchBarContainer,
   SearchField,
@@ -19,6 +19,51 @@ import { Search, Minus, Plus } from "lucide-react";
 interface SearchBarProps {
   isCompact?: boolean;
 }
+
+type GuestType = "adults" | "children" | "infants" | "pets";
+
+interface GuestCounterRowProps {
+  label: string;
+  age: string;
+  count: number;
+  guestType: GuestType;
+  onUpdate: (type: GuestType, delta: number) => void;
+}
+
+const GuestCounterRow: React.FC<GuestCounterRowProps> = React.memo(({
+  label,
+  age,
+  count,
+  guestType,
+  onUpdate,
+}) => (
+  <GuestSection>
+    <div>
+      <GuestLabel>{label}</GuestLabel>
+      <GuestAge>{age}</GuestAge>
+    </div>
+    <GuestCounter>
+      <CounterButton
+        onClick={(e) => {
+          e.stopPropagation();
+          onUpdate(guestType, -1);
+        }}
+        disabled={count === 0}
+      >
+        <Minus size={16} />
+      </CounterButton>
+      <CounterValue>{count}</CounterValue>
+      <CounterButton
+        onClick={(e) => {
+          e.stopPropagation();
+          onUpdate(guestType, 1);
+        }}
+      >
+        <Plus size={16} />
+      </CounterButton>
+    </GuestCounter>
+  </GuestSection>
+));
 
 const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
   const [showGuestPopup, setShowGuestPopup] = useState(false);
@@ -49,21 +94,26 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
     };
   }, [showGuestPopup]);
 
-  const updateGuest = (
-    type: keyof typeof guests,
-    delta: number
-  ) => {
-    setGuests((prev) => ({
-      ...prev,
-      [type]: Math.max(0, prev[type] + delta),
-    }));
-  };
+  const updateGuest = useCallback(
+    (type: GuestType, delta: number) => {
+      setGuests((prev) => ({
+        ...prev,
+        [type]: Math.max(0, prev[type] + delta),
+      }));
+    },
+    []
+  );
 
-  const totalGuests = guests.adults + guests.children + guests.infants;
+  const totalGuests = guests.adults + guests.children + guests.infants + guests.pets;
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
-      <SearchField $isCompact={isCompact}>
+      <SearchField
+        onClick={() => {
+          // TODO: 여행지 검색 기능 구현
+        }}
+        $isCompact={isCompact}
+      >
         {!isCompact && <SearchFieldLabel>여행지</SearchFieldLabel>}
         <SearchFieldContent>
           {!isCompact && <span>여행지 검색</span>}
@@ -73,7 +123,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
       <SearchDivider $isCompact={isCompact} />
 
-      <SearchField $isCompact={isCompact}>
+      <SearchField
+        onClick={() => {
+          // TODO: 날짜 선택 기능 구현
+        }}
+        $isCompact={isCompact}
+      >
         {!isCompact && <SearchFieldLabel>날짜</SearchFieldLabel>}
         <SearchFieldContent>
           {!isCompact && <span>날짜 추가</span>}
@@ -85,6 +140,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 
       <SearchField
         onClick={() => setShowGuestPopup(!showGuestPopup)}
+        $hasPopup={showGuestPopup}
         $isCompact={isCompact}
       >
         {!isCompact && <SearchFieldLabel>여행자</SearchFieldLabel>}
@@ -93,119 +149,41 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
         </SearchFieldContent>
         {showGuestPopup && (
           <GuestPopup ref={popupRef}>
-            <GuestSection>
-              <div>
-                <GuestLabel>성인</GuestLabel>
-                <GuestAge>13세 이상</GuestAge>
-              </div>
-              <GuestCounter>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("adults", -1);
-                  }}
-                  disabled={guests.adults === 0}
-                >
-                  <Minus size={16} />
-                </CounterButton>
-                <CounterValue>{guests.adults}</CounterValue>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("adults", 1);
-                  }}
-                >
-                  <Plus size={16} />
-                </CounterButton>
-              </GuestCounter>
-            </GuestSection>
-
-            <GuestSection>
-              <div>
-                <GuestLabel>어린이</GuestLabel>
-                <GuestAge>2~12세</GuestAge>
-              </div>
-              <GuestCounter>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("children", -1);
-                  }}
-                  disabled={guests.children === 0}
-                >
-                  <Minus size={16} />
-                </CounterButton>
-                <CounterValue>{guests.children}</CounterValue>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("children", 1);
-                  }}
-                >
-                  <Plus size={16} />
-                </CounterButton>
-              </GuestCounter>
-            </GuestSection>
-
-            <GuestSection>
-              <div>
-                <GuestLabel>유아</GuestLabel>
-                <GuestAge>2세 미만</GuestAge>
-              </div>
-              <GuestCounter>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("infants", -1);
-                  }}
-                  disabled={guests.infants === 0}
-                >
-                  <Minus size={16} />
-                </CounterButton>
-                <CounterValue>{guests.infants}</CounterValue>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("infants", 1);
-                  }}
-                >
-                  <Plus size={16} />
-                </CounterButton>
-              </GuestCounter>
-            </GuestSection>
-
-            <GuestSection>
-              <div>
-                <GuestLabel>반려동물</GuestLabel>
-                <GuestAge>보조동물을 동반하시나요?</GuestAge>
-              </div>
-              <GuestCounter>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("pets", -1);
-                  }}
-                  disabled={guests.pets === 0}
-                >
-                  <Minus size={16} />
-                </CounterButton>
-                <CounterValue>{guests.pets}</CounterValue>
-                <CounterButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateGuest("pets", 1);
-                  }}
-                >
-                  <Plus size={16} />
-                </CounterButton>
-              </GuestCounter>
-            </GuestSection>
+            <GuestCounterRow
+              label="성인"
+              age="13세 이상"
+              count={guests.adults}
+              guestType="adults"
+              onUpdate={updateGuest}
+            />
+            <GuestCounterRow
+              label="어린이"
+              age="2~12세"
+              count={guests.children}
+              guestType="children"
+              onUpdate={updateGuest}
+            />
+            <GuestCounterRow
+              label="유아"
+              age="2세 미만"
+              count={guests.infants}
+              guestType="infants"
+              onUpdate={updateGuest}
+            />
+            <GuestCounterRow
+              label="반려동물"
+              age="보조동물을 동반하시나요?"
+              count={guests.pets}
+              guestType="pets"
+              onUpdate={updateGuest}
+            />
           </GuestPopup>
         )}
       </SearchField>
 
       <SearchButton type="button" $isCompact={isCompact}>
         <Search size={18} />
+        {!isCompact && <span>검색</span>}
       </SearchButton>
     </SearchBarContainer>
   );

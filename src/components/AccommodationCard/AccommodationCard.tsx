@@ -17,13 +17,39 @@ export interface AccommodationCardProps {
   image: string;
   badge?: string;
   title: string;
-  date: string;
-  price: string;
-  nights: string;
+  date: {
+    start: Date;
+    end: Date;
+  };
+  price: number;
+  nights: number;
   rating: number;
   isFavorite?: boolean;
   onFavoriteClick?: () => void;
 }
+
+// 날짜 포맷팅 함수
+const formatDateRange = (start: Date, end: Date): string => {
+  const startMonth = start.getMonth() + 1;
+  const startDay = start.getDate();
+  const endMonth = end.getMonth() + 1;
+  const endDay = end.getDate();
+
+  if (startMonth === endMonth) {
+    return `${startMonth}월 ${startDay}일~${endDay}일`;
+  }
+  return `${startMonth}월 ${startDay}일~${endMonth}월 ${endDay}일`;
+};
+
+// 가격 포맷팅 함수
+const formatPrice = (price: number): string => {
+  return `₩${price.toLocaleString("ko-KR")}`;
+};
+
+// 박수 포맷팅 함수
+const formatNights = (nights: number): string => {
+  return `${nights}박`;
+};
 
 const AccommodationCard: React.FC<AccommodationCardProps> = ({
   image,
@@ -65,9 +91,9 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({
         </CardHeartButton>
         <CardBody>
           <CardTitle>{title}</CardTitle>
-          <CardDate>{date}</CardDate>
+          <CardDate>{formatDateRange(date.start, date.end)}</CardDate>
           <CardPrice>
-            {price} · {nights}
+            {formatPrice(price)} · {formatNights(nights)}
           </CardPrice>
           <CardRating>
             <Star size={14} fill="currentColor" />

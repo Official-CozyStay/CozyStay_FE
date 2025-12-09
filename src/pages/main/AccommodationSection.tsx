@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
+import type { Accommodation } from "@/types/accommodation";
 import {
   Section,
   SectionHeader,
@@ -11,23 +12,10 @@ import {
 } from "./MainPage.styles";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface Accommodation {
-  id: number;
-  image: string;
-  badge: string;
-  title: string;
-  date: string;
-  price: string;
-  nights: string;
-  rating: number;
-}
-
 interface AccommodationSectionProps {
   title: string;
   accommodations: Accommodation[];
 }
-
-const SCROLL_AMOUNT = 400;
 
 const AccommodationSection: React.FC<AccommodationSectionProps> = ({
   title,
@@ -59,14 +47,22 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
     };
   }, [accommodations]);
 
-  const scrollList = (direction: "left" | "right") => {
+  const scrollList = useCallback((direction: "left" | "right") => {
     if (listRef.current) {
-      listRef.current.scrollBy({
-        left: direction === "left" ? -SCROLL_AMOUNT : SCROLL_AMOUNT,
-        behavior: "smooth",
-      });
+      // 실제 렌더링된 첫 번째 카드 요소의 크기를 사용하여 스크롤 양 계산
+      const firstCard = listRef.current.children[0] as HTMLElement;
+      if (firstCard) {
+        const cardWidth = firstCard.offsetWidth;
+        const gap = parseFloat(getComputedStyle(listRef.current).gap || "0");
+        const scrollAmount = cardWidth + gap;
+
+        listRef.current.scrollBy({
+          left: direction === "left" ? -scrollAmount : scrollAmount,
+          behavior: "smooth",
+        });
+      }
     }
-  };
+  }, []);
 
   return (
     <Section>
@@ -112,4 +108,3 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
 };
 
 export default AccommodationSection;
-

@@ -9,7 +9,7 @@ export const CardContainer = styled.article`
   transition: transform ${({ theme }) => theme.transition.normal}, box-shadow ${({ theme }) => theme.transition.normal};
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-${({ theme }) => theme.spacing.xs});
     box-shadow: ${({ theme }) => theme.shadow.lg};
   }
 `;
@@ -30,7 +30,7 @@ export const CardBadge = styled.div`
   font-weight: ${({ theme }) => theme.font.weight.bold};
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.full};
-  padding: ${({ theme }) => theme.spacing.md} 10px;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.sm};
   box-shadow: ${({ theme }) => theme.shadow.sm};
 `;
 
@@ -39,8 +39,8 @@ export const CardHeartButton = styled.button<{ $isFavorite?: boolean }>`
   right: ${({ theme }) => theme.spacing.md};
   top: ${({ theme }) => theme.spacing.md};
   z-index: ${({ theme }) => theme.zIndex.dropdown};
-  width: 32px;
-  height: 32px;
+  width: ${({ theme }) => theme.spacing["2xl"]};
+  height: ${({ theme }) => theme.spacing["2xl"]};
   border: none;
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.full};

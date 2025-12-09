@@ -38,14 +38,16 @@ export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
 
   ${media.mobile} {
     padding: ${({ $isScrolled, theme }) =>
-      $isScrolled ? `6px ${theme.spacing.lg}` : theme.spacing.lg};
-    top: ${({ $isScrolled }) => ($isScrolled ? "0" : "auto")};
-    height: ${({ $isScrolled }) => ($isScrolled ? "56px" : "auto")};
+      $isScrolled
+        ? `${theme.spacing.xs} ${theme.spacing.lg}`
+        : theme.spacing.lg};
+    top: ${({ $isScrolled, theme }) =>
+      $isScrolled ? `${theme.spacing["3xl"]}` : "auto"};
   }
 `;
 
 export const Section = styled.section`
-  max-width: 1760px;
+  max-width: ${({ theme }) => theme.layout.maxWidth};
   margin: 0 auto ${({ theme }) => theme.spacing["5xl"]};
   padding: 0 ${({ theme }) => theme.spacing["3xl"]};
 
@@ -77,6 +79,9 @@ export const CardListWrapper = styled.div`
   position: relative;
 `;
 
+export const CARD_WIDTH = "300px";
+const CARD_WIDTH_MOBILE = "260px";
+
 export const CardList = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
@@ -93,7 +98,7 @@ export const CardList = styled.div`
 
   > * {
     flex-shrink: 0;
-    width: 300px;
+    width: ${CARD_WIDTH};
   }
 
   ${media.mobile} {
@@ -101,7 +106,7 @@ export const CardList = styled.div`
     padding: ${({ theme }) => theme.spacing.xs} 0;
 
     > * {
-      width: 260px;
+      width: ${CARD_WIDTH_MOBILE};
     }
   }
 `;
@@ -123,8 +128,13 @@ export const ScrollButton = styled.button<{
   $position: "left" | "right";
   $disabled?: boolean;
 }>`
-  width: 32px;
-  height: 32px;
+  position: absolute;
+  ${({ $position, theme }) =>
+    $position === "left" ? `left: -${theme.spacing.xl}` : `right: -${theme.spacing.xl}`};
+  top: 50%;
+  transform: translateY(-50%);
+  width: ${({ theme }) => theme.spacing["3xl"]};
+  height: ${({ theme }) => theme.spacing["3xl"]};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};

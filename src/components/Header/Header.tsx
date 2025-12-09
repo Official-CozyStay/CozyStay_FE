@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   HeaderContainer,
   HeaderLeft,
@@ -6,9 +7,9 @@ import {
   LogoText,
   HeaderCenter,
   NavItem,
+  NavBadge,
   HeaderRight,
-  HostModeButton,
-  UserProfileButton,
+  HostModeToggle,
   MenuButton,
 } from "./Header.styles";
 import { Home, Sparkles, Bell, Menu, User } from "lucide-react";
@@ -20,7 +21,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
-  const [activeNav, setActiveNav] = React.useState("숙소");
+  const location = useLocation();
+  const [hostMode, setHostMode] = React.useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -44,6 +46,26 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
     return () => window.removeEventListener("keydown", handleEscape);
   }, [isSidebarOpen]);
 
+  // 경로에 따라 활성 네비게이션 결정
+  const activeNav = React.useMemo(() => {
+    const path = location.pathname;
+    if (path === "/" || path.startsWith("/accommodation")) {
+      return "숙소";
+    }
+    if (path.startsWith("/experience")) {
+      return "체험";
+    }
+    if (path.startsWith("/service")) {
+      return "서비스";
+    }
+    return "숙소"; // 기본값
+  }, [location.pathname]);
+
+  const toggleHostMode = React.useCallback(
+    () => setHostMode((prev) => !prev),
+    []
+  );
+
   return (
     <>
       <HeaderContainer $isScrolled={isScrolled}>
@@ -53,34 +75,26 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
         </HeaderLeft>
 
         <HeaderCenter $isScrolled={isScrolled}>
-          <NavItem
-            $active={activeNav === "숙소"}
-            onClick={() => setActiveNav("숙소")}
-          >
+          <NavItem $active={activeNav === "숙소"}>
             <Home size={18} />
             <span>숙소</span>
           </NavItem>
-          <NavItem
-            $active={activeNav === "체험"}
-            onClick={() => setActiveNav("체험")}
-          >
+          <NavItem $active={activeNav === "체험"}>
             <Sparkles size={18} />
             <span>체험</span>
+            <NavBadge>NEW</NavBadge>
           </NavItem>
-          <NavItem
-            $active={activeNav === "서비스"}
-            onClick={() => setActiveNav("서비스")}
-          >
+          <NavItem $active={activeNav === "서비스"}>
             <Bell size={18} />
             <span>서비스</span>
+            <NavBadge>NEW</NavBadge>
           </NavItem>
         </HeaderCenter>
 
         <HeaderRight>
-          <HostModeButton>호스트 모드로 전환</HostModeButton>
-          <UserProfileButton>
-            <User size={30} />
-          </UserProfileButton>
+          <HostModeToggle $active={hostMode} onClick={toggleHostMode}>
+            {hostMode ? "예" : "아니오"}
+          </HostModeToggle>
           <MenuButton onClick={() => setIsSidebarOpen(true)}>
             <Menu size={20} />
           </MenuButton>

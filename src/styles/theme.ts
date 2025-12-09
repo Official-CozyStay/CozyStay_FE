@@ -2,6 +2,8 @@
 import { radius } from "./tokens/radius";
 import { shadow } from "./tokens/shadow";
 import { spacing } from "./tokens/spacing";
+import { size } from "./tokens/size";
+import { layout } from "./tokens/layout";
 import { zIndex } from "./tokens/zIndex";
 import { transition } from "./tokens/transition";
 import { fontSize, fontWeight, lineHeight } from "./tokens/typography";
@@ -44,6 +46,8 @@ export const theme = {
   radius,
   shadow,
   spacing,
+  size,
+  layout,
   zIndex,
   transition,
   font: {

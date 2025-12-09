@@ -39,6 +39,7 @@ declare module "styled-components" {
       lg: string;
     };
     spacing: {
+      xxs: string;
       xs: string;
       sm: string;
       md: string;
@@ -49,6 +50,10 @@ declare module "styled-components" {
       "4xl": string;
       "5xl": string;
       "6xl": string;
+    };
+    size: Record<string, never>; // 컴포넌트 특정적인 크기 값은 각 컴포넌트 내부 상수로 관리
+    layout: {
+      maxWidth: string;
     };
     zIndex: {
       base: number;
