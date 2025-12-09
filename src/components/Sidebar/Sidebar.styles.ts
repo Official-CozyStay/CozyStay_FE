@@ -20,7 +20,8 @@ export const SidebarContainer = styled.aside<{
   $isScrolled?: boolean;
 }>`
   position: fixed;
-  top: ${({ $isScrolled }) => ($isScrolled ? "65px" : "81px")};
+  top: ${({ $isScrolled, theme }) =>
+    $isScrolled ? theme.spacing["5xl"] : theme.spacing["6xl"]};
   right: 0;
   bottom: 0;
   width: 100%;
@@ -32,12 +33,13 @@ export const SidebarContainer = styled.aside<{
     top ${({ theme }) => theme.transition.slow};
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.1);
+  box-shadow: -${({ theme }) => theme.spacing.xs} 0 ${({ theme }) => theme.spacing.lg} rgba(0, 0, 0, 0.1);
   pointer-events: ${({ $isOpen }) => ($isOpen ? "auto" : "none")};
 
   ${media.mobile} {
     max-width: 100%;
-    top: ${({ $isScrolled }) => ($isScrolled ? "57px" : "65px")};
+    top: ${({ $isScrolled, theme }) =>
+      $isScrolled ? theme.spacing["4xl"] : theme.spacing["5xl"]};
   }
 `;
 
@@ -55,8 +57,8 @@ export const SidebarHeader = styled.div`
 `;
 
 export const SidebarCloseButton = styled.button`
-  width: 40px;
-  height: 40px;
+  width: ${({ theme }) => theme.spacing["3xl"]};
+  height: ${({ theme }) => theme.spacing["3xl"]};
   border-radius: ${({ theme }) => theme.radius.full};
   border: none;
   background: ${({ theme }) => theme.colors.common.white};
@@ -72,8 +74,8 @@ export const SidebarCloseButton = styled.button`
   }
 
   ${media.mobile} {
-    width: 36px;
-    height: 36px;
+    width: ${({ theme }) => theme.spacing["2xl"]};
+    height: ${({ theme }) => theme.spacing["2xl"]};
   }
 `;
 
@@ -153,8 +155,8 @@ export const SidebarHostIllustration = styled.div`
   position: absolute;
   right: ${({ theme }) => theme.spacing.xl};
   bottom: ${({ theme }) => theme.spacing.xl};
-  width: 80px;
-  height: 80px;
+  width: ${({ theme }) => theme.spacing["6xl"]};
+  height: ${({ theme }) => theme.spacing["6xl"]};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,8 +169,8 @@ export const SidebarHostIllustration = styled.div`
   }
 
   ${media.mobile} {
-    width: 60px;
-    height: 60px;
+    width: ${({ theme }) => theme.spacing["5xl"]};
+    height: ${({ theme }) => theme.spacing["5xl"]};
     right: ${({ theme }) => theme.spacing.lg};
     bottom: ${({ theme }) => theme.spacing.lg};
   }
