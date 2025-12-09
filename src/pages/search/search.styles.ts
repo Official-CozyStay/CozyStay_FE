@@ -5,6 +5,8 @@ export const SearchPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 64px);
+  padding-top: ${({ theme }) => theme.spacing['5xl']}; /* 헤더 높이만큼 패딩 추가 */
+  background: ${({ theme }) => theme.colors.common.white};
 `;
 
 export const FilterBar = styled.div`
@@ -16,7 +18,7 @@ export const FilterBar = styled.div`
   background: ${({ theme }) => theme.colors.common.white};
   flex-shrink: 0;
   position: sticky;
-  top: 64px;
+  top: ${({ theme }) => theme.spacing['4xl']}; /* 헤더가 작아졌을 때의 높이 */
   z-index: 10;
 `;
 
@@ -222,7 +224,8 @@ export const MapSection = styled.section`
   position: sticky;
   top: 137px;
   height: calc(100vh - 137px);
-  background: #e5e3df;
+  padding: 0 40px 24px 0;
+  background: ${({ theme }) => theme.colors.common.white}; /* 배경색을 흰색으로 설정 */
 `;
 
 export const MapContainer = styled.div`
@@ -230,6 +233,9 @@ export const MapContainer = styled.div`
   height: 100%;
   position: sticky;
   top: 0;
+  border-radius: ${({ theme }) => theme.radius.xl};
+  overflow: hidden;
+  box-shadow: ${({ theme }) => theme.shadow.md};
 `;
 
 export const MapPriceMarker = styled.button<{ $selected?: boolean }>`

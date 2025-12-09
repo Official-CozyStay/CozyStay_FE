@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export const MainContainer = styled.div`
-  padding-top: ${({ theme }) => theme.spacing["6xl"]};
+  padding-top: ${({ theme }) => theme.spacing['6xl']};
   background: ${({ theme }) => theme.colors.common.white};
 
   ${media.mobile} {
-    padding-top: ${({ theme }) => theme.spacing["5xl"]};
+    padding-top: ${({ theme }) => theme.spacing['5xl']};
   }
 `;
 
@@ -14,16 +14,20 @@ export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
   display: flex;
   justify-content: center;
   padding: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.spacing.sm : `${theme.spacing.xl} ${theme.spacing["3xl"]}`};
+    $isScrolled
+      ? theme.spacing.sm
+      : `${theme.spacing.xl} ${theme.spacing['3xl']}`};
   background: ${({ $isScrolled, theme }) =>
-    $isScrolled ? "transparent" : theme.colors.common.white};
-  position: ${({ $isScrolled }) => ($isScrolled ? "fixed" : "static")};
-  top: ${({ $isScrolled, theme }) => ($isScrolled ? `${theme.spacing["5xl"]}` : "auto")};
-  left: ${({ $isScrolled }) => ($isScrolled ? "50%" : "auto")};
-  transform: ${({ $isScrolled }) => ($isScrolled ? "translateX(-50%)" : "none")};
+    $isScrolled ? 'transparent' : theme.colors.common.white};
+  position: ${({ $isScrolled }) => ($isScrolled ? 'fixed' : 'static')};
+  top: ${({ $isScrolled, theme }) =>
+    $isScrolled ? `${theme.spacing['5xl']}` : 'auto'};
+  left: ${({ $isScrolled }) => ($isScrolled ? '50%' : 'auto')};
+  transform: ${({ $isScrolled }) =>
+    $isScrolled ? 'translateX(-50%)' : 'none'};
   z-index: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.zIndex.searchBar : "auto"};
-  width: ${({ $isScrolled }) => ($isScrolled ? "auto" : "100%")};
+    $isScrolled ? theme.zIndex.searchBar : 'auto'};
+  width: ${({ $isScrolled }) => ($isScrolled ? 'auto' : '100%')};
   transition: ${({ theme }) => theme.transition.all.slow};
 
   ${media.mobile} {
@@ -32,18 +36,18 @@ export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
         ? `${theme.spacing.xs} ${theme.spacing.lg}`
         : theme.spacing.lg};
     top: ${({ $isScrolled, theme }) =>
-      $isScrolled ? `${theme.spacing["3xl"]}` : "auto"};
+      $isScrolled ? `${theme.spacing['3xl']}` : 'auto'};
   }
 `;
 
 export const Section = styled.section`
   max-width: ${({ theme }) => theme.layout.maxWidth};
-  margin: 0 auto ${({ theme }) => theme.spacing["5xl"]};
-  padding: 0 ${({ theme }) => theme.spacing["3xl"]};
+  margin: 0 auto ${({ theme }) => theme.spacing['5xl']};
+  padding: 0 ${({ theme }) => theme.spacing['3xl']};
 
   ${media.mobile} {
     padding: 0 ${({ theme }) => theme.spacing.lg};
-    margin-bottom: ${({ theme }) => theme.spacing["4xl"]};
+    margin-bottom: ${({ theme }) => theme.spacing['4xl']};
   }
 `;
 
@@ -80,8 +84,8 @@ export const CardListWrapper = styled.div`
   position: relative;
 `;
 
-export const CARD_WIDTH = "300px";
-const CARD_WIDTH_MOBILE = "260px";
+export const CARD_WIDTH = '300px';
+const CARD_WIDTH_MOBILE = '260px';
 
 export const CardList = styled.div`
   display: flex;
@@ -112,14 +116,16 @@ export const CardList = styled.div`
   }
 `;
 
-export const ScrollButton = styled.button<{ $position: "left" | "right" }>`
+export const ScrollButton = styled.button<{ $position: 'left' | 'right' }>`
   position: absolute;
   ${({ $position, theme }) =>
-    $position === "left" ? `left: -${theme.spacing.xl}` : `right: -${theme.spacing.xl}`};
+    $position === 'left'
+      ? `left: -${theme.spacing.xl}`
+      : `right: -${theme.spacing.xl}`};
   top: 50%;
   transform: translateY(-50%);
-  width: ${({ theme }) => theme.spacing["3xl"]};
-  height: ${({ theme }) => theme.spacing["3xl"]};
+  width: ${({ theme }) => theme.spacing['3xl']};
+  height: ${({ theme }) => theme.spacing['3xl']};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
@@ -146,13 +152,12 @@ export const ScrollButton = styled.button<{ $position: "left" | "right" }>`
 `;
 
 export const Footer = styled.footer`
-  border-top: 1px solid ${({ theme }) => theme.colors.border.primary};
+  border-top: none;
   text-align: center;
-  color: ${({ theme }) => theme.colors.primary.main};
+  color: ${({ theme }) => theme.colors.text.primary};
   opacity: 0.7;
   font-size: ${({ theme }) => theme.font.size.xs};
-  padding: ${({ theme }) => theme.spacing["3xl"]} 0;
-  margin-top: ${({ theme }) => theme.spacing["6xl"]};
-  background: ${({ theme }) => theme.colors.common.white};
+  padding: ${({ theme }) => theme.spacing['3xl']} 0;
+  margin-top: ${({ theme }) => theme.spacing['6xl']};
+  background: ${({ theme }) => theme.colors.background.default};
 `;
-
