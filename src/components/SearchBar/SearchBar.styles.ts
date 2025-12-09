@@ -59,7 +59,7 @@ export const SearchField = styled.div<{
 `;
 
 export const SearchFieldLabel = styled.span`
-  font-size: ${({ theme }) => theme.font.size.xs};
+  font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
@@ -130,6 +130,11 @@ export const GuestPopup = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
   min-width: ${GUEST_POPUP_MIN_WIDTH};
   z-index: ${({ theme }) => theme.zIndex.searchBar};
+
+  ${media.mobile} {
+    padding: ${({ theme }) => theme.spacing.md};
+    min-width: 240px;
+  }
 `;
 
 export const GuestSection = styled.div`
@@ -181,6 +186,11 @@ export const CounterButton = styled.button`
   &:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+  }
+
+  ${media.mobile} {
+    width: 28px;
+    height: 28px;
   }
 `;
 

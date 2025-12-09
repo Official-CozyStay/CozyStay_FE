@@ -14,7 +14,7 @@ import {
   CounterButton,
   CounterValue,
 } from "./SearchBar.styles";
-import { Home, Search, Minus, Plus } from "lucide-react";
+import { Search, Minus, Plus } from "lucide-react";
 
 interface SearchBarProps {
   isCompact?: boolean;
@@ -116,7 +116,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
       >
         {!isCompact && <SearchFieldLabel>여행지</SearchFieldLabel>}
         <SearchFieldContent>
-          <Home size={16} />
           {!isCompact && <span>여행지 검색</span>}
           {isCompact && <span>어디든지</span>}
         </SearchFieldContent>

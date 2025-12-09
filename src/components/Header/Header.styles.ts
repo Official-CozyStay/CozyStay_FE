@@ -44,14 +44,24 @@ export const LogoText = styled.span`
   font-size: ${({ theme }) => theme.font.size.lg};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.primary.main};
+
+  ${media.mobile} {
+    font-size: ${({ theme }) => theme.font.size.md};
+  }
 `;
 
-export const HeaderCenter = styled.nav`
+export const HeaderCenter = styled.nav<{ $isScrolled?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing["2xl"]};
   justify-content: center;
   justify-self: center;
+
+  ${({ $isScrolled }) =>
+    $isScrolled &&
+    `
+    display: none;
+  `}
 
   ${media.mobile} {
     display: none;
@@ -120,13 +130,17 @@ export const HostModeToggle = styled.button<{ $active?: boolean }>`
   width: ${({ theme }) => theme.spacing["3xl"]};
   height: ${({ theme }) => theme.spacing.xl};
   border-radius: ${({ theme }) => theme.radius.full};
-  border: none;
-  cursor: pointer;
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme, $active }) =>
-    $active ? theme.colors.primary.main : theme.colors.border.primary};
-  color: ${({ theme }) => theme.colors.common.white};
+    $active ? theme.colors.primary.main : theme.colors.common.white};
+  color: ${({ theme, $active }) =>
+    $active ? theme.colors.common.white : theme.colors.text.primary};
   font-size: ${({ theme }) => theme.font.size.xs};
   font-weight: ${({ theme }) => theme.font.weight.bold};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: ${({ theme }) => theme.transition.colors.normal};
 `;
 

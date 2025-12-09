@@ -1,13 +1,13 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
 import type { Accommodation } from "@/types/accommodation";
 import {
   Section,
   SectionHeader,
   SectionTitle,
-  SectionArrow,
   CardListWrapper,
   CardList,
+  ScrollButtonGroup,
   ScrollButton,
 } from "./MainPage.styles";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -22,6 +22,30 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
   accommodations,
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollPosition = () => {
+    if (listRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = listRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+
+    checkScrollPosition();
+    list.addEventListener("scroll", checkScrollPosition);
+    window.addEventListener("resize", checkScrollPosition);
+
+    return () => {
+      list.removeEventListener("scroll", checkScrollPosition);
+      window.removeEventListener("resize", checkScrollPosition);
+    };
+  }, [accommodations]);
 
   const scrollList = useCallback((direction: "left" | "right") => {
     if (listRef.current) {
@@ -44,7 +68,6 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
     <Section>
       <SectionHeader>
         <SectionTitle>{title}</SectionTitle>
-        <SectionArrow>›</SectionArrow>
       </SectionHeader>
       <CardListWrapper>
         <CardList ref={listRef}>
@@ -61,12 +84,24 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
             />
           ))}
         </CardList>
-        <ScrollButton $position="left" onClick={() => scrollList("left")}>
-          <ChevronLeft size={20} />
-        </ScrollButton>
-        <ScrollButton $position="right" onClick={() => scrollList("right")}>
-          <ChevronRight size={20} />
-        </ScrollButton>
+        <ScrollButtonGroup>
+          <ScrollButton
+            $position="left"
+            onClick={() => scrollList("left")}
+            disabled={!canScrollLeft}
+            $disabled={!canScrollLeft}
+          >
+            <ChevronLeft size={16} />
+          </ScrollButton>
+          <ScrollButton
+            $position="right"
+            onClick={() => scrollList("right")}
+            disabled={!canScrollRight}
+            $disabled={!canScrollRight}
+          >
+            <ChevronRight size={16} />
+          </ScrollButton>
+        </ScrollButtonGroup>
       </CardListWrapper>
     </Section>
   );

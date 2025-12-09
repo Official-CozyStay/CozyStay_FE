@@ -46,7 +46,7 @@ export const GlobalStyles = createGlobalStyle`
   code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     padding: 0.1em 0.3em;
-    border-radius: 6px;
+    border-radius: ${({ theme }) => theme.radius.sm};
     border: 1px solid color-mix(in oklab, currentColor 18%, transparent);
     background: color-mix(in oklab, currentColor 8%, transparent);
   }
