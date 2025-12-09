@@ -327,7 +327,7 @@ export const LearnMoreButton = styled.button`
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.medium};
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: ${({ theme }) => theme.transition.all.normal};
 
   &:hover {
     background: ${({ theme }) => theme.colors.background.hover};
