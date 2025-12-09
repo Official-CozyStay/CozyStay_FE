@@ -24,6 +24,9 @@ declare module "styled-components" {
         white: string;
         black: string;
       };
+      overlay: {
+        default: string;
+      };
     };
     radius: {
       xs: string;
@@ -66,6 +69,10 @@ declare module "styled-components" {
       tooltip: number;
       searchBar: number;
       header: number;
+      modalOverlay: number;
+      modalContainer: number;
+      sidebarOverlay: number;
+      sidebar: number;
     };
     transition: {
       fast: string;

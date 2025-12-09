@@ -36,6 +36,10 @@ export const theme = {
       white: "#fff",
       black: "#000",
     },
+    // 오버레이 색상
+    overlay: {
+      default: "rgba(0, 0, 0, 0.5)",
+    },
     // 상태별 색상 (추후 필요시 확장)
     // status: {
     //   error: "#d32f2f",

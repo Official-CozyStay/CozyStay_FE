@@ -7,8 +7,8 @@ export const SidebarOverlay = styled.div<{ $isOpen: boolean }>`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1100;
+  background: ${({ theme }) => theme.colors.overlay.default};
+  z-index: ${({ theme }) => theme.zIndex.sidebarOverlay};
   opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
   visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
   transition: ${({ theme }) => theme.transition.normal};
@@ -27,7 +27,7 @@ export const SidebarContainer = styled.aside<{
   width: 100%;
   max-width: 400px;
   background: ${({ theme }) => theme.colors.common.white};
-  z-index: 1101;
+  z-index: ${({ theme }) => theme.zIndex.sidebar};
   transform: translateX(${({ $isOpen }) => ($isOpen ? "0" : "100%")});
   transition: transform ${({ theme }) => theme.transition.slow},
     top ${({ theme }) => theme.transition.slow};

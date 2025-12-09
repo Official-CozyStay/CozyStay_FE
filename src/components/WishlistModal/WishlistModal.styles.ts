@@ -7,8 +7,8 @@ export const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1100;
+  background: ${({ theme }) => theme.colors.overlay.default};
+  z-index: ${({ theme }) => theme.zIndex.modalOverlay};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,7 +32,7 @@ export const ModalContainer = styled.div`
   flex-direction: column;
   box-shadow: ${({ theme }) => theme.shadow.lg};
   overflow: hidden;
-  z-index: 1101;
+  z-index: ${({ theme }) => theme.zIndex.modalContainer};
   box-sizing: border-box;
 
   ${media.mobile} {
