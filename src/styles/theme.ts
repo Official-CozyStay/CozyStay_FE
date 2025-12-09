@@ -29,6 +29,8 @@ export const theme = {
     // Background (배경) 계열
     background: {
       default: "#F5EFE6", // 페이지 기본 배경
+      hover: "#f5f5f5", // 버튼 호버 배경
+      active: "#eaeaea", // 버튼 active 배경
       // paper: "#f9f9f9" // 카드 컴포넌트 등
     },
     // 공통 색상 (항상 고정되는 값)

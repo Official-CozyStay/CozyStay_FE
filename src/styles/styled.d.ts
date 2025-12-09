@@ -19,6 +19,8 @@ declare module "styled-components" {
       };
       background: {
         default: string;
+        hover: string;
+        active: string;
       };
       common: {
         white: string;

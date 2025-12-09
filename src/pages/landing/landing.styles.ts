@@ -330,11 +330,11 @@ export const LearnMoreButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #f5f5f5;
+    background: ${({ theme }) => theme.colors.background.hover};
   }
 
   &:active {
-    background: #eaeaea;
+    background: ${({ theme }) => theme.colors.background.active};
   }
 `;
 
