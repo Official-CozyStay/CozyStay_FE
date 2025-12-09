@@ -10,6 +10,15 @@ export const DropdownMenu = styled.div`
   box-shadow: ${({ theme }) => theme.shadow.lg};
   overflow: hidden;
   z-index: 1000;
+  max-height: calc(100vh - 80px); /* 헤더 높이 등을 고려한 최대 높이 설정 */
+  overflow-y: auto; /* 세로 스크롤 허용 */
+
+  /* 스크롤바 숨기기 */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 `;
 
 export const DropdownSection = styled.div`

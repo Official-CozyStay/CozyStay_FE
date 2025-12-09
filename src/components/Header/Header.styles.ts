@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { media } from '@/styles/media';
 
 export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
@@ -28,11 +29,21 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   }
 `;
 
-export const HeaderLeft = styled.div`
+export const HeaderLeft = styled(Link)`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   justify-self: start;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover,
+  &:visited,
+  &:active,
+  &:focus {
+    text-decoration: none;
+    color: inherit;
+  }
 `;
 
 export const Logo = styled.img`

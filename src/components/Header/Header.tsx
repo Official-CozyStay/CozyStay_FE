@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
   return (
     <>
       <HeaderContainer $isScrolled={isScrolled}>
-        <HeaderLeft>
+        <HeaderLeft to="/">
           <Logo src={logo} alt="CozyStay Logo" />
           <LogoText>CozyStay</LogoText>
         </HeaderLeft>
