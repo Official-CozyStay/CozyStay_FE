@@ -28,7 +28,8 @@ export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
     $isScrolled ? theme.zIndex.header + 1 : "auto"};
   width: ${({ $isScrolled }) => ($isScrolled ? "auto" : "100%")};
   transition: ${({ theme }) => theme.transition.all.slow};
-  height: ${({ $isScrolled }) => ($isScrolled ? "64px" : "auto")};
+  height: ${({ $isScrolled, theme }) =>
+    $isScrolled ? theme.spacing["5xl"] : "auto"};
   align-items: center;
   pointer-events: ${({ $isScrolled }) => ($isScrolled ? "none" : "auto")};
 
