@@ -20,15 +20,22 @@ export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
   background: ${({ $isScrolled, theme }) =>
     $isScrolled ? 'transparent' : theme.colors.common.white};
   position: ${({ $isScrolled }) => ($isScrolled ? 'fixed' : 'static')};
-  top: ${({ $isScrolled, theme }) =>
-    $isScrolled ? `${theme.spacing['5xl']}` : 'auto'};
+  top: ${({ $isScrolled }) => ($isScrolled ? '0' : 'auto')};
   left: ${({ $isScrolled }) => ($isScrolled ? '50%' : 'auto')};
   transform: ${({ $isScrolled }) =>
     $isScrolled ? 'translateX(-50%)' : 'none'};
   z-index: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.zIndex.searchBar : 'auto'};
+    $isScrolled ? theme.zIndex.header + 1 : 'auto'};
   width: ${({ $isScrolled }) => ($isScrolled ? 'auto' : '100%')};
   transition: ${({ theme }) => theme.transition.all.slow};
+  height: ${({ $isScrolled, theme }) =>
+    $isScrolled ? theme.spacing['5xl'] : 'auto'};
+  align-items: center;
+  pointer-events: ${({ $isScrolled }) => ($isScrolled ? 'none' : 'auto')};
+
+  > * {
+    pointer-events: auto;
+  }
 
   ${media.mobile} {
     padding: ${({ $isScrolled, theme }) =>
@@ -69,17 +76,6 @@ export const SectionTitle = styled.h2`
   }
 `;
 
-export const SectionArrow = styled.span`
-  font-size: ${({ theme }) => theme.font.size.xxl};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  cursor: pointer;
-  transition: ${({ theme }) => theme.transition.colors.normal};
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.text.primary};
-  }
-`;
-
 export const CardListWrapper = styled.div`
   position: relative;
 `;
@@ -116,7 +112,23 @@ export const CardList = styled.div`
   }
 `;
 
-export const ScrollButton = styled.button<{ $position: 'left' | 'right' }>`
+export const ScrollButtonGroup = styled.div`
+  position: absolute;
+  right: ${({ theme }) => theme.spacing.md};
+  top: -${({ theme }) => theme.spacing['2xl']};
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.xs};
+  z-index: ${({ theme }) => theme.zIndex.fixed};
+
+  ${media.mobile} {
+    display: none;
+  }
+`;
+
+export const ScrollButton = styled.button<{
+  $position: 'left' | 'right';
+  $disabled?: boolean;
+}>`
   position: absolute;
   ${({ $position, theme }) =>
     $position === 'left'
@@ -130,24 +142,28 @@ export const ScrollButton = styled.button<{ $position: 'left' | 'right' }>`
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: ${({ theme }) => theme.shadow.md};
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: ${({ theme }) => theme.zIndex.dropdown};
   transition: ${({ theme }) => theme.transition.all.normal};
+  color: ${({ theme, $disabled }) =>
+    $disabled ? theme.colors.text.secondary : theme.colors.text.primary};
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 
-  &:hover {
+  &:hover:not(:disabled) {
     box-shadow: ${({ theme }) => theme.shadow.lg};
-    transform: translateY(-50%) scale(1.1);
+    transform: scale(1.1);
+    border-color: ${({ theme }) => theme.colors.primary.main};
+    color: ${({ theme }) => theme.colors.primary.main};
   }
 
-  &:active {
-    transform: translateY(-50%) scale(0.95);
+  &:active:not(:disabled) {
+    transform: scale(0.95);
   }
 
-  ${media.mobile} {
-    display: none;
+  &:disabled {
+    cursor: not-allowed;
   }
 `;
 
@@ -159,5 +175,11 @@ export const Footer = styled.footer`
   font-size: ${({ theme }) => theme.font.size.xs};
   padding: ${({ theme }) => theme.spacing['3xl']} 0;
   margin-top: ${({ theme }) => theme.spacing['6xl']};
-  background: ${({ theme }) => theme.colors.background.default};
+  background: ${({ theme }) => theme.colors.common.white};
+
+  ${media.mobile} {
+    padding: ${({ theme }) => theme.spacing.xl} 0;
+    margin-top: ${({ theme }) => theme.spacing['4xl']};
+    font-size: ${({ theme }) => theme.font.size.xs};
+  }
 `;

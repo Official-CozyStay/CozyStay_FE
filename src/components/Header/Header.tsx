@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   HeaderContainer,
@@ -28,10 +28,10 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
   const location = useLocation();
   const [hostMode, setHostMode] = React.useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = React.useState(false);
+  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const { isAuthenticated, user } = useAuth();
-  const profileButtonRef = useRef<HTMLButtonElement>(null);
+  const profileButtonRef = React.useRef<HTMLButtonElement>(null);
 
   const toggleProfile = () => {
     setIsProfileOpen((prev) => !prev);
@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
           <LogoText>CozyStay</LogoText>
         </HeaderLeft>
 
-        <HeaderCenter>
+        <HeaderCenter $isScrolled={isScrolled}>
           <NavItem $active={activeNav === '숙소'}>
             <Home size={18} />
             <span>숙소</span>

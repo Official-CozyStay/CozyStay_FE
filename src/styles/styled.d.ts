@@ -19,10 +19,15 @@ declare module "styled-components" {
       };
       background: {
         default: string;
+        hover: string;
+        active: string;
       };
       common: {
         white: string;
         black: string;
+      };
+      overlay: {
+        default: string;
       };
     };
     radius: {
@@ -66,6 +71,10 @@ declare module "styled-components" {
       tooltip: number;
       searchBar: number;
       header: number;
+      modalOverlay: number;
+      modalContainer: number;
+      sidebarOverlay: number;
+      sidebar: number;
     };
     transition: {
       fast: string;

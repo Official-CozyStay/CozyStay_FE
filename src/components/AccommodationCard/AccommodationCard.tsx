@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CardContainer,
   CardImage,
@@ -11,6 +11,7 @@ import {
   CardRating,
 } from "./AccommodationCard.styles";
 import { Heart, Star } from "lucide-react";
+import WishlistModal from "@/components/WishlistModal/WishlistModal";
 
 export interface AccommodationCardProps {
   image: string;
@@ -61,31 +62,51 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({
   isFavorite = false,
   onFavoriteClick,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleHeartClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isFavorite && onFavoriteClick) {
+      onFavoriteClick();
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCreateWishlist = (name: string) => {
+    // 위시리스트 생성 로직 (나중에 API로 대체)
+    console.log(`위시리스트 생성: ${name}`);
+    if (onFavoriteClick) {
+      onFavoriteClick();
+    }
+  };
+
   return (
-    <CardContainer>
-      <CardImage src={image} alt={title} />
-      {badge && <CardBadge>{badge}</CardBadge>}
-      <CardHeartButton
-        onClick={(e) => {
-          e.stopPropagation();
-          onFavoriteClick?.();
-        }}
-        $isFavorite={isFavorite}
-      >
-        <Heart size={20} fill={isFavorite ? "currentColor" : "none"} />
-      </CardHeartButton>
-      <CardBody>
-        <CardTitle>{title}</CardTitle>
-        <CardDate>{formatDateRange(date.start, date.end)}</CardDate>
-        <CardPrice>
-          {formatPrice(price)} · {formatNights(nights)}
-        </CardPrice>
-        <CardRating>
-          <Star size={14} fill="currentColor" />
-          {rating.toFixed(2)}
-        </CardRating>
-      </CardBody>
-    </CardContainer>
+    <>
+      <CardContainer>
+        <CardImage src={image} alt={title} />
+        {badge && <CardBadge>{badge}</CardBadge>}
+        <CardHeartButton onClick={handleHeartClick} $isFavorite={isFavorite}>
+          <Heart size={20} fill={isFavorite ? "currentColor" : "none"} />
+        </CardHeartButton>
+        <CardBody>
+          <CardTitle>{title}</CardTitle>
+          <CardDate>{formatDateRange(date.start, date.end)}</CardDate>
+          <CardPrice>
+            {formatPrice(price)} · {formatNights(nights)}
+          </CardPrice>
+          <CardRating>
+            <Star size={14} fill="currentColor" />
+            {rating.toFixed(2)}
+          </CardRating>
+        </CardBody>
+      </CardContainer>
+      <WishlistModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={handleCreateWishlist}
+      />
+    </>
   );
 };
 
