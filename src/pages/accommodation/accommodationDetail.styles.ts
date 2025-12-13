@@ -8,7 +8,8 @@ export const Container = styled.div`
   color: ${({ theme }) => theme.colors.text.primary};
 
   ${media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.md};
+    padding: ${({ theme }) => theme.spacing.lg}
+      ${({ theme }) => theme.spacing.md};
   }
 `;
 
@@ -332,7 +333,8 @@ const arrowBase = css`
   transition: ${({ theme }) => theme.transition.colors.normal};
 
   &:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: ${({ theme }) => theme.colors.overlay.default};
+    opacity: 0.9;
   }
 `;
 
