@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { media } from '@/styles/media';
 
 export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   position: fixed;
@@ -7,37 +8,47 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   left: 0;
   right: 0;
   height: ${({ $isScrolled, theme }) =>
-    $isScrolled ? `${theme.spacing["4xl"]}` : `${theme.spacing["5xl"]}`};
+    $isScrolled ? `${theme.spacing['4xl']}` : `${theme.spacing['5xl']}`};
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0 ${({ theme }) => theme.spacing["3xl"]};
+  padding: 0 ${({ theme }) => theme.spacing['3xl']};
   background: ${({ theme }) => theme.colors.common.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
   transition: height ${({ theme }) => theme.transition.slow},
     box-shadow ${({ theme }) => theme.transition.slow};
   box-shadow: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.shadow.sm : "none"};
+    $isScrolled ? theme.shadow.sm : 'none'};
 
   ${media.mobile} {
     grid-template-columns: 1fr auto;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     height: ${({ $isScrolled, theme }) =>
-      $isScrolled ? `${theme.spacing["3xl"]}` : `${theme.spacing["4xl"]}`};
+      $isScrolled ? `${theme.spacing['3xl']}` : `${theme.spacing['4xl']}`};
   }
 `;
 
-export const HeaderLeft = styled.div`
+export const HeaderLeft = styled(Link)`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   justify-self: start;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover,
+  &:visited,
+  &:active,
+  &:focus {
+    text-decoration: none;
+    color: inherit;
+  }
 `;
 
 export const Logo = styled.img`
-  width: ${({ theme }) => theme.spacing["2xl"]};
-  height: ${({ theme }) => theme.spacing["2xl"]};
+  width: ${({ theme }) => theme.spacing['2xl']};
+  height: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 export const LogoText = styled.span`
@@ -53,7 +64,7 @@ export const LogoText = styled.span`
 export const HeaderCenter = styled.nav<{ $isScrolled?: boolean }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing["2xl"]};
+  gap: ${({ theme }) => theme.spacing['2xl']};
   justify-content: center;
   justify-self: center;
 
@@ -89,7 +100,7 @@ export const NavItem = styled.button<{ $active?: boolean }>`
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: ${({ theme }) => theme.spacing.lg};
@@ -127,7 +138,7 @@ export const HeaderRight = styled.div`
 `;
 
 export const HostModeToggle = styled.button<{ $active?: boolean }>`
-  width: ${({ theme }) => theme.spacing["3xl"]};
+  width: ${({ theme }) => theme.spacing['3xl']};
   height: ${({ theme }) => theme.spacing.xl};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
@@ -145,8 +156,8 @@ export const HostModeToggle = styled.button<{ $active?: boolean }>`
 `;
 
 export const MenuButton = styled.button`
-  width: ${({ theme }) => theme.spacing["3xl"]};
-  height: ${({ theme }) => theme.spacing["3xl"]};
+  width: ${({ theme }) => theme.spacing['3xl']};
+  height: ${({ theme }) => theme.spacing['3xl']};
   border-radius: ${({ theme }) => theme.radius.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
@@ -158,5 +169,51 @@ export const MenuButton = styled.button`
 
   &:hover {
     box-shadow: ${({ theme }) => theme.shadow.sm};
+  }
+`;
+
+export const ProfileDropdownWrapper = styled.div`
+  position: relative;
+`;
+
+export const ProfileButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: ${({ theme }) => theme.radius.full};
+  transition: box-shadow 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+export const ProfilePlaceholder = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.primary.main};
+  color: ${({ theme }) => theme.colors.common.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${({ theme }) => theme.font.size.sm};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  border: 1px solid ${({ theme }) => theme.colors.border.light};
+`;
+
+export const LoginButton = styled.button`
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.primary.main};
+  font-weight: 500;
+  font-size: ${({ theme }) => theme.font.size.md};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  &:hover {
+    text-decoration: underline;
   }
 `;

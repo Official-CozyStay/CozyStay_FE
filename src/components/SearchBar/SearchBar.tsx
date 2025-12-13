@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   SearchBarContainer,
   SearchField,
@@ -13,14 +14,14 @@ import {
   GuestCounter,
   CounterButton,
   CounterValue,
-} from "./SearchBar.styles";
-import { Search, Minus, Plus } from "lucide-react";
+} from './SearchBar.styles';
+import { Search, Minus, Plus } from 'lucide-react';
 
 interface SearchBarProps {
   isCompact?: boolean;
 }
 
-type GuestType = "adults" | "children" | "infants" | "pets";
+type GuestType = 'adults' | 'children' | 'infants' | 'pets';
 
 interface GuestCounterRowProps {
   label: string;
@@ -30,42 +31,39 @@ interface GuestCounterRowProps {
   onUpdate: (type: GuestType, delta: number) => void;
 }
 
-const GuestCounterRow: React.FC<GuestCounterRowProps> = React.memo(({
-  label,
-  age,
-  count,
-  guestType,
-  onUpdate,
-}) => (
-  <GuestSection>
-    <div>
-      <GuestLabel>{label}</GuestLabel>
-      <GuestAge>{age}</GuestAge>
-    </div>
-    <GuestCounter>
-      <CounterButton
-        onClick={(e) => {
-          e.stopPropagation();
-          onUpdate(guestType, -1);
-        }}
-        disabled={count === 0}
-      >
-        <Minus size={16} />
-      </CounterButton>
-      <CounterValue>{count}</CounterValue>
-      <CounterButton
-        onClick={(e) => {
-          e.stopPropagation();
-          onUpdate(guestType, 1);
-        }}
-      >
-        <Plus size={16} />
-      </CounterButton>
-    </GuestCounter>
-  </GuestSection>
-));
+const GuestCounterRow: React.FC<GuestCounterRowProps> = React.memo(
+  ({ label, age, count, guestType, onUpdate }) => (
+    <GuestSection>
+      <div>
+        <GuestLabel>{label}</GuestLabel>
+        <GuestAge>{age}</GuestAge>
+      </div>
+      <GuestCounter>
+        <CounterButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onUpdate(guestType, -1);
+          }}
+          disabled={count === 0}
+        >
+          <Minus size={16} />
+        </CounterButton>
+        <CounterValue>{count}</CounterValue>
+        <CounterButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onUpdate(guestType, 1);
+          }}
+        >
+          <Plus size={16} />
+        </CounterButton>
+      </GuestCounter>
+    </GuestSection>
+  )
+);
 
 const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
+  const navigate = useNavigate();
   const [showGuestPopup, setShowGuestPopup] = useState(false);
   const [guests, setGuests] = useState({
     adults: 0,
@@ -86,25 +84,23 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
     };
 
     if (showGuestPopup) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showGuestPopup]);
 
-  const updateGuest = useCallback(
-    (type: GuestType, delta: number) => {
-      setGuests((prev) => ({
-        ...prev,
-        [type]: Math.max(0, prev[type] + delta),
-      }));
-    },
-    []
-  );
+  const updateGuest = useCallback((type: GuestType, delta: number) => {
+    setGuests((prev) => ({
+      ...prev,
+      [type]: Math.max(0, prev[type] + delta),
+    }));
+  }, []);
 
-  const totalGuests = guests.adults + guests.children + guests.infants + guests.pets;
+  const totalGuests =
+    guests.adults + guests.children + guests.infants + guests.pets;
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
@@ -145,7 +141,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
       >
         {!isCompact && <SearchFieldLabel>여행자</SearchFieldLabel>}
         <SearchFieldContent>
-          <span>{totalGuests > 0 ? `게스트 ${totalGuests}명` : "게스트 추가"}</span>
+          <span>
+            {totalGuests > 0 ? `게스트 ${totalGuests}명` : '게스트 추가'}
+          </span>
         </SearchFieldContent>
         {showGuestPopup && (
           <GuestPopup ref={popupRef}>
@@ -181,7 +179,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
         )}
       </SearchField>
 
-      <SearchButton type="button" $isCompact={isCompact}>
+      <SearchButton
+        type="button"
+        $isCompact={isCompact}
+        onClick={() => navigate('/search')}
+      >
         <Search size={18} />
         {!isCompact && <span>검색</span>}
       </SearchButton>
@@ -190,4 +192,3 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
 };
 
 export default SearchBar;
-

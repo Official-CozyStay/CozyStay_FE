@@ -3,6 +3,7 @@ import PublicLayout from "../layouts/PublicLayout/PublicLayout";
 import LandingPage from "../pages/landing/LandingPage";
 import MainPage from "../pages/main/MainPage";
 import AccommodationDetailPage from "../pages/accommodation/AccommodationDetailPage.tsx";
+import SearchPage from "../pages/search/SearchPage";
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
       { index: true, element: <MainPage /> },
       { path: "landing", element: <LandingPage /> },
       { path: "accommodation/:id", element: <AccommodationDetailPage /> },
+      { path: "search", element: <SearchPage /> },
     ],
   },
 ]);

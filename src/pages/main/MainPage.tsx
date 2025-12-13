@@ -14,7 +14,6 @@ import { sumSpacingValues } from "@/utils/spacing";
 const MainPage: React.FC = () => {
   const theme = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showFooter, setShowFooter] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   // spacing 토큰을 기반으로 스크롤 임계값 계산 (5xl + 2xl = 64px + 32px = 96px, 100px에 근접)
   const scrollThreshold = sumSpacingValues(
@@ -26,18 +25,6 @@ const MainPage: React.FC = () => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > scrollThreshold);
-
-      // 스크롤이 끝에 도달했는지 확인
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollPosition = scrollY + windowHeight;
-
-      // 끝에서 scrollThreshold 이내에 도달하면 Footer 표시
-      if (scrollPosition >= documentHeight - scrollThreshold) {
-        setShowFooter(true);
-      } else {
-        setShowFooter(false);
-      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -72,11 +59,9 @@ const MainPage: React.FC = () => {
         accommodations={osakaAccommodations}
       />
 
-      {showFooter && (
-        <Footer>
-          © {new Date().getFullYear()} CozyStay — Inspired by Airbnb
-        </Footer>
-      )}
+      <Footer>
+        © {new Date().getFullYear()} CozyStay — Inspired by Airbnb
+      </Footer>
     </MainContainer>
   );
 };
