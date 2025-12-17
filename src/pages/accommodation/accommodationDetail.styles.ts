@@ -1,27 +1,36 @@
-import styled from 'styled-components';
+import styled, { css } from "styled-components";
+import { media } from "@/styles/media";
 
 export const Container = styled.div`
-  max-width: 1120px;
+  max-width: ${({ theme }) => theme.layout.maxWidth};
   margin: 0 auto;
-  padding: 24px 20px;
+  padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg};
   color: ${({ theme }) => theme.colors.text.primary};
+
+  ${media.mobile} {
+    padding: ${({ theme }) => theme.spacing.lg}
+      ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const Header = styled.header`
-  margin-bottom: 14px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 export const Title = styled.h1`
-  margin: 0 0 6px;
-  font-size: 28px;
-  line-height: 1.25;
+  margin: 0 0 ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.font.size.xxl};
+  line-height: ${({ theme }) => theme.font.lineHeight.tight};
+  font-weight: ${({ theme }) => theme.font.weight.extrabold};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const SubMeta = styled.div`
   display: flex;
-  gap: 10px;
+  gap: ${({ theme }) => theme.spacing.md};
   align-items: center;
   color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.font.size.sm};
 
   a {
     color: inherit;
@@ -31,18 +40,24 @@ export const SubMeta = styled.div`
 `;
 
 export const Dot = styled.span`
-  color: #aaa;
+  color: ${({ theme }) => theme.colors.text.secondary};
 `;
 
 export const Gallery = styled.section`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   grid-template-rows: 220px 220px;
-  gap: 6px;
-  margin-bottom: 24px;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
 
-  @media (min-width: 900px) {
+  ${media.desktop} {
     grid-template-rows: 260px 260px;
+  }
+
+  ${media.mobile} {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: ${({ theme }) => theme.spacing.xs};
   }
 `;
 
@@ -50,6 +65,10 @@ export const MainImage = styled.div`
   grid-row: 1 / 3;
   overflow: hidden;
   border-radius: ${({ theme }) => theme.radius.md};
+
+  ${media.mobile} {
+    grid-row: 1;
+  }
 `;
 
 export const Thumb = styled.div`
@@ -62,15 +81,21 @@ export const Img = styled.img`
   height: 100%;
   display: block;
   object-fit: cover;
+  cursor: pointer;
+  transition: ${({ theme }) => theme.transition.colors.normal};
+
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 export const Main = styled.div`
   display: grid;
   grid-template-columns: 1fr 360px;
-  gap: 32px;
+  gap: ${({ theme }) => theme.spacing["2xl"]};
   align-items: start;
 
-  @media (max-width: 1024px) {
+  ${media.tablet} {
     grid-template-columns: 1fr;
   }
 `;
@@ -80,33 +105,41 @@ export const Right = styled.aside``;
 
 export const Section = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.border.light};
-  padding: 18px 0;
+  padding: ${({ theme }) => theme.spacing.lg} 0;
 `;
 
 export const H2 = styled.h2`
-  margin: 0 0 8px;
-  font-size: 22px;
+  margin: 0 0 ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.font.size.xl};
+  font-weight: ${({ theme }) => theme.font.weight.extrabold};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const H3 = styled.h3`
-  margin: 0 0 10px;
-  font-size: 18px;
+  margin: 0 0 ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const Meta = styled.div`
-  color: #6b6b6b;
-  margin-bottom: 12px;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.font.size.sm};
 `;
 
 export const P = styled.p`
   white-space: pre-wrap;
   margin: 0;
+  font-size: ${({ theme }) => theme.font.size.md};
+  line-height: ${({ theme }) => theme.font.lineHeight.normal};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const AmenityList = styled.ul`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
   margin: 0;
   padding: 0;
   list-style: none;
@@ -114,103 +147,124 @@ export const AmenityList = styled.ul`
 
 export const StickyCard = styled.div`
   position: sticky;
-  top: 24px;
+  top: ${({ theme }) => theme.spacing.xl};
   border: 1px solid ${({ theme }) => theme.colors.border.light};
   border-radius: ${({ theme }) => theme.radius.md};
-  padding: 16px;
+  padding: ${({ theme }) => theme.spacing.lg};
   box-shadow: ${({ theme }) => theme.shadow.md};
+  background: ${({ theme }) => theme.colors.common.white};
 `;
 
 export const Price = styled.div`
-  font-size: 20px;
-  font-weight: 700;
+  font-size: ${({ theme }) => theme.font.size.xl};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
 
   span {
-    font-weight: 400;
-    font-size: 14px;
-    color: #6b6b6b;
+    font-weight: ${({ theme }) => theme.font.weight.regular};
+    font-size: ${({ theme }) => theme.font.size.sm};
+    color: ${({ theme }) => theme.colors.text.secondary};
   }
 `;
 
-export const Small = styled.div`
-  color: #6b6b6b;
-  font-size: 12px;
-  margin-top: 8px;
+export const Small = styled.div<{ $compact?: boolean }>`
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.font.size.xs};
+  margin-top: ${({ $compact, theme }) =>
+    $compact ? theme.spacing.xs : theme.spacing.sm};
 `;
 
 export const FormSection = styled.div`
-  margin-top: 12px;
+  margin-top: ${({ theme }) => theme.spacing.md};
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 export const Label = styled.div`
-  font-size: 12px;
-  color: #666;
+  font-size: ${({ theme }) => theme.font.size.xs};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
 `;
 
 export const NumberInput = styled.input`
   width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 10px 12px;
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: ${({ theme }) => theme.spacing.md};
   outline: none;
+  font-size: ${({ theme }) => theme.font.size.md};
+  color: ${({ theme }) => theme.colors.text.primary};
+  transition: ${({ theme }) => theme.transition.colors.normal};
 
   &:focus {
-    border-color: #222;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.main}33;
   }
 `;
 
 export const HelperText = styled.div`
-  font-size: 12px;
-  color: #888;
-  margin-top: 4px;
+  font-size: ${({ theme }) => theme.font.size.xs};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  margin-top: ${({ theme }) => theme.spacing.xs};
 `;
 
 export const Summary = styled.div`
-  margin-top: 16px;
-  font-size: 14px;
+  margin-top: ${({ theme }) => theme.spacing.lg};
+  font-size: ${({ theme }) => theme.font.size.sm};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const SummaryRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 4px;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const SummaryTotal = styled(SummaryRow)`
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #eee;
-  font-weight: 700;
+  margin-top: ${({ theme }) => theme.spacing.sm};
+  padding-top: ${({ theme }) => theme.spacing.sm};
+  border-top: 1px solid ${({ theme }) => theme.colors.border.light};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
 
 export const ErrorText = styled.div<{ $compact?: boolean }>`
-  margin-top: ${({ $compact }) => ($compact ? '4px' : '8px')};
-  font-size: 12px;
-  color: #c03434;
+  margin-top: ${({ $compact, theme }) =>
+    $compact ? theme.spacing.xs : theme.spacing.sm};
+  font-size: ${({ theme }) => theme.font.size.xs};
+  color: ${({ theme }) => theme.colors.primary.main};
 `;
 
 export const ReserveButton = styled.button`
-  margin-top: 12px;
+  margin-top: ${({ theme }) => theme.spacing.md};
   width: 100%;
-  padding: 12px 0;
-  border-radius: 12px;
+  padding: ${({ theme }) => theme.spacing.md} 0;
+  border-radius: ${({ theme }) => theme.radius.md};
   border: none;
-  font-weight: 600;
-  background-color: #ff385c;
-  color: #fff;
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  background: linear-gradient(
+    180deg,
+    ${({ theme }) => theme.colors.primary.main},
+    ${({ theme }) => theme.colors.primary.hover}
+  );
+  color: ${({ theme }) => theme.colors.common.white};
   cursor: pointer;
+  font-size: ${({ theme }) => theme.font.size.md};
+  transition: ${({ theme }) => theme.transition.fast};
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.05);
+  }
 
   &:disabled {
-    background-color: #ddd;
+    background: ${({ theme }) => theme.colors.border.light};
     cursor: not-allowed;
   }
 `;
@@ -218,8 +272,8 @@ export const ReserveButton = styled.button`
 export const LightboxOverlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 9999;
+  background: ${({ theme }) => theme.colors.overlay.default};
+  z-index: ${({ theme }) => theme.zIndex.modalOverlay};
 
   display: flex;
   align-items: center;
@@ -230,8 +284,8 @@ export const LightboxInner = styled.div`
   position: relative;
   max-width: 90vw;
   max-height: 90vh;
-  background: #000;
-  border-radius: 12px;
+  background: ${({ theme }) => theme.colors.common.black};
+  border-radius: ${({ theme }) => theme.radius.lg};
   overflow: hidden;
 
   display: flex;
@@ -247,16 +301,21 @@ export const LightboxImage = styled.img`
 
 export const LightboxClose = styled.button`
   position: absolute;
-  top: 8px;
-  right: 12px;
+  top: ${({ theme }) => theme.spacing.sm};
+  right: ${({ theme }) => theme.spacing.md};
   border: none;
   background: transparent;
-  color: #fff;
-  font-size: 28px;
+  color: ${({ theme }) => theme.colors.common.white};
+  font-size: ${({ theme }) => theme.font.size.xxl};
   cursor: pointer;
+  transition: ${({ theme }) => theme.transition.colors.normal};
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
-const arrowBase = `
+const arrowBase = css`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -264,26 +323,26 @@ const arrowBase = `
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background: ${({ theme }) => theme.colors.overlay.default};
+  color: ${({ theme }) => theme.colors.common.white};
   font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.15s ease;
-  
+  transition: ${({ theme }) => theme.transition.colors.normal};
+
   &:hover {
-    background: rgba(0, 0, 0, 0.8);
+    filter: brightness(0.7);
   }
 `;
 
 export const LightboxPrev = styled.button`
-  ${arrowBase};
-  left: 12px;
+  ${arrowBase}
+  left: ${({ theme }) => theme.spacing.md};
 `;
 
 export const LightboxNext = styled.button`
-  ${arrowBase};
-  right: 12px;
+  ${arrowBase}
+  right: ${({ theme }) => theme.spacing.md};
 `;

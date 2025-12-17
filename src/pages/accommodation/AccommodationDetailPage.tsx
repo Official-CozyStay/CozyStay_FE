@@ -54,9 +54,9 @@ export default function AccommodationDetailPage() {
     const primary = images[primaryIndex];
 
     const thumbs = images
-        .map((img, idx) => ({ ...img, idx }))
-        .filter((item) => item.idx !== primaryIndex)
-        .slice(0, 4);
+      .map((img, idx) => ({ ...img, idx }))
+      .filter((item) => item.idx !== primaryIndex)
+      .slice(0, 4);
 
     return { primary, primaryIndex, thumbs };
   }, [images]);
@@ -75,52 +75,52 @@ export default function AccommodationDetailPage() {
   if (!detail) return <S.Container>데이터 없음</S.Container>;
 
   return (
-      <S.Container>
-        <S.Header>
-          <S.Title>{detail.title}</S.Title>
-          <S.SubMeta>
-            <span>★ {detail.reviewSummary.average.toFixed(2)}</span>
-            <S.Dot>.</S.Dot>
-            <a href="#reviews">후기 {detail.reviewSummary.count}개</a>
-            <S.Dot>.</S.Dot>
-            <span>
+    <S.Container>
+      <S.Header>
+        <S.Title>{detail.title}</S.Title>
+        <S.SubMeta>
+          <span>★ {detail.reviewSummary.average.toFixed(2)}</span>
+          <S.Dot>.</S.Dot>
+          <a href="#reviews">후기 {detail.reviewSummary.count}개</a>
+          <S.Dot>.</S.Dot>
+          <span>
             {detail.city}, {detail.country}
           </span>
-          </S.SubMeta>
-        </S.Header>
+        </S.SubMeta>
+      </S.Header>
 
-        {/* 갤러리 */}
-        {primary && (
-            <GallerySection
-                primary={primary}
-                primaryIndex={primaryIndex}
-                thumbs={thumbs}
-                onOpen={openLightbox}
-            />
-        )}
-
-        <S.Main>
-          <InfoSection detail={detail} />
-
-          <BookingCard
-              detail={detail}
-              checkIn={checkIn}
-              checkOut={checkOut}
-              guests={guests}
-              setDates={(ci, co) => setDates(ci ?? undefined, co ?? undefined)}
-              setGuests={setGuests}
-          />
-        </S.Main>
-
-        <LightboxModal
-            isOpen={lightboxOpen}
-            activeIndex={activeImageIndex}
-            images={images}
-            title={detail.title}
-            onClose={closeLightbox}
-            onPrev={showPrevImage}
-            onNext={showNextImage}
+      {/* 갤러리 */}
+      {primary && (
+        <GallerySection
+          primary={primary}
+          primaryIndex={primaryIndex}
+          thumbs={thumbs}
+          onOpen={openLightbox}
         />
-      </S.Container>
+      )}
+
+      <S.Main>
+        <InfoSection detail={detail} />
+
+        <BookingCard
+          detail={detail}
+          checkIn={checkIn}
+          checkOut={checkOut}
+          guests={guests}
+          setDates={(ci, co) => setDates(ci ?? null, co ?? null)}
+          setGuests={setGuests}
+        />
+      </S.Main>
+
+      <LightboxModal
+        isOpen={lightboxOpen}
+        activeIndex={activeImageIndex}
+        images={images}
+        title={detail.title}
+        onClose={closeLightbox}
+        onPrev={showPrevImage}
+        onNext={showNextImage}
+      />
+    </S.Container>
   );
 }
