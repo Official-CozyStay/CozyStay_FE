@@ -333,8 +333,7 @@ const arrowBase = css`
   transition: ${({ theme }) => theme.transition.colors.normal};
 
   &:hover {
-    background: ${({ theme }) => theme.colors.overlay.default};
-    opacity: 0.9;
+    filter: brightness(0.7);
   }
 `;
 
