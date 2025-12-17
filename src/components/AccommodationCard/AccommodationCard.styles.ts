@@ -6,7 +6,8 @@ export const CardContainer = styled.article`
   overflow: hidden;
   background: ${({ theme }) => theme.colors.common.white};
   cursor: pointer;
-  transition: transform ${({ theme }) => theme.transition.normal}, box-shadow ${({ theme }) => theme.transition.normal};
+  transition: transform ${({ theme }) => theme.transition.normal},
+    box-shadow ${({ theme }) => theme.transition.normal};
 
   &:hover {
     transform: translateY(-${({ theme }) => theme.spacing.xs});
@@ -16,7 +17,7 @@ export const CardContainer = styled.article`
 
 export const CardImage = styled.img`
   width: 100%;
-  height: 240px;
+  height: ${({ theme }) => theme.size.cardImage.default};
   object-fit: cover;
   display: block;
 `;
@@ -94,4 +95,3 @@ export const CardRating = styled.p`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs};
 `;
-

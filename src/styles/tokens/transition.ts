@@ -15,8 +15,12 @@ export const transition = {
   },
   colors: {
     fast: "color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease",
-    normal: "color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease",
+    normal:
+      "color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease",
     slow: "color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease",
   },
+  // 추가 transform 값들
+  translateY: {
+    sm: "translateY(-2px)",
+  },
 };
-

@@ -1,32 +1,35 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const SearchPageContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 64px);
-  padding-top: ${({ theme }) => theme.spacing['5xl']}; /* 헤더 높이만큼 패딩 추가 */
+  min-height: ${({ theme }) => theme.layout.contentOffset.withHeader};
+  padding-top: ${({ theme }) =>
+    theme.spacing["5xl"]}; /* 헤더 높이만큼 패딩 추가 */
   background: ${({ theme }) => theme.colors.common.white};
 `;
 
 export const FilterBar = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.md}
+    ${({ theme }) => theme.spacing["2xl"]};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   background: ${({ theme }) => theme.colors.common.white};
   flex-shrink: 0;
   position: sticky;
-  top: ${({ theme }) => theme.spacing['4xl']}; /* 헤더가 작아졌을 때의 높이 */
-  z-index: 10;
+  top: ${({ theme }) => theme.spacing["4xl"]}; /* 헤더가 작아졌을 때의 높이 */
+  z-index: ${({ theme }) => theme.zIndex.sticky};
 `;
 
 export const FilterButton = styled.button<{ $active?: boolean }>`
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
+  gap: ${({ theme }) => theme.spacing["6px"]};
+  padding: ${({ theme }) => theme.spacing["10px"]}
+    ${({ theme }) => theme.spacing.lg};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid
     ${({ theme, $active }) =>
@@ -37,7 +40,7 @@ export const FilterButton = styled.button<{ $active?: boolean }>`
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.medium};
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: ${({ theme }) => theme.transition.all.fast};
   white-space: nowrap;
 
   &:hover {
@@ -45,14 +48,14 @@ export const FilterButton = styled.button<{ $active?: boolean }>`
   }
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: ${({ theme }) => theme.size.icon.md};
+    height: ${({ theme }) => theme.size.icon.md};
   }
 `;
 
 export const FilterDivider = styled.div`
-  width: 1px;
-  height: 24px;
+  width: ${({ theme }) => theme.spacing["1px"]};
+  height: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.border.light};
 `;
 
@@ -64,25 +67,26 @@ export const ResultCount = styled.span`
 
 export const ContentArea = styled.div`
   display: flex;
-  min-height: calc(100vh - 137px);
+  min-height: ${({ theme }) => theme.layout.contentOffset.withHeaderAndFilter};
 `;
 
 export const ListSection = styled.section`
   width: 55%;
-  min-width: 400px;
-  padding: 20px 24px;
+  min-width: ${({ theme }) => theme.size.width.md};
+  padding: ${({ theme }) => theme.spacing["20px"]}
+    ${({ theme }) => theme.spacing["2xl"]};
   background: ${({ theme }) => theme.colors.common.white};
 `;
 
 export const ListHeader = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const ListTitle = styled.h2`
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.regular};
   color: ${({ theme }) => theme.colors.text.secondary};
-  margin: 0 0 4px;
+  margin: 0 0 ${({ theme }) => theme.spacing.xs};
 `;
 
 export const ListCount = styled.p`
@@ -94,25 +98,26 @@ export const ListCount = styled.p`
 export const AccommodationGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: ${({ theme }) => theme.spacing.xl};
 `;
 
 export const AccommodationCard = styled.article<{ $selected?: boolean }>`
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: ${({ theme }) => theme.transition.transform.fast},
+    ${({ theme }) => theme.transition.colors.fast};
   border-radius: ${({ theme }) => theme.radius.lg};
-  padding: 8px;
-  margin: -8px;
+  padding: ${({ theme }) => theme.spacing.xs};
+  margin: -${({ theme }) => theme.spacing.xs};
 
   ${({ $selected, theme }) =>
     $selected &&
     `
     background: ${theme.colors.primary.light};
-    box-shadow: 0 0 0 2px ${theme.colors.primary.main};
+    box-shadow: ${theme.shadow.focus};
   `}
 
   &:hover {
-    transform: translateY(-2px);
+    transform: ${({ theme }) => theme.transition.translateY.sm};
   }
 `;
 
@@ -131,22 +136,23 @@ export const CardImage = styled.img`
 
 export const CardBadge = styled.span`
   position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 4px 8px;
+  top: ${({ theme }) => theme.spacing["10px"]};
+  left: ${({ theme }) => theme.spacing["10px"]};
+  padding: ${({ theme }) => theme.spacing.xxs}
+    ${({ theme }) => theme.spacing.xs};
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.sm};
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.font.size.xs};
   font-weight: ${({ theme }) => theme.font.weight.medium};
   box-shadow: ${({ theme }) => theme.shadow.sm};
 `;
 
 export const FavoriteButton = styled.button`
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
+  top: ${({ theme }) => theme.spacing["10px"]};
+  right: ${({ theme }) => theme.spacing["10px"]};
+  width: ${({ theme }) => theme.size.button.sm};
+  height: ${({ theme }) => theme.size.button.sm};
   border: none;
   background: transparent;
   cursor: pointer;
@@ -155,12 +161,12 @@ export const FavoriteButton = styled.button`
   justify-content: center;
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: ${({ theme }) => theme.size.icon.xl};
+    height: ${({ theme }) => theme.size.icon.xl};
     color: ${({ theme }) => theme.colors.common.white};
     fill: rgba(0, 0, 0, 0.5);
     stroke-width: 2;
-    transition: all 0.15s ease;
+    transition: ${({ theme }) => theme.transition.all.fast};
   }
 
   &:hover svg {
@@ -169,14 +175,14 @@ export const FavoriteButton = styled.button`
 `;
 
 export const CardContent = styled.div`
-  padding: 10px 0;
+  padding: ${({ theme }) => theme.spacing["10px"]} 0;
 `;
 
 export const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2px;
+  margin-bottom: ${({ theme }) => theme.spacing.xxs};
 `;
 
 export const CardTitle = styled.h3`
@@ -192,14 +198,14 @@ export const CardTitle = styled.h3`
 export const CardRating = styled.span`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: ${({ theme }) => theme.spacing.xxs};
   font-size: ${({ theme }) => theme.font.size.sm};
   flex-shrink: 0;
-  margin-left: 8px;
+  margin-left: ${({ theme }) => theme.spacing.xs};
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: ${({ theme }) => theme.size.icon.sm};
+    height: ${({ theme }) => theme.size.icon.sm};
     fill: currentColor;
   }
 `;
@@ -207,12 +213,12 @@ export const CardRating = styled.span`
 export const CardMeta = styled.p`
   font-size: ${({ theme }) => theme.font.size.sm};
   color: ${({ theme }) => theme.colors.text.secondary};
-  margin: 0 0 2px;
+  margin: 0 0 ${({ theme }) => theme.spacing.xxs};
 `;
 
 export const CardPrice = styled.p`
   font-size: ${({ theme }) => theme.font.size.md};
-  margin: 4px 0 0;
+  margin: ${({ theme }) => theme.spacing.xxs} 0 0;
 
   strong {
     font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -222,10 +228,12 @@ export const CardPrice = styled.p`
 export const MapSection = styled.section`
   flex: 1;
   position: sticky;
-  top: 137px;
-  height: calc(100vh - 137px);
-  padding: 0 40px 24px 0;
-  background: ${({ theme }) => theme.colors.common.white}; /* 배경색을 흰색으로 설정 */
+  top: ${({ theme }) => theme.layout.filterBarHeight};
+  height: ${({ theme }) => theme.layout.contentOffset.withHeaderAndFilter};
+  padding: 0 ${({ theme }) => theme.spacing["40px"]}
+    ${({ theme }) => theme.spacing.xl} 0;
+  background: ${({ theme }) =>
+    theme.colors.common.white}; /* 배경색을 흰색으로 설정 */
 `;
 
 export const MapContainer = styled.div`
@@ -239,23 +247,24 @@ export const MapContainer = styled.div`
 `;
 
 export const MapPriceMarker = styled.button<{ $selected?: boolean }>`
-  padding: 6px 10px;
+  padding: ${({ theme }) => theme.spacing["6px"]}
+    ${({ theme }) => theme.spacing["10px"]};
   border-radius: ${({ theme }) => theme.radius.full};
   border: none;
   background: ${({ theme, $selected }) =>
     $selected ? theme.colors.text.primary : theme.colors.common.white};
   color: ${({ theme, $selected }) =>
     $selected ? theme.colors.common.white : theme.colors.text.primary};
-  font-size: 13px;
+  font-size: 13px; /* 특수한 경우라 토큰에 없는 값 */
   font-weight: ${({ theme }) => theme.font.weight.bold};
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: ${({ theme }) => theme.shadow.mapMarker};
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: ${({ theme }) => theme.transition.all.fast};
   white-space: nowrap;
 
   &:hover {
     transform: scale(1.05);
-    z-index: 10;
+    z-index: ${({ theme }) => theme.zIndex.tooltip};
   }
 `;
 
@@ -290,16 +299,16 @@ export const MAP_MARKER_STYLES = {
 export const FilterDropdown = styled.div`
   position: absolute;
   /* left와 top은 FilterDropdownPanel에서 동적으로 계산하여 인라인 스타일로 설정 */
-  min-width: 320px;
+  min-width: ${({ theme }) => theme.size.width.sm};
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.lg};
   box-shadow: ${({ theme }) => theme.shadow.lg};
-  padding: 20px;
-  z-index: 100;
+  padding: ${({ theme }) => theme.spacing["20px"]};
+  z-index: ${({ theme }) => theme.zIndex.dropdown};
 `;
 
 export const FilterSection = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: ${({ theme }) => theme.spacing["20px"]};
 
   &:last-child {
     margin-bottom: 0;
@@ -310,12 +319,13 @@ export const FilterLabel = styled.label`
   display: block;
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.medium};
-  margin-bottom: 8px;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
 export const FilterInput = styled.input`
   width: 100%;
-  padding: 10px 12px;
+  padding: ${({ theme }) => theme.spacing["10px"]}
+    ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   font-size: ${({ theme }) => theme.font.size.sm};
@@ -329,18 +339,18 @@ export const FilterInput = styled.input`
 export const PriceRangeWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const PriceInput = styled(FilterInput)`
-  width: 120px;
+  width: ${({ theme }) => theme.size.width.xs};
 `;
 
 export const GuestCounter = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 0;
+  padding: ${({ theme }) => theme.spacing.md} 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
 
   &:last-child {
@@ -364,12 +374,12 @@ export const GuestLabel = styled.div`
 export const CounterControls = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const CounterButton = styled.button`
-  width: 32px;
-  height: 32px;
+  width: ${({ theme }) => theme.size.button.sm};
+  height: ${({ theme }) => theme.size.button.sm};
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
@@ -377,7 +387,7 @@ export const CounterButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: ${({ theme }) => theme.transition.all.fast};
 
   &:hover:not(:disabled) {
     border-color: ${({ theme }) => theme.colors.text.primary};
@@ -389,13 +399,13 @@ export const CounterButton = styled.button`
   }
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: ${({ theme }) => theme.size.icon.sm};
+    height: ${({ theme }) => theme.size.icon.sm};
   }
 `;
 
 export const CounterValue = styled.span`
-  min-width: 20px;
+  min-width: ${({ theme }) => theme.spacing["20px"]};
   text-align: center;
   font-size: ${({ theme }) => theme.font.size.md};
 `;
@@ -404,8 +414,8 @@ export const FilterActions = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: ${({ theme }) => theme.spacing.lg};
+  padding-top: ${({ theme }) => theme.spacing.lg};
   border-top: 1px solid ${({ theme }) => theme.colors.border.light};
 `;
 
@@ -423,7 +433,8 @@ export const ClearButton = styled.button`
 `;
 
 export const ApplyButton = styled.button`
-  padding: 10px 20px;
+  padding: ${({ theme }) => theme.spacing["10px"]}
+    ${({ theme }) => theme.spacing["20px"]};
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme }) => theme.colors.primary.main};
@@ -431,7 +442,7 @@ export const ApplyButton = styled.button`
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.medium};
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: ${({ theme }) => theme.transition.colors.fast};
 
   &:hover {
     background: ${({ theme }) => theme.colors.primary.hover};
@@ -442,25 +453,26 @@ export const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 32px 24px;
-  gap: 4px;
+  padding: ${({ theme }) => theme.spacing["5xl"]}
+    ${({ theme }) => theme.spacing["2xl"]};
+  gap: ${({ theme }) => theme.spacing.xxs};
 `;
 
 export const PaginationButton = styled.button<{ $active?: boolean }>`
-  min-width: 32px;
-  height: 32px;
-  padding: 0 12px;
+  min-width: ${({ theme }) => theme.size.button.sm};
+  height: ${({ theme }) => theme.size.button.sm};
+  padding: 0 ${({ theme }) => theme.spacing.md};
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme, $active }) =>
-    $active ? theme.colors.text.primary : 'transparent'};
+    $active ? theme.colors.text.primary : "transparent"};
   color: ${({ theme, $active }) =>
     $active ? theme.colors.common.white : theme.colors.text.primary};
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme, $active }) =>
     $active ? theme.font.weight.bold : theme.font.weight.medium};
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: ${({ theme }) => theme.transition.all.fast};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -476,14 +488,13 @@ export const PaginationButton = styled.button<{ $active?: boolean }>`
   }
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: ${({ theme }) => theme.size.icon.md};
+    height: ${({ theme }) => theme.size.icon.md};
   }
 `;
 
 export const PaginationEllipsis = styled.span`
-  padding: 0 4px;
+  padding: 0 ${({ theme }) => theme.spacing.xxs};
   color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.sm};
 `;
-

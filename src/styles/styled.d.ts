@@ -42,6 +42,9 @@ declare module "styled-components" {
       sm: string;
       md: string;
       lg: string;
+      mapMarker: string;
+      focus: string;
+      header: string;
     };
     spacing: {
       xxs: string;
@@ -55,10 +58,53 @@ declare module "styled-components" {
       "4xl": string;
       "5xl": string;
       "6xl": string;
+      "1px": string;
+      "2px": string;
+      "6px": string;
+      "10px": string;
+      "18px": string;
+      "20px": string;
+      "40px": string;
     };
-    size: Record<string, never>; // 컴포넌트 특정적인 크기 값은 각 컴포넌트 내부 상수로 관리
+    size: {
+      icon: {
+        xs: string;
+        sm: string;
+        md: string;
+        lg: string;
+        xl: string;
+        xxl: string;
+      };
+      button: {
+        sm: string;
+        md: string;
+        lg: string;
+      };
+      input: {
+        sm: string;
+        md: string;
+        lg: string;
+      };
+      width: {
+        xs: string;
+        sm: string;
+        md: string;
+      };
+      cardImage: {
+        default: string;
+      };
+    };
     layout: {
       maxWidth: string;
+      headerHeight: {
+        default: string;
+        scrolled: string;
+      };
+      filterBarHeight: string;
+      contentOffset: {
+        withHeader: string;
+        withHeaderAndFilter: string;
+      };
     };
     zIndex: {
       base: number;
@@ -94,6 +140,9 @@ declare module "styled-components" {
         fast: string;
         normal: string;
         slow: string;
+      };
+      translateY: {
+        sm: string;
       };
     };
     font: {
