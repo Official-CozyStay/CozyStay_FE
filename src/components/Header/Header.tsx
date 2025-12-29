@@ -9,17 +9,17 @@ import {
   NavItem,
   NavBadge,
   HeaderRight,
-  HostModeToggle,
   ProfileDropdownWrapper,
   ProfileButton,
   ProfilePlaceholder,
   LoginButton,
 } from './Header.styles';
-import { Home, Sparkles, Bell } from 'lucide-react';
+import { Home, Sparkles, Bell, User } from 'lucide-react';
 import logo from '@/assets/images/logo.svg';
 import LoginModal from '@/pages/auth/LoginPage';
 import ProfileDropdown from '@/components/ProfileDropdown';
 import { useAuth } from '@/contexts/AuthContext';
+import SearchBar from '@/components/SearchBar/SearchBar';
 
 interface HeaderProps {
   isScrolled?: boolean;
@@ -27,7 +27,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
   const location = useLocation();
-  const [hostMode, setHostMode] = React.useState(false);
+  const isMainPage = location.pathname === '/';
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const { isAuthenticated, user } = useAuth();
@@ -52,11 +52,6 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
     return '숙소'; // 기본값
   }, [location.pathname]);
 
-  const toggleHostMode = React.useCallback(
-    () => setHostMode((prev) => !prev),
-    []
-  );
-
   return (
     <>
       <HeaderContainer $isScrolled={isScrolled}>
@@ -66,26 +61,30 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
         </HeaderLeft>
 
         <HeaderCenter $isScrolled={isScrolled}>
-          <NavItem $active={activeNav === '숙소'}>
-            <Home size={18} />
-            <span>숙소</span>
-          </NavItem>
-          <NavItem $active={activeNav === '체험'}>
-            <Sparkles size={18} />
-            <span>체험</span>
-            <NavBadge>NEW</NavBadge>
-          </NavItem>
-          <NavItem $active={activeNav === '서비스'}>
-            <Bell size={18} />
-            <span>서비스</span>
-            <NavBadge>NEW</NavBadge>
-          </NavItem>
+          {isScrolled && isMainPage ? (
+            <SearchBar isCompact={true} />
+          ) : (
+            <>
+              <NavItem $active={activeNav === '숙소'}>
+                <Home size={18} />
+                <span>숙소</span>
+              </NavItem>
+              <NavItem $active={activeNav === '체험'}>
+                <Sparkles size={18} />
+                <span>체험</span>
+              </NavItem>
+              <NavItem $active={activeNav === '서비스'}>
+                <Bell size={18} />
+                <span>서비스</span>
+              </NavItem>
+            </>
+          )}
         </HeaderCenter>
 
         <HeaderRight>
-          <HostModeToggle $active={hostMode} onClick={toggleHostMode}>
-            {hostMode ? '예' : '아니오'}
-          </HostModeToggle>
+          <ProfileButton type="button" onClick={() => {}}>
+            <User size={20} />
+          </ProfileButton>
 
           {isAuthenticated && user ? (
             <ProfileDropdownWrapper>

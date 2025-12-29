@@ -35,8 +35,8 @@ const MainPage: React.FC = () => {
 
   return (
     <MainContainer ref={containerRef}>
-      <SearchBarWrapper $isScrolled={isScrolled}>
-        <SearchBar isCompact={isScrolled} />
+      <SearchBarWrapper>
+        <SearchBar />
       </SearchBarWrapper>
 
       <AccommodationSection

@@ -8,7 +8,7 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   left: 0;
   right: 0;
   height: ${({ $isScrolled, theme }) =>
-    $isScrolled ? `${theme.spacing['4xl']}` : `${theme.spacing['5xl']}`};
+    $isScrolled ? `${theme.spacing['5xl']}` : `${theme.spacing['6xl']}`};
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -16,16 +16,15 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   background: ${({ theme }) => theme.colors.common.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
-  transition: height ${({ theme }) => theme.transition.slow},
-    box-shadow ${({ theme }) => theme.transition.slow};
+  transition: all ${({ theme }) => theme.transition.slow};
   box-shadow: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.shadow.sm : 'none'};
+    $isScrolled ? theme.shadow.md : 'none'};
 
   ${media.mobile} {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto 1fr;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     height: ${({ $isScrolled, theme }) =>
-      $isScrolled ? `${theme.spacing['3xl']}` : `${theme.spacing['4xl']}`};
+      $isScrolled ? `${theme.spacing['4xl']}` : `${theme.spacing['5xl']}`};
   }
 `;
 
@@ -67,12 +66,6 @@ export const HeaderCenter = styled.nav<{ $isScrolled?: boolean }>`
   gap: ${({ theme }) => theme.spacing['2xl']};
   justify-content: center;
   justify-self: center;
-
-  ${({ $isScrolled }) =>
-    $isScrolled &&
-    `
-    display: none;
-  `}
 
   ${media.mobile} {
     display: none;
@@ -137,23 +130,6 @@ export const HeaderRight = styled.div`
   }
 `;
 
-export const HostModeToggle = styled.button<{ $active?: boolean }>`
-  width: ${({ theme }) => theme.spacing['3xl']};
-  height: ${({ theme }) => theme.spacing.xl};
-  border-radius: ${({ theme }) => theme.radius.full};
-  border: 1px solid ${({ theme }) => theme.colors.border.primary};
-  background: ${({ theme, $active }) =>
-    $active ? theme.colors.primary.main : theme.colors.common.white};
-  color: ${({ theme, $active }) =>
-    $active ? theme.colors.common.white : theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.font.size.xs};
-  font-weight: ${({ theme }) => theme.font.weight.bold};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: ${({ theme }) => theme.transition.colors.normal};
-`;
 
 export const MenuButton = styled.button`
   width: ${({ theme }) => theme.spacing['3xl']};
