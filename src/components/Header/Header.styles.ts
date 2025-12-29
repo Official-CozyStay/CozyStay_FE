@@ -13,7 +13,7 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing['3xl']};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
   transition: all ${({ theme }) => theme.transition.slow};

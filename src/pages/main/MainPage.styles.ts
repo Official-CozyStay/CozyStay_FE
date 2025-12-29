@@ -3,7 +3,7 @@ import { media } from "@/styles/media";
 
 export const MainContainer = styled.div`
   padding-top: ${({ theme }) => theme.spacing["6xl"]};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 
   ${media.mobile} {
     padding-top: ${({ theme }) => theme.spacing["5xl"]};
@@ -14,7 +14,7 @@ export const SearchBarWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing["3xl"]}`};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
   width: 100%;
   align-items: center;
 
@@ -90,11 +90,12 @@ export const CardList = styled.div`
 
 export const ScrollButtonGroup = styled.div`
   position: absolute;
-  right: ${({ theme }) => theme.spacing.md};
-  top: -${({ theme }) => theme.spacing["2xl"]};
+  top: -${({ theme }) => theme.spacing["4xl"]};
+  right: 0;
   display: flex;
-  gap: ${({ theme }) => theme.spacing.xs};
-  z-index: ${({ theme }) => theme.zIndex.fixed};
+  gap: ${({ theme }) => theme.spacing.sm};
+  align-items: center;
+  z-index: 10;
 
   ${media.mobile} {
     display: none;
@@ -105,19 +106,12 @@ export const ScrollButton = styled.button<{
   $position: "left" | "right";
   $disabled?: boolean;
 }>`
-  position: absolute;
-  ${({ $position, theme }) =>
-    $position === "left"
-      ? `left: -${theme.spacing.xl}`
-      : `right: -${theme.spacing.xl}`};
-  top: 50%;
-  transform: translateY(-50%);
   width: ${({ theme }) => theme.spacing["3xl"]};
   height: ${({ theme }) => theme.spacing["3xl"]};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
-  box-shadow: ${({ theme }) => theme.shadow.md};
+  box-shadow: ${({ theme }) => theme.shadow.sm};
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   display: flex;
   align-items: center;
@@ -125,11 +119,11 @@ export const ScrollButton = styled.button<{
   transition: ${({ theme }) => theme.transition.all.normal};
   color: ${({ theme, $disabled }) =>
     $disabled ? theme.colors.text.secondary : theme.colors.text.primary};
-  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  opacity: ${({ $disabled }) => ($disabled ? 0.4 : 1)};
 
   &:hover:not(:disabled) {
-    box-shadow: ${({ theme }) => theme.shadow.lg};
-    transform: scale(1.1);
+    box-shadow: ${({ theme }) => theme.shadow.md};
+    transform: scale(1.05);
     border-color: ${({ theme }) => theme.colors.primary.main};
     color: ${({ theme }) => theme.colors.primary.main};
   }
@@ -151,7 +145,7 @@ export const Footer = styled.footer`
   font-size: ${({ theme }) => theme.font.size.xs};
   padding: ${({ theme }) => theme.spacing["3xl"]} 0;
   margin-top: ${({ theme }) => theme.spacing["6xl"]};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.xl} 0;
