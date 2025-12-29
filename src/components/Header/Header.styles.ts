@@ -21,7 +21,7 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
     $isScrolled ? theme.shadow.md : 'none'};
 
   ${media.mobile} {
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: 1fr auto;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     height: ${({ $isScrolled, theme }) =>
       $isScrolled ? `${theme.spacing['4xl']}` : `${theme.spacing['5xl']}`};
@@ -191,5 +191,26 @@ export const LoginButton = styled.button`
   font-family: inherit;
   &:hover {
     text-decoration: underline;
+  }
+`;
+
+export const HostButton = styled.button`
+  background: none;
+  border: none;
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  border-radius: ${({ theme }) => theme.radius.full};
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.font.size.sm};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
+  transition: background-color ${({ theme }) => theme.transition.normal};
+  white-space: nowrap;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  ${media.mobile} {
+    display: none;
   }
 `;

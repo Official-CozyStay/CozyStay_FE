@@ -9,6 +9,7 @@ import {
   NavItem,
   NavBadge,
   HeaderRight,
+  HostButton,
   ProfileDropdownWrapper,
   ProfileButton,
   ProfilePlaceholder,
@@ -82,6 +83,10 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
         </HeaderCenter>
 
         <HeaderRight>
+          <HostButton type="button" onClick={() => {}}>
+            호스트로 등록하기
+          </HostButton>
+
           <ProfileButton type="button" onClick={() => {}}>
             <User size={20} />
           </ProfileButton>
