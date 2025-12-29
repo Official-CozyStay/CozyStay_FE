@@ -4,7 +4,7 @@ export const SearchPageContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: ${({ theme }) => theme.layout.contentOffset.withHeader};
+  min-height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default});
   padding-top: ${({ theme }) =>
     theme.spacing["5xl"]}; /* 헤더 높이만큼 패딩 추가 */
   background: ${({ theme }) => theme.colors.common.white};
@@ -15,7 +15,7 @@ export const FilterBar = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.md}
-    ${({ theme }) => theme.spacing["2xl"]};
+    ${({ theme }) => theme.spacing.xl};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   background: ${({ theme }) => theme.colors.common.white};
   flex-shrink: 0;
@@ -67,14 +67,14 @@ export const ResultCount = styled.span`
 
 export const ContentArea = styled.div`
   display: flex;
-  min-height: ${({ theme }) => theme.layout.contentOffset.withHeaderAndFilter};
+  min-height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default} - ${({ theme }) => theme.layout.filterBarHeight});
 `;
 
 export const ListSection = styled.section`
   width: 55%;
   min-width: ${({ theme }) => theme.size.width.md};
   padding: ${({ theme }) => theme.spacing["20px"]}
-    ${({ theme }) => theme.spacing["2xl"]};
+    ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.common.white};
 `;
 
@@ -104,10 +104,10 @@ export const AccommodationGrid = styled.div`
 export const AccommodationCard = styled.article<{ $selected?: boolean }>`
   cursor: pointer;
   transition: ${({ theme }) => theme.transition.transform.fast},
-    ${({ theme }) => theme.transition.colors.fast};
+    box-shadow ${({ theme }) => theme.transition.fast};
   border-radius: ${({ theme }) => theme.radius.lg};
-  padding: ${({ theme }) => theme.spacing.xs};
-  margin: -${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => theme.spacing.sm};
+  margin: -${({ theme }) => theme.spacing.sm};
 
   ${({ $selected, theme }) =>
     $selected &&
@@ -138,8 +138,8 @@ export const CardBadge = styled.span`
   position: absolute;
   top: ${({ theme }) => theme.spacing["10px"]};
   left: ${({ theme }) => theme.spacing["10px"]};
-  padding: ${({ theme }) => theme.spacing.xxs}
-    ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => theme.spacing.xs}
+    ${({ theme }) => theme.spacing.sm};
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.sm};
   font-size: ${({ theme }) => theme.font.size.xs};
@@ -198,10 +198,10 @@ export const CardTitle = styled.h3`
 export const CardRating = styled.span`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.xxs};
+  gap: ${({ theme }) => theme.spacing.xs};
   font-size: ${({ theme }) => theme.font.size.sm};
   flex-shrink: 0;
-  margin-left: ${({ theme }) => theme.spacing.xs};
+  margin-left: ${({ theme }) => theme.spacing.sm};
 
   svg {
     width: ${({ theme }) => theme.size.icon.sm};
@@ -218,7 +218,7 @@ export const CardMeta = styled.p`
 
 export const CardPrice = styled.p`
   font-size: ${({ theme }) => theme.font.size.md};
-  margin: ${({ theme }) => theme.spacing.xxs} 0 0;
+  margin: ${({ theme }) => theme.spacing.xs} 0 0;
 
   strong {
     font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -228,8 +228,8 @@ export const CardPrice = styled.p`
 export const MapSection = styled.section`
   flex: 1;
   position: sticky;
-  top: ${({ theme }) => theme.layout.filterBarHeight};
-  height: ${({ theme }) => theme.layout.contentOffset.withHeaderAndFilter};
+  top: calc(${({ theme }) => theme.layout.headerHeight.default} + ${({ theme }) => theme.layout.filterBarHeight});
+  height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default} - ${({ theme }) => theme.layout.filterBarHeight});
   padding: 0 ${({ theme }) => theme.spacing["40px"]}
     ${({ theme }) => theme.spacing.xl} 0;
   background: ${({ theme }) =>
@@ -319,7 +319,7 @@ export const FilterLabel = styled.label`
   display: block;
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.medium};
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const FilterInput = styled.input`
@@ -494,7 +494,7 @@ export const PaginationButton = styled.button<{ $active?: boolean }>`
 `;
 
 export const PaginationEllipsis = styled.span`
-  padding: 0 ${({ theme }) => theme.spacing.xxs};
+  padding: 0 ${({ theme }) => theme.spacing.xs};
   color: ${({ theme }) => theme.colors.text.secondary};
   font-size: ${({ theme }) => theme.font.size.sm};
 `;

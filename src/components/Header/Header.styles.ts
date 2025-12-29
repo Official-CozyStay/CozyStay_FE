@@ -120,7 +120,7 @@ export const NavBadge = styled.span`
   background: ${({ theme }) => theme.colors.primary.main};
   color: ${({ theme }) => theme.colors.common.white};
   font-size: ${({ theme }) => theme.font.size.xs};
-  padding: ${({ theme }) => theme.spacing.xxs}
+  padding: ${({ theme }) => theme.spacing.xs}
     ${({ theme }) => theme.spacing.md};
   border-radius: ${({ theme }) => theme.radius.sm};
   font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -182,7 +182,7 @@ export const ProfileButton = styled.button`
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.xxs};
   border-radius: ${({ theme }) => theme.radius.full};
-  transition: ${({ theme }) => theme.transition.colors.fast};
+  transition: box-shadow ${({ theme }) => theme.transition.fast};
 
   &:hover {
     box-shadow: ${({ theme }) => theme.shadow.header};

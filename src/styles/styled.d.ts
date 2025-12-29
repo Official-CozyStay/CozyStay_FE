@@ -101,10 +101,6 @@ declare module "styled-components" {
         scrolled: string;
       };
       filterBarHeight: string;
-      contentOffset: {
-        withHeader: string;
-        withHeaderAndFilter: string;
-      };
     };
     zIndex: {
       base: number;
