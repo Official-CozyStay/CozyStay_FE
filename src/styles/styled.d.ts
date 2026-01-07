@@ -12,6 +12,7 @@ declare module "styled-components" {
       text: {
         primary: string;
         secondary: string;
+        tertiary: string;
       };
       border: {
         primary: string;
@@ -28,6 +29,11 @@ declare module "styled-components" {
       };
       overlay: {
         default: string;
+      };
+      status: {
+        error: string;
+        warning: string;
+        success: string;
       };
     };
     radius: {
