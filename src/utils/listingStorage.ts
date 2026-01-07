@@ -1,4 +1,4 @@
-import { Listing } from '@/types/listing';
+import type { Listing } from '@/types/listing';
 
 const LISTINGS_KEY = 'cozy_listings';
 const DRAFT_KEY = 'cozy_listing_draft';

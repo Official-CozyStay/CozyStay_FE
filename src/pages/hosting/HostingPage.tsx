@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HostingHeader from '@/components/HostingHeader/HostingHeader';
 import { getListings } from '@/utils/listingStorage';
-import { Listing } from '@/types/listing';
+import type { Listing } from '@/types/listing';
 import {
   HostingContainer,
   TabSection,

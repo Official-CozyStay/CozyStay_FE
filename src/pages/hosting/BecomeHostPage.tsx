@@ -23,7 +23,7 @@ import Discounts from './steps/Discounts';
 import SafetyInfo from './steps/SafetyInfo';
 import HostDetails from './steps/HostDetails';
 import { saveListing, generateId } from '@/utils/listingStorage';
-import { Listing } from '@/types/listing';
+import type { Listing } from '@/types/listing';
 
 // 스텝 설정 배열 - 순서 변경, 추가/삭제가 쉬움
 const STEPS = [
