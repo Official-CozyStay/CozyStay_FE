@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="650" viewBox="0 0 900 650" fill="none">
+  <defs>
+    <linearGradient id="floor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F3F4F6"/>
+      <stop offset="1" stop-color="#E5E7EB"/>
+    </linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F5F5F5"/>
+    </linearGradient>
+    <linearGradient id="shadow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- soft shadow -->
+  <ellipse cx="560" cy="520" rx="240" ry="60" fill="url(#shadow)"/>
+
+  <!-- isometric floor -->
+  <path d="M360 470 L610 390 L820 500 L570 585 Z" fill="url(#floor)" stroke="#E5E7EB"/>
+
+  <!-- walls -->
+  <path d="M360 260 L610 180 L610 390 L360 470 Z" fill="url(#wall)" stroke="#E5E7EB"/>
+  <path d="M610 180 L820 290 L820 500 L610 390 Z" fill="url(#wall)" stroke="#E5E7EB"/>
+
+  <!-- window -->
+  <path d="M645 230 L760 292 L760 395 L645 332 Z" fill="#FFFFFF" stroke="#D1D5DB"/>
+  <path d="M702 261 L702 363" stroke="#D1D5DB"/>
+  <path d="M645 282 L760 345" stroke="#D1D5DB"/>
+
+  <!-- bed (simple) -->
+  <path d="M470 350 L560 310 L645 360 L555 400 Z" fill="#FDE68A" stroke="#F59E0B"/>
+  <path d="M470 350 L470 315 L560 275 L560 310 Z" fill="#FFF7ED" stroke="#FDBA74"/>
+  <path d="M560 275 L645 325 L645 360 L560 310 Z" fill="#FFF7ED" stroke="#FDBA74"/>
+
+  <!-- sofa -->
+  <path d="M560 475 L635 440 L700 475 L625 510 Z" fill="#93C5FD" stroke="#60A5FA"/>
+  <path d="M560 475 L560 440 L635 405 L635 440 Z" fill="#BFDBFE" stroke="#60A5FA"/>
+
+  <!-- small decor -->
+  <circle cx="735" cy="260" r="10" fill="#34D399"/>
+  <path d="M735 270 L735 300" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- subtle label -->
+  <text x="560" y="610" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto" font-size="18" fill="#6B7280">(임시 일러스트 — 나중에 에어비앤비 스타일 이미지로 교체 가능)</text>
+</svg>

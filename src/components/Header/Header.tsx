@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   HeaderContainer,
   HeaderLeft,
@@ -28,6 +28,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isMainPage = location.pathname === '/';
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
@@ -83,13 +84,9 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
         </HeaderCenter>
 
         <HeaderRight>
-          <HostButton type="button" onClick={() => {}}>
+          <HostButton type="button" onClick={() => navigate('/hosting')}>
             호스트로 등록하기
           </HostButton>
-
-          <ProfileButton type="button" onClick={() => {}}>
-            <User size={20} />
-          </ProfileButton>
 
           {isAuthenticated && user ? (
             <ProfileDropdownWrapper>
@@ -110,9 +107,16 @@ const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
               )}
             </ProfileDropdownWrapper>
           ) : (
-            <LoginButton type="button" onClick={() => setIsLoginOpen(true)}>
-              로그인
-            </LoginButton>
+            <>
+              <ProfileButton type="button" onClick={() => setIsLoginOpen(true)}>
+                <ProfilePlaceholder>
+                  <User size={18} />
+                </ProfilePlaceholder>
+              </ProfileButton>
+              <LoginButton type="button" onClick={() => setIsLoginOpen(true)}>
+                로그인
+              </LoginButton>
+            </>
           )}
         </HeaderRight>
       </HeaderContainer>

@@ -4,6 +4,8 @@ import LandingPage from "../pages/landing/LandingPage";
 import MainPage from "../pages/main/MainPage";
 import AccommodationDetailPage from "../pages/accommodation/AccommodationDetailPage.tsx";
 import SearchPage from "../pages/search/SearchPage";
+import HostingPage from "../pages/hosting/HostingPage";
+import BecomeHostPage from "../pages/hosting/BecomeHostPage";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +17,14 @@ export const router = createBrowserRouter([
       { path: "accommodation/:id", element: <AccommodationDetailPage /> },
       { path: "search", element: <SearchPage /> },
     ],
+  },
+  {
+    path: "/hosting",
+    element: <HostingPage />,
+  },
+  {
+    path: "/hosting/become-a-host",
+    element: <BecomeHostPage />,
   },
 ]);
 
