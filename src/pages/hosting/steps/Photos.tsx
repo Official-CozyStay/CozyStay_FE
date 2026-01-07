@@ -15,7 +15,7 @@ import {
   RemoveButton,
 } from './Photos.styles';
 
-const Photos: React.FC = () => {
+const Photos = () => {
   const [photos, setPhotos] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 

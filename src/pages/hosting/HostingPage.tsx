@@ -26,7 +26,7 @@ import {
   ListingStatus,
 } from './hosting.styles';
 
-const HostingPage: React.FC = () => {
+const HostingPage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'today' | 'upcoming'>('today');
   const [listings, setListings] = useState<Listing[]>([]);

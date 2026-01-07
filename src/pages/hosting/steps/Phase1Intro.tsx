@@ -9,7 +9,7 @@ import {
   Illustration,
 } from './Phase1Intro.styles';
 
-const Phase1Intro: React.FC = () => {
+const Phase1Intro = () => {
   return (
     <IntroContainer>
       <TextSection>

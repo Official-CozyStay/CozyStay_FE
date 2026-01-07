@@ -28,7 +28,7 @@ const formatPrice = (price: number): string => {
   return price.toLocaleString('ko-KR');
 };
 
-const WeekendPricing: React.FC = () => {
+const WeekendPricing = () => {
   const [premium, setPremium] = useState(29);
 
   const weekendPrice = Math.round(BASE_PRICE * (1 + premium / 100));

@@ -27,7 +27,7 @@ const formatPrice = (price: number): string => {
   return price.toLocaleString('ko-KR');
 };
 
-const Pricing: React.FC = () => {
+const Pricing = () => {
   const [price, setPrice] = useState<number>(50000);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {

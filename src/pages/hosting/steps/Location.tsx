@@ -12,7 +12,7 @@ import {
   PlaceholderMap,
 } from './Location.styles';
 
-const Location: React.FC = () => {
+const Location = () => {
   return (
     <LocationContainer>
       <HeaderSection>

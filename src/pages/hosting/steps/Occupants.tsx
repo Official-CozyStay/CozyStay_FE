@@ -19,7 +19,7 @@ const occupantTypes = [
   { id: 'roommate', label: '룸메이트', icon: <Users size={32} /> },
 ];
 
-const Occupants: React.FC = () => {
+const Occupants = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const toggleSelection = (id: string) => {

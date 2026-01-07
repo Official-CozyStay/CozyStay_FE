@@ -54,7 +54,7 @@ const safetyOptions: SafetyOption[] = [
 
 const MAX_LENGTH = 300;
 
-const SafetyInfo: React.FC = () => {
+const SafetyInfo = () => {
   const [selectedItems, setSelectedItems] = useState<Record<string, { checked: boolean; description: string }>>({});
   const [modalOpen, setModalOpen] = useState<string | null>(null);
   const [tempDescription, setTempDescription] = useState('');

@@ -15,7 +15,7 @@ import {
 
 type GuestOption = 'all' | 'experienced';
 
-const GuestRequirements: React.FC = () => {
+const GuestRequirements = () => {
   const [selected, setSelected] = useState<GuestOption>('all');
 
   return (

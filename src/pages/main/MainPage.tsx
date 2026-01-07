@@ -11,7 +11,7 @@ import {
 import { MainContainer, SearchBarWrapper, Footer } from "./MainPage.styles";
 import { sumSpacingValues } from "@/utils/spacing";
 
-const MainPage: React.FC = () => {
+const MainPage = () => {
   const theme = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

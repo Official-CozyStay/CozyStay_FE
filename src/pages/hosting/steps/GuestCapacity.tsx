@@ -18,7 +18,7 @@ import {
   RadioLabel,
 } from './GuestCapacity.styles';
 
-const GuestCapacity: React.FC = () => {
+const GuestCapacity = () => {
   const [guests, setGuests] = useState(4);
   const [bedrooms, setBedrooms] = useState(1);
   const [beds, setBeds] = useState(1);

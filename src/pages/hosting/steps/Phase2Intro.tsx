@@ -10,7 +10,7 @@ import {
 } from './Phase2Intro.styles';
 import hostingStep2Image from '@/assets/images/hosting_step2.svg';
 
-const Phase2Intro: React.FC = () => {
+const Phase2Intro = () => {
   return (
     <IntroContainer>
       <TextSection>

@@ -17,10 +17,10 @@ interface AccommodationSectionProps {
   accommodations: Accommodation[];
 }
 
-const AccommodationSection: React.FC<AccommodationSectionProps> = ({
+const AccommodationSection = ({
   title,
   accommodations,
-}) => {
+}: AccommodationSectionProps) => {
   const listRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);

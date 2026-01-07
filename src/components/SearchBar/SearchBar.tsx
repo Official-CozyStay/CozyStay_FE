@@ -31,8 +31,8 @@ interface GuestCounterRowProps {
   onUpdate: (type: GuestType, delta: number) => void;
 }
 
-const GuestCounterRow: React.FC<GuestCounterRowProps> = React.memo(
-  ({ label, age, count, guestType, onUpdate }) => (
+const GuestCounterRow = React.memo(
+  ({ label, age, count, guestType, onUpdate }: GuestCounterRowProps) => (
     <GuestSection>
       <div>
         <GuestLabel>{label}</GuestLabel>
@@ -62,7 +62,7 @@ const GuestCounterRow: React.FC<GuestCounterRowProps> = React.memo(
   )
 );
 
-const SearchBar: React.FC<SearchBarProps> = ({ isCompact = false }) => {
+const SearchBar = ({ isCompact = false }: SearchBarProps) => {
   const navigate = useNavigate();
   const [showGuestPopup, setShowGuestPopup] = useState(false);
   const [guests, setGuests] = useState({

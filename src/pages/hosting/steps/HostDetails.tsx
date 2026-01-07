@@ -20,7 +20,7 @@ import {
   OptionButton,
 } from './HostDetails.styles';
 
-const HostDetails: React.FC = () => {
+const HostDetails = () => {
   const [country, setCountry] = useState('한국');
   const [province, setProvince] = useState('');
   const [city, setCity] = useState('');

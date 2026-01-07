@@ -10,7 +10,7 @@ import {
 
 const MAX_LENGTH = 50;
 
-const TitleStep: React.FC = () => {
+const TitleStep = () => {
   const [name, setName] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

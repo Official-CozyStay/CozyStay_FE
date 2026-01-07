@@ -18,7 +18,7 @@ const categories = [
   { id: 'castle', label: '캐슬', icon: <Landmark size={32} /> },
 ];
 
-const CategorySelect: React.FC = () => {
+const CategorySelect = () => {
   const [selected, setSelected] = useState<string | null>(null);
 
   return (

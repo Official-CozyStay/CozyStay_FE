@@ -48,7 +48,7 @@ const standoutAmenities = [
   { id: 'firepit', label: '화로', icon: <Flame size={28} /> },
 ];
 
-const Amenities: React.FC = () => {
+const Amenities = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const toggleSelection = (id: string) => {

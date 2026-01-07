@@ -13,7 +13,7 @@ import {
   CounterValue,
 } from './Bathrooms.styles';
 
-const Bathrooms: React.FC = () => {
+const Bathrooms = () => {
   const [counts, setCounts] = useState({
     attached: 0,
     dedicated: 0,

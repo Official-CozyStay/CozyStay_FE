@@ -10,7 +10,7 @@ import {
 
 const MAX_LENGTH = 500;
 
-const Description: React.FC = () => {
+const Description = () => {
   const [description, setDescription] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

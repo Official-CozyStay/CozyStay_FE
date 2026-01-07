@@ -16,7 +16,7 @@ import {
 
 type BookingOption = 'review' | 'instant';
 
-const BookingSettings: React.FC = () => {
+const BookingSettings = () => {
   const [selected, setSelected] = useState<BookingOption>('review');
 
   return (

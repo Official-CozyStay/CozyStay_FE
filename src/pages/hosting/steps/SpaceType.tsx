@@ -32,7 +32,7 @@ const types = [
   },
 ];
 
-const SpaceType: React.FC = () => {
+const SpaceType = () => {
   const [selected, setSelected] = useState<string | null>(null);
 
   return (

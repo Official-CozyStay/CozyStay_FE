@@ -26,7 +26,7 @@ interface HeaderProps {
   isScrolled?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ isScrolled = false }) => {
+const Header = ({ isScrolled = false }: HeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isMainPage = location.pathname === '/';

@@ -29,7 +29,7 @@ interface HostingRegistrationLayoutProps {
   showProgressBar?: boolean;
 }
 
-const HostingRegistrationLayout: React.FC<HostingRegistrationLayoutProps> = ({
+const HostingRegistrationLayout = ({
   children,
   currentStep,
   totalSteps,
@@ -39,7 +39,7 @@ const HostingRegistrationLayout: React.FC<HostingRegistrationLayoutProps> = ({
   backDisabled,
   nextLabel = '다음',
   showProgressBar = true,
-}) => {
+}: HostingRegistrationLayoutProps) => {
   const navigate = useNavigate();
 
   return (

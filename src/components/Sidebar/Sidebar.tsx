@@ -35,7 +35,7 @@ interface SidebarProps {
   isScrolled?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isScrolled = false }) => {
+const Sidebar = ({ isOpen, onClose, isScrolled = false }: SidebarProps) => {
   const menuItems = [
     { icon: Heart, text: "위시리스트" },
     { icon: Plane, text: "여행" },

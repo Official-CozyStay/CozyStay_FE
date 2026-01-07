@@ -44,7 +44,7 @@ const discountOptions: DiscountOption[] = [
   },
 ];
 
-const Discounts: React.FC = () => {
+const Discounts = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>(['new_listing']);
 
   const toggleDiscount = (id: string) => {

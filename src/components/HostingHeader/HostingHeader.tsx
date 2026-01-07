@@ -17,7 +17,7 @@ import {
   MenuIconButton,
 } from './HostingHeader.styles';
 
-const HostingHeader: React.FC = () => {
+const HostingHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user } = useAuth();

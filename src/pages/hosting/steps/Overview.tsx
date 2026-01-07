@@ -11,7 +11,7 @@ import {
   StepDesc,
 } from '../becomeHost.styles';
 
-const Overview: React.FC = () => {
+const Overview = () => {
   return (
     <MainContent style={{ paddingBottom: 0, marginTop: 0 }}>
       <LeftSection>

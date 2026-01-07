@@ -57,7 +57,7 @@ const STEPS = [
   { component: HostDetails, showProgress: true, nextLabel: '리스팅 만들기' },
 ] as const;
 
-const BecomeHostPage: React.FC = () => {
+const BecomeHostPage = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   
