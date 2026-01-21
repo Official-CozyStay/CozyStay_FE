@@ -69,10 +69,14 @@ const BecomeHostPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [listingData, setListingData] = useState<Partial<Listing>>(defaultListing);
   
-  const totalSteps = STEPS.length - 1; // 인덱스 기준
   const stepConfig = STEPS[currentStep];
   const StepComponent = stepConfig.component;
-  const isLastStep = currentStep === totalSteps;
+  const isLastStep = currentStep === STEPS.length - 1;
+
+  // 프로그레스 바에 표시될 스텝만 필터링하여 계산
+  const totalProgressSteps = STEPS.filter(step => step.showProgress).length;
+  const currentProgressStep = STEPS.slice(0, currentStep + 1)
+    .filter(step => step.showProgress).length;
 
   const handleDataChange = (newData: Partial<Listing>) => {
     setListingData(prev => ({ ...prev, ...newData }));
@@ -134,8 +138,8 @@ const BecomeHostPage = () => {
 
   return (
     <HostingRegistrationLayout
-      currentStep={currentStep}
-      totalSteps={totalSteps}
+      currentStep={currentProgressStep}
+      totalSteps={totalProgressSteps}
       onNext={handleNext}
       onBack={handleBack}
       backDisabled={currentStep === 0}
