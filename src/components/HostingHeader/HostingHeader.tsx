@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Menu, User } from 'lucide-react';
 import logo from '@/assets/images/logo.svg';
 import { useAuth } from '@/contexts/AuthContext';
@@ -19,13 +19,10 @@ import {
 
 const HostingHeader = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { isAuthenticated, user } = useAuth();
 
-  const activeTab = React.useMemo(() => {
-    if (location.pathname === '/hosting') return '투데이';
-    return '투데이';
-  }, [location.pathname]);
+  // TODO: 향후 다른 경로에 따라 탭 활성화 로직 추가 필요 (예: /hosting/calendar → '달력', /hosting/listings → '리스팅')
+  const activeTab = '투데이';
 
   return (
     <HeaderContainer>
