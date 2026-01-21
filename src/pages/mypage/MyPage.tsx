@@ -29,6 +29,13 @@ import {
 import logo from "@/assets/images/logo.svg";
 import PersonalInfoSection from "./sections/PersonalInfoSection";
 import SecuritySection from "./sections/SecuritySection";
+import PrivacySection from "./sections/PrivacySection";
+import NotificationsSection from "./sections/NotificationsSection";
+import TaxSection from "./sections/TaxSection";
+import PaymentSection from "./sections/PaymentSection";
+import LanguageSection from "./sections/LanguageSection";
+import BusinessSection from "./sections/BusinessSection";
+import HostingToolsSection from "./sections/HostingToolsSection";
 
 type MenuKey =
   | "personal"
@@ -77,19 +84,19 @@ const MyPage = () => {
       case "security":
         return <SecuritySection />;
       case "privacy":
-        return <PersonalInfoSection />; // TODO: PrivacySection 구현
+        return <PrivacySection />;
       case "notifications":
-        return <PersonalInfoSection />; // TODO: NotificationsSection 구현
+        return <NotificationsSection />;
       case "tax":
-        return <PersonalInfoSection />; // TODO: TaxSection 구현
+        return <TaxSection />;
       case "payment":
-        return <PersonalInfoSection />; // TODO: PaymentSection 구현
+        return <PaymentSection />;
       case "language":
-        return <PersonalInfoSection />; // TODO: LanguageSection 구현
+        return <LanguageSection />;
       case "business":
-        return <PersonalInfoSection />; // TODO: BusinessSection 구현
+        return <BusinessSection />;
       case "hosting":
-        return <PersonalInfoSection />; // TODO: HostingToolsSection 구현
+        return <HostingToolsSection />;
       default:
         return <PersonalInfoSection />;
     }
