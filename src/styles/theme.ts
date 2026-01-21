@@ -20,6 +20,7 @@ export const theme = {
     text: {
       primary: "#222",
       secondary: "#7b7b7bff",
+      tertiary: "#b0b0b0",
     },
     // Border(경계선) 계열
     border: {
@@ -42,12 +43,12 @@ export const theme = {
     overlay: {
       default: "rgba(0, 0, 0, 0.5)",
     },
-    // 상태별 색상 (추후 필요시 확장)
-    // status: {
-    //   error: "#d32f2f",
-    //   warning: "#ffa000",
-    //   success: "#388e3c",
-    // }
+    // 상태별 색상
+    status: {
+      error: "#d32f2f",
+      warning: "#ffa000",
+      success: "#388e3c",
+    },
   },
   radius,
   shadow,

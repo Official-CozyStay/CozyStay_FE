@@ -23,11 +23,11 @@ interface WishlistModalProps {
   onCreate?: (name: string) => void;
 }
 
-const WishlistModal: React.FC<WishlistModalProps> = ({
+const WishlistModal = ({
   isOpen,
   onClose,
   onCreate,
-}) => {
+}: WishlistModalProps) => {
   const [wishlistName, setWishlistName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const MAX_LENGTH = 50;

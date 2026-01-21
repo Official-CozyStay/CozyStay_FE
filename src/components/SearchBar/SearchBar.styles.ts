@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { media } from "@/styles/media";
 
-const SEARCH_BAR_MAX_WIDTH_COMPACT = "300px";
+const SEARCH_BAR_MAX_WIDTH_COMPACT = "340px";
 const SEARCH_BAR_MAX_WIDTH = "850px";
-const SEARCH_BAR_MAX_WIDTH_MOBILE = "280px";
+const SEARCH_BAR_MAX_WIDTH_MOBILE = "300px";
 
 export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
   display: flex;
@@ -13,7 +13,7 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
   border-radius: ${({ theme }) => theme.radius.full};
   padding: ${({ $isCompact, theme }) =>
     $isCompact
-      ? `${theme.spacing.sm} ${theme.spacing.lg}`
+      ? `${theme.spacing.xs} ${theme.spacing.sm} ${theme.spacing.xs} ${theme.spacing.lg}`
       : `${theme.spacing.md} ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.xl}`};
   box-shadow: ${({ theme }) => theme.shadow.md};
   max-width: ${({ $isCompact }) =>
@@ -102,7 +102,7 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   transition: ${({ theme }) => theme.transition.colors.normal};
   flex-shrink: 0;
   margin-left: ${({ $isCompact, theme }) =>
-    $isCompact ? theme.spacing.md : "0"};
+    $isCompact ? theme.spacing.xs : "0"};
 
   &:hover {
     background: ${({ theme }) => theme.colors.primary.hover};

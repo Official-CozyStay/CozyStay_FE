@@ -3,47 +3,23 @@ import { media } from "@/styles/media";
 
 export const MainContainer = styled.div`
   padding-top: ${({ theme }) => theme.spacing["6xl"]};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 
   ${media.mobile} {
     padding-top: ${({ theme }) => theme.spacing["5xl"]};
   }
 `;
 
-export const SearchBarWrapper = styled.div<{ $isScrolled?: boolean }>`
+export const SearchBarWrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding: ${({ $isScrolled, theme }) =>
-    $isScrolled
-      ? theme.spacing.sm
-      : `${theme.spacing.xl} ${theme.spacing["3xl"]}`};
-  background: ${({ $isScrolled, theme }) =>
-    $isScrolled ? "transparent" : theme.colors.common.white};
-  position: ${({ $isScrolled }) => ($isScrolled ? "fixed" : "static")};
-  top: ${({ $isScrolled }) => ($isScrolled ? "0" : "auto")};
-  left: ${({ $isScrolled }) => ($isScrolled ? "50%" : "auto")};
-  transform: ${({ $isScrolled }) =>
-    $isScrolled ? "translateX(-50%)" : "none"};
-  z-index: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.zIndex.header + 1 : "auto"};
-  width: ${({ $isScrolled }) => ($isScrolled ? "auto" : "100%")};
-  transition: ${({ theme }) => theme.transition.all.slow};
-  height: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.spacing["5xl"] : "auto"};
+  padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing["3xl"]}`};
+  background: ${({ theme }) => theme.colors.background.default};
+  width: 100%;
   align-items: center;
-  pointer-events: ${({ $isScrolled }) => ($isScrolled ? "none" : "auto")};
-
-  > * {
-    pointer-events: auto;
-  }
 
   ${media.mobile} {
-    padding: ${({ $isScrolled, theme }) =>
-      $isScrolled
-        ? `${theme.spacing.xs} ${theme.spacing.lg}`
-        : theme.spacing.lg};
-    top: ${({ $isScrolled, theme }) =>
-      $isScrolled ? `${theme.spacing["3xl"]}` : "auto"};
+    padding: ${({ theme }) => theme.spacing.lg};
   }
 `;
 
@@ -114,11 +90,12 @@ export const CardList = styled.div`
 
 export const ScrollButtonGroup = styled.div`
   position: absolute;
-  right: ${({ theme }) => theme.spacing.md};
-  top: -${({ theme }) => theme.spacing["2xl"]};
+  top: -${({ theme }) => theme.spacing["4xl"]};
+  right: 0;
   display: flex;
-  gap: ${({ theme }) => theme.spacing.xs};
-  z-index: ${({ theme }) => theme.zIndex.fixed};
+  gap: ${({ theme }) => theme.spacing.sm};
+  align-items: center;
+  z-index: 10;
 
   ${media.mobile} {
     display: none;
@@ -129,19 +106,12 @@ export const ScrollButton = styled.button<{
   $position: "left" | "right";
   $disabled?: boolean;
 }>`
-  position: absolute;
-  ${({ $position, theme }) =>
-    $position === "left"
-      ? `left: -${theme.spacing.xl}`
-      : `right: -${theme.spacing.xl}`};
-  top: 50%;
-  transform: translateY(-50%);
   width: ${({ theme }) => theme.spacing["3xl"]};
   height: ${({ theme }) => theme.spacing["3xl"]};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
-  box-shadow: ${({ theme }) => theme.shadow.md};
+  box-shadow: ${({ theme }) => theme.shadow.sm};
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   display: flex;
   align-items: center;
@@ -149,11 +119,11 @@ export const ScrollButton = styled.button<{
   transition: ${({ theme }) => theme.transition.all.normal};
   color: ${({ theme, $disabled }) =>
     $disabled ? theme.colors.text.secondary : theme.colors.text.primary};
-  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  opacity: ${({ $disabled }) => ($disabled ? 0.4 : 1)};
 
   &:hover:not(:disabled) {
-    box-shadow: ${({ theme }) => theme.shadow.lg};
-    transform: scale(1.1);
+    box-shadow: ${({ theme }) => theme.shadow.md};
+    transform: scale(1.05);
     border-color: ${({ theme }) => theme.colors.primary.main};
     color: ${({ theme }) => theme.colors.primary.main};
   }
@@ -175,7 +145,7 @@ export const Footer = styled.footer`
   font-size: ${({ theme }) => theme.font.size.xs};
   padding: ${({ theme }) => theme.spacing["3xl"]} 0;
   margin-top: ${({ theme }) => theme.spacing["6xl"]};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.xl} 0;

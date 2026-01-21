@@ -17,10 +17,10 @@ interface AccommodationSectionProps {
   accommodations: Accommodation[];
 }
 
-const AccommodationSection: React.FC<AccommodationSectionProps> = ({
+const AccommodationSection = ({
   title,
   accommodations,
-}) => {
+}: AccommodationSectionProps) => {
   const listRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -70,20 +70,6 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
         <SectionTitle>{title}</SectionTitle>
       </SectionHeader>
       <CardListWrapper>
-        <CardList ref={listRef}>
-          {accommodations.map((accommodation) => (
-            <AccommodationCard
-              key={accommodation.id}
-              image={accommodation.image}
-              badge={accommodation.badge}
-              title={accommodation.title}
-              date={accommodation.date}
-              price={accommodation.price}
-              nights={accommodation.nights}
-              rating={accommodation.rating}
-            />
-          ))}
-        </CardList>
         <ScrollButtonGroup>
           <ScrollButton
             $position="left"
@@ -102,6 +88,20 @@ const AccommodationSection: React.FC<AccommodationSectionProps> = ({
             <ChevronRight size={16} />
           </ScrollButton>
         </ScrollButtonGroup>
+        <CardList ref={listRef}>
+          {accommodations.map((accommodation) => (
+            <AccommodationCard
+              key={accommodation.id}
+              image={accommodation.image}
+              badge={accommodation.badge}
+              title={accommodation.title}
+              date={accommodation.date}
+              price={accommodation.price}
+              nights={accommodation.nights}
+              rating={accommodation.rating}
+            />
+          ))}
+        </CardList>
       </CardListWrapper>
     </Section>
   );

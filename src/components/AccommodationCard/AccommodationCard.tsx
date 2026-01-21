@@ -51,7 +51,7 @@ const formatNights = (nights: number): string => {
   return `${nights}박`;
 };
 
-const AccommodationCard: React.FC<AccommodationCardProps> = ({
+const AccommodationCard = ({
   image,
   badge,
   title,
@@ -61,7 +61,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({
   rating,
   isFavorite = false,
   onFavoriteClick,
-}) => {
+}: AccommodationCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleHeartClick = (e: React.MouseEvent) => {

@@ -91,7 +91,7 @@ const FaqItemWithState = ({ q, a }: { q: string; a: string }) => {
   );
 };
 
-const LandingPage: React.FC = () => {
+const LandingPage = () => {
   const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {

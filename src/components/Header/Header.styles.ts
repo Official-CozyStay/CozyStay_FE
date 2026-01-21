@@ -8,16 +8,15 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   left: 0;
   right: 0;
   height: ${({ $isScrolled, theme }) =>
-    $isScrolled ? `${theme.spacing["4xl"]}` : `${theme.spacing["5xl"]}`};
+    $isScrolled ? `${theme.spacing["5xl"]}` : `${theme.spacing["6xl"]}`};
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing["3xl"]};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
-  transition: height ${({ theme }) => theme.transition.slow},
-    box-shadow ${({ theme }) => theme.transition.slow};
+  transition: all ${({ theme }) => theme.transition.slow};
   box-shadow: ${({ $isScrolled, theme }) =>
     $isScrolled ? theme.shadow.sm : "none"};
 
@@ -68,12 +67,6 @@ export const HeaderCenter = styled.nav<{ $isScrolled?: boolean }>`
   justify-content: center;
   justify-self: center;
 
-  ${({ $isScrolled }) =>
-    $isScrolled &&
-    `
-    display: none;
-  `}
-
   ${media.mobile} {
     display: none;
   }
@@ -120,8 +113,7 @@ export const NavBadge = styled.span`
   background: ${({ theme }) => theme.colors.primary.main};
   color: ${({ theme }) => theme.colors.common.white};
   font-size: ${({ theme }) => theme.font.size.xs};
-  padding: ${({ theme }) => theme.spacing.xs}
-    ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.md};
   border-radius: ${({ theme }) => theme.radius.sm};
   font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
@@ -215,5 +207,26 @@ export const LoginButton = styled.button`
   font-family: inherit;
   &:hover {
     text-decoration: underline;
+  }
+`;
+
+export const HostButton = styled.button`
+  background: none;
+  border: none;
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  border-radius: ${({ theme }) => theme.radius.full};
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.font.size.sm};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
+  transition: background-color ${({ theme }) => theme.transition.normal};
+  white-space: nowrap;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  ${media.mobile} {
+    display: none;
   }
 `;
