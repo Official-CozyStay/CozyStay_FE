@@ -56,6 +56,6 @@ export const clearDraft = (): void => {
 
 // 고유 ID 생성
 export const generateId = (): string => {
-  return `listing_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  return crypto.randomUUID();
 };
 
