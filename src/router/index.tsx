@@ -6,6 +6,7 @@ import AccommodationDetailPage from "../pages/accommodation/AccommodationDetailP
 import SearchPage from "../pages/search/SearchPage";
 import HostingPage from "../pages/hosting/HostingPage";
 import BecomeHostPage from "../pages/hosting/BecomeHostPage";
+import MyPage from "../pages/mypage/MyPage";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
   {
     path: "/hosting/become-a-host",
     element: <BecomeHostPage />,
+  },
+  {
+    path: "/mypage",
+    element: <MyPage />,
   },
 ]);
 
