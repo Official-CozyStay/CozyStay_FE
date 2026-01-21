@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { X } from 'lucide-react';
 import {
   PhotosContainer,
@@ -14,9 +14,10 @@ import {
   PhotoPreview,
   RemoveButton,
 } from './Photos.styles';
+import type { StepProps } from '../BecomeHostPage';
 
-const Photos = () => {
-  const [photos, setPhotos] = useState<string[]>([]);
+const Photos = ({ data, onDataChange }: StepProps) => {
+  const photos = data.photos || [];
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddClick = () => {
@@ -34,7 +35,7 @@ const Photos = () => {
         if (event.target?.result) {
           newPhotos.push(event.target.result as string);
           if (newPhotos.length === files.length) {
-            setPhotos((prev) => [...prev, ...newPhotos]);
+            onDataChange({ photos: [...photos, ...newPhotos] });
           }
         }
       };
@@ -48,7 +49,7 @@ const Photos = () => {
   };
 
   const handleRemovePhoto = (index: number) => {
-    setPhotos((prev) => prev.filter((_, i) => i !== index));
+    onDataChange({ photos: photos.filter((_, i) => i !== index) });
   };
 
   return (

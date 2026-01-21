@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   TypeContainer,
   Title,
@@ -10,6 +10,7 @@ import {
   IconWrapper,
 } from './SpaceType.styles';
 import { Home, DoorOpen, Users } from 'lucide-react';
+import type { StepProps } from '../BecomeHostPage';
 
 const types = [
   {
@@ -32,8 +33,12 @@ const types = [
   },
 ];
 
-const SpaceType = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+const SpaceType = ({ data, onDataChange }: StepProps) => {
+  const selected = data.spaceType || null;
+
+  const handleSelect = (spaceTypeLabel: string) => {
+    onDataChange({ spaceType: spaceTypeLabel });
+  };
 
   return (
     <TypeContainer>
@@ -42,8 +47,8 @@ const SpaceType = () => {
         {types.map((type) => (
           <TypeItem
             key={type.id}
-            $selected={selected === type.id}
-            onClick={() => setSelected(type.id)}
+            $selected={selected === type.label}
+            onClick={() => handleSelect(type.label)}
           >
             <TextContent>
               <Label>{type.label}</Label>

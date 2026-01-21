@@ -24,90 +24,102 @@ import SafetyInfo from './steps/SafetyInfo';
 import HostDetails from './steps/HostDetails';
 import { saveListing, generateId } from '@/utils/listingStorage';
 import type { Listing } from '@/types/listing';
+import { defaultListing } from '@/types/listing';
+
+// 스텝 props 타입
+export interface StepProps {
+  data: Partial<Listing>;
+  onDataChange: (newData: Partial<Listing>) => void;
+}
 
 // 스텝 설정 배열 - 순서 변경, 추가/삭제가 쉬움
 const STEPS = [
   // Phase 0: 시작
-  { component: Overview, showProgress: false, nextLabel: '시작하기' },
+  { component: Overview, showProgress: false, nextLabel: '시작하기', needsData: false },
   
   // Phase 1: 숙소 정보
-  { component: Phase1Intro, showProgress: true },
-  { component: CategorySelect, showProgress: true },
-  { component: SpaceType, showProgress: true },
-  { component: Location, showProgress: true },
-  { component: GuestCapacity, showProgress: true },
-  { component: Bathrooms, showProgress: true },
-  { component: Occupants, showProgress: true },
+  { component: Phase1Intro, showProgress: true, needsData: false },
+  { component: CategorySelect, showProgress: true, needsData: true },
+  { component: SpaceType, showProgress: true, needsData: true },
+  { component: Location, showProgress: true, needsData: true },
+  { component: GuestCapacity, showProgress: true, needsData: true },
+  { component: Bathrooms, showProgress: true, needsData: true },
+  { component: Occupants, showProgress: true, needsData: true },
   
   // Phase 2: 매력 어필
-  { component: Phase2Intro, showProgress: true },
-  { component: Amenities, showProgress: true },
-  { component: Photos, showProgress: true },
-  { component: TitleStep, showProgress: true },
-  { component: Description, showProgress: true },
+  { component: Phase2Intro, showProgress: true, needsData: false },
+  { component: Amenities, showProgress: true, needsData: true },
+  { component: Photos, showProgress: true, needsData: true },
+  { component: TitleStep, showProgress: true, needsData: true },
+  { component: Description, showProgress: true, needsData: true },
   
   // Phase 3: 마무리
-  { component: Phase3Intro, showProgress: true },
-  { component: BookingSettings, showProgress: true },
-  { component: GuestRequirements, showProgress: true },
-  { component: Pricing, showProgress: true },
-  { component: WeekendPricing, showProgress: true },
-  { component: Discounts, showProgress: true },
-  { component: SafetyInfo, showProgress: true },
-  { component: HostDetails, showProgress: true, nextLabel: '리스팅 만들기' },
+  { component: Phase3Intro, showProgress: true, needsData: false },
+  { component: BookingSettings, showProgress: true, needsData: true },
+  { component: GuestRequirements, showProgress: true, needsData: true },
+  { component: Pricing, showProgress: true, needsData: true },
+  { component: WeekendPricing, showProgress: true, needsData: true },
+  { component: Discounts, showProgress: true, needsData: true },
+  { component: SafetyInfo, showProgress: true, needsData: true },
+  { component: HostDetails, showProgress: true, nextLabel: '리스팅 만들기', needsData: true },
 ] as const;
 
 const BecomeHostPage = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
+  const [listingData, setListingData] = useState<Partial<Listing>>(defaultListing);
   
   const totalSteps = STEPS.length - 1; // 인덱스 기준
   const stepConfig = STEPS[currentStep];
   const StepComponent = stepConfig.component;
   const isLastStep = currentStep === totalSteps;
 
+  const handleDataChange = (newData: Partial<Listing>) => {
+    setListingData(prev => ({ ...prev, ...newData }));
+  };
+
   const handleNext = () => {
     if (isLastStep) {
-      // 마지막 스텝: 리스팅 저장 후 호스팅 페이지로 이동
-      const newListing: Listing = {
+      // 마지막 스텝: 실제 입력된 데이터를 취합하여 저장
+      const finalListing: Listing = {
         id: generateId(),
-        title: '나의 새로운 숙소',
-        description: '편안하고 아늑한 공간입니다.',
-        category: '아파트',
-        spaceType: '공간 전체',
-        location: {
+        title: listingData.title || '새로운 숙소',
+        description: listingData.description || '',
+        category: listingData.category || '',
+        spaceType: listingData.spaceType || '',
+        location: listingData.location || {
           country: '한국',
-          province: '서울특별시',
+          province: '',
           city: '',
-          district: '강남구',
-          streetAddress: '테헤란로 123',
+          district: '',
+          streetAddress: '',
           detailAddress: '',
-          postalCode: '06234',
+          postalCode: '',
         },
-        guests: 4,
-        bedrooms: 2,
-        beds: 2,
-        bathrooms: 1,
-        amenities: ['와이파이', '에어컨', '주방'],
-        photos: [],
-        pricing: {
-          basePrice: 80000,
-          weekendPremium: 20,
+        guests: listingData.guests || 1,
+        bedrooms: listingData.bedrooms || 1,
+        beds: listingData.beds || 1,
+        bathrooms: listingData.bathrooms || 1,
+        amenities: listingData.amenities || [],
+        photos: listingData.photos || [],
+        pricing: listingData.pricing || {
+          basePrice: 50000,
+          weekendPremium: 0,
         },
-        discounts: {
-          newListing: true,
+        discounts: listingData.discounts || {
+          newListing: false,
           weekly: false,
           monthly: false,
         },
-        bookingSettings: 'review',
-        guestRequirements: 'experienced',
-        safetyInfo: {},
-        isBusiness: false,
+        bookingSettings: listingData.bookingSettings || 'review',
+        guestRequirements: listingData.guestRequirements || 'experienced',
+        safetyInfo: listingData.safetyInfo || {},
+        isBusiness: listingData.isBusiness || false,
         createdAt: new Date().toISOString(),
         status: 'published',
       };
       
-      saveListing(newListing);
+      saveListing(finalListing);
       navigate('/hosting');
     } else {
       setCurrentStep(currentStep + 1);
@@ -130,7 +142,11 @@ const BecomeHostPage = () => {
       nextLabel={stepConfig.nextLabel ?? '다음'}
       showProgressBar={stepConfig.showProgress}
     >
-      <StepComponent />
+      {stepConfig.needsData ? (
+        <StepComponent data={listingData} onDataChange={handleDataChange} />
+      ) : (
+        <StepComponent />
+      )}
     </HostingRegistrationLayout>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Wifi, 
   Tv, 
@@ -27,6 +27,7 @@ import {
   IconWrapper,
   Label,
 } from './Amenities.styles';
+import type { StepProps } from '../BecomeHostPage';
 
 const popularAmenities = [
   { id: 'wifi', label: '와이파이', icon: <Wifi size={28} /> },
@@ -48,13 +49,14 @@ const standoutAmenities = [
   { id: 'firepit', label: '화로', icon: <Flame size={28} /> },
 ];
 
-const Amenities = () => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+const Amenities = ({ data, onDataChange }: StepProps) => {
+  const selectedIds = data.amenities || [];
 
-  const toggleSelection = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
+  const toggleSelection = (label: string) => {
+    const newSelectedIds = selectedIds.includes(label)
+      ? selectedIds.filter((i) => i !== label)
+      : [...selectedIds, label];
+    onDataChange({ amenities: newSelectedIds });
   };
 
   return (
@@ -72,8 +74,8 @@ const Amenities = () => {
           {popularAmenities.map((amenity) => (
             <AmenityItem
               key={amenity.id}
-              $selected={selectedIds.includes(amenity.id)}
-              onClick={() => toggleSelection(amenity.id)}
+              $selected={selectedIds.includes(amenity.label)}
+              onClick={() => toggleSelection(amenity.label)}
             >
               <IconWrapper>{amenity.icon}</IconWrapper>
               <Label>{amenity.label}</Label>
@@ -88,8 +90,8 @@ const Amenities = () => {
           {standoutAmenities.map((amenity) => (
             <AmenityItem
               key={amenity.id}
-              $selected={selectedIds.includes(amenity.id)}
-              onClick={() => toggleSelection(amenity.id)}
+              $selected={selectedIds.includes(amenity.label)}
+              onClick={() => toggleSelection(amenity.label)}
             >
               <IconWrapper>{amenity.icon}</IconWrapper>
               <Label>{amenity.label}</Label>

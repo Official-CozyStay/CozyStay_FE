@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   DescriptionContainer,
   TitleSection,
@@ -7,16 +7,17 @@ import {
   TextArea,
   CharCount,
 } from './Description.styles';
+import type { StepProps } from '../BecomeHostPage';
 
 const MAX_LENGTH = 500;
 
-const Description = () => {
-  const [description, setDescription] = useState('');
+const Description = ({ data, onDataChange }: StepProps) => {
+  const description = data.description || '';
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     if (value.length <= MAX_LENGTH) {
-      setDescription(value);
+      onDataChange({ description: value });
     }
   };
 

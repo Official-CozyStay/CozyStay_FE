@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Minus, Plus } from 'lucide-react';
 import {
   BasicsContainer,
@@ -17,17 +17,23 @@ import {
   RadioInput,
   RadioLabel,
 } from './GuestCapacity.styles';
+import type { StepProps } from '../BecomeHostPage';
 
-const GuestCapacity = () => {
-  const [guests, setGuests] = useState(4);
-  const [bedrooms, setBedrooms] = useState(1);
-  const [beds, setBeds] = useState(1);
-  const [hasLock, setHasLock] = useState<string | null>(null);
+const GuestCapacity = ({ data, onDataChange }: StepProps) => {
+  const guests = data.guests || 1;
+  const bedrooms = data.bedrooms || 1;
+  const beds = data.beds || 1;
 
   const updateCount = (type: 'guests' | 'bedrooms' | 'beds', delta: number) => {
-    if (type === 'guests') setGuests(Math.max(1, guests + delta));
-    if (type === 'bedrooms') setBedrooms(Math.max(1, bedrooms + delta));
-    if (type === 'beds') setBeds(Math.max(1, beds + delta));
+    if (type === 'guests') {
+      onDataChange({ guests: Math.max(1, guests + delta) });
+    }
+    if (type === 'bedrooms') {
+      onDataChange({ bedrooms: Math.max(1, bedrooms + delta) });
+    }
+    if (type === 'beds') {
+      onDataChange({ beds: Math.max(1, beds + delta) });
+    }
   };
 
   return (
@@ -86,8 +92,6 @@ const GuestCapacity = () => {
               type="radio" 
               name="lock" 
               value="yes" 
-              checked={hasLock === 'yes'} 
-              onChange={(e) => setHasLock(e.target.value)} 
             />
             <RadioLabel>예</RadioLabel>
           </RadioOption>
@@ -96,8 +100,6 @@ const GuestCapacity = () => {
               type="radio" 
               name="lock" 
               value="no" 
-              checked={hasLock === 'no'} 
-              onChange={(e) => setHasLock(e.target.value)} 
             />
             <RadioLabel>아니요</RadioLabel>
           </RadioOption>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { User, Users, UserPlus } from 'lucide-react';
 import {
   OccupantsContainer,
@@ -11,6 +11,7 @@ import {
   Label,
   FooterText,
 } from './Occupants.styles';
+import type { StepProps } from '../BecomeHostPage';
 
 const occupantTypes = [
   { id: 'host', label: '호스트', icon: <User size={32} /> },
@@ -19,13 +20,17 @@ const occupantTypes = [
   { id: 'roommate', label: '룸메이트', icon: <Users size={32} /> },
 ];
 
-const Occupants = () => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+const Occupants = ({ data, onDataChange }: StepProps) => {
+  // occupants를 amenities와 같이 배열로 저장하거나, 별도 필드로 관리할 수 있음
+  // 여기서는 Listing 타입에 occupants가 없으므로, 임시로 내부 상태를 유지
+  // 추후 Listing 타입 확장 시 수정 필요
+  const selectedIds = (data as { occupants?: string[] }).occupants || [];
 
   const toggleSelection = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
+    const newSelectedIds = selectedIds.includes(id)
+      ? selectedIds.filter((i) => i !== id)
+      : [...selectedIds, id];
+    onDataChange({ occupants: newSelectedIds } as Partial<typeof data>);
   };
 
   return (

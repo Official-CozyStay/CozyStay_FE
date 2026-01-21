@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Check } from 'lucide-react';
 import {
   DiscountsContainer,
@@ -15,9 +15,10 @@ import {
   DiscountDescription,
   DiscountPercent,
 } from './Discounts.styles';
+import type { StepProps } from '../BecomeHostPage';
 
 interface DiscountOption {
-  id: string;
+  id: 'newListing' | 'weekly' | 'monthly';
   title: string;
   description: string;
   percent: number;
@@ -25,7 +26,7 @@ interface DiscountOption {
 
 const discountOptions: DiscountOption[] = [
   {
-    id: 'new_listing',
+    id: 'newListing',
     title: '신규 숙소 할인',
     description: '첫 3건의 예약에 20% 할인을 제공합니다.',
     percent: 20,
@@ -44,15 +45,16 @@ const discountOptions: DiscountOption[] = [
   },
 ];
 
-const Discounts = () => {
-  const [selectedIds, setSelectedIds] = useState<string[]>(['new_listing']);
+const Discounts = ({ data, onDataChange }: StepProps) => {
+  const discounts = data.discounts || { newListing: false, weekly: false, monthly: false };
 
-  const toggleDiscount = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((i) => i !== id)
-        : [...prev, id]
-    );
+  const toggleDiscount = (id: 'newListing' | 'weekly' | 'monthly') => {
+    onDataChange({
+      discounts: {
+        ...discounts,
+        [id]: !discounts[id],
+      },
+    });
   };
 
   return (
@@ -66,7 +68,7 @@ const Discounts = () => {
 
       <DiscountList>
         {discountOptions.map((option) => {
-          const isChecked = selectedIds.includes(option.id);
+          const isChecked = discounts[option.id] || false;
           return (
             <DiscountItem key={option.id}>
               <DiscountLeft>

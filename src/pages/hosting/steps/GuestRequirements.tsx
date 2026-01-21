@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   GuestContainer,
   TitleSection,
@@ -12,11 +12,16 @@ import {
   OptionTitle,
   OptionDescription,
 } from './GuestRequirements.styles';
+import type { StepProps } from '../BecomeHostPage';
 
-type GuestOption = 'all' | 'experienced';
+type GuestOption = 'anyone' | 'experienced';
 
-const GuestRequirements = () => {
-  const [selected, setSelected] = useState<GuestOption>('all');
+const GuestRequirements = ({ data, onDataChange }: StepProps) => {
+  const selected: GuestOption = data.guestRequirements || 'anyone';
+
+  const handleSelect = (option: GuestOption) => {
+    onDataChange({ guestRequirements: option });
+  };
 
   return (
     <GuestContainer>
@@ -26,15 +31,15 @@ const GuestRequirements = () => {
       </TitleSection>
 
       <OptionList>
-        <OptionCard $selected={selected === 'all'}>
+        <OptionCard $selected={selected === 'anyone'}>
           <HiddenRadio
             type="radio"
             name="guestRequirement"
-            value="all"
-            checked={selected === 'all'}
-            onChange={() => setSelected('all')}
+            value="anyone"
+            checked={selected === 'anyone'}
+            onChange={() => handleSelect('anyone')}
           />
-          <RadioButton $selected={selected === 'all'} />
+          <RadioButton $selected={selected === 'anyone'} />
           <OptionContent>
             <OptionTitle>모든 CozyStay 게스트</OptionTitle>
             <OptionDescription>
@@ -49,7 +54,7 @@ const GuestRequirements = () => {
             name="guestRequirement"
             value="experienced"
             checked={selected === 'experienced'}
-            onChange={() => setSelected('experienced')}
+            onChange={() => handleSelect('experienced')}
           />
           <RadioButton $selected={selected === 'experienced'} />
           <OptionContent>

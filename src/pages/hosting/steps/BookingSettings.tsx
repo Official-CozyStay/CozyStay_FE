@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CalendarCheck, Zap } from 'lucide-react';
 import {
   BookingContainer,
@@ -13,11 +13,16 @@ import {
   OptionDescription,
   IconWrapper,
 } from './BookingSettings.styles';
+import type { StepProps } from '../BecomeHostPage';
 
 type BookingOption = 'review' | 'instant';
 
-const BookingSettings = () => {
-  const [selected, setSelected] = useState<BookingOption>('review');
+const BookingSettings = ({ data, onDataChange }: StepProps) => {
+  const selected: BookingOption = data.bookingSettings || 'review';
+
+  const handleSelect = (option: BookingOption) => {
+    onDataChange({ bookingSettings: option });
+  };
 
   return (
     <BookingContainer>
@@ -29,7 +34,7 @@ const BookingSettings = () => {
       <OptionList>
         <OptionCard
           $selected={selected === 'review'}
-          onClick={() => setSelected('review')}
+          onClick={() => handleSelect('review')}
         >
           <OptionContent>
             <OptionTitle>최초 5건 예약은 직접 검토 후 승인</OptionTitle>
@@ -45,7 +50,7 @@ const BookingSettings = () => {
 
         <OptionCard
           $selected={selected === 'instant'}
-          onClick={() => setSelected('instant')}
+          onClick={() => handleSelect('instant')}
         >
           <OptionContent>
             <OptionTitle>즉시 예약 사용</OptionTitle>

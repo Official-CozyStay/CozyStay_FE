@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import {
   DetailsContainer,
@@ -19,16 +19,28 @@ import {
   ButtonGroup,
   OptionButton,
 } from './HostDetails.styles';
+import type { StepProps } from '../BecomeHostPage';
 
-const HostDetails = () => {
-  const [country, setCountry] = useState('한국');
-  const [province, setProvince] = useState('');
-  const [city, setCity] = useState('');
-  const [district, setDistrict] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
-  const [detailAddress, setDetailAddress] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [isBusiness, setIsBusiness] = useState<boolean | null>(null);
+const HostDetails = ({ data, onDataChange }: StepProps) => {
+  const location = data.location || {
+    country: '한국',
+    province: '',
+    city: '',
+    district: '',
+    streetAddress: '',
+    detailAddress: '',
+    postalCode: '',
+  };
+  const isBusiness = data.isBusiness;
+
+  const updateLocation = (field: string, value: string) => {
+    onDataChange({
+      location: {
+        ...location,
+        [field]: value,
+      },
+    });
+  };
 
   return (
     <DetailsContainer>
@@ -44,7 +56,7 @@ const HostDetails = () => {
         <FormGroup>
           <SelectWrapper>
             <SelectLabel>국가/지역</SelectLabel>
-            <Select value={country} onChange={(e) => setCountry(e.target.value)}>
+            <Select value={location.country} onChange={(e) => updateLocation('country', e.target.value)}>
               <option value="한국">한국</option>
               <option value="미국">미국</option>
               <option value="일본">일본</option>
@@ -61,38 +73,38 @@ const HostDetails = () => {
             <Input
               type="text"
               placeholder="도/특별·광역시"
-              value={province}
-              onChange={(e) => setProvince(e.target.value)}
+              value={location.province}
+              onChange={(e) => updateLocation('province', e.target.value)}
             />
             <Input
               type="text"
               placeholder="도시(해당하는 경우)"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
+              value={location.city}
+              onChange={(e) => updateLocation('city', e.target.value)}
             />
             <Input
               type="text"
               placeholder="군/구(해당하는 경우)"
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
+              value={location.district}
+              onChange={(e) => updateLocation('district', e.target.value)}
             />
             <Input
               type="text"
               placeholder="도로명 주소"
-              value={streetAddress}
-              onChange={(e) => setStreetAddress(e.target.value)}
+              value={location.streetAddress}
+              onChange={(e) => updateLocation('streetAddress', e.target.value)}
             />
             <Input
               type="text"
               placeholder="아파트 층수/호수, 건물명(해당하는 경우)"
-              value={detailAddress}
-              onChange={(e) => setDetailAddress(e.target.value)}
+              value={location.detailAddress}
+              onChange={(e) => updateLocation('detailAddress', e.target.value)}
             />
             <Input
               type="text"
               placeholder="우편번호(해당하는 경우)"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
+              value={location.postalCode}
+              onChange={(e) => updateLocation('postalCode', e.target.value)}
             />
           </InputGroup>
         </FormGroup>
@@ -109,13 +121,13 @@ const HostDetails = () => {
         <ButtonGroup>
           <OptionButton
             $selected={isBusiness === true}
-            onClick={() => setIsBusiness(true)}
+            onClick={() => onDataChange({ isBusiness: true })}
           >
             예
           </OptionButton>
           <OptionButton
             $selected={isBusiness === false}
-            onClick={() => setIsBusiness(false)}
+            onClick={() => onDataChange({ isBusiness: false })}
           >
             아니요
           </OptionButton>

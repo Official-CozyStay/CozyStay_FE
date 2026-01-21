@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   WeekendContainer,
   TitleSection,
@@ -20,22 +20,24 @@ import {
   InfoIcon,
   InfoText,
 } from './WeekendPricing.styles';
+import type { StepProps } from '../BecomeHostPage';
 
-const BASE_PRICE = 60000; // 기본 주중 요금 (실제로는 이전 페이지에서 가져와야 함)
 const SERVICE_FEE_RATE = 0.14; // 게스트 서비스 수수료 14%
 
 const formatPrice = (price: number): string => {
   return price.toLocaleString('ko-KR');
 };
 
-const WeekendPricing = () => {
-  const [premium, setPremium] = useState(29);
+const WeekendPricing = ({ data, onDataChange }: StepProps) => {
+  const basePrice = data.pricing?.basePrice || 50000;
+  const premium = data.pricing?.weekendPremium || 0;
 
-  const weekendPrice = Math.round(BASE_PRICE * (1 + premium / 100));
+  const weekendPrice = Math.round(basePrice * (1 + premium / 100));
   const guestPrice = Math.round(weekendPrice * (1 + SERVICE_FEE_RATE));
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPremium(parseInt(e.target.value, 10));
+    const newPremium = parseInt(e.target.value, 10);
+    onDataChange({ pricing: { ...data.pricing, basePrice, weekendPremium: newPremium } });
   };
 
   return (

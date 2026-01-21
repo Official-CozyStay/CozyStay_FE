@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   CategoryContainer,
   Title,
@@ -8,6 +8,7 @@ import {
   Label,
 } from './CategorySelect.styles';
 import { Home, Building2, Warehouse, Tent, Ship, Landmark } from 'lucide-react';
+import type { StepProps } from '../BecomeHostPage';
 
 const categories = [
   { id: 'house', label: '주택(예: 펜션, 한옥 등)', icon: <Home size={32} /> },
@@ -18,8 +19,12 @@ const categories = [
   { id: 'castle', label: '캐슬', icon: <Landmark size={32} /> },
 ];
 
-const CategorySelect = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+const CategorySelect = ({ data, onDataChange }: StepProps) => {
+  const selected = data.category || null;
+
+  const handleSelect = (categoryLabel: string) => {
+    onDataChange({ category: categoryLabel });
+  };
 
   return (
     <CategoryContainer>
@@ -28,8 +33,8 @@ const CategorySelect = () => {
         {categories.map((cat) => (
           <CategoryItem
             key={cat.id}
-            $selected={selected === cat.id}
-            onClick={() => setSelected(cat.id)}
+            $selected={selected === cat.label}
+            onClick={() => handleSelect(cat.label)}
           >
             <Icon>{cat.icon}</Icon>
             <Label>{cat.label}</Label>

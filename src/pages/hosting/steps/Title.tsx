@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   TitleContainer,
   TitleSection,
@@ -7,16 +7,17 @@ import {
   TextArea,
   CharCount,
 } from './Title.styles';
+import type { StepProps } from '../BecomeHostPage';
 
 const MAX_LENGTH = 50;
 
-const TitleStep = () => {
-  const [name, setName] = useState('');
+const TitleStep = ({ data, onDataChange }: StepProps) => {
+  const name = data.title || '';
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     if (value.length <= MAX_LENGTH) {
-      setName(value);
+      onDataChange({ title: value });
     }
   };
 

@@ -23,6 +23,7 @@ import {
   CharCount,
   ModalButton,
 } from './SafetyInfo.styles';
+import type { StepProps } from '../BecomeHostPage';
 
 interface SafetyOption {
   id: string;
@@ -54,8 +55,8 @@ const safetyOptions: SafetyOption[] = [
 
 const MAX_LENGTH = 300;
 
-const SafetyInfo = () => {
-  const [selectedItems, setSelectedItems] = useState<Record<string, { checked: boolean; description: string }>>({});
+const SafetyInfo = ({ data, onDataChange }: StepProps) => {
+  const selectedItems = data.safetyInfo || {};
   const [modalOpen, setModalOpen] = useState<string | null>(null);
   const [tempDescription, setTempDescription] = useState('');
 
@@ -64,10 +65,12 @@ const SafetyInfo = () => {
     
     if (currentItem?.checked) {
       // 체크 해제
-      setSelectedItems((prev) => ({
-        ...prev,
-        [id]: { checked: false, description: '' },
-      }));
+      onDataChange({
+        safetyInfo: {
+          ...selectedItems,
+          [id]: { checked: false, description: '' },
+        },
+      });
     } else {
       // 체크 시 모달 열기
       setModalOpen(id);
@@ -82,10 +85,12 @@ const SafetyInfo = () => {
 
   const handleModalSubmit = () => {
     if (modalOpen) {
-      setSelectedItems((prev) => ({
-        ...prev,
-        [modalOpen]: { checked: true, description: tempDescription },
-      }));
+      onDataChange({
+        safetyInfo: {
+          ...selectedItems,
+          [modalOpen]: { checked: true, description: tempDescription },
+        },
+      });
       setModalOpen(null);
       setTempDescription('');
     }
