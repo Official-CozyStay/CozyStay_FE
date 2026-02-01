@@ -1,64 +1,48 @@
 import styled from "styled-components";
-import type { UserProfileDTO } from "../../../api/types";
-import { Award, CheckCircle } from "lucide-react";
+import type { PublicUserProfileResponse } from "../../../api/types";
+import { CheckCircle } from "lucide-react";
 
 interface Props {
-    user: UserProfileDTO;
+  user: PublicUserProfileResponse;
 }
 
 export default function UserProfileCard({ user }: Props) {
-    return (
-        <Card>
-            <ProfileImageWrapper>
-                <ProfileImage
-                    src={user.profileImageUrl || "https://via.placeholder.com/150"}
-                    alt={user.nickName}
-                />
-                {user.isSuperhost && (
-                    <SuperhostBadge>
-                        <Award size={16} />
-                    </SuperhostBadge>
-                )}
-            </ProfileImageWrapper>
+  return (
+    <Card>
+      <ProfileImageWrapper>
+        <ProfileImage
+          src={user.profileImageUrl || "https://via.placeholder.com/150"}
+          alt={user.nickName}
+        />
+      </ProfileImageWrapper>
 
-            <Stats>
-                <StatItem>
-                    <h3>{user.reviewCount}</h3>
-                    <span>후기</span>
-                </StatItem>
-                <Divider />
-                <StatItem>
-                    <h3>{user.averageRating.toFixed(2)}</h3>
-                    <span>평점</span>
-                </StatItem>
-                <Divider />
-                <StatItem>
-                    <h3>{user.listingsCount}</h3>
-                    <span>숙소 운영</span>
-                </StatItem>
-            </Stats>
+      <Stats>
+        <StatItem>
+          <h3>{user.reviewCount}</h3>
+          <span>후기</span>
+        </StatItem>
+        <Divider />
+        <StatItem>
+          <h3>{user.grade}</h3>
+          <span>등급</span>
+        </StatItem>
+      </Stats>
 
-            <Section>
-                <SectionTitle>인증 완료</SectionTitle>
-                <VerificationList>
-                    {user.isVerified && (
-                        <VerificationItem>
-                            <CheckCircle size={18} />
-                            <span>자신 인증 완료</span>
-                        </VerificationItem>
-                    )}
-                    <VerificationItem>
-                        <CheckCircle size={18} />
-                        <span>이메일 주소</span>
-                    </VerificationItem>
-                    <VerificationItem>
-                        <CheckCircle size={18} />
-                        <span>전화번호</span>
-                    </VerificationItem>
-                </VerificationList>
-            </Section>
-        </Card>
-    );
+      <Section>
+        <SectionTitle>인증 완료</SectionTitle>
+        <VerificationList>
+          <VerificationItem>
+            <CheckCircle size={18} />
+            <span>본인 인증 완료</span>
+          </VerificationItem>
+          <VerificationItem>
+            <CheckCircle size={18} />
+            <span>이메일 주소</span>
+          </VerificationItem>
+        </VerificationList>
+      </Section>
+    </Card>
+  );
 }
 
 const Card = styled.div`
@@ -90,20 +74,6 @@ const ProfileImage = styled.img`
   object-fit: cover;
 `;
 
-const SuperhostBadge = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: ${({ theme }) => theme.colors.primary.main};
-  color: ${({ theme }) => theme.colors.common.white};
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid ${({ theme }) => theme.colors.common.white};
-`;
 
 const Stats = styled.div`
   display: flex;

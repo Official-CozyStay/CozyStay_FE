@@ -19,12 +19,52 @@ export type ReviewSummaryDTO = {
   count: number;
 };
 
+export type ApiResponse<T> = {
+  success: boolean;
+  message: string | null;
+  data: T;
+};
+
 export type HostDTO = {
   userId: number;
   nickName: string;
   profileImageUrl?: string | null;
 };
 
+export type HostelReviewDTO = {
+  id: number;
+  bookingId: number;
+  ratingOverall: number;
+  ratingCleanliness: number;
+  ratingAccuracy: number;
+  ratingCheckin: number;
+  ratingCommunication: number;
+  ratingLocation: number;
+  reviewComment: string;
+  // Note: Backend sample doesn't include author info yet, but we'll keep it for UI if added later
+  author?: {
+    userId: number;
+    nickName: string;
+    profileImageUrl?: string | null;
+  };
+};
+
+export type UserReviewDTO = {
+  targetGuestId: number;
+  bookingId: number;
+  rating: number;
+  reviewComment: string;
+};
+
+export type PublicUserProfileResponse = {
+  id: number;
+  nickName: string;
+  profileImageUrl: string | null;
+  grade: string;
+  reviewCount: number;
+};
+
+// Existing types preserved or adapted
 export type AccommodationDetailDTO = {
   accommodationId: number;
   hostId: number;
@@ -50,23 +90,14 @@ export type AccommodationDetailDTO = {
   checkOutTime?: string | null;
   images: AccommodationImageDTO[];
   amenities: AmenityDTO[];
-  reviewSummary: ReviewSummaryDTO;
+  reviewSummary: {
+    average: number;
+    count: number;
+  };
   host: HostDTO;
 };
 
-export type UserProfileDTO = HostDTO & {
-  about?: string | null;
-  joinedDate: string;
-  isVerified: boolean;
-  isSuperhost: boolean;
-  listingsCount: number;
-  reviewCount: number;
-  averageRating: number;
-  location?: string | null;
-  work?: string | null;
-  languages?: string[];
-};
-
+// UI legacy compatibility (will be refactored)
 export type ReviewDTO = {
   reviewId: number;
   author: {
@@ -74,24 +105,24 @@ export type ReviewDTO = {
     nickName: string;
     profileImageUrl?: string | null;
   };
-  rating: number; // 1 ~ 5
+  rating: number;
   content: string;
   createdAt: string;
-  accommodationId?: number; // Optional: If review is linked to an accommodation
-  accommodationName?: string; // For reviews on user profile
-};
-
-export type ReviewRatingBreakdown = {
-  cleanliness: number;
-  accuracy: number;
-  communication: number;
-  location: number;
-  checkIn: number;
-  value: number;
+  accommodationName?: string;
 };
 
 export type ReviewListResponse = {
   reviews: ReviewDTO[];
-  summary: ReviewSummaryDTO;
-  breakdown?: ReviewRatingBreakdown;
+  summary: {
+    average: number;
+    count: number;
+  };
+  breakdown?: {
+    cleanliness: number;
+    accuracy: number;
+    communication: number;
+    location: number;
+    checkIn: number;
+    value: number;
+  };
 };

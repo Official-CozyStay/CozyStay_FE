@@ -2,97 +2,91 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { fetchUserProfile, fetchUserReviews } from "../../api/user";
-import type { ReviewListResponse, UserProfileDTO } from "../../api/types";
+import type { ReviewListResponse, PublicUserProfileResponse } from "../../api/types";
 import UserProfileCard from "./components/UserProfileCard";
 import ReviewRatingBreakdown from "../../components/reviews/ReviewRatingBreakdown";
 import ReviewItem from "../../components/reviews/ReviewItem";
 import { media } from "../../styles/media";
 
 export default function UserPage() {
-    const { id } = useParams<{ id: string }>();
-    const [user, setUser] = useState<UserProfileDTO | null>(null);
-    const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
-    const [loading, setLoading] = useState(true);
+  const { id } = useParams<{ id: string }>();
+  const [user, setUser] = useState<PublicUserProfileResponse | null>(null);
+  const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        async function loadData() {
-            if (!id) return;
-            try {
-                setLoading(true);
-                const [userData, reviewData] = await Promise.all([
-                    fetchUserProfile(id),
-                    fetchUserReviews(id),
-                ]);
-                setUser(userData);
-                setReviews(reviewData);
-            } catch (error) {
-                console.error("Failed to fetch user data", error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        loadData();
-    }, [id]);
+  useEffect(() => {
+    async function loadData() {
+      if (!id) return;
+      try {
+        setLoading(true);
+        const [userData, reviewData] = await Promise.all([
+          fetchUserProfile(id),
+          fetchUserReviews(id),
+        ]);
+        setUser(userData);
+        setReviews(reviewData);
+      } catch (error) {
+        console.error("Failed to fetch user data", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [id]);
 
-    if (loading) return <Container>Loading...</Container>;
-    if (!user) return <Container>User not found</Container>;
+  if (loading) return <Container>Loading...</Container>;
+  if (!user) return <Container>User not found</Container>;
 
-    return (
-        <Container>
-            <Layout>
-                <Sidebar>
-                    <UserProfileCard user={user} />
-                </Sidebar>
+  return (
+    <Container>
+      <Layout>
+        <Sidebar>
+          <UserProfileCard user={user} />
+        </Sidebar>
 
-                <Main>
-                    <Section>
-                        <H1>안녕하세요, 저는 {user.nickName}입니다.</H1>
-                        <JoinDate>회원 가입: {user.joinedDate.split("-")[0]}년</JoinDate>
+        <Main>
+          <Section>
+            <H1>안녕하세요, 저는 {user.nickName}입니다.</H1>
+            <JoinDate>CozyStay 회원</JoinDate>
 
-                        {user.about && (
-                            <About>
-                                <SectionTitle>소개</SectionTitle>
-                                <p>{user.about}</p>
-                                <MetaList>
-                                    {user.location && <li>거주지: {user.location}</li>}
-                                    {user.work && <li>직업: {user.work}</li>}
-                                    {user.languages && (
-                                        <li>구사 언어: {user.languages.join(", ")}</li>
-                                    )}
-                                </MetaList>
-                            </About>
-                        )}
-                    </Section>
+            <About>
+              <SectionTitle>소개</SectionTitle>
+              <p>
+                {user.nickName}님의 프로필입니다. 현재 {user.grade} 등급으로
+                활동 중이며, 지금까지 {user.reviewCount}개의 후기를 받았습니다.
+              </p>
+            </About>
+          </Section>
 
-                    {reviews && (
-                        <Section>
-                            <ReviewHeader>
-                                <SectionTitle>
-                                    ★ {reviews.summary.average.toFixed(2)} 후기 {reviews.summary.count}개
-                                </SectionTitle>
-                            </ReviewHeader>
+          {reviews && (
+            <Section>
+              <ReviewHeader>
+                <SectionTitle>
+                  ★ {reviews.summary.average.toFixed(2)} 후기 {reviews.summary.count}개
+                </SectionTitle>
+              </ReviewHeader>
 
-                            {reviews.breakdown && (
-                                <BreakdownWrapper>
-                                    <ReviewRatingBreakdown data={reviews.breakdown} />
-                                </BreakdownWrapper>
-                            )}
+              {reviews.breakdown && (
+                <BreakdownWrapper>
+                  <ReviewRatingBreakdown data={reviews.breakdown} />
+                </BreakdownWrapper>
+              )}
 
-                            <ReviewList>
-                                {reviews.reviews.map((review) => (
-                                    <ReviewItem
-                                        key={review.reviewId}
-                                        review={review}
-                                        showAccommodationName
-                                    />
-                                ))}
-                            </ReviewList>
-                        </Section>
-                    )}
-                </Main>
-            </Layout>
-        </Container>
-    );
+              <ReviewList>
+                {reviews.reviews.map((review) => (
+                  <ReviewItem
+                    key={review.reviewId}
+                    review={review}
+                    showAccommodationName
+                  />
+                ))}
+              </ReviewList>
+            </Section>
+          )}
+        </Main>
+      </Layout>
+    </Container>
+  );
 }
 
 const Container = styled.div`
@@ -161,19 +155,6 @@ const About = styled.div`
   }
 `;
 
-const MetaList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.text.primary};
-  
-  li {
-    font-size: ${({ theme }) => theme.font.size.md};
-  }
-`;
 
 const ReviewHeader = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.xl};

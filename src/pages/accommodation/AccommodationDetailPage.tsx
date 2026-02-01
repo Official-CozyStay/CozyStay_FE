@@ -78,14 +78,17 @@ export default function AccommodationDetailPage() {
   if (error) return <S.Container>에러 : {error}</S.Container>;
   if (!detail) return <S.Container>데이터 없음</S.Container>;
 
+  const averageRating = detail.reviewSummary?.average ?? 0;
+  const reviewCount = detail.reviewSummary?.count ?? 0;
+
   return (
     <S.Container>
       <S.Header>
         <S.Title>{detail.title}</S.Title>
         <S.SubMeta>
-          <span>★ {detail.reviewSummary.average.toFixed(2)}</span>
+          <span>★ {averageRating.toFixed(2)}</span>
           <S.Dot>.</S.Dot>
-          <a href="#reviews">후기 {detail.reviewSummary.count}개</a>
+          <a href="#reviews">후기 {reviewCount}개</a>
           <S.Dot>.</S.Dot>
           <span>
             {detail.city}, {detail.country}

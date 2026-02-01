@@ -3,46 +3,47 @@ import type { ReviewDTO } from "../../api/types";
 import { Star } from "lucide-react";
 
 interface ReviewItemProps {
-    review: ReviewDTO;
-    showAccommodationName?: boolean; // For user profile page, show which accommodation was reviewed
+  review: ReviewDTO;
+  showAccommodationName?: boolean; // For user profile page, show which accommodation was reviewed
 }
 
 export default function ReviewItem({
-    review,
-    showAccommodationName = false,
+  review,
+  showAccommodationName = false,
 }: ReviewItemProps) {
-    return (
-        <Container>
-            <Header>
-                <Avatar
-                    src={review.author.profileImageUrl || "https://via.placeholder.com/48"}
-                    alt={review.author.nickName}
-                />
-                <Meta>
-                    <Author>{review.author.nickName}</Author>
-                    <SubInfo>
-                        {review.createdAt}
-                        {showAccommodationName && review.accommodationName && (
-                            <> · {review.accommodationName}</>
-                        )}
-                    </SubInfo>
-                </Meta>
-            </Header>
+  const authorName = review.author?.nickName || "익명";
+  const profileImage =
+    review.author?.profileImageUrl || "https://via.placeholder.com/48";
 
-            <Rating>
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                        key={i}
-                        size={14}
-                        fill={i < review.rating ? "currentColor" : "none"}
-                        className={i < review.rating ? "active" : "inactive"}
-                    />
-                ))}
-            </Rating>
+  return (
+    <Container>
+      <Header>
+        <Avatar src={profileImage} alt={authorName} />
+        <Meta>
+          <Author>{authorName}</Author>
+          <SubInfo>
+            {review.createdAt}
+            {showAccommodationName && review.accommodationName && (
+              <> · {review.accommodationName}</>
+            )}
+          </SubInfo>
+        </Meta>
+      </Header>
 
-            <Content>{review.content}</Content>
-        </Container>
-    );
+      <Rating>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            size={14}
+            fill={i < review.rating ? "currentColor" : "none"}
+            className={i < review.rating ? "active" : "inactive"}
+          />
+        ))}
+      </Rating>
+
+      <Content>{review.content}</Content>
+    </Container>
+  );
 }
 
 const Container = styled.div`
