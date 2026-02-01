@@ -53,3 +53,45 @@ export type AccommodationDetailDTO = {
   reviewSummary: ReviewSummaryDTO;
   host: HostDTO;
 };
+
+export type UserProfileDTO = HostDTO & {
+  about?: string | null;
+  joinedDate: string;
+  isVerified: boolean;
+  isSuperhost: boolean;
+  listingsCount: number;
+  reviewCount: number;
+  averageRating: number;
+  location?: string | null;
+  work?: string | null;
+  languages?: string[];
+};
+
+export type ReviewDTO = {
+  reviewId: number;
+  author: {
+    userId: number;
+    nickName: string;
+    profileImageUrl?: string | null;
+  };
+  rating: number; // 1 ~ 5
+  content: string;
+  createdAt: string;
+  accommodationId?: number; // Optional: If review is linked to an accommodation
+  accommodationName?: string; // For reviews on user profile
+};
+
+export type ReviewRatingBreakdown = {
+  cleanliness: number;
+  accuracy: number;
+  communication: number;
+  location: number;
+  checkIn: number;
+  value: number;
+};
+
+export type ReviewListResponse = {
+  reviews: ReviewDTO[];
+  summary: ReviewSummaryDTO;
+  breakdown?: ReviewRatingBreakdown;
+};
