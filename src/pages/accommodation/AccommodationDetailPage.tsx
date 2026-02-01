@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAccommodationStore } from "../../store/accommodationStore";
 import * as S from "./accommodationDetail.styles";
@@ -7,14 +7,17 @@ import GallerySection from "./components/GallerySection";
 import InfoSection from "./components/InfoSection";
 import BookingCard from "./components/BookingCard";
 import LightboxModal from "./components/LightboxModal";
+import ReviewSection from "./components/ReviewSection";
 import { useLightbox } from "./hooks/useLightbox";
 
-import type { AccommodationImageDTO } from "../../api/types";
+import type { AccommodationImageDTO, ReviewListResponse } from "../../api/types";
+import { fetchAccommodationReviews } from "../../api/accommodation";
 
 type ThumbImage = AccommodationImageDTO & { idx: number };
 
 export default function AccommodationDetailPage() {
   const { id = "1" } = useParams();
+  const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
 
   const {
     detail,
@@ -30,6 +33,7 @@ export default function AccommodationDetailPage() {
 
   useEffect(() => {
     load(id);
+    fetchAccommodationReviews(id).then(setReviews);
   }, [id, load]);
 
   const images: AccommodationImageDTO[] = detail?.images ?? [];
@@ -100,16 +104,21 @@ export default function AccommodationDetailPage() {
       )}
 
       <S.Main>
-        <InfoSection detail={detail} />
+        <S.Left>
+          <InfoSection detail={detail} />
+          {reviews && <ReviewSection reviews={reviews} />}
+        </S.Left>
 
-        <BookingCard
-          detail={detail}
-          checkIn={checkIn}
-          checkOut={checkOut}
-          guests={guests}
-          setDates={(ci, co) => setDates(ci ?? null, co ?? null)}
-          setGuests={setGuests}
-        />
+        <S.Right>
+          <BookingCard
+            detail={detail}
+            checkIn={checkIn}
+            checkOut={checkOut}
+            guests={guests}
+            setDates={(ci, co) => setDates(ci ?? null, co ?? null)}
+            setGuests={setGuests}
+          />
+        </S.Right>
       </S.Main>
 
       <LightboxModal
