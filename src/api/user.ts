@@ -40,6 +40,7 @@ export async function fetchUserReviews(
             rating: r.rating,
             content: r.reviewComment,
             createdAt: "2024-01-01",
+            reply: r.comment,
         })),
     };
 }
