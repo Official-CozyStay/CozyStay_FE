@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import type { ReviewDTO } from "../../api/types";
 import { Star } from "lucide-react";
+import ReviewReply from "./ReviewReply";
 
 interface ReviewItemProps {
   review: ReviewDTO;
@@ -42,6 +43,8 @@ export default function ReviewItem({
       </Rating>
 
       <Content>{review.content}</Content>
+
+      {review.reply && <ReviewReply reply={review.reply} />}
     </Container>
   );
 }

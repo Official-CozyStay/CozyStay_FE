@@ -31,6 +31,16 @@ export type HostDTO = {
   profileImageUrl?: string | null;
 };
 
+export type CommentDTO = {
+  commentId: number;
+  content: string;
+  authorId: number;
+  authorNickname: string;
+  authorProfileImage: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type HostelReviewDTO = {
   id: number;
   bookingId: number;
@@ -41,12 +51,7 @@ export type HostelReviewDTO = {
   ratingCommunication: number;
   ratingLocation: number;
   reviewComment: string;
-  // Note: Backend sample doesn't include author info yet, but we'll keep it for UI if added later
-  author?: {
-    userId: number;
-    nickName: string;
-    profileImageUrl?: string | null;
-  };
+  comment?: CommentDTO | null;
 };
 
 export type UserReviewDTO = {
@@ -54,6 +59,7 @@ export type UserReviewDTO = {
   bookingId: number;
   rating: number;
   reviewComment: string;
+  comment?: CommentDTO | null;
 };
 
 export type PublicUserProfileResponse = {
@@ -64,7 +70,6 @@ export type PublicUserProfileResponse = {
   reviewCount: number;
 };
 
-// Existing types preserved or adapted
 export type AccommodationDetailDTO = {
   accommodationId: number;
   hostId: number;
@@ -97,6 +102,15 @@ export type AccommodationDetailDTO = {
   host: HostDTO;
 };
 
+export type ReviewRatingBreakdown = {
+  cleanliness: number;
+  accuracy: number;
+  communication: number;
+  location: number;
+  checkIn: number;
+  value: number;
+};
+
 // UI legacy compatibility (will be refactored)
 export type ReviewDTO = {
   reviewId: number;
@@ -109,6 +123,7 @@ export type ReviewDTO = {
   content: string;
   createdAt: string;
   accommodationName?: string;
+  reply?: CommentDTO | null; // 답글 (댓글)
 };
 
 export type ReviewListResponse = {
