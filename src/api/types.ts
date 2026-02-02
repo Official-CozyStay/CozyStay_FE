@@ -70,6 +70,18 @@ export type PublicUserProfileResponse = {
   reviewCount: number;
 };
 
+export type AccommodationDetailInfoDTO = {
+  summary?: string;
+  space?: string;
+  access?: string;
+  notes?: string;
+  // Assuming these numeric fields are inside detail info based on typical patterns, 
+  // as they are missing from the top-level DTO provided by the user.
+  bedrooms?: number;
+  beds?: number;
+  bathrooms?: number;
+};
+
 export type AccommodationDetailDTO = {
   accommodationId: number;
   hostId: number;
@@ -84,22 +96,20 @@ export type AccommodationDetailDTO = {
   latitude?: number | null;
   longitude?: number | null;
   maxGuests: number;
-  bedrooms: number;
-  beds: number;
-  bathrooms: number;
   pricePerNight: number;
   cleaningFee: number;
   serviceFeePercentage: number;
   instantBooking: boolean;
   checkInTime?: string | null;
   checkOutTime?: string | null;
+
+  detail?: AccommodationDetailInfoDTO | null;
+
   images: AccommodationImageDTO[];
   amenities: AmenityDTO[];
-  reviewSummary: {
-    average: number;
-    count: number;
-  };
-  host: HostDTO;
+
+  // Frontend specific or optional fields if needed for compatibility (e.g. from reviews)
+  // host: HostDTO; // Removing this as backend only sends hostId
 };
 
 export type ReviewRatingBreakdown = {

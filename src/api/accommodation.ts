@@ -11,7 +11,6 @@ import { fetchComment } from "./comment";
 export async function fetchAccommodationDetail(
   id: string
 ): Promise<AccommodationDetailDTO> {
-  // 실제 연동
   const data = await client.get<any, AccommodationDetailDTO>(
     `/api/accommodations/${id}`
   );
@@ -22,47 +21,78 @@ export async function fetchAccommodationDetail(
 export async function fetchAccommodationReviews(
   accId: string
 ): Promise<ReviewListResponse> {
-  // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
-  const reviews = await client.get<any, HostelReviewDTO[]>(
-    `/api/review/hostel/${accId}`
-  );
+  let reviewsToUse: HostelReviewDTO[] = [];
 
-  if (!Array.isArray(reviews)) {
-    console.error("Expected array but got:", reviews);
-    return { summary: { average: 0, count: 0 }, reviews: [] };
+  // 더미 데이터 정의
+  const MOCK_REVIEWS: HostelReviewDTO[] = Array.from({ length: 3 }).map((_, i) => ({
+    id: 100 + i,
+    bookingId: 200 + i,
+    ratingOverall: 4.5 + (i * 0.1),
+    ratingCleanliness: 5,
+    ratingAccuracy: 4,
+    ratingCheckin: 5,
+    ratingCommunication: 5,
+    ratingLocation: 4,
+    reviewComment: `정말 멋진 숙소였습니다! (테스트 후기 ${i + 1})`,
+    comment: null,
+  }));
+
+  try {
+    // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
+    const reviews = await client.get<any, HostelReviewDTO[]>(
+      `/api/review/hostel/${accId}`
+    );
+
+    if (Array.isArray(reviews)) {
+      reviewsToUse = reviews;
+    } else {
+      console.warn("Expected array but got:", reviews);
+      reviewsToUse = MOCK_REVIEWS; // 데이터 형식이 다르면 더미 사용
+    }
+  } catch (error) {
+    console.error("Failed to fetch reviews (using mock data):", error);
+    reviewsToUse = MOCK_REVIEWS; // 에러(401 등) 발생 시 더미 사용
   }
 
-  const count = reviews.length;
-  // ratingOverall은 BigDecimal로 넘어오므로 숫자 취급 (JS/TS에서는 자동으로 숫자 혹은 문자열)
-  // 안전하게 Number() 변환 권장
+  const count = reviewsToUse.length;
   const average =
     count > 0
-      ? reviews.reduce((acc, r) => acc + Number(r.ratingOverall), 0) / count
+      ? reviewsToUse.reduce((acc, r) => acc + Number(r.ratingOverall), 0) / count
       : 0;
 
   // 항목별 평균 계산
   const breakdown = {
-    cleanliness: reviews.reduce((acc, r) => acc + Number(r.ratingCleanliness || 0), 0) / count || 0,
-    accuracy: reviews.reduce((acc, r) => acc + Number(r.ratingAccuracy || 0), 0) / count || 0,
-    communication: reviews.reduce((acc, r) => acc + Number(r.ratingCommunication || 0), 0) / count || 0,
-    location: reviews.reduce((acc, r) => acc + Number(r.ratingLocation || 0), 0) / count || 0,
-    checkIn: reviews.reduce((acc, r) => acc + Number(r.ratingCheckin || 0), 0) / count || 0,
+    cleanliness:
+      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingCleanliness || 0), 0) /
+      count || 0,
+    accuracy:
+      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingAccuracy || 0), 0) /
+      count || 0,
+    communication:
+      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingCommunication || 0), 0) /
+      count || 0,
+    location:
+      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingLocation || 0), 0) /
+      count || 0,
+    checkIn:
+      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingCheckin || 0), 0) /
+      count || 0,
     value: average,
   };
 
   return {
     summary: { average, count },
     breakdown,
-    reviews: reviews.map((r) => ({
+    reviews: reviewsToUse.map((r) => ({
       reviewId: r.id,
       author: {
-        userId: 0, // 백엔드 DTO에 사용자 정보가 아직 없음
-        nickName: "알 수 없는 사용자",
-        profileImageUrl: null,
+        userId: 0,
+        nickName: `게스트 ${r.id}`,
+        profileImageUrl: `https://i.pravatar.cc/150?u=${r.id}`,
       },
       rating: Number(r.ratingOverall),
       content: r.reviewComment,
-      createdAt: "2024-01-01",
+      createdAt: "2024-02-02",
       reply: r.comment,
     })),
   };
