@@ -4,7 +4,7 @@ import { media } from "@/styles/media";
 export const Container = styled.div`
   max-width: ${({ theme }) => theme.layout.maxWidth};
   margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg};
+  padding: 100px ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xl};
   color: ${({ theme }) => theme.colors.text.primary};
 
   ${media.mobile} {
@@ -44,6 +44,7 @@ export const Dot = styled.span`
 `;
 
 export const Gallery = styled.section`
+  position: relative;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   grid-template-rows: 220px 220px;
@@ -345,4 +346,115 @@ export const LightboxPrev = styled.button`
 export const LightboxNext = styled.button`
   ${arrowBase}
   right: ${({ theme }) => theme.spacing.md};
+`;
+
+// --- 사진 모두 보기 관련 스타일 ---
+
+export const ShowAllButton = styled.button`
+  position: absolute;
+  bottom: ${({ theme }) => theme.spacing.xl};
+  right: ${({ theme }) => theme.spacing.xl};
+  background: ${({ theme }) => theme.colors.common.white};
+  border: 1px solid ${({ theme }) => theme.colors.text.primary};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.xl};
+  font-size: 16px;
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  box-shadow: ${({ theme }) => theme.shadow.sm};
+  transition: transform 0.1s ease;
+  z-index: 10;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.background.active};
+    transform: scale(1.02);
+  }
+
+  ${media.mobile} {
+    bottom: ${({ theme }) => theme.spacing.sm};
+    right: ${({ theme }) => theme.spacing.sm};
+    padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
+  }
+`;
+
+export const PhotoModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: ${({ theme }) => theme.colors.common.white};
+  z-index: ${({ theme }) => theme.zIndex.modalOverlay};
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const PhotoModalHeader = styled.header`
+  position: sticky;
+  top: 0;
+  background: ${({ theme }) => theme.colors.common.white};
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
+  z-index: ${({ theme }) => theme.zIndex.sticky};
+`;
+
+export const CloseButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs};
+  border-radius: ${({ theme }) => theme.radius.full};
+  transition: background 0.2s;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.background.hover};
+  }
+`;
+
+export const PhotoModalBody = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: ${({ theme }) => theme.spacing.xl};
+  width: 100%;
+`;
+
+export const PhotoGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: ${({ theme }) => theme.spacing.md};
+
+  /* 3의 배수(3번째, 6번째...) 이미지는 크게 보여주기 (옵션) */
+  & > div:nth-child(3n) {
+    grid-column: span 2;
+  }
+
+  ${media.mobile} {
+    grid-template-columns: 1fr;
+    
+    & > div:nth-child(3n) {
+      grid-column: span 1;
+    }
+  }
+`;
+
+export const PhotoItem = styled.div`
+  width: 100%;
+  height: auto;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
 `;

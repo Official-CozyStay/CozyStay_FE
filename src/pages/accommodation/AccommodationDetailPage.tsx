@@ -7,6 +7,7 @@ import GallerySection from "./components/GallerySection";
 import InfoSection from "./components/InfoSection";
 import BookingCard from "./components/BookingCard";
 import LightboxModal from "./components/LightboxModal";
+import AllPhotosModal from "./components/AllPhotosModal"; // 모달 추가
 import ReviewSection from "./components/ReviewSection";
 import { useLightbox } from "./hooks/useLightbox";
 
@@ -18,6 +19,9 @@ type ThumbImage = AccommodationImageDTO & { idx: number };
 export default function AccommodationDetailPage() {
   const { id = "1" } = useParams();
   const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
+
+  // 전체 사진 모달 상태
+  const [isAllPhotosOpen, setIsAllPhotosOpen] = useState(false);
 
   const {
     detail,
@@ -31,12 +35,32 @@ export default function AccommodationDetailPage() {
     setGuests,
   } = useAccommodationStore();
 
+  const openAllPhotos = () => setIsAllPhotosOpen(true);
+  const closeAllPhotos = () => setIsAllPhotosOpen(false);
+
   useEffect(() => {
     load(id);
     fetchAccommodationReviews(id).then(setReviews);
   }, [id, load]);
 
-  const images: AccommodationImageDTO[] = detail?.images ?? [];
+  /* 
+    임시: 백엔드 데이터가 없을 경우를 대비한 더미 이미지 데이터
+    실제 데이터가 들어오면 이 부분은 사용되지 않습니다.
+  */
+  const MOCK_IMAGES: AccommodationImageDTO[] = Array.from({ length: 5 }).map(
+    (_, i) => ({
+      imageId: 1000 + i,
+      imageUrl: `https://picsum.photos/seed/cozy${1000 + i}/800/600`,
+      isPrimary: i === 0,
+      displayOrder: i,
+    })
+  );
+
+  const images: AccommodationImageDTO[] =
+    detail?.images && detail.images.length > 0
+      ? detail.images
+      : MOCK_IMAGES;
+
   const totalImages = images.length;
 
   const { primary, primaryIndex, thumbs } = useMemo<{
@@ -78,8 +102,8 @@ export default function AccommodationDetailPage() {
   if (error) return <S.Container>에러 : {error}</S.Container>;
   if (!detail) return <S.Container>데이터 없음</S.Container>;
 
-  const averageRating = detail.reviewSummary?.average ?? 0;
-  const reviewCount = detail.reviewSummary?.count ?? 0;
+  const averageRating = reviews?.summary?.average ?? 0;
+  const reviewCount = reviews?.summary?.count ?? 0;
 
   return (
     <S.Container>
@@ -103,6 +127,7 @@ export default function AccommodationDetailPage() {
           primaryIndex={primaryIndex}
           thumbs={thumbs}
           onOpen={openLightbox}
+          onShowAll={openAllPhotos} // 추가: 핸들러 전달
         />
       )}
 
@@ -132,6 +157,13 @@ export default function AccommodationDetailPage() {
         onClose={closeLightbox}
         onPrev={showPrevImage}
         onNext={showNextImage}
+      />
+
+      {/* 새 기능: 전체 사진 보기 모달 */}
+      <AllPhotosModal
+        isOpen={isAllPhotosOpen}
+        onClose={closeAllPhotos}
+        images={images}
       />
     </S.Container>
   );
