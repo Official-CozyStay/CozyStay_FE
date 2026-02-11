@@ -3,9 +3,8 @@ import type {
   AccommodationDetailDTO,
   HostelReviewDTO,
   ReviewListResponse,
-  ApiResponse,
 } from "./types";
-import { fetchComment } from "./comment";
+
 
 // 숙소 상세 조회
 export async function fetchAccommodationDetail(
