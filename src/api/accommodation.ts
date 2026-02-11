@@ -13,7 +13,7 @@ export async function fetchAccommodationDetail(
 ): Promise<AccommodationDetailDTO> {
   const data = await client.get<AccommodationDetailDTO>(
     `/api/accommodations/${encodeURIComponent(id)}`
-  );
+  ) as unknown as AccommodationDetailDTO;
   return data;
 }
 
@@ -42,7 +42,7 @@ export async function fetchAccommodationReviews(
     // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
     const reviews = await client.get<HostelReviewDTO[]>(
       `/api/review/hostel/${safeAccId}`
-    );
+    ) as unknown as HostelReviewDTO[];
 
     if (Array.isArray(reviews)) {
       reviewsToUse = reviews;
