@@ -142,12 +142,5 @@ export type ReviewListResponse = {
     average: number;
     count: number;
   };
-  breakdown?: {
-    cleanliness: number;
-    accuracy: number;
-    communication: number;
-    location: number;
-    checkIn: number;
-    value: number;
-  };
+  breakdown?: ReviewRatingBreakdown;
 };
