@@ -55,28 +55,35 @@ export async function fetchAccommodationReviews(
   }
 
   const count = reviewsToUse.length;
-  const average =
-    count > 0
-      ? reviewsToUse.reduce((acc, r) => acc + Number(r.ratingOverall), 0) / count
-      : 0;
+  // 단일 reduce로 모든 항목의 합계 계산
+  const sums = reviewsToUse.reduce(
+    (acc, r) => ({
+      overall: acc.overall + Number(r.ratingOverall || 0),
+      cleanliness: acc.cleanliness + Number(r.ratingCleanliness || 0),
+      accuracy: acc.accuracy + Number(r.ratingAccuracy || 0),
+      communication: acc.communication + Number(r.ratingCommunication || 0),
+      location: acc.location + Number(r.ratingLocation || 0),
+      checkIn: acc.checkIn + Number(r.ratingCheckin || 0),
+    }),
+    {
+      overall: 0,
+      cleanliness: 0,
+      accuracy: 0,
+      communication: 0,
+      location: 0,
+      checkIn: 0,
+    }
+  );
+
+  const average = count > 0 ? sums.overall / count : 0;
 
   // 항목별 평균 계산
   const breakdown = {
-    cleanliness:
-      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingCleanliness || 0), 0) /
-      count || 0,
-    accuracy:
-      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingAccuracy || 0), 0) /
-      count || 0,
-    communication:
-      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingCommunication || 0), 0) /
-      count || 0,
-    location:
-      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingLocation || 0), 0) /
-      count || 0,
-    checkIn:
-      reviewsToUse.reduce((acc, r) => acc + Number(r.ratingCheckin || 0), 0) /
-      count || 0,
+    cleanliness: count > 0 ? sums.cleanliness / count : 0,
+    accuracy: count > 0 ? sums.accuracy / count : 0,
+    communication: count > 0 ? sums.communication / count : 0,
+    location: count > 0 ? sums.location / count : 0,
+    checkIn: count > 0 ? sums.checkIn / count : 0,
     value: average,
   };
 
