@@ -40,7 +40,11 @@ export default function AccommodationDetailPage() {
 
   useEffect(() => {
     load(id);
-    fetchAccommodationReviews(id).then(setReviews);
+    fetchAccommodationReviews(id)
+      .then(setReviews)
+      .catch((err) => {
+        console.error("리뷰 로딩 실패:", err);
+      });
   }, [id, load]);
 
   /* 
