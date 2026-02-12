@@ -1,5 +1,6 @@
 import * as S from "../accommodationDetail.styles";
 import type { AccommodationImageDTO } from "../../../api/types";
+import { Grip } from "lucide-react";
 
 type ThumbImage = AccommodationImageDTO & { idx: number };
 
@@ -8,6 +9,7 @@ type Props = {
   primaryIndex: number;
   thumbs: ThumbImage[];
   onOpen: (index: number) => void;
+  onShowAll: () => void;
 };
 
 export default function GallerySection({
@@ -15,6 +17,7 @@ export default function GallerySection({
   primaryIndex,
   thumbs,
   onOpen,
+  onShowAll,
 }: Props) {
   return (
     <S.Gallery>
@@ -35,6 +38,11 @@ export default function GallerySection({
           />
         </S.Thumb>
       ))}
+
+      <S.ShowAllButton onClick={onShowAll}>
+        <Grip size={16} />
+        사진 모두 보기
+      </S.ShowAllButton>
     </S.Gallery>
   );
 }

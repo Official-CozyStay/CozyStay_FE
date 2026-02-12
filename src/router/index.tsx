@@ -7,6 +7,7 @@ import SearchPage from "../pages/search/SearchPage";
 import HostingPage from "../pages/hosting/HostingPage";
 import BecomeHostPage from "../pages/hosting/BecomeHostPage";
 import MyPage from "../pages/mypage/MyPage";
+import UserPage from "../pages/user/UserPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
   {
     path: "/mypage",
     element: <MyPage />,
+  },
+  {
+    path: "/users/:id",
+    element: <UserPage />,
   },
 ]);
 

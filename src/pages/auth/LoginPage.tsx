@@ -48,7 +48,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
   );
   const [phone, setPhone] = useState('');
 
-  const backendBaseUrl = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:8080';
+  const backendBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
   const kakaoLoginUrl = `${backendBaseUrl}/oauth2/authorization/kakao`;
 
   const handlePhoneSubmit = (event: React.FormEvent<HTMLFormElement>) => {
