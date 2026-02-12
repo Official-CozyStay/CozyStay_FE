@@ -43,7 +43,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // API에서 사용자 정보 가져오기
 const fetchUserProfile = async (token: string): Promise<User | null> => {
   const backendBaseUrl =
-    import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:8080';
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
   const url = `${backendBaseUrl}/api/users/me`;
 
   try {
