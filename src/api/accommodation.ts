@@ -10,6 +10,11 @@ import type {
 export async function fetchAccommodationDetail(
   id: string
 ): Promise<AccommodationDetailDTO> {
+  // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
+  if (!id || !/^\d+$/.test(id)) {
+    throw new Error(`Invalid id format: ${id}`);
+  }
+
   const data = await client.get<AccommodationDetailDTO>(
     `/api/accommodations/${encodeURIComponent(id)}`
   ) as unknown as AccommodationDetailDTO;
@@ -20,6 +25,15 @@ export async function fetchAccommodationDetail(
 export async function fetchAccommodationReviews(
   accId: string
 ): Promise<ReviewListResponse> {
+  // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
+  if (!accId || !/^\d+$/.test(accId)) {
+    console.error(`Invalid accId format: ${accId}`);
+    return {
+      summary: { average: 0, count: 0 },
+      reviews: [],
+    };
+  }
+
   const safeAccId = encodeURIComponent(accId);
   let reviewsToUse: HostelReviewDTO[] = [];
 
