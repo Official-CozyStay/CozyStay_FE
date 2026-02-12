@@ -10,20 +10,33 @@ import type {
 export async function fetchUserProfile(
     userId: string
 ): Promise<PublicUserProfileResponse> {
-    const { data } = await client.get<any, ApiResponse<PublicUserProfileResponse>>(
+    // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
+    if (!userId || !/^\d+$/.test(userId)) {
+        throw new Error(`Invalid userId format: ${userId}`);
+    }
+
+    const response = await client.get<ApiResponse<PublicUserProfileResponse>>(
         `/api/users/${userId}/public-profile`
-    );
-    return data;
+    ) as unknown as ApiResponse<PublicUserProfileResponse>;
+    return response.data;
 }
 
 // 사용자 리뷰 조회 (호스트가 게스트에게 남긴 리뷰)
 export async function fetchUserReviews(
     userId: string
 ): Promise<ReviewListResponse> {
+    if (!userId || !/^\d+$/.test(userId)) {
+        console.error(`Invalid userId format: ${userId}`);
+        return {
+            summary: { average: 0, count: 0 },
+            reviews: [],
+        };
+    }
+
     try {
-        const reviews = await client.get<any, UserReviewDTO[]>(
+        const reviews = await client.get<UserReviewDTO[]>(
             `/api/review/users/${userId}`
-        );
+        ) as unknown as UserReviewDTO[];
 
         const count = reviews.length;
         const average =
