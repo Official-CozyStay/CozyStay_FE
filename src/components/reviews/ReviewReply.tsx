@@ -36,7 +36,7 @@ const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing.md};
   margin-left: ${({ theme }) => theme.spacing.lg};
   padding: ${({ theme }) => theme.spacing.md};
-  background-color: #f7f7f7; // Fallback or use correct theme token
+  background-color: ${({ theme }) => theme.colors.background.hover};
   border-radius: ${({ theme }) => theme.radius.md};
 `;
 
