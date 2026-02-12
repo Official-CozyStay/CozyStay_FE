@@ -10,9 +10,14 @@ import type {
 export async function fetchAccommodationDetail(
   id: string
 ): Promise<AccommodationDetailDTO> {
-  const data = await client.get<any, AccommodationDetailDTO>(
-    `/api/accommodations/${id}`
-  );
+  // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
+  if (!id || !/^\d+$/.test(id)) {
+    throw new Error(`Invalid id format: ${id}`);
+  }
+
+  const data = await client.get<AccommodationDetailDTO>(
+    `/api/accommodations/${encodeURIComponent(id)}`
+  ) as unknown as AccommodationDetailDTO;
   return data;
 }
 
@@ -20,6 +25,16 @@ export async function fetchAccommodationDetail(
 export async function fetchAccommodationReviews(
   accId: string
 ): Promise<ReviewListResponse> {
+  // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
+  if (!accId || !/^\d+$/.test(accId)) {
+    console.error(`Invalid accId format: ${accId}`);
+    return {
+      summary: { average: 0, count: 0 },
+      reviews: [],
+    };
+  }
+
+  const safeAccId = encodeURIComponent(accId);
   let reviewsToUse: HostelReviewDTO[] = [];
 
   // 더미 데이터 정의
@@ -38,9 +53,9 @@ export async function fetchAccommodationReviews(
 
   try {
     // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
-    const reviews = await client.get<any, HostelReviewDTO[]>(
-      `/api/review/hostel/${accId}`
-    );
+    const reviews = await client.get<HostelReviewDTO[]>(
+      `/api/review/hostel/${safeAccId}`
+    ) as unknown as HostelReviewDTO[];
 
     if (Array.isArray(reviews)) {
       reviewsToUse = reviews;

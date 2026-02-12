@@ -1,32 +1,33 @@
 import styled from "styled-components";
 import type { CommentDTO } from "../../api/types";
 import { CornerDownRight } from "lucide-react";
+import { format, parseISO } from "date-fns";
 
 interface Props {
-    reply: CommentDTO;
+  reply: CommentDTO;
 }
 
 export default function ReviewReply({ reply }: Props) {
-    return (
-        <Container>
-            <IconWrapper>
-                <CornerDownRight size={20} />
-            </IconWrapper>
-            <ContentBox>
-                <Header>
-                    <AuthorInfo>
-                        <Avatar
-                            src={reply.authorProfileImage || "https://via.placeholder.com/40"}
-                            alt={reply.authorNickname}
-                        />
-                        <AuthorName>{reply.authorNickname} 님의 답글</AuthorName>
-                    </AuthorInfo>
-                    <Date>{reply.createdAt.split("T")[0]}</Date>
-                </Header>
-                <Body>{reply.content}</Body>
-            </ContentBox>
-        </Container>
-    );
+  return (
+    <Container>
+      <IconWrapper>
+        <CornerDownRight size={20} />
+      </IconWrapper>
+      <ContentBox>
+        <Header>
+          <AuthorInfo>
+            <Avatar
+              src={reply.authorProfileImage || "https://via.placeholder.com/40"}
+              alt={reply.authorNickname}
+            />
+            <AuthorName>{reply.authorNickname} 님의 답글</AuthorName>
+          </AuthorInfo>
+          <Date>{format(parseISO(reply.createdAt), 'yyyy-MM-dd')}</Date>
+        </Header>
+        <Body>{reply.content}</Body>
+      </ContentBox>
+    </Container>
+  );
 }
 
 const Container = styled.div`
@@ -35,7 +36,7 @@ const Container = styled.div`
   margin-top: ${({ theme }) => theme.spacing.md};
   margin-left: ${({ theme }) => theme.spacing.lg};
   padding: ${({ theme }) => theme.spacing.md};
-  background-color: #f7f7f7; // Fallback or use correct theme token
+  background-color: ${({ theme }) => theme.colors.background.hover};
   border-radius: ${({ theme }) => theme.radius.md};
 `;
 
