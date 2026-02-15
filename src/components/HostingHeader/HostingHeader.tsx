@@ -1,28 +1,27 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, User } from 'lucide-react';
 import logo from '@/assets/images/logo.svg';
 import { useAuth } from '@/contexts/AuthContext';
+import ProfileDropdown from '@/components/ProfileDropdown';
 import {
   HeaderContainer,
   HeaderLeft,
   Logo,
   LogoText,
-  HeaderCenter,
-  NavItem,
   HeaderRight,
   SwitchModeButton,
   ProfileButton,
   ProfilePlaceholder,
   MenuIconButton,
+  MenuDropdownWrapper,
 } from './HostingHeader.styles';
 
 const HostingHeader = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-
-  // TODO: 향후 다른 경로에 따라 탭 활성화 로직 추가 필요 (예: /hosting/calendar → '달력', /hosting/listings → '리스팅')
-  const activeTab = '투데이';
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <HeaderContainer>
@@ -31,35 +30,39 @@ const HostingHeader = () => {
         <LogoText>CozyStay</LogoText>
       </HeaderLeft>
 
-      <HeaderCenter>
-        <NavItem $active={activeTab === '투데이'}>투데이</NavItem>
-        <NavItem $active={activeTab === '달력'}>달력</NavItem>
-        <NavItem $active={activeTab === '리스팅'}>리스팅</NavItem>
-        <NavItem $active={activeTab === '메시지'}>메시지</NavItem>
-      </HeaderCenter>
-
       <HeaderRight>
         <SwitchModeButton onClick={() => navigate('/')}>
           게스트 모드로 전환
         </SwitchModeButton>
         
         {isAuthenticated && user ? (
-          <ProfileButton type="button" onClick={() => {}}>
+          <ProfileButton type="button" onClick={() => navigate('/mypage')}>
             <ProfilePlaceholder>
               {user.nickname?.charAt(0)?.toUpperCase() || '?'}
             </ProfilePlaceholder>
           </ProfileButton>
         ) : (
-          <ProfileButton type="button" onClick={() => {}}>
+          <ProfileButton type="button" onClick={() => navigate('/mypage')}>
             <ProfilePlaceholder>
               <User size={18} />
             </ProfilePlaceholder>
           </ProfileButton>
         )}
 
-        <MenuIconButton>
-          <Menu size={20} />
-        </MenuIconButton>
+        <MenuDropdownWrapper>
+          <MenuIconButton
+            ref={menuButtonRef}
+            onClick={() => setIsMenuOpen(prev => !prev)}
+          >
+            <Menu size={20} />
+          </MenuIconButton>
+          {isMenuOpen && (
+            <ProfileDropdown
+              onClose={() => setIsMenuOpen(false)}
+              buttonRef={menuButtonRef}
+            />
+          )}
+        </MenuDropdownWrapper>
       </HeaderRight>
     </HeaderContainer>
   );
