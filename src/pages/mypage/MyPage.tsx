@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import { useState, ComponentType } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   PageContainer,
   PageHeader,
+  LogoWrapper,
   Logo,
+  LogoText,
   CompleteButton,
   ContentWrapper,
   Sidebar,
@@ -25,6 +27,7 @@ import {
   Globe,
   Briefcase,
   Building2,
+  LucideIcon,
 } from "lucide-react";
 import logo from "@/assets/images/logo.svg";
 import PersonalInfoSection from "./sections/PersonalInfoSection";
@@ -50,57 +53,31 @@ type MenuKey =
 
 interface MenuItem {
   key: MenuKey;
-  icon: React.ElementType;
+  icon: LucideIcon;
   label: string;
+  component: ComponentType;
   isNew?: boolean;
+  hasDividerBefore?: boolean;
 }
+
+const menuItems: MenuItem[] = [
+  { key: "personal", icon: User, label: "개인 정보", component: PersonalInfoSection },
+  { key: "security", icon: Shield, label: "로그인 및 보안", component: SecuritySection },
+  { key: "privacy", icon: Lock, label: "개인정보 보호", component: PrivacySection },
+  { key: "notifications", icon: Bell, label: "알림", component: NotificationsSection },
+  { key: "tax", icon: FileText, label: "세금", component: TaxSection },
+  { key: "payment", icon: CreditCard, label: "결제 및 대금 수령", component: PaymentSection, isNew: true },
+  { key: "language", icon: Globe, label: "언어 및 통화", component: LanguageSection },
+  { key: "business", icon: Briefcase, label: "출장", component: BusinessSection },
+  { key: "hosting", icon: Building2, label: "전문 호스팅 도구", component: HostingToolsSection, hasDividerBefore: true },
+];
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState<MenuKey>("personal");
 
-  const menuItems: MenuItem[] = [
-    { key: "personal", icon: User, label: "개인 정보" },
-    { key: "security", icon: Shield, label: "로그인 및 보안" },
-    { key: "privacy", icon: Lock, label: "개인정보 보호" },
-    { key: "notifications", icon: Bell, label: "알림" },
-    { key: "tax", icon: FileText, label: "세금" },
-    { key: "payment", icon: CreditCard, label: "결제 및 대금 수령", isNew: true },
-    { key: "language", icon: Globe, label: "언어 및 통화" },
-    { key: "business", icon: Briefcase, label: "출장" },
-  ];
-
-  const hostingMenuItem: MenuItem = {
-    key: "hosting",
-    icon: Building2,
-    label: "전문 호스팅 도구",
-  };
-
-  // activeMenu에 따른 콘텐츠 렌더링
-  const renderContent = () => {
-    switch (activeMenu) {
-      case "personal":
-        return <PersonalInfoSection />;
-      case "security":
-        return <SecuritySection />;
-      case "privacy":
-        return <PrivacySection />;
-      case "notifications":
-        return <NotificationsSection />;
-      case "tax":
-        return <TaxSection />;
-      case "payment":
-        return <PaymentSection />;
-      case "language":
-        return <LanguageSection />;
-      case "business":
-        return <BusinessSection />;
-      case "hosting":
-        return <HostingToolsSection />;
-      default:
-        return <PersonalInfoSection />;
-    }
-  };
+  const activeItem = menuItems.find((item) => item.key === activeMenu);
+  const ActiveComponent = activeItem?.component ?? PersonalInfoSection;
 
   const handleComplete = () => {
     navigate(-1);
@@ -113,7 +90,10 @@ const MyPage = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <Logo src={logo} alt="CozyStay Logo" onClick={handleLogoClick} />
+        <LogoWrapper onClick={handleLogoClick}>
+          <Logo src={logo} alt="CozyStay Logo" />
+          <LogoText>CozyStay</LogoText>
+        </LogoWrapper>
         <CompleteButton onClick={handleComplete}>완료</CompleteButton>
       </PageHeader>
 
@@ -124,31 +104,25 @@ const MyPage = () => {
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
-                <SidebarMenuItem
-                  key={item.key}
-                  $active={activeMenu === item.key}
-                  onClick={() => setActiveMenu(item.key)}
-                >
-                  <Icon size={24} />
-                  <MenuItemText>{item.label}</MenuItemText>
-                  {item.isNew && <NewBadge>NEW</NewBadge>}
-                </SidebarMenuItem>
+                <div key={item.key}>
+                  {item.hasDividerBefore && <SidebarDivider />}
+                  <SidebarMenuItem
+                    $active={activeMenu === item.key}
+                    onClick={() => setActiveMenu(item.key)}
+                  >
+                    <Icon size={24} />
+                    <MenuItemText>{item.label}</MenuItemText>
+                    {item.isNew && <NewBadge>NEW</NewBadge>}
+                  </SidebarMenuItem>
+                </div>
               );
             })}
-
-            <SidebarDivider />
-
-            <SidebarMenuItem
-              $active={activeMenu === hostingMenuItem.key}
-              onClick={() => setActiveMenu(hostingMenuItem.key)}
-            >
-              <hostingMenuItem.icon size={24} />
-              <MenuItemText>{hostingMenuItem.label}</MenuItemText>
-            </SidebarMenuItem>
           </SidebarNav>
         </Sidebar>
 
-        <MainContent>{renderContent()}</MainContent>
+        <MainContent>
+          <ActiveComponent />
+        </MainContent>
       </ContentWrapper>
     </PageContainer>
   );

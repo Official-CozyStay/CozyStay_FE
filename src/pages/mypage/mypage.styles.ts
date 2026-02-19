@@ -3,7 +3,7 @@ import { media } from "@/styles/media";
 
 export const PageContainer = styled.div`
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const PageHeader = styled.header`
@@ -14,7 +14,7 @@ export const PageHeader = styled.header`
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   position: sticky;
   top: 0;
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
   z-index: ${({ theme }) => theme.zIndex.header};
 
   ${media.mobile} {
@@ -22,9 +22,26 @@ export const PageHeader = styled.header`
   }
 `;
 
-export const Logo = styled.img`
-  height: 32px;
+export const LogoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
   cursor: pointer;
+`;
+
+export const Logo = styled.img`
+  width: ${({ theme }) => theme.spacing["2xl"]};
+  height: ${({ theme }) => theme.spacing["2xl"]};
+`;
+
+export const LogoText = styled.span`
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.primary.main};
+
+  ${media.mobile} {
+    font-size: ${({ theme }) => theme.font.size.md};
+  }
 `;
 
 export const CompleteButton = styled.button`
@@ -183,8 +200,13 @@ export const InfoAction = styled.button`
   flex-shrink: 0;
   margin-left: ${({ theme }) => theme.spacing.lg};
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: ${({ theme }) => theme.colors.text.secondary};
+  }
+
+  &:disabled {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+    cursor: not-allowed;
   }
 `;
 

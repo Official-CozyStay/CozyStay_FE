@@ -7,10 +7,8 @@ import {
   LogoText,
   HeaderCenter,
   NavItem,
-  NavBadge,
   HeaderRight,
   HostButton,
-  ProfileDropdownWrapper,
   ProfileButton,
   ProfilePlaceholder,
   LoginButton,
@@ -18,7 +16,6 @@ import {
 import { Home, Sparkles, Bell, User } from 'lucide-react';
 import logo from '@/assets/images/logo.svg';
 import LoginModal from '@/pages/auth/LoginPage';
-import ProfileDropdown from '@/components/ProfileDropdown';
 import { useAuth } from '@/contexts/AuthContext';
 import SearchBar from '@/components/SearchBar/SearchBar';
 
@@ -31,13 +28,7 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
   const navigate = useNavigate();
   const isMainPage = location.pathname === '/';
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
-  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const { isAuthenticated, user } = useAuth();
-  const profileButtonRef = React.useRef<HTMLButtonElement>(null);
-
-  const toggleProfile = () => {
-    setIsProfileOpen((prev) => !prev);
-  };
 
   // 경로에 따라 활성 네비게이션 결정
   const activeNav = React.useMemo(() => {
@@ -89,26 +80,14 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
           </HostButton>
 
           {isAuthenticated && user ? (
-            <ProfileDropdownWrapper>
-              <ProfileButton
-                ref={profileButtonRef}
-                type="button"
-                onClick={toggleProfile}
-              >
-                <ProfilePlaceholder>
-                  {user.nickname?.charAt(0)?.toUpperCase() || '?'}
-                </ProfilePlaceholder>
-              </ProfileButton>
-              {isProfileOpen && (
-                <ProfileDropdown
-                  onClose={() => setIsProfileOpen(false)}
-                  buttonRef={profileButtonRef}
-                />
-              )}
-            </ProfileDropdownWrapper>
+            <ProfileButton type="button" onClick={() => navigate('/mypage')}>
+              <ProfilePlaceholder>
+                {user.nickname?.charAt(0)?.toUpperCase() || '?'}
+              </ProfilePlaceholder>
+            </ProfileButton>
           ) : (
             <>
-              <ProfileButton type="button" onClick={() => setIsLoginOpen(true)}>
+              <ProfileButton type="button" onClick={() => navigate('/mypage')}>
                 <ProfilePlaceholder>
                   <User size={18} />
                 </ProfilePlaceholder>
