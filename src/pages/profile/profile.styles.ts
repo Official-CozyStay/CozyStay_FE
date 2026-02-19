@@ -314,11 +314,23 @@ export const PrimaryButton = styled.button`
 `;
 
 export const ReviewSection = styled.div`
+  padding-top: ${({ theme }) => theme.spacing.xl};
+  border-top: 1px solid ${({ theme }) => theme.colors.border.light};
+`;
+
+export const ReviewButton = styled.button`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
-  padding-top: ${({ theme }) => theme.spacing.xl};
-  border-top: 1px solid ${({ theme }) => theme.colors.border.light};
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: ${({ theme }) => theme.transition.normal};
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export const ReviewIcon = styled.div`
@@ -328,6 +340,7 @@ export const ReviewIcon = styled.div`
 export const ReviewText = styled.span`
   font-size: ${({ theme }) => theme.font.size.md};
   color: ${({ theme }) => theme.colors.text.primary};
+  text-decoration: underline;
 `;
 
 export const EmptyState = styled.div`

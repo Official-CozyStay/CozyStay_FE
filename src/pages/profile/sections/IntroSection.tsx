@@ -14,6 +14,7 @@ import {
   ProfileCompleteDesc,
   PrimaryButton,
   ReviewSection,
+  ReviewButton,
   ReviewIcon,
   ReviewText,
 } from "../profile.styles";
@@ -30,7 +31,7 @@ const IntroSection = ({ userName, userInitial }: IntroSectionProps) => {
     <>
       <ContentTitle>
         자기소개
-        <EditButton>수정</EditButton>
+        <EditButton onClick={() => navigate("/profile/edit")}>수정</EditButton>
       </ContentTitle>
 
       <ProfileCard>
@@ -57,10 +58,12 @@ const IntroSection = ({ userName, userInitial }: IntroSectionProps) => {
       </ProfileCard>
 
       <ReviewSection>
-        <ReviewIcon>
-          <ClipboardList size={24} />
-        </ReviewIcon>
-        <ReviewText>내가 작성한 후기</ReviewText>
+        <ReviewButton onClick={() => navigate("/profile/reviews")}>
+          <ReviewIcon>
+            <ClipboardList size={24} />
+          </ReviewIcon>
+          <ReviewText>내가 작성한 후기</ReviewText>
+        </ReviewButton>
       </ReviewSection>
     </>
   );

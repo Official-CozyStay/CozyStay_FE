@@ -9,6 +9,7 @@ import BecomeHostPage from "../pages/hosting/BecomeHostPage";
 import AccountPage from "../pages/account/AccountPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import ProfileEditPage from "../pages/profile/edit/ProfileEditPage";
+import ReviewsPage from "../pages/profile/reviews/ReviewsPage";
 import UserPage from "../pages/user/UserPage";
 
 export const router = createBrowserRouter([
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
   {
     path: "/profile/edit",
     element: <ProfileEditPage />,
+  },
+  {
+    path: "/profile/reviews",
+    element: <ReviewsPage />,
   },
   {
     path: "/users/:id",
