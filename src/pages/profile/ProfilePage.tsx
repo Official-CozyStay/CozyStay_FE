@@ -1,25 +1,12 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import type { ComponentType } from "react";
-import { useNavigate } from "react-router-dom";
-import { User, Menu } from "lucide-react";
-import logo from "@/assets/images/logo.svg";
 import { useAuth } from "@/contexts/AuthContext";
-import ProfileDropdown from "@/components/ProfileDropdown";
+import SimpleHeader from "@/components/SimpleHeader";
 import IntroSection from "./sections/IntroSection";
 import PastTripsSection from "./sections/PastTripsSection";
 import ConnectionsSection from "./sections/ConnectionsSection";
 import {
   PageContainer,
-  PageHeader,
-  HeaderLeft,
-  Logo,
-  LogoText,
-  HeaderRight,
-  HostButton,
-  ProfileButton,
-  ProfilePlaceholder,
-  MenuButton,
-  MenuDropdownWrapper,
   ContentWrapper,
   Sidebar,
   SidebarTitle,
@@ -58,18 +45,11 @@ const menuItems: MenuItem[] = [
 ];
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
   const [activeMenu, setActiveMenu] = useState<MenuKey>("intro");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const userName = user?.nickname || "예은";
   const userInitial = userName.charAt(0);
-
-  const handleLogoClick = () => {
-    navigate("/");
-  };
 
   const renderIcon = (iconType: string) => {
     switch (iconType) {
@@ -116,48 +96,7 @@ const ProfilePage = () => {
 
   return (
     <PageContainer>
-      <PageHeader>
-        <HeaderLeft onClick={handleLogoClick}>
-          <Logo src={logo} alt="CozyStay Logo" />
-          <LogoText>CozyStay</LogoText>
-        </HeaderLeft>
-
-        <HeaderRight>
-          <HostButton type="button" onClick={() => navigate("/hosting")}>
-            호스팅 하기
-          </HostButton>
-
-          {isAuthenticated && user ? (
-            <ProfileButton type="button">
-              <ProfilePlaceholder>
-                {user.nickname?.charAt(0)?.toUpperCase() || "?"}
-              </ProfilePlaceholder>
-            </ProfileButton>
-          ) : (
-            <ProfileButton type="button">
-              <ProfilePlaceholder>
-                <User size={18} />
-              </ProfilePlaceholder>
-            </ProfileButton>
-          )}
-
-          <MenuDropdownWrapper>
-            <MenuButton
-              ref={menuButtonRef}
-              type="button"
-              onClick={() => setIsMenuOpen((prev) => !prev)}
-            >
-              <Menu size={20} />
-            </MenuButton>
-            {isMenuOpen && (
-              <ProfileDropdown
-                onClose={() => setIsMenuOpen(false)}
-                buttonRef={menuButtonRef}
-              />
-            )}
-          </MenuDropdownWrapper>
-        </HeaderRight>
-      </PageHeader>
+      <SimpleHeader />
 
       <ContentWrapper>
         <Sidebar>

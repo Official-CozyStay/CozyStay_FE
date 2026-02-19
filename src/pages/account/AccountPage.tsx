@@ -1,12 +1,7 @@
-import { useState, ComponentType } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import type { ComponentType } from "react";
 import {
   PageContainer,
-  PageHeader,
-  LogoWrapper,
-  Logo,
-  LogoText,
-  CompleteButton,
   ContentWrapper,
   Sidebar,
   SidebarTitle,
@@ -29,7 +24,7 @@ import {
   Building2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import logo from "@/assets/images/logo.svg";
+import SimpleHeader from "@/components/SimpleHeader";
 import PersonalInfoSection from "./sections/PersonalInfoSection";
 import SecuritySection from "./sections/SecuritySection";
 import PrivacySection from "./sections/PrivacySection";
@@ -115,29 +110,14 @@ const menuItems: MenuItem[] = [
 ];
 
 const AccountPage = () => {
-  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState<MenuKey>("personal");
 
   const activeItem = menuItems.find((item) => item.key === activeMenu);
   const ActiveComponent = activeItem?.component ?? PersonalInfoSection;
 
-  const handleComplete = () => {
-    navigate(-1);
-  };
-
-  const handleLogoClick = () => {
-    navigate("/");
-  };
-
   return (
     <PageContainer>
-      <PageHeader>
-        <LogoWrapper onClick={handleLogoClick}>
-          <Logo src={logo} alt="CozyStay Logo" />
-          <LogoText>CozyStay</LogoText>
-        </LogoWrapper>
-        <CompleteButton onClick={handleComplete}>완료</CompleteButton>
-      </PageHeader>
+      <SimpleHeader />
 
       <ContentWrapper>
         <Sidebar>

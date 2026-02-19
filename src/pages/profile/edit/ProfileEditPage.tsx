@@ -1,15 +1,8 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import SimpleHeader from "@/components/SimpleHeader";
 import {
   PageContainer,
-  PageHeader,
-  Logo,
-  LogoText,
-  HeaderLeft,
-  HeaderRight,
-  HostingButton,
-  ProfileIconButton,
-  MenuButton,
   ContentWrapper,
   ProfileImageSection,
   AvatarWrapper,
@@ -39,11 +32,8 @@ import {
   AddInterestButton,
   SelectedInterestTag,
   AddInterestTextButton,
-  Footer,
-  CompleteButton,
 } from "./profileEdit.styles";
 import {
-  Menu,
   Camera,
   Briefcase,
   MapPin,
@@ -62,7 +52,6 @@ import {
   Plane,
   Luggage,
 } from "lucide-react";
-import logo from "@/assets/images/logo.svg";
 import { InterestModal } from "@/components/InterestModal";
 import { TextInputModal } from "@/components/TextInputModal";
 import { BirthYearModal } from "@/components/BirthYearModal";
@@ -185,7 +174,6 @@ const ProfileEditPage = () => {
   const [isIntroModalOpen, setIsIntroModalOpen] = useState(false);
   const [introduction, setIntroduction] = useState("");
 
-  // 프로필 항목별 값 상태 (나중에 API 연동 시 대체)
   const [profileValues, setProfileValues] = useState<Record<TextInputProfileItemId, string>>({
     job: "",
     dreamDestination: "",
@@ -199,7 +187,6 @@ const ProfileEditPage = () => {
     favorites: "",
   });
 
-  // 임시 사용자 데이터
   const user = {
     name: "예은",
     initial: "예",
@@ -276,14 +263,6 @@ const ProfileEditPage = () => {
     { icon: Luggage, label: "다음 여행지", shape: "circle" as const },
   ];
 
-  const handleLogoClick = () => {
-    navigate("/");
-  };
-
-  const handleHostingClick = () => {
-    navigate("/hosting");
-  };
-
   const handleComplete = () => {
     navigate("/profile");
   };
@@ -317,20 +296,12 @@ const ProfileEditPage = () => {
 
   return (
     <PageContainer>
-      <PageHeader>
-        <HeaderLeft onClick={handleLogoClick}>
-          <Logo src={logo} alt="CozyStay Logo" />
-          <LogoText>CozyStay</LogoText>
-        </HeaderLeft>
-
-        <HeaderRight>
-          <HostingButton onClick={handleHostingClick}>호스팅 하기</HostingButton>
-          <ProfileIconButton>{user.initial}</ProfileIconButton>
-          <MenuButton>
-            <Menu size={18} />
-          </MenuButton>
-        </HeaderRight>
-      </PageHeader>
+      <SimpleHeader
+        rightAction={{
+          label: "완료",
+          onClick: handleComplete,
+        }}
+      />
 
       <ContentWrapper>
         {/* 왼쪽: 프로필 이미지 */}
@@ -498,11 +469,6 @@ const ProfileEditPage = () => {
           </Section>
         </MainContent>
       </ContentWrapper>
-
-      {/* 하단 완료 버튼 */}
-      <Footer>
-        <CompleteButton onClick={handleComplete}>완료</CompleteButton>
-      </Footer>
 
       {/* 관심사 모달 */}
       <InterestModal
