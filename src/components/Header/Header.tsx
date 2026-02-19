@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useRef, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   HeaderContainer,
   HeaderLeft,
@@ -12,12 +12,15 @@ import {
   ProfileButton,
   ProfilePlaceholder,
   LoginButton,
-} from './Header.styles';
-import { Home, Sparkles, Bell, User } from 'lucide-react';
-import logo from '@/assets/images/logo.svg';
-import LoginModal from '@/pages/auth/LoginPage';
-import { useAuth } from '@/contexts/AuthContext';
-import SearchBar from '@/components/SearchBar/SearchBar';
+  MenuButton,
+  ProfileDropdownWrapper,
+} from "./Header.styles";
+import { Home, Sparkles, Bell, User, Menu } from "lucide-react";
+import logo from "@/assets/images/logo.svg";
+import LoginModal from "@/pages/auth/LoginPage";
+import { useAuth } from "@/contexts/AuthContext";
+import SearchBar from "@/components/SearchBar/SearchBar";
+import ProfileDropdown from "@/components/ProfileDropdown";
 
 interface HeaderProps {
   isScrolled?: boolean;
@@ -26,23 +29,25 @@ interface HeaderProps {
 const Header = ({ isScrolled = false }: HeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isMainPage = location.pathname === '/';
-  const [isLoginOpen, setIsLoginOpen] = React.useState(false);
+  const isMainPage = location.pathname === "/";
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { isAuthenticated, user } = useAuth();
 
   // 경로에 따라 활성 네비게이션 결정
-  const activeNav = React.useMemo(() => {
+  const activeNav = useMemo(() => {
     const path = location.pathname;
-    if (path === '/' || path.startsWith('/accommodation')) {
-      return '숙소';
+    if (path === "/" || path.startsWith("/accommodation")) {
+      return "숙소";
     }
-    if (path.startsWith('/experience')) {
-      return '체험';
+    if (path.startsWith("/experience")) {
+      return "체험";
     }
-    if (path.startsWith('/service')) {
-      return '서비스';
+    if (path.startsWith("/service")) {
+      return "서비스";
     }
-    return '숙소'; // 기본값
+    return "숙소"; // 기본값
   }, [location.pathname]);
 
   return (
@@ -58,15 +63,15 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
             <SearchBar isCompact={true} />
           ) : (
             <>
-              <NavItem $active={activeNav === '숙소'}>
+              <NavItem $active={activeNav === "숙소"}>
                 <Home size={18} />
                 <span>숙소</span>
               </NavItem>
-              <NavItem $active={activeNav === '체험'}>
+              <NavItem $active={activeNav === "체험"}>
                 <Sparkles size={18} />
                 <span>체험</span>
               </NavItem>
-              <NavItem $active={activeNav === '서비스'}>
+              <NavItem $active={activeNav === "서비스"}>
                 <Bell size={18} />
                 <span>서비스</span>
               </NavItem>
@@ -75,19 +80,19 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
         </HeaderCenter>
 
         <HeaderRight>
-          <HostButton type="button" onClick={() => navigate('/hosting')}>
+          <HostButton type="button" onClick={() => navigate("/hosting")}>
             호스트로 등록하기
           </HostButton>
 
           {isAuthenticated && user ? (
-            <ProfileButton type="button" onClick={() => navigate('/mypage')}>
+            <ProfileButton type="button" onClick={() => navigate("/profile")}>
               <ProfilePlaceholder>
-                {user.nickname?.charAt(0)?.toUpperCase() || '?'}
+                {user.nickname?.charAt(0)?.toUpperCase() || "?"}
               </ProfilePlaceholder>
             </ProfileButton>
           ) : (
             <>
-              <ProfileButton type="button" onClick={() => navigate('/mypage')}>
+              <ProfileButton type="button" onClick={() => navigate("/profile")}>
                 <ProfilePlaceholder>
                   <User size={18} />
                 </ProfilePlaceholder>
@@ -97,6 +102,22 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
               </LoginButton>
             </>
           )}
+
+          <ProfileDropdownWrapper>
+            <MenuButton
+              ref={menuButtonRef}
+              type="button"
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+            >
+              <Menu size={20} />
+            </MenuButton>
+            {isMenuOpen && (
+              <ProfileDropdown
+                onClose={() => setIsMenuOpen(false)}
+                buttonRef={menuButtonRef}
+              />
+            )}
+          </ProfileDropdownWrapper>
         </HeaderRight>
       </HeaderContainer>
       <LoginModal open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
