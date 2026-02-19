@@ -5,7 +5,7 @@ import {
   TabItem,
   Section,
   SectionTitle,
-} from "../mypage.styles";
+} from "../account.styles";
 import InfoItemList from "../components/InfoItemList";
 import type { InfoItemData } from "../components/InfoItemList";
 
@@ -100,4 +100,3 @@ const SecuritySection = () => {
 };
 
 export default SecuritySection;
-

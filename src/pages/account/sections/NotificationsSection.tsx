@@ -1,8 +1,4 @@
-import {
-  ContentTitle,
-  Section,
-  SectionTitle,
-} from "../mypage.styles";
+import { ContentTitle, Section, SectionTitle } from "../account.styles";
 import InfoItemList from "../components/InfoItemList";
 import type { InfoItemData } from "../components/InfoItemList";
 
@@ -87,4 +83,3 @@ const NotificationsSection = () => {
 };
 
 export default NotificationsSection;
-

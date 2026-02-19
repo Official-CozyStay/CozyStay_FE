@@ -16,7 +16,7 @@ import {
   NewBadge,
   SidebarDivider,
   MainContent,
-} from "./mypage.styles";
+} from "./account.styles";
 import {
   User,
   Shield,
@@ -27,8 +27,8 @@ import {
   Globe,
   Briefcase,
   Building2,
-  LucideIcon,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import logo from "@/assets/images/logo.svg";
 import PersonalInfoSection from "./sections/PersonalInfoSection";
 import SecuritySection from "./sections/SecuritySection";
@@ -61,18 +61,60 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { key: "personal", icon: User, label: "개인 정보", component: PersonalInfoSection },
-  { key: "security", icon: Shield, label: "로그인 및 보안", component: SecuritySection },
-  { key: "privacy", icon: Lock, label: "개인정보 보호", component: PrivacySection },
-  { key: "notifications", icon: Bell, label: "알림", component: NotificationsSection },
+  {
+    key: "personal",
+    icon: User,
+    label: "개인 정보",
+    component: PersonalInfoSection,
+  },
+  {
+    key: "security",
+    icon: Shield,
+    label: "로그인 및 보안",
+    component: SecuritySection,
+  },
+  {
+    key: "privacy",
+    icon: Lock,
+    label: "개인정보 보호",
+    component: PrivacySection,
+  },
+  {
+    key: "notifications",
+    icon: Bell,
+    label: "알림",
+    component: NotificationsSection,
+  },
   { key: "tax", icon: FileText, label: "세금", component: TaxSection },
-  { key: "payment", icon: CreditCard, label: "결제 및 대금 수령", component: PaymentSection, isNew: true },
-  { key: "language", icon: Globe, label: "언어 및 통화", component: LanguageSection },
-  { key: "business", icon: Briefcase, label: "출장", component: BusinessSection },
-  { key: "hosting", icon: Building2, label: "전문 호스팅 도구", component: HostingToolsSection, hasDividerBefore: true },
+  {
+    key: "payment",
+    icon: CreditCard,
+    label: "결제 및 대금 수령",
+    component: PaymentSection,
+    isNew: true,
+  },
+  {
+    key: "language",
+    icon: Globe,
+    label: "언어 및 통화",
+    component: LanguageSection,
+  },
+  {
+    key: "business",
+    icon: Briefcase,
+    label: "출장",
+    component: BusinessSection,
+  },
+  {
+    key: "hosting",
+    icon: Building2,
+    label: "전문 호스팅 도구",
+    component: HostingToolsSection,
+    hasDividerBefore: true,
+  },
 ];
 
-const MyPage = () => {
+const AccountPage = () => {
   const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState<MenuKey>("personal");
 
@@ -128,5 +170,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
-
+export default AccountPage;

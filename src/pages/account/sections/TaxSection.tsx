@@ -1,8 +1,4 @@
-import {
-  ContentTitle,
-  Section,
-  SectionTitle,
-} from "../mypage.styles";
+import { ContentTitle, Section, SectionTitle } from "../account.styles";
 import InfoItemList from "../components/InfoItemList";
 import type { InfoItemData } from "../components/InfoItemList";
 
@@ -11,7 +7,8 @@ const TaxSection = () => {
     {
       id: "taxpayer-info",
       label: "납세자 정보",
-      value: "납세자 정보가 제출되지 않았습니다. 대금을 받으려면 납세자 정보를 제출하세요.",
+      value:
+        "납세자 정보가 제출되지 않았습니다. 대금을 받으려면 납세자 정보를 제출하세요.",
       action: "추가",
     },
     {
@@ -55,4 +52,3 @@ const TaxSection = () => {
 };
 
 export default TaxSection;
-

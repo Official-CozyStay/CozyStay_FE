@@ -1,4 +1,4 @@
-import { ContentTitle } from "../mypage.styles";
+import { ContentTitle } from "../account.styles";
 import InfoItemList from "../components/InfoItemList";
 import type { InfoItemData } from "../components/InfoItemList";
 
@@ -64,4 +64,3 @@ const PersonalInfoSection = () => {
 };
 
 export default PersonalInfoSection;
-
