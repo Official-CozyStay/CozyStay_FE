@@ -88,7 +88,6 @@ const INTERESTS: Interest[] = [
 const ALL_INTERESTS: Interest[] = [
   { id: "karate", label: "가라데", icon: Dumbbell },
   { id: "architecture", label: "건축", icon: Home },
-  { id: "walking", label: "걷기", icon: Footprints },
   { id: "horseRacing", label: "경마", icon: Headphones },
   { id: "golf", label: "골프", icon: Globe },
   { id: "cycling", label: "자전거", icon: Bike },

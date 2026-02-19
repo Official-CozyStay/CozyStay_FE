@@ -13,6 +13,7 @@ import {
   SidebarNav,
   SidebarMenuItem,
   MenuIcon,
+  UserInitialIcon,
   MenuItemText,
   MainContent,
 } from "./profile.styles";
@@ -56,22 +57,7 @@ const ProfilePage = () => {
       case "user":
         return (
           <MenuIcon>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                background: "#222",
-                color: "#fff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 16,
-                fontWeight: "bold",
-              }}
-            >
-              {userInitial}
-            </div>
+            <UserInitialIcon>{userInitial}</UserInitialIcon>
           </MenuIcon>
         );
       case "luggage":

@@ -255,6 +255,20 @@ const ProfileEditPage = () => {
     }));
   };
 
+  const getDisplayText = (itemId: ProfileItemId, label: string): string => {
+    if (itemId === "birthYear") {
+      return showBirthDecade ? "00년대생" : label;
+    }
+    if (itemId === "languages") {
+      return selectedLanguages.length > 0 ? selectedLanguages.join(", ") : label;
+    }
+    if (itemId === "residence") {
+      return residence || label;
+    }
+    const value = profileValues[itemId as TextInputProfileItemId];
+    return value || label;
+  };
+
   // 여행 스탬프 데이터
   const travelStamps = [
     { icon: Globe, label: "다음 여행지", shape: "square" as const },
@@ -344,23 +358,6 @@ const ProfileEditPage = () => {
             <ProfileGrid>
               {profileItems.map((item) => {
                 const Icon = item.icon;
-                
-                // 항목별 표시 텍스트 결정
-                let displayText = item.label;
-                
-                if (item.id === "birthYear") {
-                  displayText = showBirthDecade ? "00년대생" : item.label;
-                } else if (item.id === "languages") {
-                  displayText = selectedLanguages.length > 0
-                    ? selectedLanguages.join(", ")
-                    : item.label;
-                } else if (item.id === "residence") {
-                  displayText = residence || item.label;
-                } else {
-                  const value = profileValues[item.id as TextInputProfileItemId];
-                  displayText = value || item.label;
-                }
-                
                 return (
                   <ProfileItem
                     key={item.id}
@@ -368,7 +365,7 @@ const ProfileEditPage = () => {
                   >
                     <Icon size={20} />
                     <ProfileItemText>
-                      {displayText}
+                      {getDisplayText(item.id, item.label)}
                     </ProfileItemText>
                   </ProfileItem>
                 );
@@ -448,19 +445,11 @@ const ProfileEditPage = () => {
                   {interestLabels[interestId] || interestId}
                 </SelectedInterestTag>
               ))}
-              <AddInterestButton onClick={() => setIsInterestModalOpen(true)}>
-                <Plus size={24} />
-              </AddInterestButton>
-              {selectedInterests.length < 2 && (
-                <AddInterestButton onClick={() => setIsInterestModalOpen(true)}>
+              {Array.from({ length: Math.max(1, 3 - selectedInterests.length) }).map((_, index) => (
+                <AddInterestButton key={`add-${index}`} onClick={() => setIsInterestModalOpen(true)}>
                   <Plus size={24} />
                 </AddInterestButton>
-              )}
-              {selectedInterests.length < 1 && (
-                <AddInterestButton onClick={() => setIsInterestModalOpen(true)}>
-                  <Plus size={24} />
-                </AddInterestButton>
-              )}
+              ))}
             </InterestTags>
 
             <AddInterestTextButton onClick={() => setIsInterestModalOpen(true)}>

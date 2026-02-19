@@ -62,7 +62,7 @@ export const SidebarMenuItem = styled.button<{ $active?: boolean }>`
   }
 `;
 
-export const MenuIcon = styled.div<{ $active?: boolean }>`
+export const MenuIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: ${({ theme }) => theme.radius.full};
@@ -76,6 +76,19 @@ export const MenuIcon = styled.div<{ $active?: boolean }>`
     height: 100%;
     object-fit: cover;
   }
+`;
+
+export const UserInitialIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors.common.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
 
 export const MenuItemText = styled.span`

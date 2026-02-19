@@ -35,7 +35,7 @@ const ReviewsPage = () => {
           <BreadcrumbCurrent>후기</BreadcrumbCurrent>
         </Breadcrumb>
 
-        <PageTitle>내가 작성한 후기</PageTitle>
+        <PageTitle>{activeTab === "by-me" ? "내가 작성한 후기" : "나에 대한 후기"}</PageTitle>
 
         <TabContainer>
           <Tab
