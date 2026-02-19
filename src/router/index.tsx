@@ -8,6 +8,7 @@ import HostingPage from "../pages/hosting/HostingPage";
 import BecomeHostPage from "../pages/hosting/BecomeHostPage";
 import MyPage from "../pages/mypage/MyPage";
 import UserPage from "../pages/user/UserPage";
+import MessagePage from "../pages/chat/MessagePage";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
       { path: "landing", element: <LandingPage /> },
       { path: "accommodation/:id", element: <AccommodationDetailPage /> },
       { path: "search", element: <SearchPage /> },
+      { path: "messages", element: <MessagePage /> },
     ],
   },
   {
