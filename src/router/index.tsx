@@ -8,6 +8,7 @@ import HostingPage from "../pages/hosting/HostingPage";
 import BecomeHostPage from "../pages/hosting/BecomeHostPage";
 import AccountPage from "../pages/account/AccountPage";
 import ProfilePage from "../pages/profile/ProfilePage";
+import ProfileEditPage from "../pages/profile/edit/ProfileEditPage";
 import UserPage from "../pages/user/UserPage";
 
 export const router = createBrowserRouter([
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
   {
     path: "/profile",
     element: <ProfilePage />,
+  },
+  {
+    path: "/profile/edit",
+    element: <ProfileEditPage />,
   },
   {
     path: "/users/:id",

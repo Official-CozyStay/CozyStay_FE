@@ -49,7 +49,7 @@ const IntroSection = ({ userName, userInitial }: IntroSectionProps) => {
               다른 호스트와 게스트에게 나를 알릴 수 있도록 프로필 작성을 완료해
               주세요.
             </ProfileCompleteDesc>
-            <PrimaryButton onClick={() => navigate("/account")}>
+            <PrimaryButton onClick={() => navigate("/profile/edit")}>
               시작하기
             </PrimaryButton>
           </ProfileCompleteBox>
