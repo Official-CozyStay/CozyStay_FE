@@ -200,8 +200,13 @@ export const InfoAction = styled.button`
   flex-shrink: 0;
   margin-left: ${({ theme }) => theme.spacing.lg};
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: ${({ theme }) => theme.colors.text.secondary};
+  }
+
+  &:disabled {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+    cursor: not-allowed;
   }
 `;
 

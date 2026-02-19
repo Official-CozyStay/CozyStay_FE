@@ -28,7 +28,7 @@ const InfoItemList = ({ items }: InfoItemListProps) => {
             <InfoLabel>{item.label}</InfoLabel>
             <InfoValue>{item.value}</InfoValue>
           </InfoContent>
-          <InfoAction onClick={item.onAction}>{item.action}</InfoAction>
+          <InfoAction onClick={item.onAction} disabled={!item.onAction}>{item.action}</InfoAction>
         </InfoItem>
       ))}
     </InfoList>
