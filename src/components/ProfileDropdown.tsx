@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownItem,
@@ -45,6 +46,7 @@ const MENU_LABELS = {
 } as const;
 
 const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
+  const navigate = useNavigate();
   const { logout } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -79,7 +81,12 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
           <Home />
           {MENU_LABELS.trips}
         </DropdownItem>
-        <DropdownItem>
+        <DropdownItem
+          onClick={() => {
+            navigate('/messages');
+            onClose();
+          }}
+        >
           <MessageCircle />
           {MENU_LABELS.messages}
         </DropdownItem>
