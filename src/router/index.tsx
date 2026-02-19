@@ -6,7 +6,8 @@ import AccommodationDetailPage from "../pages/accommodation/AccommodationDetailP
 import SearchPage from "../pages/search/SearchPage";
 import HostingPage from "../pages/hosting/HostingPage";
 import BecomeHostPage from "../pages/hosting/BecomeHostPage";
-import MyPage from "../pages/mypage/MyPage";
+import AccountPage from "../pages/account/AccountPage";
+import ProfilePage from "../pages/profile/ProfilePage";
 import UserPage from "../pages/user/UserPage";
 
 export const router = createBrowserRouter([
@@ -29,8 +30,12 @@ export const router = createBrowserRouter([
     element: <BecomeHostPage />,
   },
   {
-    path: "/mypage",
-    element: <MyPage />,
+    path: "/account",
+    element: <AccountPage />,
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
   },
   {
     path: "/users/:id",
