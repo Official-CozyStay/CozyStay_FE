@@ -34,7 +34,6 @@ const DISABLED_PROVIDER = {
   badge: 'G',
 } as const;
 
-
 type LoginModalProps = {
   open: boolean;
   onClose: () => void;
@@ -44,11 +43,12 @@ type CountryCode = (typeof COUNTRIES)[number]['value'];
 
 const LoginModal = ({ open, onClose }: LoginModalProps) => {
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(
-    COUNTRIES[0].value
+    COUNTRIES[0].value,
   );
   const [phone, setPhone] = useState('');
 
-  const backendBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+  const backendBaseUrl =
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
   const kakaoLoginUrl = `${backendBaseUrl}/oauth2/authorization/kakao`;
 
   const handlePhoneSubmit = (event: React.FormEvent<HTMLFormElement>) => {

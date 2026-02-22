@@ -1,23 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useAccommodationStore } from "../../store/accommodationStore";
-import * as S from "./accommodationDetail.styles";
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAccommodationStore } from '../../store/accommodationStore';
+import * as S from './accommodationDetail.styles';
 
-import GallerySection from "./components/GallerySection";
-import InfoSection from "./components/InfoSection";
-import BookingCard from "./components/BookingCard";
-import LightboxModal from "./components/LightboxModal";
-import AllPhotosModal from "./components/AllPhotosModal"; // 모달 추가
-import ReviewSection from "./components/ReviewSection";
-import { useLightbox } from "./hooks/useLightbox";
+import GallerySection from './components/GallerySection';
+import InfoSection from './components/InfoSection';
+import BookingCard from './components/BookingCard';
+import LightboxModal from './components/LightboxModal';
+import AllPhotosModal from './components/AllPhotosModal'; // 모달 추가
+import ReviewSection from './components/ReviewSection';
+import { useLightbox } from './hooks/useLightbox';
 
-import type { AccommodationImageDTO, ReviewListResponse } from "../../api/types";
-import { fetchAccommodationReviews } from "../../api/accommodation";
+import type {
+  AccommodationImageDTO,
+  ReviewListResponse,
+} from '../../api/types';
+import { fetchAccommodationReviews } from '../../api/accommodation';
 
 type ThumbImage = AccommodationImageDTO & { idx: number };
 
 export default function AccommodationDetailPage() {
-  const { id = "1" } = useParams();
+  const { id = '1' } = useParams();
   const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
 
   // 전체 사진 모달 상태
@@ -43,7 +46,7 @@ export default function AccommodationDetailPage() {
     fetchAccommodationReviews(id)
       .then(setReviews)
       .catch((err) => {
-        console.error("리뷰 로딩 실패:", err);
+        console.error('리뷰 로딩 실패:', err);
       });
   }, [id, load]);
 
@@ -57,13 +60,11 @@ export default function AccommodationDetailPage() {
       imageUrl: `https://picsum.photos/seed/cozy${1000 + i}/800/600`,
       isPrimary: i === 0,
       displayOrder: i,
-    })
+    }),
   );
 
   const images: AccommodationImageDTO[] =
-    detail?.images && detail.images.length > 0
-      ? detail.images
-      : MOCK_IMAGES;
+    detail?.images && detail.images.length > 0 ? detail.images : MOCK_IMAGES;
 
   const totalImages = images.length;
 

@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export const Container = styled.main`
   --max: 1440px;
@@ -14,8 +14,8 @@ export const Hero = styled.section`
   min-height: 542px;
 
   ${media.mobile} {
-    margin: ${({ theme }) => theme.spacing["3xl"]} auto
-      ${({ theme }) => theme.spacing["5xl"]};
+    margin: ${({ theme }) => theme.spacing['3xl']} auto
+      ${({ theme }) => theme.spacing['5xl']};
     min-height: auto;
   }
 `;
@@ -23,7 +23,7 @@ export const Hero = styled.section`
 export const HeroCard = styled.div`
   position: absolute;
   top: 50%;
-  left: ${({ theme }) => theme.spacing["2xl"]};
+  left: ${({ theme }) => theme.spacing['2xl']};
   transform: translateY(-50%);
   width: 420px;
   max-width: 520px;
@@ -119,13 +119,14 @@ export const FieldLabel = styled.span`
 `;
 
 export const Input = styled.input`
-  height: ${({ theme }) => theme.spacing["3xl"]};
+  height: ${({ theme }) => theme.spacing['3xl']};
   padding: 0 ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   outline: none;
   font-size: ${({ theme }) => theme.font.size.sm};
-  transition: ${({ theme }) => theme.transition.colors.normal},
+  transition:
+    ${({ theme }) => theme.transition.colors.normal},
     ${({ theme }) => theme.transition.normal};
 
   &:focus {
@@ -135,13 +136,14 @@ export const Input = styled.input`
 `;
 
 export const Select = styled.select`
-  height: ${({ theme }) => theme.spacing["3xl"]};
+  height: ${({ theme }) => theme.spacing['3xl']};
   padding: 0 ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   outline: none;
   font-size: ${({ theme }) => theme.font.size.sm};
-  transition: ${({ theme }) => theme.transition.colors.normal},
+  transition:
+    ${({ theme }) => theme.transition.colors.normal},
     ${({ theme }) => theme.transition.normal};
 
   &:focus {
@@ -180,7 +182,7 @@ export const Submit = styled.button`
 
 export const Features = styled.section`
   max-width: var(--max);
-  margin: ${({ theme }) => theme.spacing["4xl"]} auto 100px;
+  margin: ${({ theme }) => theme.spacing['4xl']} auto 100px;
   padding: 0 ${({ theme }) => theme.spacing.lg};
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -194,8 +196,8 @@ export const Features = styled.section`
   ${media.mobile} {
     grid-template-columns: 1fr;
     gap: ${({ theme }) => theme.spacing.xl};
-    margin: ${({ theme }) => theme.spacing["2xl"]} auto
-      ${({ theme }) => theme.spacing["5xl"]};
+    margin: ${({ theme }) => theme.spacing['2xl']} auto
+      ${({ theme }) => theme.spacing['5xl']};
   }
 `;
 
@@ -340,18 +342,18 @@ export const LearnMoreButton = styled.button`
 
 export const Faq = styled.section`
   max-width: var(--max);
-  margin: ${({ theme }) => theme.spacing["6xl"]} auto 120px;
+  margin: ${({ theme }) => theme.spacing['6xl']} auto 120px;
   padding: 0 16px;
 `;
 
 export const FaqGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.6fr;
-  gap: ${({ theme }) => theme.spacing["4xl"]};
+  gap: ${({ theme }) => theme.spacing['4xl']};
   align-items: start;
 
   ${media.tablet} {
-    gap: ${({ theme }) => theme.spacing["2xl"]};
+    gap: ${({ theme }) => theme.spacing['2xl']};
   }
 
   ${media.mobile} {

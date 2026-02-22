@@ -148,4 +148,3 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
 };
 
 export default ProfileDropdown;
-

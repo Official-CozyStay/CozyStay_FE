@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection,
   StepTitle,
   Subtitle,
@@ -13,7 +13,14 @@ import {
 } from './shared.styles';
 
 // 공통 스타일 재export
-export { TitleSection, Subtitle, OptionContent, OptionTitle, OptionDescription, IconWrapper };
+export {
+  TitleSection,
+  Subtitle,
+  OptionContent,
+  OptionTitle,
+  OptionDescription,
+  IconWrapper,
+};
 export const Title = StepTitle;
 
 // BookingSettings 전용 스타일

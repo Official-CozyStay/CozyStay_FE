@@ -34,7 +34,7 @@ const HostingHeader = () => {
         <SwitchModeButton onClick={() => navigate('/')}>
           게스트 모드로 전환
         </SwitchModeButton>
-        
+
         {isAuthenticated && user ? (
           <ProfileButton type="button" onClick={() => navigate('/mypage')}>
             <ProfilePlaceholder>
@@ -52,7 +52,7 @@ const HostingHeader = () => {
         <MenuDropdownWrapper>
           <MenuIconButton
             ref={menuButtonRef}
-            onClick={() => setIsMenuOpen(prev => !prev)}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
           >
             <Menu size={20} />
           </MenuIconButton>
@@ -69,4 +69,3 @@ const HostingHeader = () => {
 };
 
 export default HostingHeader;
-

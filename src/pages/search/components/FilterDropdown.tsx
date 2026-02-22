@@ -54,7 +54,10 @@ const FilterDropdownPanel = ({
   buttonRefs,
 }: FilterDropdownPanelProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [dropdownPosition, setDropdownPosition] = useState<{ left: number; top: number } | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<{
+    left: number;
+    top: number;
+  } | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -75,14 +78,19 @@ const FilterDropdownPanel = ({
     setDropdownPosition(null);
 
     const calculatePosition = () => {
-      const activeButtonRef = buttonRefs[activeFilter as keyof typeof buttonRefs];
+      const activeButtonRef =
+        buttonRefs[activeFilter as keyof typeof buttonRefs];
       if (activeButtonRef?.current) {
         const buttonRect = activeButtonRef.current.getBoundingClientRect();
-        const filterBar = activeButtonRef.current.closest('[data-filter-bar]') as HTMLElement;
+        const filterBar = activeButtonRef.current.closest(
+          '[data-filter-bar]',
+        ) as HTMLElement;
         if (filterBar) {
           const barRect = filterBar.getBoundingClientRect();
-          const searchContainer = filterBar.closest('[data-search-container]') as HTMLElement;
-          
+          const searchContainer = filterBar.closest(
+            '[data-search-container]',
+          ) as HTMLElement;
+
           if (searchContainer) {
             const containerRect = searchContainer.getBoundingClientRect();
             // FilterBar 기준으로 left 위치 계산
@@ -340,5 +348,3 @@ const FilterDropdownPanel = ({
 };
 
 export default FilterDropdownPanel;
-
-

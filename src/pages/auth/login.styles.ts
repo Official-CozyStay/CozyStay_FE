@@ -146,7 +146,9 @@ export const AuthButton = styled.button<{ $variant?: 'kakao' }>`
   background: ${({ $variant }) => ($variant === 'kakao' ? '#FEE500' : '#fff')};
   color: ${({ $variant }) => ($variant === 'kakao' ? '#191600' : '#333')};
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
   box-shadow: ${({ $variant }) =>
     $variant === 'kakao' ? '0 8px 20px rgba(0,0,0,0.18)' : 'none'};
 

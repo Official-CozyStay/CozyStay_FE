@@ -59,7 +59,7 @@ const GuestCounterRow = React.memo(
         </CounterButton>
       </GuestCounter>
     </GuestSection>
-  )
+  ),
 );
 
 const SearchBar = ({ isCompact = false }: SearchBarProps) => {

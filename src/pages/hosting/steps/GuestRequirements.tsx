@@ -27,7 +27,9 @@ const GuestRequirements = ({ data, onDataChange }: StepProps) => {
     <GuestContainer>
       <TitleSection>
         <Title>첫 예약의 게스트 조건을 선택해주세요</Title>
-        <Subtitle>첫 번째 게스트의 예약을 받은 후에는 누구나 숙소를 예약할 수 있습니다.</Subtitle>
+        <Subtitle>
+          첫 번째 게스트의 예약을 받은 후에는 누구나 숙소를 예약할 수 있습니다.
+        </Subtitle>
       </TitleSection>
 
       <OptionList>
@@ -43,7 +45,8 @@ const GuestRequirements = ({ data, onDataChange }: StepProps) => {
           <OptionContent>
             <OptionTitle>모든 CozyStay 게스트</OptionTitle>
             <OptionDescription>
-              모든 CozyStay 게스트를 맞이하겠다고 설정하면 예약을 더 빨리 받으실 수 있습니다.
+              모든 CozyStay 게스트를 맞이하겠다고 설정하면 예약을 더 빨리 받으실
+              수 있습니다.
             </OptionDescription>
           </OptionContent>
         </OptionCard>
@@ -60,7 +63,8 @@ const GuestRequirements = ({ data, onDataChange }: StepProps) => {
           <OptionContent>
             <OptionTitle>경험이 풍부한 게스트</OptionTitle>
             <OptionDescription>
-              CozyStay 이용 실적이 우수하며, 유용한 호스팅 팁도 제공할 수 있는 사람을 첫 번째 게스트로 수락하세요.
+              CozyStay 이용 실적이 우수하며, 유용한 호스팅 팁도 제공할 수 있는
+              사람을 첫 번째 게스트로 수락하세요.
             </OptionDescription>
           </OptionContent>
         </OptionCard>
@@ -70,4 +74,3 @@ const GuestRequirements = ({ data, onDataChange }: StepProps) => {
 };
 
 export default GuestRequirements;
-

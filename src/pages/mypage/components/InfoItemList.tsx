@@ -5,7 +5,7 @@ import {
   InfoLabel,
   InfoValue,
   InfoAction,
-} from "../mypage.styles";
+} from '../mypage.styles';
 
 export interface InfoItemData {
   id: string;
@@ -28,7 +28,9 @@ const InfoItemList = ({ items }: InfoItemListProps) => {
             <InfoLabel>{item.label}</InfoLabel>
             <InfoValue>{item.value}</InfoValue>
           </InfoContent>
-          <InfoAction onClick={item.onAction} disabled={!item.onAction}>{item.action}</InfoAction>
+          <InfoAction onClick={item.onAction} disabled={!item.onAction}>
+            {item.action}
+          </InfoAction>
         </InfoItem>
       ))}
     </InfoList>

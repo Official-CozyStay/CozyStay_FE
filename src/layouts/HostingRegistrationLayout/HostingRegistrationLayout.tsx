@@ -50,7 +50,9 @@ const HostingRegistrationLayout = ({
         </LogoLink>
         <HeaderButtons>
           <HeaderButton onClick={() => {}}>궁금하신 점이 있나요?</HeaderButton>
-          <HeaderButton onClick={() => navigate('/hosting')}>저장 후 나가기</HeaderButton>
+          <HeaderButton onClick={() => navigate('/hosting')}>
+            저장 후 나가기
+          </HeaderButton>
         </HeaderButtons>
       </Header>
 
@@ -82,4 +84,3 @@ const HostingRegistrationLayout = ({
 };
 
 export default HostingRegistrationLayout;
-

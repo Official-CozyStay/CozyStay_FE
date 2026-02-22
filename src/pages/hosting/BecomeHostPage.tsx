@@ -35,8 +35,13 @@ export interface StepProps {
 // 스텝 설정 배열 - 순서 변경, 추가/삭제가 쉬움
 const STEPS = [
   // Phase 0: 시작
-  { component: Overview, showProgress: false, nextLabel: '시작하기', needsData: false },
-  
+  {
+    component: Overview,
+    showProgress: false,
+    nextLabel: '시작하기',
+    needsData: false,
+  },
+
   // Phase 1: 숙소 정보
   { component: Phase1Intro, showProgress: true, needsData: false },
   { component: CategorySelect, showProgress: true, needsData: true },
@@ -45,14 +50,14 @@ const STEPS = [
   { component: GuestCapacity, showProgress: true, needsData: true },
   { component: Bathrooms, showProgress: true, needsData: true },
   { component: Occupants, showProgress: true, needsData: true },
-  
+
   // Phase 2: 매력 어필
   { component: Phase2Intro, showProgress: true, needsData: false },
   { component: Amenities, showProgress: true, needsData: true },
   { component: Photos, showProgress: true, needsData: true },
   { component: TitleStep, showProgress: true, needsData: true },
   { component: Description, showProgress: true, needsData: true },
-  
+
   // Phase 3: 마무리
   { component: Phase3Intro, showProgress: true, needsData: false },
   { component: BookingSettings, showProgress: true, needsData: true },
@@ -61,25 +66,32 @@ const STEPS = [
   { component: WeekendPricing, showProgress: true, needsData: true },
   { component: Discounts, showProgress: true, needsData: true },
   { component: SafetyInfo, showProgress: true, needsData: true },
-  { component: HostDetails, showProgress: true, nextLabel: '리스팅 만들기', needsData: true },
+  {
+    component: HostDetails,
+    showProgress: true,
+    nextLabel: '리스팅 만들기',
+    needsData: true,
+  },
 ] as const;
 
 const BecomeHostPage = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
-  const [listingData, setListingData] = useState<Partial<Listing>>(defaultListing);
-  
+  const [listingData, setListingData] =
+    useState<Partial<Listing>>(defaultListing);
+
   const stepConfig = STEPS[currentStep];
   const StepComponent = stepConfig.component;
   const isLastStep = currentStep === STEPS.length - 1;
 
   // 프로그레스 바에 표시될 스텝만 필터링하여 계산
-  const totalProgressSteps = STEPS.filter(step => step.showProgress).length;
-  const currentProgressStep = STEPS.slice(0, currentStep + 1)
-    .filter(step => step.showProgress).length;
+  const totalProgressSteps = STEPS.filter((step) => step.showProgress).length;
+  const currentProgressStep = STEPS.slice(0, currentStep + 1).filter(
+    (step) => step.showProgress,
+  ).length;
 
   const handleDataChange = (newData: Partial<Listing>) => {
-    setListingData(prev => ({ ...prev, ...newData }));
+    setListingData((prev) => ({ ...prev, ...newData }));
   };
 
   const handleNext = () => {
@@ -122,7 +134,7 @@ const BecomeHostPage = () => {
         createdAt: new Date().toISOString(),
         status: 'published',
       };
-      
+
       saveListing(finalListing);
       navigate('/hosting');
     } else {
