@@ -1,12 +1,7 @@
-import { useState, ComponentType } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import type { ComponentType } from "react";
 import {
   PageContainer,
-  PageHeader,
-  LogoWrapper,
-  Logo,
-  LogoText,
-  CompleteButton,
   ContentWrapper,
   Sidebar,
   SidebarTitle,
@@ -16,7 +11,7 @@ import {
   NewBadge,
   SidebarDivider,
   MainContent,
-} from "./mypage.styles";
+} from "./account.styles";
 import {
   User,
   Shield,
@@ -27,9 +22,9 @@ import {
   Globe,
   Briefcase,
   Building2,
-  LucideIcon,
 } from "lucide-react";
-import logo from "@/assets/images/logo.svg";
+import type { LucideIcon } from "lucide-react";
+import SimpleHeader from "@/components/SimpleHeader";
 import PersonalInfoSection from "./sections/PersonalInfoSection";
 import SecuritySection from "./sections/SecuritySection";
 import PrivacySection from "./sections/PrivacySection";
@@ -61,41 +56,68 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { key: "personal", icon: User, label: "개인 정보", component: PersonalInfoSection },
-  { key: "security", icon: Shield, label: "로그인 및 보안", component: SecuritySection },
-  { key: "privacy", icon: Lock, label: "개인정보 보호", component: PrivacySection },
-  { key: "notifications", icon: Bell, label: "알림", component: NotificationsSection },
+  {
+    key: "personal",
+    icon: User,
+    label: "개인 정보",
+    component: PersonalInfoSection,
+  },
+  {
+    key: "security",
+    icon: Shield,
+    label: "로그인 및 보안",
+    component: SecuritySection,
+  },
+  {
+    key: "privacy",
+    icon: Lock,
+    label: "개인정보 보호",
+    component: PrivacySection,
+  },
+  {
+    key: "notifications",
+    icon: Bell,
+    label: "알림",
+    component: NotificationsSection,
+  },
   { key: "tax", icon: FileText, label: "세금", component: TaxSection },
-  { key: "payment", icon: CreditCard, label: "결제 및 대금 수령", component: PaymentSection, isNew: true },
-  { key: "language", icon: Globe, label: "언어 및 통화", component: LanguageSection },
-  { key: "business", icon: Briefcase, label: "출장", component: BusinessSection },
-  { key: "hosting", icon: Building2, label: "전문 호스팅 도구", component: HostingToolsSection, hasDividerBefore: true },
+  {
+    key: "payment",
+    icon: CreditCard,
+    label: "결제 및 대금 수령",
+    component: PaymentSection,
+    isNew: true,
+  },
+  {
+    key: "language",
+    icon: Globe,
+    label: "언어 및 통화",
+    component: LanguageSection,
+  },
+  {
+    key: "business",
+    icon: Briefcase,
+    label: "출장",
+    component: BusinessSection,
+  },
+  {
+    key: "hosting",
+    icon: Building2,
+    label: "전문 호스팅 도구",
+    component: HostingToolsSection,
+    hasDividerBefore: true,
+  },
 ];
 
-const MyPage = () => {
-  const navigate = useNavigate();
+const AccountPage = () => {
   const [activeMenu, setActiveMenu] = useState<MenuKey>("personal");
 
   const activeItem = menuItems.find((item) => item.key === activeMenu);
   const ActiveComponent = activeItem?.component ?? PersonalInfoSection;
 
-  const handleComplete = () => {
-    navigate(-1);
-  };
-
-  const handleLogoClick = () => {
-    navigate("/");
-  };
-
   return (
     <PageContainer>
-      <PageHeader>
-        <LogoWrapper onClick={handleLogoClick}>
-          <Logo src={logo} alt="CozyStay Logo" />
-          <LogoText>CozyStay</LogoText>
-        </LogoWrapper>
-        <CompleteButton onClick={handleComplete}>완료</CompleteButton>
-      </PageHeader>
+      <SimpleHeader />
 
       <ContentWrapper>
         <Sidebar>
@@ -128,5 +150,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
-
+export default AccountPage;

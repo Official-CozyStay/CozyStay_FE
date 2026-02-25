@@ -1,8 +1,4 @@
-import {
-  ContentTitle,
-  Section,
-  SectionTitle,
-} from "../mypage.styles";
+import { ContentTitle, Section, SectionTitle } from "../account.styles";
 import InfoItemList from "../components/InfoItemList";
 import type { InfoItemData } from "../components/InfoItemList";
 
@@ -11,7 +7,8 @@ const BusinessSection = () => {
     {
       id: "business-email",
       label: "출장 이메일",
-      value: "출장용 이메일을 등록하면 회사에서 여행 경비를 쉽게 관리할 수 있습니다.",
+      value:
+        "출장용 이메일을 등록하면 회사에서 여행 경비를 쉽게 관리할 수 있습니다.",
       action: "추가",
     },
     {

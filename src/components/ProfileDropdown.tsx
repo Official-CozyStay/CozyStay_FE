@@ -1,4 +1,5 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownItem,
@@ -8,7 +9,7 @@ import {
   DropdownHeaderTitle,
   DropdownHeaderDesc,
   DropdownHeaderImage,
-} from './ProfileDropdown.styles';
+} from "./ProfileDropdown.styles";
 import {
   Heart,
   Home,
@@ -20,8 +21,8 @@ import {
   LogOut,
   UserPlus,
   Users,
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ProfileDropdownProps = {
   onClose: () => void;
@@ -30,21 +31,22 @@ type ProfileDropdownProps = {
 
 // 메뉴 텍스트 상수 (향후 i18n 적용 시 쉽게 교체 가능)
 const MENU_LABELS = {
-  wishlist: '위시리스트',
-  trips: '여행',
-  messages: '메시지',
-  profile: '프로필',
-  accountSettings: '계정 관리',
-  languageAndCurrency: '언어 및 통화',
-  helpCenter: '도움말 센터',
-  hosting: '호스팅 하기',
-  hostingDescription: '간단하게 호스팅을 시작하고 부수입을 올릴 수 있습니다.',
-  recommendHost: '호스트 추천하기',
-  findCoHost: '공동 호스트 찾기',
-  logout: '로그아웃',
+  wishlist: "위시리스트",
+  trips: "여행",
+  messages: "메시지",
+  profile: "프로필",
+  accountSettings: "계정 관리",
+  languageAndCurrency: "언어 및 통화",
+  helpCenter: "도움말 센터",
+  hosting: "호스팅 하기",
+  hostingDescription: "간단하게 호스팅을 시작하고 부수입을 올릴 수 있습니다.",
+  recommendHost: "호스트 추천하기",
+  findCoHost: "공동 호스트 찾기",
+  logout: "로그아웃",
 } as const;
 
 const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
+  const navigate = useNavigate();
   const { logout } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -59,12 +61,17 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose, buttonRef]);
 
   const handleLogout = () => {
     logout();
+    onClose();
+  };
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
     onClose();
   };
 
@@ -92,7 +99,7 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
       <DropdownDivider />
 
       <DropdownSection>
-        <DropdownItem>
+        <DropdownItem onClick={() => handleNavigate("/account")}>
           <Settings />
           {MENU_LABELS.accountSettings}
         </DropdownItem>
@@ -148,4 +155,3 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
 };
 
 export default ProfileDropdown;
-

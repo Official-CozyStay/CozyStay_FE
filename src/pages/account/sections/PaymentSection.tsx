@@ -5,7 +5,7 @@ import {
   TabItem,
   Section,
   SectionTitle,
-} from "../mypage.styles";
+} from "../account.styles";
 import InfoItemList from "../components/InfoItemList";
 import type { InfoItemData } from "../components/InfoItemList";
 
@@ -23,7 +23,8 @@ const PaymentSection = () => {
     {
       id: "payment-method",
       label: "결제 수단",
-      value: "등록된 결제 수단이 없습니다. 결제 수단을 추가하면 더 빠르게 예약할 수 있습니다.",
+      value:
+        "등록된 결제 수단이 없습니다. 결제 수단을 추가하면 더 빠르게 예약할 수 있습니다.",
       action: "추가",
     },
   ];
@@ -53,7 +54,8 @@ const PaymentSection = () => {
     {
       id: "payout-method",
       label: "대금 수령 방법",
-      value: "등록된 대금 수령 방법이 없습니다. 호스팅 대금을 받으려면 수령 방법을 추가하세요.",
+      value:
+        "등록된 대금 수령 방법이 없습니다. 호스팅 대금을 받으려면 수령 방법을 추가하세요.",
       action: "설정",
     },
   ];

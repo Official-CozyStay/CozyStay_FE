@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, User } from "lucide-react";
+import { User, Menu } from "lucide-react";
 import logo from "@/assets/images/logo.svg";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileDropdown from "@/components/ProfileDropdown";
@@ -10,30 +10,45 @@ import {
   Logo,
   LogoText,
   HeaderRight,
-  SwitchModeButton,
+  HostButton,
   ProfileButton,
   ProfilePlaceholder,
-  MenuIconButton,
+  MenuButton,
   MenuDropdownWrapper,
-} from "./HostingHeader.styles";
+  ActionButton,
+} from "./SimpleHeader.styles";
 
-const HostingHeader = () => {
+interface SimpleHeaderProps {
+  rightAction?: {
+    label: string;
+    onClick: () => void;
+  };
+  showHostButton?: boolean;
+}
+
+const SimpleHeader = ({ rightAction, showHostButton = true }: SimpleHeaderProps) => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
+  const handleLogoClick = () => {
+    navigate("/");
+  };
+
   return (
     <HeaderContainer>
-      <HeaderLeft to="/">
+      <HeaderLeft onClick={handleLogoClick}>
         <Logo src={logo} alt="CozyStay Logo" />
         <LogoText>CozyStay</LogoText>
       </HeaderLeft>
 
       <HeaderRight>
-        <SwitchModeButton onClick={() => navigate("/")}>
-          게스트 모드로 전환
-        </SwitchModeButton>
+        {showHostButton && (
+          <HostButton type="button" onClick={() => navigate("/hosting")}>
+            호스팅 하기
+          </HostButton>
+        )}
 
         {isAuthenticated && user ? (
           <ProfileButton type="button" onClick={() => navigate("/profile")}>
@@ -50,12 +65,13 @@ const HostingHeader = () => {
         )}
 
         <MenuDropdownWrapper>
-          <MenuIconButton
+          <MenuButton
             ref={menuButtonRef}
+            type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
           >
             <Menu size={20} />
-          </MenuIconButton>
+          </MenuButton>
           {isMenuOpen && (
             <ProfileDropdown
               onClose={() => setIsMenuOpen(false)}
@@ -63,9 +79,15 @@ const HostingHeader = () => {
             />
           )}
         </MenuDropdownWrapper>
+
+        {rightAction && (
+          <ActionButton onClick={rightAction.onClick}>
+            {rightAction.label}
+          </ActionButton>
+        )}
       </HeaderRight>
     </HeaderContainer>
   );
 };
 
-export default HostingHeader;
+export default SimpleHeader;
