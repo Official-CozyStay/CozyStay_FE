@@ -38,7 +38,7 @@ type ChatMessageListResponseDTO = {
     conversationId: number;
     senderId: number;
     messageText: string;
-    createdAt: string;
+    createdAt: string | number[];
   }>;
   nextCursor: number | null;
   hasMore: boolean;
@@ -62,6 +62,24 @@ function unwrap<T>(body: unknown): T {
     return (body as ApiResponse<T>).data;
   }
   return body as T;
+}
+
+function normalizeCreatedAt(value: unknown): string {
+  if (typeof value === "string") return value;
+
+  if (Array.isArray(value) && value.length >= 3) {
+    const [y, mon = 1, d = 1, h = 0, min = 0, s = 0] = value;
+    return new Date(
+      Number(y),
+      Number(mon) - 1,
+      Number(d),
+      Number(h),
+      Number(min),
+      Number(s)
+    ).toISOString();
+  }
+
+  return "";
 }
 
 // 에러 응답 시 JSON에서 message 추출 후 사용자용 메시지로 throw
@@ -144,7 +162,7 @@ export async function fetchMessages(
         conversationId: row.conversationId as number,
         senderId: row.senderId as number,
         content: row.messageText as string,
-        createdAt: String(row.createdAt),
+        createdAt: normalizeCreatedAt(row.createdAt),
       };
     }
     return m as unknown as MessageResponseDTO;

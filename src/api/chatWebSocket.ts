@@ -33,7 +33,10 @@ function normalizeWsMessage(raw: WsMessagePayload): NormalizedMessage {
       typeof raw.createdAt === "string"
         ? raw.createdAt
         : Array.isArray((raw as unknown as { createdAt: number[] }).createdAt)
-          ? new Date((raw as unknown as { createdAt: number[] }).createdAt[0]).toISOString()
+          ? (() => {
+              const [y, mon = 1, d = 1, h = 0, min = 0, s = 0] = (raw as unknown as { createdAt: number[] }).createdAt;
+              return new Date(y, mon - 1, d, h, min, s).toISOString();
+            })()
           : "",
   };
 }
