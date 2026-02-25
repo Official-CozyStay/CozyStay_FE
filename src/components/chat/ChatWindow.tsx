@@ -247,7 +247,8 @@ export default function ChatWindow({
           }
         );
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("WebSocket connection failed:", err);
       });
 
     return () => {
