@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useAuth } from '@/contexts/AuthContext';
 import client from '@/api/client';
 import {
@@ -81,10 +82,14 @@ const LoginModal = ({ open, onClose, onOpenSignup }: LoginModalProps) => {
       } else {
         throw new Error(result?.message || '로그인 실패. 아이디와 비밀번호를 확인해주세요.');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      // Axios wraps errors in error.response.data
-      const errorMessage = error.response?.data?.message || error.message || '서버 오류가 발생했습니다.';
+      let errorMessage = '서버 오류가 발생했습니다.';
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || error.message || errorMessage;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
       alert(errorMessage);
     }
   };

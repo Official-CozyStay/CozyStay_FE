@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import client from '@/api/client';
 import {
     Page,
@@ -67,10 +68,16 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
             await client.post(`/api/auth/email-verification/request?email=${formData.email}`);
             setEmailStatus('sent');
             alert('인증번호가 발송되었습니다. 이메일을 확인해주세요.');
-        } catch (error: any) {
-            console.error(error);
+        } catch (error: unknown) {
+            console.error('Send verification error:', error);
             setEmailStatus('idle');
-            alert(error.response?.data?.message || '인증번호 발송에 실패했습니다. 다시 시도해주세요.');
+            let errorMessage = '인증번호 발송에 실패했습니다. 다시 시도해주세요.';
+            if (axios.isAxiosError(error)) {
+                errorMessage = error.response?.data?.message || errorMessage;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            alert(errorMessage);
         }
     };
 
@@ -87,10 +94,16 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
             });
             setVerificationStatus('success');
             alert('인증이 완료되었습니다.');
-        } catch (error: any) {
-            console.error(error);
+        } catch (error: unknown) {
+            console.error('Verify code error:', error);
             setVerificationStatus('failed');
-            alert(error.response?.data?.message || '인증에 실패했습니다. 코드를 다시 확인해주세요.');
+            let errorMessage = '인증에 실패했습니다. 코드를 다시 확인해주세요.';
+            if (axios.isAxiosError(error)) {
+                errorMessage = error.response?.data?.message || errorMessage;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            alert(errorMessage);
         }
     };
 
@@ -119,9 +132,15 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
             } else {
                 throw new Error(result?.message || '회원가입 실패');
             }
-        } catch (error: any) {
-            console.error(error);
-            alert(error.response?.data?.message || error.message || '회원가입 중 오류가 발생했습니다.');
+        } catch (error: unknown) {
+            console.error('Signup error:', error);
+            let errorMessage = '회원가입 중 오류가 발생했습니다.';
+            if (axios.isAxiosError(error)) {
+                errorMessage = error.response?.data?.message || error.message || errorMessage;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            alert(errorMessage);
         }
     };
 
