@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import client from '@/api/client';
 import {
   AuthButton,
   AuthButtons,
@@ -57,20 +58,12 @@ const LoginModal = ({ open, onClose, onOpenSignup }: LoginModalProps) => {
     }
 
     try {
-      const response = await fetch(`${backendBaseUrl}/api/auth/signin`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          password: formData.password,
-        }),
+      const result: any = await client.post('/api/auth/signin', {
+        username: formData.username,
+        password: formData.password,
       });
 
-      const result = await response.json().catch(() => null);
-
-      if (response.ok && (result?.success || response.status === 200)) {
+      if (result?.success || result) {
         // Check if backend provides token inside data or directly on the result object
         const token = result?.data?.accessToken || result?.accessToken || result?.token || '';
         const refreshToken = result?.data?.refreshToken || result?.refreshToken || '';
@@ -90,7 +83,9 @@ const LoginModal = ({ open, onClose, onOpenSignup }: LoginModalProps) => {
       }
     } catch (error: any) {
       console.error('Login error:', error);
-      alert(error.message || '서버 오류가 발생했습니다.');
+      // Axios wraps errors in error.response.data
+      const errorMessage = error.response?.data?.message || error.message || '서버 오류가 발생했습니다.';
+      alert(errorMessage);
     }
   };
 

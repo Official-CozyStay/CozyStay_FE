@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import client from '@/api/client';
 import {
     Page,
     SignupCard,
@@ -55,8 +56,6 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const backendBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-
     const handleSendVerification = async () => {
         if (!formData.email) {
             alert('이메일을 입력해주세요.');
@@ -64,19 +63,14 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
         }
         setEmailStatus('sending');
         try {
-            const response = await fetch(`${backendBaseUrl}/api/auth/email-verification/request?email=${formData.email}`, {
-                method: 'POST',
-            });
-            if (response.ok) {
-                setEmailStatus('sent');
-                alert('인증번호가 발송되었습니다. 이메일을 확인해주세요.');
-            } else {
-                throw new Error('이메일 발송 실패');
-            }
-        } catch (error) {
+            // client defaults to stripping out {data}, so if response doesn't throw it's 2xx
+            await client.post(`/api/auth/email-verification/request?email=${formData.email}`);
+            setEmailStatus('sent');
+            alert('인증번호가 발송되었습니다. 이메일을 확인해주세요.');
+        } catch (error: any) {
             console.error(error);
             setEmailStatus('idle');
-            alert('인증번호 발송에 실패했습니다. 다시 시도해주세요.');
+            alert(error.response?.data?.message || '인증번호 발송에 실패했습니다. 다시 시도해주세요.');
         }
     };
 
@@ -87,26 +81,16 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
         }
         setVerificationStatus('verifying');
         try {
-            const response = await fetch(`${backendBaseUrl}/api/auth/verify`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: formData.email,
-                    code: formData.verificationCode,
-                }),
+            await client.post('/api/auth/verify', {
+                email: formData.email,
+                code: formData.verificationCode,
             });
-            if (response.ok) {
-                setVerificationStatus('success');
-                alert('인증이 완료되었습니다.');
-            } else {
-                throw new Error('인증 실패');
-            }
-        } catch (error) {
+            setVerificationStatus('success');
+            alert('인증이 완료되었습니다.');
+        } catch (error: any) {
             console.error(error);
             setVerificationStatus('failed');
-            alert('인증에 실패했습니다. 코드를 다시 확인해주세요.');
+            alert(error.response?.data?.message || '인증에 실패했습니다. 코드를 다시 확인해주세요.');
         }
     };
 
@@ -122,22 +106,14 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
         }
 
         try {
-            const response = await fetch(`${backendBaseUrl}/api/auth/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: formData.username,
-                    password: formData.password,
-                    email: formData.email,
-                    nickName: formData.nickName,
-                }),
+            const result: any = await client.post('/api/auth/signup', {
+                username: formData.username,
+                password: formData.password,
+                email: formData.email,
+                nickName: formData.nickName,
             });
 
-            const result = await response.json().catch(() => null);
-
-            if (response.ok && (result?.success || response.status === 200)) {
+            if (result?.success || result) {
                 alert('회원가입이 완료되었습니다!');
                 onClose();
             } else {
@@ -145,7 +121,7 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
             }
         } catch (error: any) {
             console.error(error);
-            alert(error.message || '회원가입 중 오류가 발생했습니다.');
+            alert(error.response?.data?.message || error.message || '회원가입 중 오류가 발생했습니다.');
         }
     };
 
