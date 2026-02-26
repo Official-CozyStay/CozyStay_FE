@@ -1,10 +1,10 @@
 import * as S from "../payment.styles";
 
-export type PaymentMethod = "CARD" | "NAVERPAY" | "KAKAOPAY";
+export type UiPaymentMethod = "CARD" | "NAVERPAY" | "KAKAOPAY";
 
 type Props = {
-    value: PaymentMethod;
-    onChange: (method: PaymentMethod) => void;
+    value: UiPaymentMethod;
+    onChange: (method: UiPaymentMethod) => void;
 };
 
 export default function PaymentMethodSection({ value, onChange }: Props) {
