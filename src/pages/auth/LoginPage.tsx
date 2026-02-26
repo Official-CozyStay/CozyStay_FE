@@ -131,7 +131,7 @@ const LoginModal = ({ open, onClose, onOpenSignup }: LoginModalProps) => {
             </AuthButton>
             <AuthButton type="button" $variant="kakao" onClick={handleKakaoLogin}>
               <KakaoIcon>K</KakaoIcon>
-              카카오로 로그인하기
+              카카오로 시작하기
             </AuthButton>
             <AuthButton type="button" disabled>
               <ProviderIcon>{DISABLED_PROVIDER.badge}</ProviderIcon>
