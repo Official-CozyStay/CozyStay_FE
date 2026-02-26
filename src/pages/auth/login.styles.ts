@@ -131,30 +131,46 @@ export const AuthButtons = styled.div`
   gap: 10px;
 `;
 
-export const AuthButton = styled.button<{ $variant?: 'kakao' }>`
+export const AuthButton = styled.button<{ $variant?: 'kakao' | 'general' }>`
   border-radius: 14px;
   padding: 13px 16px;
   border: 1px solid
     ${({ theme, $variant }) =>
-      $variant === 'kakao' ? 'transparent' : theme.colors.border.primary};
+    $variant === 'kakao' || $variant === 'general' ? 'transparent' : theme.colors.border.primary};
   font-size: 15px;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 12px;
   justify-content: center;
-  background: ${({ $variant }) => ($variant === 'kakao' ? '#FEE500' : '#fff')};
-  color: ${({ $variant }) => ($variant === 'kakao' ? '#191600' : '#333')};
+  background: ${({ theme, $variant }) =>
+    $variant === 'kakao'
+      ? '#FEE500'
+      : $variant === 'general'
+        ? `linear-gradient(135deg, ${theme.colors.primary.main}, ${theme.colors.primary.hover})`
+        : '#fff'};
+  color: ${({ $variant, theme }) =>
+    $variant === 'kakao'
+      ? '#191600'
+      : $variant === 'general'
+        ? theme.colors.common.white
+        : '#333'};
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: ${({ $variant }) =>
-    $variant === 'kakao' ? '0 8px 20px rgba(0,0,0,0.18)' : 'none'};
+  box-shadow: ${({ $variant, theme }) =>
+    $variant === 'kakao'
+      ? '0 8px 20px rgba(0,0,0,0.18)'
+      : $variant === 'general'
+        ? `0 8px 20px ${theme.colors.primary.main}40`
+        : 'none'};
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: ${({ $variant }) =>
-      $variant === 'kakao'
-        ? '0 12px 24px rgba(0,0,0,0.2)'
+    box-shadow: ${({ $variant, theme }) =>
+    $variant === 'kakao'
+      ? '0 12px 24px rgba(0,0,0,0.2)'
+      : $variant === 'general'
+        ? `0 12px 24px ${theme.colors.primary.main}60`
         : '0 8px 16px rgba(0,0,0,0.08)'};
   }
 
