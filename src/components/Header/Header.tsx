@@ -18,6 +18,7 @@ import {
 import { Home, Sparkles, Bell, User, Menu } from "lucide-react";
 import logo from "@/assets/images/logo.svg";
 import LoginModal from "@/pages/auth/LoginPage";
+import SignupModal from "@/pages/auth/SignupModal";
 import { useAuth } from "@/contexts/AuthContext";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import ProfileDropdown from "@/components/ProfileDropdown";
@@ -31,6 +32,7 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
   const navigate = useNavigate();
   const isMainPage = location.pathname === "/";
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { isAuthenticated, user } = useAuth();
@@ -120,7 +122,18 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
           </ProfileDropdownWrapper>
         </HeaderRight>
       </HeaderContainer>
-      <LoginModal open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginModal
+        open={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onOpenSignup={() => {
+          setIsLoginOpen(false);
+          setIsSignupOpen(true);
+        }}
+      />
+      <SignupModal
+        open={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+      />
     </>
   );
 };
