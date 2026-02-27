@@ -14,10 +14,6 @@ import RequestConfirmSection from "./components/RequestConfirmSection";
 import { createBooking } from "@/api/booking";
 import { createPayment, confirmPayment, type PaymentMethod as ApiPaymentMethod,} from "@/api/payment";
 
-type ErrorResponse = {
-    message?: string;
-};
-
 export default function PaymentPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -101,25 +97,26 @@ export default function PaymentPage() {
             // 결제 confirm (PG 연동 전이라 임시 키 생성)
             const mockPaymentKey = `MOCK_${payment.paymentId}_${Date.now()}`;
 
-            await confirmPayment(payment.paymentId, {paymentKey: mockPaymentKey,});
+            const confirmed = await confirmPayment(payment.paymentId, {paymentKey: mockPaymentKey,});
+
+            console.log("booking: ", booking);
+            console.log("payment(created): ", payment);
+            console.log("payment(confirmed): ", confirmed);
 
             // 결제 성공 페이지로 이동
             navigate(`/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`);
-        } catch (e: unknown) {
-            if (axios.isAxiosError<ErrorResponse>(e)) {
-                const status = e.response?.status;
 
+        } catch (e: unknown) {
+            if (axios.isAxiosError<{ message?: string }>(e)) {
+                const status = e.response?.status;
                 const msg =
                     status === 401
                         ? "로그인이 필요합니다."
-                        : e.response?.data?.message ??
-                        "예약/결제 요청에 실패했습니다.";
-
+                        : e.response?.data?.message ?? "예약/결제 요청에 실패했습니다.";
                 setSubmitError(msg);
             } else {
                 setSubmitError("알 수 없는 오류가 발생했습니다.");
             }
-
             console.error(e);
         } finally {
             setSubmitting(false);
