@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { fetchUserBookings } from "@/api/booking";
 import { fetchAccommodationReviews, writeAccommodationReview } from "@/api/review";
 import { fetchUserReviews } from "@/api/user";
+import { fetchAccommodationDetail } from "@/api/accommodation";
 import type { BookingResponse, AccommodationReviewRequest, UserReviewDTO } from "@/api/types";
 import ReviewFormModal from "@/components/reviews/ReviewFormModal";
 import ReviewItem from "@/components/reviews/ReviewItem";
@@ -34,6 +35,7 @@ const ReviewsPage = () => {
   const [bookings, setBookings] = useState<BookingResponse[]>([]);
   const [writtenReviewBookingIds, setWrittenReviewBookingIds] = useState<Set<number>>(new Set());
   const [aboutMeReviews, setAboutMeReviews] = useState<UserReviewDTO[]>([]);
+  const [accommodationNames, setAccommodationNames] = useState<Record<number, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
   // Modal State
@@ -67,6 +69,20 @@ const ReviewsPage = () => {
           writtenBookingIds.add(review.bookingId);
         });
 
+        // 5. 숙소 이름 조회를 위한 패치
+        const newNames: Record<number, string> = {};
+        const detailPromises = accIds.map(async (id) => {
+          try {
+            // fetchAccommodationDetail 내부에서 id를 문자열로 요구하는지 확인해야 하지만, number를 문자열로 치환.
+            const detail = await fetchAccommodationDetail(String(id));
+            newNames[id] = detail.title;
+          } catch (e) {
+            console.error(`Failed to fetch accommodation details for id: ${id}`, e);
+          }
+        });
+        await Promise.all(detailPromises);
+
+        setAccommodationNames(newNames);
         setWrittenReviewBookingIds(writtenBookingIds);
       } else {
         // 1. 나에게 달린 리뷰 목록 조회
@@ -136,9 +152,11 @@ const ReviewsPage = () => {
                 {pendingBookings.map(booking => (
                   <li key={`pending-${booking.bookingId}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px', marginBottom: '12px' }}>
                     <div>
-                      <strong>예약 번호: {booking.bookingId}</strong>
+                      <strong style={{ fontSize: '16px' }}>
+                        {accommodationNames[booking.accommodationId] || `숙소 ID: ${booking.accommodationId}`}
+                      </strong>
                       <p style={{ margin: '4px 0 0', color: '#666', fontSize: '14px' }}>
-                        일정: {booking.checkInDate} ~ {booking.checkOutDate}
+                        예약 번호: {booking.bookingId} | 일정: {booking.checkInDate} ~ {booking.checkOutDate}
                       </p>
                     </div>
                     <button
@@ -165,9 +183,11 @@ const ReviewsPage = () => {
                 {writtenBookings.map(booking => (
                   <li key={`written-${booking.bookingId}`} style={{ padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px', marginBottom: '12px', background: '#f9f9f9' }}>
                     <div>
-                      <strong>예약 번호: {booking.bookingId}</strong>
+                      <strong style={{ fontSize: '16px' }}>
+                        {accommodationNames[booking.accommodationId] || `숙소 ID: ${booking.accommodationId}`}
+                      </strong>
                       <p style={{ margin: '4px 0 0', color: '#666', fontSize: '14px' }}>
-                        일정: {booking.checkInDate} ~ {booking.checkOutDate}
+                        예약 번호: {booking.bookingId} | 일정: {booking.checkInDate} ~ {booking.checkOutDate}
                       </p>
                       <span style={{ display: 'inline-block', marginTop: '8px', color: '#388e3c', fontSize: '14px', fontWeight: 'bold' }}>작성 완료</span>
                     </div>
