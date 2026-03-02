@@ -93,9 +93,11 @@ const Container = styled.div`
   max-width: ${({ theme }) => theme.layout.maxWidth};
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg};
+  padding-top: calc(${({ theme }) => theme.layout.headerHeight.default} + ${({ theme }) => theme.spacing.xl});
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.md};
+    padding-top: calc(${({ theme }) => theme.layout.headerHeight.scrolled} + ${({ theme }) => theme.spacing.lg});
   }
 `;
 

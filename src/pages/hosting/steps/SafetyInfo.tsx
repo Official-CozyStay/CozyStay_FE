@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import {
   SafetyContainer,
@@ -62,7 +62,7 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
 
   const handleCheckboxClick = (id: string) => {
     const currentItem = selectedItems[id];
-    
+
     if (currentItem?.checked) {
       // 체크 해제
       onDataChange({
@@ -125,7 +125,7 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
       <NoticeSection>
         <NoticeTitle>중요사항</NoticeTitle>
         <NoticeText>
-          실내 공간을 모니터링하는 보안 카메라는 전원이 꺼져 있어도 허용되지 않습니다. 
+          실내 공간을 모니터링하는 보안 카메라는 전원이 꺼져 있어도 허용되지 않습니다.
           실외 공간을 모니터링하는 보안 카메라는 설치 위치를 모두 공개해야 합니다.
         </NoticeText>
       </NoticeSection>
@@ -139,10 +139,10 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
                 <X size={24} />
               </CloseButton>
             </ModalHeader>
-            
+
             <ModalTitle>{currentModalOption.modalTitle}</ModalTitle>
             <ModalDescription>{currentModalOption.modalDescription}</ModalDescription>
-            
+
             <ModalTextArea
               value={tempDescription}
               onChange={(e) => {
@@ -154,7 +154,7 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
               maxLength={MAX_LENGTH}
             />
             <CharCount>{MAX_LENGTH - tempDescription.length}자 남음</CharCount>
-            
+
             <ModalButton onClick={handleModalSubmit}>
               계속
             </ModalButton>

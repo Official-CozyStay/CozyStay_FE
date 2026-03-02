@@ -62,6 +62,41 @@ export type UserReviewDTO = {
   comment?: CommentDTO | null;
 };
 
+export type BookingResponse = {
+  bookingId: number;
+  accommodationId: number;
+  guestId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: number;
+  totalPrice: number;
+  bookingStatus: string;
+};
+
+export type AccommodationReviewRequest = {
+  bookingId: number;
+  ratingOverall: number;
+  ratingCleanliness: number;
+  ratingAccuracy: number;
+  ratingCheckin: number;
+  ratingCommunication: number;
+  ratingLocation: number;
+  reviewComment: string;
+};
+
+export type AccommodationReviewResponse = {
+  id: number;
+  bookingId: number;
+  ratingOverall: number;
+  ratingCleanliness: number;
+  ratingAccuracy: number;
+  ratingCheckin: number;
+  ratingCommunication: number;
+  ratingLocation: number;
+  reviewComment: string;
+  comment?: CommentDTO | null;
+};
+
 export type PublicUserProfileResponse = {
   id: number;
   nickName: string;

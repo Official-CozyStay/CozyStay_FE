@@ -6,12 +6,15 @@ export const fontSize = {
   lg: "20px",
   xl: "24px",
   xxl: "32px",
+  "2xl": "32px",
+  "3xl": "40px",
   display: "40px",
 };
 
 export const fontWeight = {
   regular: 400,
   medium: 500,
+  semibold: 600,
   bold: 700,
   extrabold: 800,
 };
