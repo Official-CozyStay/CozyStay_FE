@@ -12,8 +12,8 @@ export async function fetchAccommodationReviews(
 ): Promise<AccommodationReviewResponse[]> {
     const response = await client.get<AccommodationReviewResponse[]>(
         `/api/review/accommodation/${accId}`
-    );
-    return response.data;
+    ) as unknown as AccommodationReviewResponse[];
+    return response;
 }
 
 /**
@@ -25,6 +25,6 @@ export async function writeAccommodationReview(
     const response = await client.post<AccommodationReviewResponse>(
         "/api/review/accommodation",
         data
-    );
-    return response.data;
+    ) as unknown as AccommodationReviewResponse;
+    return response;
 }
