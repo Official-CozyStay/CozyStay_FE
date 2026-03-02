@@ -2,6 +2,8 @@ import client from "./client";
 import type {
     AccommodationReviewRequest,
     AccommodationReviewResponse,
+    UserReviewCreateRequest,
+    UserReviewDTO,
 } from "./types";
 
 /**
@@ -26,5 +28,18 @@ export async function writeAccommodationReview(
         "/api/review/accommodation",
         data
     ) as unknown as AccommodationReviewResponse;
+    return response;
+}
+
+/**
+ * 호스트 -> 게스트 리뷰 작성
+ */
+export async function writeUserReview(
+    data: UserReviewCreateRequest
+): Promise<UserReviewDTO> {
+    const response = await client.post<UserReviewDTO>(
+        "/api/review/users",
+        data
+    ) as unknown as UserReviewDTO;
     return response;
 }

@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SimpleHeader from "@/components/SimpleHeader";
 import { useAuth } from "@/contexts/AuthContext";
-import { fetchUserBookings } from "@/api/booking";
-import { fetchAccommodationReviews, writeAccommodationReview } from "@/api/review";
+import { fetchUserBookings, fetchHostBookings } from "@/api/booking";
+import { fetchAccommodationReviews, writeAccommodationReview, writeUserReview } from "@/api/review";
 import { fetchUserReviews } from "@/api/user";
 import { fetchAccommodationDetail } from "@/api/accommodation";
-import type { BookingResponse, AccommodationReviewRequest, UserReviewDTO } from "@/api/types";
+import type { BookingResponse, AccommodationReviewRequest, UserReviewDTO, HostBookingListItemResponse, UserReviewCreateRequest } from "@/api/types";
 import ReviewFormModal from "@/components/reviews/ReviewFormModal";
+import GuestReviewModal from "@/components/reviews/GuestReviewModal";
 import ReviewItem from "@/components/reviews/ReviewItem";
 import {
   PageContainer,
@@ -35,11 +36,15 @@ const ReviewsPage = () => {
   const [bookings, setBookings] = useState<BookingResponse[]>([]);
   const [writtenReviewBookingIds, setWrittenReviewBookingIds] = useState<Set<number>>(new Set());
   const [aboutMeReviews, setAboutMeReviews] = useState<UserReviewDTO[]>([]);
+  const [hostBookings, setHostBookings] = useState<HostBookingListItemResponse[]>([]);
   const [accommodationNames, setAccommodationNames] = useState<Record<number, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const isHost = user?.role === "HOST";
+
   // Modal State
   const [reviewModalTarget, setReviewModalTarget] = useState<number | null>(null);
+  const [guestReviewModalTarget, setGuestReviewModalTarget] = useState<{ bookingId: number, guestId: number } | null>(null);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -84,6 +89,16 @@ const ReviewsPage = () => {
 
         setAccommodationNames(newNames);
         setWrittenReviewBookingIds(writtenBookingIds);
+
+        // 호스트인 경우 게스트 리뷰를 위해 hostBookings 도 추가 로드
+        if (isHost) {
+          try {
+            const hBookings = await fetchHostBookings();
+            setHostBookings(hBookings);
+          } catch (err) {
+            console.error("호스트 예약 정보 로드 실패:", err);
+          }
+        }
       } else {
         // 1. 나에게 달린 리뷰 목록 조회
         const res = await fetchUserReviews(String(user.id));
@@ -101,6 +116,12 @@ const ReviewsPage = () => {
   const handleReviewSubmit = async (data: AccommodationReviewRequest) => {
     await writeAccommodationReview(data);
     // 작성 완료 후 목록 재조회
+    await loadData();
+  };
+
+  const handleGuestReviewSubmit = async (data: UserReviewCreateRequest) => {
+    await writeUserReview(data);
+    alert("게스트에 대한 리뷰 작성이 완료되었습니다.");
     await loadData();
   };
 
@@ -195,6 +216,40 @@ const ReviewsPage = () => {
                 ))}
               </ul>
             )}
+
+            {isHost && (
+              <>
+                <Divider />
+                <SectionTitle>내 숙소 방문 게스트 ({hostBookings.length})</SectionTitle>
+                <SectionDescription>
+                  게스트에 대한 리뷰를 작성해 보세요. 호스트 리뷰는 다른 호스트들에게 큰 도움이 됩니다.
+                </SectionDescription>
+                {hostBookings.length === 0 ? (
+                  <SectionDescription>아직 방문한 게스트가 없습니다.</SectionDescription>
+                ) : (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                    {hostBookings.map(b => (
+                      <li key={`host-booking-${b.bookingId}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', border: '1px dotted #ccc', borderRadius: '8px', marginBottom: '12px' }}>
+                        <div>
+                          <strong style={{ fontSize: '16px', color: '#1a1a1a' }}>숙소: {b.accommodationTitle}</strong>
+                          <p style={{ margin: '4px 0 0', color: '#666', fontSize: '14px' }}>
+                            예약 예약번호: {b.bookingId} | 일정: {b.checkInDate} ~ {b.checkOutDate}
+                          </p>
+                          <p style={{ margin: '2px 0 0', color: '#888', fontSize: '14px' }}>
+                            방문 게스트 ID: {b.guestId} ({b.numberOfGuests}명)
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setGuestReviewModalTarget({ bookingId: b.bookingId, guestId: b.guestId })}
+                          style={{ padding: '8px 16px', height: 'fit-content', cursor: 'pointer', background: '#e0f2f1', color: '#00695c', border: '1px solid #b2dfdb', borderRadius: '4px', fontWeight: 'bold' }}>
+                          게스트 리뷰 작성
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
           </>
         )}
 
@@ -222,6 +277,15 @@ const ReviewsPage = () => {
             bookingId={reviewModalTarget}
             onClose={() => setReviewModalTarget(null)}
             onSubmit={handleReviewSubmit}
+          />
+        )}
+
+        {guestReviewModalTarget !== null && (
+          <GuestReviewModal
+            bookingId={guestReviewModalTarget.bookingId}
+            guestId={guestReviewModalTarget.guestId}
+            onClose={() => setGuestReviewModalTarget(null)}
+            onSubmit={handleGuestReviewSubmit}
           />
         )}
       </ContentWrapper>
