@@ -88,8 +88,8 @@ const ReviewsPage = () => {
     await loadData();
   };
 
-  const pendingBookings = bookings.filter(b => !writtenReviewBookingIds.has(b.bookingId));
-  const writtenBookings = bookings.filter(b => writtenReviewBookingIds.has(b.bookingId));
+  const pendingBookings = (bookings || []).filter(b => !writtenReviewBookingIds.has(b.bookingId));
+  const writtenBookings = (bookings || []).filter(b => writtenReviewBookingIds.has(b.bookingId));
 
 
   return (
