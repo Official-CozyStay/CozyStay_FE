@@ -57,8 +57,11 @@ export type HostelReviewDTO = {
 };
 
 export type UserReviewDTO = {
+  id?: number;
   targetGuestId: number;
   bookingId: number;
+  userNickName?: string;
+  userProfileImageUrl?: string | null;
   rating: number;
   reviewComment: string;
   comment?: CommentDTO | null;

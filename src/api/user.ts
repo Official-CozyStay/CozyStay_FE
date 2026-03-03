@@ -45,11 +45,11 @@ export async function fetchUserReviews(
         return {
             summary: { average, count },
             reviews: reviews.map((r) => ({
-                reviewId: r.bookingId, // 백엔드 리뷰 DTO에 별도 ID가 없어 우선 bookingId 사용
+                reviewId: r.id || r.bookingId, // 백엔드 리뷰 DTO에 별도 ID가 없어 우선 bookingId 사용
                 author: {
                     userId: 0,
-                    nickName: "시스템",
-                    profileImageUrl: null,
+                    nickName: r.userNickName || "익명 사용자",
+                    profileImageUrl: r.userProfileImageUrl || null,
                 },
                 rating: r.rating,
                 content: r.reviewComment,
