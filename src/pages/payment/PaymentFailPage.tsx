@@ -6,7 +6,6 @@ export default function PaymentFailPage() {
     const [sp] = useSearchParams();
 
     const bookingId = sp.get("bookingId");
-    const paymentId = sp.get("paymentId");
 
     const canRetry = useMemo(() => {
         return !!bookingId;
@@ -30,22 +29,6 @@ export default function PaymentFailPage() {
                 <br />
                 다시 시도하거나, 문제가 계속되면 잠시 후 재시도해주세요.
             </p>
-
-            <div
-                style={{
-                    marginTop: 20,
-                    padding: 16,
-                    border: "1px solid #ddd",
-                    borderRadius: 12,
-                }}
-            >
-                <div style={{ marginBottom: 8 }}>
-                    <strong>bookingId:</strong> {bookingId ?? "-"}
-                </div>
-                <div>
-                    <strong>paymentId:</strong> {paymentId ?? "-"}
-                </div>
-            </div>
 
             <div style={{ display: "flex", gap: 12, marginTop: 20, flexWrap: "wrap" }}>
                 {/* 결제 재시도: 다시 PaymentPage로 */}
