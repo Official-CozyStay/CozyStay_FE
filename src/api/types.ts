@@ -85,6 +85,8 @@ export type AccommodationDetailInfoDTO = {
 export type AccommodationDetailDTO = {
   accommodationId: number;
   hostId: number;
+  hostNickname: string;
+  hostProfileImageUrl?: string | null;
   title: string;
   description: string;
   accommodationType: AccommodationType;

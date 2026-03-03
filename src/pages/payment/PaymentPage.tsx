@@ -181,7 +181,7 @@ export default function PaymentPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <PaymentMethodSection value={paymentMethod} onChange={setPaymentMethod} />
 
-                <HostMessageSection value={hostMessage} onChange={setHostMessage} hostName="현진" />
+                <HostMessageSection value={hostMessage} onChange={setHostMessage} hostName={detail.hostNickname ?? "호스트"} />
 
                 {submitError && (
                     <div
