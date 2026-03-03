@@ -113,10 +113,10 @@ export default function AccommodationDetailPage() {
   const handleGoToPayment = () => {
     const params = new URLSearchParams();
 
-    if(checkIn) params.set("checkin:", checkIn);
+    if(checkIn) params.set("checkin", checkIn);
     if(checkOut) params.set("checkout", checkOut);
 
-    params.set("numberOfGuest", String(guests));
+    params.set("numberOfGuests", String(guests));
     params.set("guestCurrency", "KRW");
 
     navigate(`/payment/${id}?${params.toString()}`);
