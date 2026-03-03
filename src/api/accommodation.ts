@@ -41,6 +41,8 @@ export async function fetchAccommodationReviews(
   const MOCK_REVIEWS: HostelReviewDTO[] = Array.from({ length: 3 }).map((_, i) => ({
     id: 100 + i,
     bookingId: 200 + i,
+    userNickName: `더미 유저 ${i + 1}`,
+    userProfileImageUrl: `https://i.pravatar.cc/150?u=${100 + i}`,
     ratingOverall: 4.5 + (i * 0.1),
     ratingCleanliness: 5,
     ratingAccuracy: 4,
@@ -108,8 +110,8 @@ export async function fetchAccommodationReviews(
       reviewId: r.id,
       author: {
         userId: 0,
-        nickName: `게스트 ${r.id}`,
-        profileImageUrl: `https://i.pravatar.cc/150?u=${r.id}`,
+        nickName: r.userNickName || `게스트 ${r.id}`,
+        profileImageUrl: r.userProfileImageUrl || `https://i.pravatar.cc/150?u=${r.id}`,
       },
       rating: Number(r.ratingOverall),
       content: r.reviewComment,

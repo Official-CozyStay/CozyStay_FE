@@ -44,6 +44,8 @@ export type CommentDTO = {
 export type HostelReviewDTO = {
   id: number;
   bookingId: number;
+  userNickName: string;
+  userProfileImageUrl: string | null;
   ratingOverall: number;
   ratingCleanliness: number;
   ratingAccuracy: number;
