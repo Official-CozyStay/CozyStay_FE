@@ -6,13 +6,13 @@ import { useAccommodationStore } from "@/store/accommodationStore.ts";
 import { nightsBetween, calcTotal } from "../../utils/price";
 
 import BookingSummaryCard from "./components/BookngSummaryCard";
-import PaymentMethodSection, { type UiPaymentMethod,} from "./components/PaymentMethodSection";
+import PaymentMethodSection, { type UiPaymentMethod, } from "./components/PaymentMethodSection";
 
 import HostMessageSection from "./components/HostMessageSection";
 import RequestConfirmSection from "./components/RequestConfirmSection";
 
 import { createBooking } from "@/api/booking";
-import { createPayment, confirmPayment, type PaymentMethod as ApiPaymentMethod,} from "@/api/payment";
+import { createPayment, confirmPayment, failPayment, type PaymentMethod as ApiPaymentMethod, } from "@/api/payment";
 
 export default function PaymentPage() {
     const { id } = useParams<{ id: string }>();
@@ -21,8 +21,7 @@ export default function PaymentPage() {
     const { detail, loading, error, load } = useAccommodationStore();
 
     /** 결제수단 */
-    const [paymentMethod, setPaymentMethod] =
-        useState<UiPaymentMethod>("CARD");
+    const [paymentMethod, setPaymentMethod] = useState<UiPaymentMethod>("CARD");
 
     const [hostMessage, setHostMessage] = useState("");
     const [submitting, setSubmitting] = useState(false);
@@ -32,9 +31,7 @@ export default function PaymentPage() {
     const checkOut = searchParams.get("checkout");
     const guests = Number(searchParams.get("numberOfGuests") ?? 1);
 
-    useEffect(() => {
-        if (id) load(id);
-    }, [id, load]);
+    useEffect(() => { if (id) load(id); }, [id, load]);
 
     const nights = nightsBetween(checkIn ?? undefined, checkOut ?? undefined);
 
@@ -64,9 +61,7 @@ export default function PaymentPage() {
         !submitting;
 
     /** UI → 서버 PaymentMethod 매핑 */
-    const toApiPaymentMethod = (
-        m: UiPaymentMethod
-    ): ApiPaymentMethod => {
+    const toApiPaymentMethod = (m: UiPaymentMethod): ApiPaymentMethod => {
         if (m === "CARD") return "CARD";
         // NAVERPAY / KAKAOPAY는 서버에서는 EASY_PAY
         return "EASY_PAY";
@@ -76,11 +71,14 @@ export default function PaymentPage() {
     const handleSubmit = async () => {
         if (!canSubmit) return;
 
+        let bookingIdForNav: number | null = null;
+        let paymentIdForNav: number | null = null;
+
         try {
             setSubmitting(true);
             setSubmitError(null);
 
-            // 예약 생성
+            // 1) 예약 생성
             const booking = await createBooking({
                 accommodationId: Number(id),
                 checkInDate: checkIn!,
@@ -88,25 +86,48 @@ export default function PaymentPage() {
                 numberOfGuests: guests,
             });
 
-            // 결제 생성
+            bookingIdForNav = booking.bookingId;
+
+            // 2) 결제 생성
             const payment = await createPayment({
                 bookingId: booking.bookingId,
                 paymentMethod: toApiPaymentMethod(paymentMethod),
             });
 
-            // 결제 confirm (PG 연동 전이라 임시 키 생성)
+            paymentIdForNav = payment.paymentId;
+
+            // 3) 결제 confirm (PG 연동 전이라 임시 키 생성)
             const mockPaymentKey = `MOCK_${payment.paymentId}_${Date.now()}`;
 
-            const confirmed = await confirmPayment(payment.paymentId, {paymentKey: mockPaymentKey,});
+            try {
+                const confirmed = await confirmPayment(payment.paymentId, {
+                    paymentKey: mockPaymentKey,
+                });
 
-            console.log("booking: ", booking);
-            console.log("payment(created): ", payment);
-            console.log("payment(confirmed): ", confirmed);
+                console.log("booking: ", booking);
+                console.log("payment(created): ", payment);
+                console.log("payment(confirmed): ", confirmed);
 
-            // 결제 성공 페이지로 이동
-            navigate(`/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`);
+                // 결제 성공 페이지로 이동
+                navigate(
+                    `/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`
+                );
+            } catch {
+                // confirm 실패 → failPayment 호출(백엔드 상태 FAIL로)
+                try {
+                    await failPayment(payment.paymentId);
+                } catch (failErr) {
+                    // failPayment도 실패할 수 있으니 로그 남김
+                    console.error("failPayment 호출 실패:", failErr);
+                }
 
+                // 실패 페이지로 이동
+                navigate(
+                    `/payment/fail?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`
+                );
+            }
         } catch (e: unknown) {
+            // createBooking / createPayment 단계에서의 에러
             if (axios.isAxiosError<{ message?: string }>(e)) {
                 const status = e.response?.status;
                 const msg =
@@ -118,6 +139,14 @@ export default function PaymentPage() {
                 setSubmitError("알 수 없는 오류가 발생했습니다.");
             }
             console.error(e);
+
+            // 여기서도 paymentId가 있으면 fail 처리하고 fail 페이지로 보낼 수 있음
+            // (지금은 createPayment 전에 실패하면 paymentId가 없을 수 있어서 기본은 에러 표시만)
+            if (bookingIdForNav && paymentIdForNav) {
+                navigate(
+                    `/payment/fail?bookingId=${bookingIdForNav}&paymentId=${paymentIdForNav}`
+                );
+            }
         } finally {
             setSubmitting(false);
         }
@@ -150,16 +179,9 @@ export default function PaymentPage() {
 
             {/* 오른쪽: 결제 영역 */}
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <PaymentMethodSection
-                    value={paymentMethod}
-                    onChange={setPaymentMethod}
-                />
+                <PaymentMethodSection value={paymentMethod} onChange={setPaymentMethod} />
 
-                <HostMessageSection
-                    value={hostMessage}
-                    onChange={setHostMessage}
-                    hostName="현진"
-                />
+                <HostMessageSection value={hostMessage} onChange={setHostMessage} hostName="현진" />
 
                 {submitError && (
                     <div
@@ -176,10 +198,7 @@ export default function PaymentPage() {
                     </div>
                 )}
 
-                <RequestConfirmSection
-                    disabled={!canSubmit}
-                    onSubmit={handleSubmit}
-                />
+                <RequestConfirmSection disabled={!canSubmit} onSubmit={handleSubmit} />
             </div>
         </div>
     );

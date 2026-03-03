@@ -13,6 +13,7 @@ import ReviewsPage from "../pages/profile/reviews/ReviewsPage";
 import UserPage from "../pages/user/UserPage";
 import PaymentPage from "../pages/payment/PaymentPage";
 import PaymentSuccessPage from "../pages/payment/PaymentSuccessPage.tsx";
+import PaymentFailPage from "../pages/payment/PaymentFailPage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       { path: "accommodation/:id", element: <AccommodationDetailPage /> },
       { path: "payment/:id", element: <PaymentPage/>},
       { path: "payment/success", element: <PaymentSuccessPage/>},
+      { path: "payment/fail", element: <PaymentFailPage/>},
       { path: "search", element: <SearchPage /> },
     ],
   },

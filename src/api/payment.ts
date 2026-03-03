@@ -38,3 +38,8 @@ export async function confirmPayment(paymentId: number, req: PaymentConfirmReque
     const res = await axios.post<PaymentResponse>(`/api/payments/${paymentId}/confirm`, req);
     return res.data;
 }
+
+export async function failPayment(paymentId: number){
+    const res = await axios.post<PaymentResponse>(`/api/payments/${paymentId}/fail`);
+    return res.data;
+}
