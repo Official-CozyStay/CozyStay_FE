@@ -54,7 +54,7 @@ export async function fetchAccommodationReviews(
   try {
     // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
     const reviews = await client.get<HostelReviewDTO[]>(
-      `/api/review/hostel/${safeAccId}`
+      `/api/review/accommodation/${safeAccId}`
     ) as unknown as HostelReviewDTO[];
 
     if (Array.isArray(reviews)) {
