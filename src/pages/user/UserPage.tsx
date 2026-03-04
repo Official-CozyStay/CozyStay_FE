@@ -129,7 +129,7 @@ const Section = styled.div`
 `;
 
 const H1 = styled.h1`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   margin: 0 0 ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.text.primary};

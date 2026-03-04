@@ -15,7 +15,7 @@ export const HeaderSection = styled.div`
 `;
 
 export const Title = styled.h2`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   margin-bottom: ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.text.primary};

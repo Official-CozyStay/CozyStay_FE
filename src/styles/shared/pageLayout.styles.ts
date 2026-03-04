@@ -124,7 +124,7 @@ export const BaseSidebar = styled.aside`
 
 // 사이드바 제목
 export const SidebarTitle = styled.h2`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
@@ -173,7 +173,7 @@ export const BaseMainContent = styled.main`
 
 // 콘텐츠 제목
 export const ContentTitle = styled.h1`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
@@ -192,7 +192,7 @@ export const ToggleSwitch = styled.button<{ $active?: boolean }>`
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid
     ${({ $active, theme }) =>
-      $active ? theme.colors.common.black : theme.colors.border.primary};
+    $active ? theme.colors.common.black : theme.colors.border.primary};
   background: ${({ $active, theme }) =>
     $active ? theme.colors.common.black : theme.colors.common.white};
   cursor: pointer;
@@ -209,7 +209,7 @@ export const ToggleSwitch = styled.button<{ $active?: boolean }>`
     height: 22px;
     border-radius: ${({ theme }) => theme.radius.full};
     background: ${({ $active, theme }) =>
-      $active ? theme.colors.common.white : theme.colors.border.primary};
+    $active ? theme.colors.common.white : theme.colors.border.primary};
     transition: ${({ theme }) => theme.transition.normal};
   }
 `;

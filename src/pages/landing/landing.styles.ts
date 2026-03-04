@@ -51,7 +51,7 @@ export const HeroCard = styled.div`
 `;
 
 export const HeroTitle = styled.h1`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   line-height: ${({ theme }) => theme.font.lineHeight.tight};
   margin: 0 0 ${({ theme }) => theme.spacing.sm};
   font-weight: ${({ theme }) => theme.font.weight.extrabold};
