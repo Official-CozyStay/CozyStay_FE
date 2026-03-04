@@ -23,6 +23,16 @@ import {
   SectionTitle,
   SectionDescription,
   Divider,
+  ReviewList,
+  ReviewListItem,
+  HostReviewListItem,
+  BookingTitle,
+  BookingDetails,
+  GuestDetails,
+  ActionButton,
+  HostActionButton,
+  StatusText,
+  ReviewItemContainer,
 } from "./reviews.styles";
 
 type TabKey = "about-me" | "by-me";
@@ -168,25 +178,24 @@ const ReviewsPage = () => {
                 현재 작성할 후기가 없습니다. 여행을 한번 다녀올 때가 된 것 같네요!
               </SectionDescription>
             ) : (
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <ReviewList>
                 {pendingBookings.map(booking => (
-                  <li key={`pending-${booking.bookingId}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px', marginBottom: '12px' }}>
+                  <ReviewListItem key={`pending-${booking.bookingId}`}>
                     <div>
-                      <strong style={{ fontSize: '16px' }}>
+                      <BookingTitle>
                         {accommodationNames[booking.accommodationId] || `숙소 ID: ${booking.accommodationId}`}
-                      </strong>
-                      <p style={{ margin: '4px 0 0', color: '#666', fontSize: '14px' }}>
+                      </BookingTitle>
+                      <BookingDetails>
                         예약 번호: {booking.bookingId} | 일정: {booking.checkInDate} ~ {booking.checkOutDate}
-                      </p>
+                      </BookingDetails>
                     </div>
-                    <button
-                      onClick={() => setReviewModalTarget(booking.bookingId)}
-                      style={{ padding: '8px 16px', cursor: 'pointer', background: '#345342', color: 'white', border: 'none', borderRadius: '4px' }}>
+                    <ActionButton
+                      onClick={() => setReviewModalTarget(booking.bookingId)}>
                       후기 작성
-                    </button>
-                  </li>
+                    </ActionButton>
+                  </ReviewListItem>
                 ))}
-              </ul>
+              </ReviewList>
             )}
 
             <Divider />
@@ -199,21 +208,21 @@ const ReviewsPage = () => {
                 아직 후기를 남기지 않으셨습니다.
               </SectionDescription>
             ) : (
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <ReviewList>
                 {writtenBookings.map(booking => (
-                  <li key={`written-${booking.bookingId}`} style={{ padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px', marginBottom: '12px', background: '#f9f9f9' }}>
+                  <ReviewListItem key={`written-${booking.bookingId}`} $isWritten>
                     <div>
-                      <strong style={{ fontSize: '16px' }}>
+                      <BookingTitle>
                         {accommodationNames[booking.accommodationId] || `숙소 ID: ${booking.accommodationId}`}
-                      </strong>
-                      <p style={{ margin: '4px 0 0', color: '#666', fontSize: '14px' }}>
+                      </BookingTitle>
+                      <BookingDetails>
                         예약 번호: {booking.bookingId} | 일정: {booking.checkInDate} ~ {booking.checkOutDate}
-                      </p>
-                      <span style={{ display: 'inline-block', marginTop: '8px', color: '#388e3c', fontSize: '14px', fontWeight: 'bold' }}>작성 완료</span>
+                      </BookingDetails>
+                      <StatusText>작성 완료</StatusText>
                     </div>
-                  </li>
+                  </ReviewListItem>
                 ))}
-              </ul>
+              </ReviewList>
             )}
 
             {isHost && (
@@ -226,26 +235,25 @@ const ReviewsPage = () => {
                 {hostBookings.length === 0 ? (
                   <SectionDescription>아직 방문한 게스트가 없습니다.</SectionDescription>
                 ) : (
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  <ReviewList>
                     {hostBookings.map(b => (
-                      <li key={`host-booking-${b.bookingId}`} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px', border: '1px dotted #ccc', borderRadius: '8px', marginBottom: '12px' }}>
+                      <HostReviewListItem key={`host-booking-${b.bookingId}`}>
                         <div>
-                          <strong style={{ fontSize: '16px', color: '#1a1a1a' }}>숙소: {b.accommodationTitle}</strong>
-                          <p style={{ margin: '4px 0 0', color: '#666', fontSize: '14px' }}>
-                            예약 예약번호: {b.bookingId} | 일정: {b.checkInDate} ~ {b.checkOutDate}
-                          </p>
-                          <p style={{ margin: '2px 0 0', color: '#888', fontSize: '14px' }}>
+                          <BookingTitle>숙소: {b.accommodationTitle}</BookingTitle>
+                          <BookingDetails>
+                            예약번호: {b.bookingId} | 일정: {b.checkInDate} ~ {b.checkOutDate}
+                          </BookingDetails>
+                          <GuestDetails>
                             방문 게스트 ID: {b.guestId} ({b.numberOfGuests}명)
-                          </p>
+                          </GuestDetails>
                         </div>
-                        <button
-                          onClick={() => setGuestReviewModalTarget({ bookingId: b.bookingId, guestId: b.guestId })}
-                          style={{ padding: '8px 16px', height: 'fit-content', cursor: 'pointer', background: '#e0f2f1', color: '#00695c', border: '1px solid #b2dfdb', borderRadius: '4px', fontWeight: 'bold' }}>
+                        <HostActionButton
+                          onClick={() => setGuestReviewModalTarget({ bookingId: b.bookingId, guestId: b.guestId })}>
                           게스트 리뷰 작성
-                        </button>
-                      </li>
+                        </HostActionButton>
+                      </HostReviewListItem>
                     ))}
-                  </ul>
+                  </ReviewList>
                 )}
               </>
             )}
@@ -262,11 +270,11 @@ const ReviewsPage = () => {
                 아직 받은 후기가 없습니다.
               </SectionDescription>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '16px' }}>
+              <ReviewItemContainer>
                 {aboutMeReviews.map((review, idx) => (
                   <ReviewItem key={idx} review={review} />
                 ))}
-              </div>
+              </ReviewItemContainer>
             )}
           </>
         )}

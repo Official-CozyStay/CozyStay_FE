@@ -81,7 +81,7 @@ export const Tab = styled.button<{ $active?: boolean }>`
     right: 0;
     height: 2px;
     background: ${({ theme, $active }) =>
-      $active ? theme.colors.text.primary : "transparent"};
+    $active ? theme.colors.text.primary : "transparent"};
   }
 
   &:hover {
@@ -107,4 +107,91 @@ export const Divider = styled.hr`
   border: none;
   border-top: 1px solid ${({ theme }) => theme.colors.border.light};
   margin: ${({ theme }) => `${theme.spacing["2xl"]} 0`};
+`;
+
+export const ReviewList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+export const ReviewListItem = styled.li<{ $isWritten?: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.spacing.lg};
+  border: 1px solid ${({ theme }) => theme.colors.border.light};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme, $isWritten }) =>
+    $isWritten ? theme.colors.background.default : theme.colors.common.white};
+`;
+
+export const HostReviewListItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.spacing.lg};
+  border: 1px dotted ${({ theme }) => theme.colors.border.primary};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+export const BookingTitle = styled.strong`
+  font-size: ${({ theme }) => theme.font.size.md};
+  color: ${({ theme }) => theme.colors.text.primary};
+`;
+
+export const BookingDetails = styled.p`
+  margin: ${({ theme }) => `${theme.spacing.xs} 0 0`};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.font.size.sm};
+`;
+
+export const GuestDetails = styled.p`
+  margin: ${({ theme }) => `${theme.spacing.xs} 0 0`};
+  color: ${({ theme }) => theme.colors.text.tertiary};
+  font-size: ${({ theme }) => theme.font.size.sm};
+`;
+
+export const ActionButton = styled.button`
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
+  cursor: pointer;
+  background: ${({ theme }) => theme.colors.primary.main};
+  color: ${({ theme }) => theme.colors.common.white};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.xs};
+  height: fit-content;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary.hover};
+  }
+`;
+
+export const HostActionButton = styled.button`
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
+  cursor: pointer;
+  background: ${({ theme }) => theme.colors.primary.light};
+  color: ${({ theme }) => theme.colors.primary.main};
+  border: 1px solid ${({ theme }) => theme.colors.primary.main};
+  border-radius: ${({ theme }) => theme.radius.xs};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  height: fit-content;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+export const StatusText = styled.span`
+  display: inline-block;
+  margin-top: ${({ theme }) => theme.spacing.sm};
+  color: ${({ theme }) => theme.colors.status.success};
+  font-size: ${({ theme }) => theme.font.size.sm};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+`;
+
+export const ReviewItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xl};
+  margin-top: ${({ theme }) => theme.spacing.lg};
 `;
