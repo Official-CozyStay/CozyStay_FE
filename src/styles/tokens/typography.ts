@@ -5,7 +5,6 @@ export const fontSize = {
   md: "16px",
   lg: "20px",
   xl: "24px",
-  xxl: "32px",
   "2xl": "32px",
   "3xl": "40px",
   display: "40px",
