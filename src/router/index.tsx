@@ -21,6 +21,11 @@ export const router = createBrowserRouter([
       { path: "landing", element: <LandingPage /> },
       { path: "accommodation/:id", element: <AccommodationDetailPage /> },
       { path: "search", element: <SearchPage /> },
+      { path: "account", element: <AccountPage /> },
+      { path: "profile", element: <ProfilePage /> },
+      { path: "profile/edit", element: <ProfileEditPage /> },
+      { path: "profile/reviews", element: <ReviewsPage /> },
+      { path: "users/:id", element: <UserPage /> },
     ],
   },
   {
@@ -30,26 +35,6 @@ export const router = createBrowserRouter([
   {
     path: "/hosting/become-a-host",
     element: <BecomeHostPage />,
-  },
-  {
-    path: "/account",
-    element: <AccountPage />,
-  },
-  {
-    path: "/profile",
-    element: <ProfilePage />,
-  },
-  {
-    path: "/profile/edit",
-    element: <ProfileEditPage />,
-  },
-  {
-    path: "/profile/reviews",
-    element: <ReviewsPage />,
-  },
-  {
-    path: "/users/:id",
-    element: <UserPage />,
   },
 ]);
 
