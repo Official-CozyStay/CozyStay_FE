@@ -6,7 +6,7 @@ import { fetchUserBookings, fetchHostBookings } from "@/api/booking";
 import { fetchAccommodationReviews, writeAccommodationReview, writeUserReview } from "@/api/review";
 import { fetchUserReviews } from "@/api/user";
 import { fetchAccommodationDetail } from "@/api/accommodation";
-import type { BookingResponse, AccommodationReviewRequest, UserReviewDTO, HostBookingListItemResponse, UserReviewCreateRequest } from "@/api/types";
+import type { BookingResponse, AccommodationReviewRequest, ReviewDTO, HostBookingListItemResponse, UserReviewCreateRequest } from "@/api/types";
 import ReviewFormModal from "@/components/reviews/ReviewFormModal";
 import GuestReviewModal from "@/components/reviews/GuestReviewModal";
 import ReviewItem from "@/components/reviews/ReviewItem";
@@ -35,7 +35,7 @@ const ReviewsPage = () => {
   // Data States
   const [bookings, setBookings] = useState<BookingResponse[]>([]);
   const [writtenReviewBookingIds, setWrittenReviewBookingIds] = useState<Set<number>>(new Set());
-  const [aboutMeReviews, setAboutMeReviews] = useState<UserReviewDTO[]>([]);
+  const [aboutMeReviews, setAboutMeReviews] = useState<ReviewDTO[]>([]);
   const [hostBookings, setHostBookings] = useState<HostBookingListItemResponse[]>([]);
   const [accommodationNames, setAccommodationNames] = useState<Record<number, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -103,8 +103,7 @@ const ReviewsPage = () => {
         // 1. 나에게 달린 리뷰 목록 조회
         const res = await fetchUserReviews(String(user.id));
         // res.reviews 에 UserReviewDTO를 ReviewDTO로 매핑한 값이 들어있음
-        // 여기서는 임시 렌더링을 위해 간단히 타입 무시 캐스팅 후 저장
-        setAboutMeReviews(res.reviews as any);
+        setAboutMeReviews(res.reviews);
       }
     } catch (error) {
       console.error("데이터 로드 중 오류:", error);
@@ -265,7 +264,7 @@ const ReviewsPage = () => {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '16px' }}>
                 {aboutMeReviews.map((review, idx) => (
-                  <ReviewItem key={idx} review={review as any} />
+                  <ReviewItem key={idx} review={review} />
                 ))}
               </div>
             )}
