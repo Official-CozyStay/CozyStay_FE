@@ -15,9 +15,9 @@ export async function fetchUserProfile(
         throw new Error(`Invalid userId format: ${userId}`);
     }
 
-    const response = await client.get<ApiResponse<PublicUserProfileResponse>>(
+    const response = await client.get(
         `/api/users/${userId}/public-profile`
-    ) as unknown as ApiResponse<PublicUserProfileResponse>;
+    ) as ApiResponse<PublicUserProfileResponse>;
     return response.data;
 }
 
@@ -34,9 +34,9 @@ export async function fetchUserReviews(
     }
 
     try {
-        const reviews = await client.get<UserReviewDTO[]>(
+        const reviews = await client.get(
             `/api/review/users/${userId}`
-        ) as unknown as UserReviewDTO[];
+        ) as UserReviewDTO[];
 
         const count = reviews.length;
         const average =

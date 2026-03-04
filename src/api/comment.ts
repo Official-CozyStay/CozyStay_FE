@@ -10,9 +10,9 @@ export async function fetchComment(commentId: number): Promise<CommentDTO | null
     }
 
     try {
-        const response = await client.get<ApiResponse<CommentDTO>>(
+        const response = await client.get(
             `/api/comments/${commentId}`
-        ) as unknown as ApiResponse<CommentDTO>;
+        ) as ApiResponse<CommentDTO>;
         return response.data;
     } catch (error) {
         console.error(`Failed to fetch comment ${commentId}`, error);

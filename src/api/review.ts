@@ -12,9 +12,9 @@ import type {
 export async function fetchAccommodationReviews(
     accId: number
 ): Promise<AccommodationReviewResponse[]> {
-    const response = await client.get<AccommodationReviewResponse[]>(
+    const response = await client.get(
         `/api/review/accommodation/${accId}`
-    ) as unknown as AccommodationReviewResponse[];
+    ) as AccommodationReviewResponse[];
     return response;
 }
 
@@ -24,10 +24,10 @@ export async function fetchAccommodationReviews(
 export async function writeAccommodationReview(
     data: AccommodationReviewRequest
 ): Promise<AccommodationReviewResponse> {
-    const response = await client.post<AccommodationReviewResponse>(
+    const response = await client.post(
         "/api/review/accommodation",
         data
-    ) as unknown as AccommodationReviewResponse;
+    ) as AccommodationReviewResponse;
     return response;
 }
 
@@ -37,9 +37,9 @@ export async function writeAccommodationReview(
 export async function writeUserReview(
     data: UserReviewCreateRequest
 ): Promise<UserReviewDTO> {
-    const response = await client.post<UserReviewDTO>(
+    const response = await client.post(
         "/api/review/users",
         data
-    ) as unknown as UserReviewDTO;
+    ) as UserReviewDTO;
     return response;
 }

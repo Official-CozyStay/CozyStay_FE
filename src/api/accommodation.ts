@@ -15,9 +15,9 @@ export async function fetchAccommodationDetail(
     throw new Error(`Invalid id format: ${id}`);
   }
 
-  const data = await client.get<AccommodationDetailDTO>(
+  const data = await client.get(
     `/api/accommodations/${encodeURIComponent(id)}`
-  ) as unknown as AccommodationDetailDTO;
+  ) as AccommodationDetailDTO;
   return data;
 }
 
@@ -55,9 +55,9 @@ export async function fetchAccommodationReviews(
 
   try {
     // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
-    const reviews = await client.get<HostelReviewDTO[]>(
+    const reviews = await client.get(
       `/api/review/accommodation/${safeAccId}`
-    ) as unknown as HostelReviewDTO[];
+    ) as HostelReviewDTO[];
 
     if (Array.isArray(reviews)) {
       reviewsToUse = reviews;
