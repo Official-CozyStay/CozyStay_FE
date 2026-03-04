@@ -12,23 +12,24 @@ import {
 import { Home, DoorOpen, Users } from 'lucide-react';
 import type { StepProps } from '../BecomeHostPage';
 
+// 백엔드 API accommodationType 값에 맞춤
 const types = [
   {
-    id: 'entire',
+    id: 'entire_place',
     label: '공간 전체',
     description: '게스트가 숙소 전체를 단독으로 사용합니다.',
     icon: <Home size={32} />,
   },
   {
-    id: 'room',
-    label: '방',
+    id: 'private_room',
+    label: '개인실',
     description: '단독으로 사용하는 개인실이 있고, 공용 공간도 있는 형태입니다.',
     icon: <DoorOpen size={32} />,
   },
   {
-    id: 'hostel',
-    label: '호스텔 내 다인실',
-    description: '게스트는 연중무휴 직원이 상주하는 전문 숙박시설인 호스텔 내부 다인실에서 머무릅니다.',
+    id: 'shared_room',
+    label: '다인실',
+    description: '게스트가 다른 사람과 함께 사용하는 공용 공간에서 머무릅니다.',
     icon: <Users size={32} />,
   },
 ];
@@ -36,8 +37,8 @@ const types = [
 const SpaceType = ({ data, onDataChange }: StepProps) => {
   const selected = data.spaceType || null;
 
-  const handleSelect = (spaceTypeLabel: string) => {
-    onDataChange({ spaceType: spaceTypeLabel });
+  const handleSelect = (spaceTypeId: string) => {
+    onDataChange({ spaceType: spaceTypeId });
   };
 
   return (
@@ -47,8 +48,8 @@ const SpaceType = ({ data, onDataChange }: StepProps) => {
         {types.map((type) => (
           <TypeItem
             key={type.id}
-            $selected={selected === type.label}
-            onClick={() => handleSelect(type.label)}
+            $selected={selected === type.id}
+            onClick={() => handleSelect(type.id)}
           >
             <TextContent>
               <Label>{type.label}</Label>
