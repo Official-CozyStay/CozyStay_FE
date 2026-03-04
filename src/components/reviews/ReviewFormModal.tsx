@@ -1,181 +1,181 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Star } from "lucide-react";
-import type { AccommodationReviewRequest } from "../../api/types";
+import type { AccommodationReviewRequest } from "@/api/types";
 
 interface ReviewFormModalProps {
-    bookingId: number;
-    onClose: () => void;
-    onSubmit: (data: AccommodationReviewRequest) => Promise<void>;
+  bookingId: number;
+  onClose: () => void;
+  onSubmit: (data: AccommodationReviewRequest) => Promise<void>;
 }
 
 const RATING_CATEGORIES = [
-    { id: "cleanliness", label: "청결도" },
-    { id: "accuracy", label: "정확성" },
-    { id: "checkin", label: "체크인" },
-    { id: "communication", label: "의사소통" },
-    { id: "location", label: "위치" },
+  { id: "cleanliness", label: "청결도" },
+  { id: "accuracy", label: "정확성" },
+  { id: "checkin", label: "체크인" },
+  { id: "communication", label: "의사소통" },
+  { id: "location", label: "위치" },
 ] as const;
 
 type RatingState = {
-    overall: number;
-    cleanliness: number;
-    accuracy: number;
-    checkin: number;
-    communication: number;
-    location: number;
+  overall: number;
+  cleanliness: number;
+  accuracy: number;
+  checkin: number;
+  communication: number;
+  location: number;
 };
 
 export default function ReviewFormModal({
-    bookingId,
-    onClose,
-    onSubmit,
+  bookingId,
+  onClose,
+  onSubmit,
 }: ReviewFormModalProps) {
-    const [ratings, setRatings] = useState<RatingState>({
-        overall: 0,
-        cleanliness: 0,
-        accuracy: 0,
-        checkin: 0,
-        communication: 0,
-        location: 0,
-    });
-    const [comment, setComment] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [ratings, setRatings] = useState<RatingState>({
+    overall: 0,
+    cleanliness: 0,
+    accuracy: 0,
+    checkin: 0,
+    communication: 0,
+    location: 0,
+  });
+  const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleRatingChange = (key: keyof RatingState, value: number) => {
-        setRatings((prev) => ({ ...prev, [key]: value }));
-    };
+  const handleRatingChange = (key: keyof RatingState, value: number) => {
+    setRatings((prev) => ({ ...prev, [key]: value }));
+  };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        // 간단한 유효성 검사
-        if (Object.values(ratings).some((val) => val === 0)) {
-            alert("모든 항목에 별점을 입력해주세요.");
-            return;
-        }
-        if (comment.trim().length < 10) {
-            alert("리뷰 내용을 10자 이상 작성해주세요.");
-            return;
-        }
+    // 간단한 유효성 검사
+    if (Object.values(ratings).some((val) => val === 0)) {
+      alert("모든 항목에 별점을 입력해주세요.");
+      return;
+    }
+    if (comment.trim().length < 10) {
+      alert("리뷰 내용을 10자 이상 작성해주세요.");
+      return;
+    }
 
-        try {
-            setIsSubmitting(true);
-            await onSubmit({
-                bookingId,
-                ratingOverall: ratings.overall,
-                ratingCleanliness: ratings.cleanliness,
-                ratingAccuracy: ratings.accuracy,
-                ratingCheckin: ratings.checkin,
-                ratingCommunication: ratings.communication,
-                ratingLocation: ratings.location,
-                reviewComment: comment,
-            });
-            onClose();
-        } catch (error) {
-            console.error("리뷰 제출 실패:", error);
-            alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    try {
+      setIsSubmitting(true);
+      await onSubmit({
+        bookingId,
+        ratingOverall: ratings.overall,
+        ratingCleanliness: ratings.cleanliness,
+        ratingAccuracy: ratings.accuracy,
+        ratingCheckin: ratings.checkin,
+        ratingCommunication: ratings.communication,
+        ratingLocation: ratings.location,
+        reviewComment: comment,
+      });
+      onClose();
+    } catch (error) {
+      console.error("리뷰 제출 실패:", error);
+      alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-    // 배경 클릭 시 닫기
-    const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.target === e.currentTarget) {
-            onClose();
-        }
-    };
+  // 배경 클릭 시 닫기
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
-    return (
-        <Overlay onClick={handleOverlayClick}>
-            <ModalContainer role="dialog" aria-modal="true">
-                <ModalHeader>
-                    <ModalTitle>숙소 후기 쓰기</ModalTitle>
-                    <CloseButton onClick={onClose} aria-label="닫기">
-                        ✕
-                    </CloseButton>
-                </ModalHeader>
-                <ModalBody onSubmit={handleSubmit}>
-                    <FormGroup>
-                        <RatingLabel>전체 평점</RatingLabel>
-                        <StarRating
-                            rating={ratings.overall}
-                            onChange={(val) => handleRatingChange("overall", val)}
-                            size={32}
-                        />
-                    </FormGroup>
+  return (
+    <Overlay onClick={handleOverlayClick}>
+      <ModalContainer role="dialog" aria-modal="true">
+        <ModalHeader>
+          <ModalTitle>숙소 후기 쓰기</ModalTitle>
+          <CloseButton onClick={onClose} aria-label="닫기">
+            ✕
+          </CloseButton>
+        </ModalHeader>
+        <ModalBody onSubmit={handleSubmit}>
+          <FormGroup>
+            <RatingLabel>전체 평점</RatingLabel>
+            <StarRating
+              rating={ratings.overall}
+              onChange={(val) => handleRatingChange("overall", val)}
+              size={32}
+            />
+          </FormGroup>
 
-                    <Divider />
+          <Divider />
 
-                    <SubRatingsGrid>
-                        {RATING_CATEGORIES.map(({ id, label }) => (
-                            <SubRatingItem key={id}>
-                                <SubRatingLabel>{label}</SubRatingLabel>
-                                <StarRating
-                                    rating={ratings[id]}
-                                    onChange={(val) => handleRatingChange(id, val)}
-                                    size={24}
-                                />
-                            </SubRatingItem>
-                        ))}
-                    </SubRatingsGrid>
+          <SubRatingsGrid>
+            {RATING_CATEGORIES.map(({ id, label }) => (
+              <SubRatingItem key={id}>
+                <SubRatingLabel>{label}</SubRatingLabel>
+                <StarRating
+                  rating={ratings[id]}
+                  onChange={(val) => handleRatingChange(id, val)}
+                  size={24}
+                />
+              </SubRatingItem>
+            ))}
+          </SubRatingsGrid>
 
-                    <Divider />
+          <Divider />
 
-                    <FormGroup>
-                        <RatingLabel>후기 내용 (최소 10자)</RatingLabel>
-                        <TextArea
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            placeholder="이번 숙소에서의 경험은 어떠셨나요? 자세히 적어주시면 다른 게스트와 호스트에게 큰 도움이 됩니다."
-                            rows={5}
-                        />
-                    </FormGroup>
+          <FormGroup>
+            <RatingLabel>후기 내용 (최소 10자)</RatingLabel>
+            <TextArea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="이번 숙소에서의 경험은 어떠셨나요? 자세히 적어주시면 다른 게스트와 호스트에게 큰 도움이 됩니다."
+              rows={5}
+            />
+          </FormGroup>
 
-                    <FormActions>
-                        <SecondaryButton type="button" onClick={onClose}>
-                            취소
-                        </SecondaryButton>
-                        <SubmitButton type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "제출 중..." : "리뷰 제출"}
-                        </SubmitButton>
-                    </FormActions>
-                </ModalBody>
-            </ModalContainer>
-        </Overlay>
-    );
+          <FormActions>
+            <SecondaryButton type="button" onClick={onClose}>
+              취소
+            </SecondaryButton>
+            <SubmitButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "제출 중..." : "리뷰 제출"}
+            </SubmitButton>
+          </FormActions>
+        </ModalBody>
+      </ModalContainer>
+    </Overlay>
+  );
 }
 
 // -- 하위 별점 컴포넌트 --
 interface StarRatingProps {
-    rating: number;
-    onChange: (value: number) => void;
-    size?: number;
+  rating: number;
+  onChange: (value: number) => void;
+  size?: number;
 }
 function StarRating({ rating, onChange, size = 24 }: StarRatingProps) {
-    const [hoverRating, setHoverRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
 
-    return (
-        <StarContainer>
-            {[1, 2, 3, 4, 5].map((star) => (
-                <StarIconButton
-                    key={star}
-                    type="button"
-                    onMouseEnter={() => setHoverRating(star)}
-                    onMouseLeave={() => setHoverRating(0)}
-                    onClick={() => onChange(star)}
-                    $active={star <= (hoverRating || rating)}
-                >
-                    <Star
-                        size={size}
-                        fill={star <= (hoverRating || rating) ? "currentColor" : "none"}
-                        stroke="currentColor"
-                    />
-                </StarIconButton>
-            ))}
-        </StarContainer>
-    );
+  return (
+    <StarContainer>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <StarIconButton
+          key={star}
+          type="button"
+          onMouseEnter={() => setHoverRating(star)}
+          onMouseLeave={() => setHoverRating(0)}
+          onClick={() => onChange(star)}
+          $active={star <= (hoverRating || rating)}
+        >
+          <Star
+            size={size}
+            fill={star <= (hoverRating || rating) ? "currentColor" : "none"}
+            stroke="currentColor"
+          />
+        </StarIconButton>
+      ))}
+    </StarContainer>
+  );
 }
 
 // -- Styled Components --
@@ -292,7 +292,7 @@ const StarIconButton = styled.button<{ $active: boolean }>`
   padding: 0;
   cursor: pointer;
   color: ${({ theme, $active }) =>
-        $active ? theme.colors.primary.main : theme.colors.border.primary};
+    $active ? theme.colors.primary.main : theme.colors.border.primary};
   transition: color 0.2s ease-in-out;
 
   &:hover {
