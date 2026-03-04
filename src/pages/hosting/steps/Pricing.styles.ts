@@ -152,3 +152,54 @@ export const BreakdownValue = styled.span<{ $highlight?: boolean }>`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
+// 청소비 스타일
+export const CleaningFeeSection = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding-top: ${({ theme }) => theme.spacing.xl};
+  border-top: 1px solid ${({ theme }) => theme.colors.border.light};
+`;
+
+export const CleaningFeeLabel = styled.label`
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
+`;
+
+export const CleaningFeeInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const CleaningFeeInput = styled.input`
+  width: 150px;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text.primary};
+  transition: all ${({ theme }) => theme.transition.fast};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.text.primary};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance: textfield;
+`;
+
