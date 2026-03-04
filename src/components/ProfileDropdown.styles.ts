@@ -90,4 +90,3 @@ export const DropdownHeaderDesc = styled.div`
   color: ${({ theme }) => theme.colors.text.secondary};
   line-height: 1.4;
 `;
-

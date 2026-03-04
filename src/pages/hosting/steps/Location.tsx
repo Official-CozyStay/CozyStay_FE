@@ -8,13 +8,14 @@ import {
   MapWrapper,
   SearchInputWrapper,
   SearchInput,
-  SearchText,
   PlaceholderMap,
 } from './Location.styles';
 import type { StepProps } from '../BecomeHostPage';
 
 const Location = ({ data, onDataChange }: StepProps) => {
-  const [addressInput, setAddressInput] = useState(data.location?.streetAddress || '');
+  const [addressInput, setAddressInput] = useState(
+    data.location?.streetAddress || '',
+  );
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -60,7 +61,7 @@ const Location = ({ data, onDataChange }: StepProps) => {
             />
           </SearchInput>
         </SearchInputWrapper>
-        
+
         {/* 나중에 실제 구글 맵 컴포넌트로 교체될 영역입니다 */}
         <PlaceholderMap />
       </MapWrapper>
@@ -69,4 +70,3 @@ const Location = ({ data, onDataChange }: StepProps) => {
 };
 
 export default Location;
-

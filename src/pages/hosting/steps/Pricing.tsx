@@ -35,14 +35,32 @@ const Pricing = ({ data, onDataChange }: StepProps) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     const numValue = parseInt(value, 10);
     if (!isNaN(numValue)) {
-      onDataChange({ pricing: { ...data.pricing, basePrice: numValue, weekendPremium: data.pricing?.weekendPremium || 0 } });
+      onDataChange({
+        pricing: {
+          ...data.pricing,
+          basePrice: numValue,
+          weekendPremium: data.pricing?.weekendPremium || 0,
+        },
+      });
     } else if (value === '') {
-      onDataChange({ pricing: { ...data.pricing, basePrice: 0, weekendPremium: data.pricing?.weekendPremium || 0 } });
+      onDataChange({
+        pricing: {
+          ...data.pricing,
+          basePrice: 0,
+          weekendPremium: data.pricing?.weekendPremium || 0,
+        },
+      });
     }
   };
 
   const setPrice = (newPrice: number) => {
-    onDataChange({ pricing: { ...data.pricing, basePrice: newPrice, weekendPremium: data.pricing?.weekendPremium || 0 } });
+    onDataChange({
+      pricing: {
+        ...data.pricing,
+        basePrice: newPrice,
+        weekendPremium: data.pricing?.weekendPremium || 0,
+      },
+    });
   };
 
   const serviceFee = Math.round(price * SERVICE_FEE_RATE);
@@ -53,7 +71,8 @@ const Pricing = ({ data, onDataChange }: StepProps) => {
       <TitleSection>
         <Title>주중 기본 요금 설정</Title>
         <Subtitle>
-          게스트가 1박당 지불할 금액을 설정하세요. 나중에 언제든지 변경할 수 있습니다.
+          게스트가 1박당 지불할 금액을 설정하세요. 나중에 언제든지 변경할 수
+          있습니다.
         </Subtitle>
       </TitleSection>
 
@@ -86,7 +105,8 @@ const Pricing = ({ data, onDataChange }: StepProps) => {
       <InfoCard>
         <InfoTitle>💡 비슷한 숙소의 평균 가격</InfoTitle>
         <InfoText>
-          이 지역의 비슷한 숙소는 평균 ₩55,000 ~ ₩85,000의 가격대로 운영되고 있습니다.
+          이 지역의 비슷한 숙소는 평균 ₩55,000 ~ ₩85,000의 가격대로 운영되고
+          있습니다.
         </InfoText>
 
         <PriceBreakdown>
@@ -100,7 +120,9 @@ const Pricing = ({ data, onDataChange }: StepProps) => {
           </BreakdownRow>
           <BreakdownRow>
             <BreakdownLabel>예상 수익</BreakdownLabel>
-            <BreakdownValue $highlight>₩{formatPrice(hostEarnings)}</BreakdownValue>
+            <BreakdownValue $highlight>
+              ₩{formatPrice(hostEarnings)}
+            </BreakdownValue>
           </BreakdownRow>
         </PriceBreakdown>
       </InfoCard>
@@ -109,4 +131,3 @@ const Pricing = ({ data, onDataChange }: StepProps) => {
 };
 
 export default Pricing;
-

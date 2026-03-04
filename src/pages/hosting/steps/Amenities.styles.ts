@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitle,
   Subtitle as BaseSubtitle,
@@ -25,4 +25,3 @@ export const AmenityGrid = SelectableGrid;
 export const AmenityItem = SelectableCard;
 export const IconWrapper = CardIcon;
 export const Label = CardLabel;
-

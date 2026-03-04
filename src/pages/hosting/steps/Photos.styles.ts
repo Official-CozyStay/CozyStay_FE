@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitle,
   Subtitle as BaseSubtitle,
@@ -93,4 +93,3 @@ export const RemoveButton = styled.button`
     transform: scale(1.1);
   }
 `;
-

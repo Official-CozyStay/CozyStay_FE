@@ -17,13 +17,13 @@ export const getListings = (): Listing[] => {
 export const saveListing = (listing: Listing): void => {
   const listings = getListings();
   const existingIndex = listings.findIndex((l) => l.id === listing.id);
-  
+
   if (existingIndex >= 0) {
     listings[existingIndex] = listing;
   } else {
     listings.push(listing);
   }
-  
+
   localStorage.setItem(LISTINGS_KEY, JSON.stringify(listings));
 };
 
@@ -58,4 +58,3 @@ export const clearDraft = (): void => {
 export const generateId = (): string => {
   return crypto.randomUUID();
 };
-

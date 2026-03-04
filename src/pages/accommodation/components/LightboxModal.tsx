@@ -1,8 +1,8 @@
 // 이미지 확대해서 보여주는 UI 컴포넌트
 
-import * as S from "../accommodationDetail.styles";
-import type { AccommodationImageDTO } from "../../../api/types";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import * as S from '../accommodationDetail.styles';
+import type { AccommodationImageDTO } from '../../../api/types';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Props = {
   isOpen: boolean;

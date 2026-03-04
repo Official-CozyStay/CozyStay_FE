@@ -5,7 +5,7 @@ import {
   InfoLabel,
   InfoValue,
   InfoAction,
-} from "../account.styles";
+} from '../account.styles';
 
 export interface InfoItemData {
   id: string;

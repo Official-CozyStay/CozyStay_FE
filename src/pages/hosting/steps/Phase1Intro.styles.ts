@@ -1,4 +1,4 @@
-import { 
+import {
   IntroContainer,
   IntroTextSection,
   StepLabel,
@@ -16,4 +16,3 @@ export const Title = IntroTitle;
 export const Description = IntroDescription;
 export const ImageSection = IntroImageSection;
 export const Illustration = IntroIllustration;
-

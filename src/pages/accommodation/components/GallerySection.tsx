@@ -1,6 +1,6 @@
-import * as S from "../accommodationDetail.styles";
-import type { AccommodationImageDTO } from "../../../api/types";
-import { Grip } from "lucide-react";
+import * as S from '../accommodationDetail.styles';
+import type { AccommodationImageDTO } from '../../../api/types';
+import { Grip } from 'lucide-react';
 
 type ThumbImage = AccommodationImageDTO & { idx: number };
 

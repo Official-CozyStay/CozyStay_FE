@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ModalOverlay,
   ModalContainer,
@@ -11,11 +11,10 @@ import {
   ModalInputLabel,
   ModalCharCount,
   ModalFooter,
-  ModalButton,
   ModalCancelButton,
   ModalCreateButton,
-} from "./WishlistModal.styles";
-import { X } from "lucide-react";
+} from './WishlistModal.styles';
+import { X } from 'lucide-react';
 
 interface WishlistModalProps {
   isOpen: boolean;
@@ -23,45 +22,41 @@ interface WishlistModalProps {
   onCreate?: (name: string) => void;
 }
 
-const WishlistModal = ({
-  isOpen,
-  onClose,
-  onCreate,
-}: WishlistModalProps) => {
-  const [wishlistName, setWishlistName] = useState("");
+const WishlistModal = ({ isOpen, onClose, onCreate }: WishlistModalProps) => {
+  const [wishlistName, setWishlistName] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const MAX_LENGTH = 50;
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
       // 모달이 열릴 때 입력 필드에 포커스
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
     } else {
-      document.body.style.overflow = "";
-      setWishlistName("");
+      document.body.style.overflow = '';
+      setWishlistName('');
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, [isOpen]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === 'Escape' && isOpen) {
         onClose();
       }
     };
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
   const handleCreate = () => {
     if (wishlistName.trim() && onCreate) {
       onCreate(wishlistName.trim());
-      setWishlistName("");
+      setWishlistName('');
       onClose();
     }
   };
@@ -114,4 +109,3 @@ const WishlistModal = ({
 };
 
 export default WishlistModal;
-

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitle,
   Subtitle as BaseSubtitle,
@@ -85,12 +85,13 @@ export const QuickPriceButtons = styled.div`
 
 export const QuickPriceButton = styled.button<{ $active?: boolean }>`
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
-  border: 1px solid ${({ theme, $active }) => 
-    $active ? theme.colors.text.primary : theme.colors.border.primary};
+  border: 1px solid
+    ${({ theme, $active }) =>
+      $active ? theme.colors.text.primary : theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.full};
-  background-color: ${({ theme, $active }) => 
+  background-color: ${({ theme, $active }) =>
     $active ? theme.colors.text.primary : theme.colors.common.white};
-  color: ${({ theme, $active }) => 
+  color: ${({ theme, $active }) =>
     $active ? theme.colors.common.white : theme.colors.text.primary};
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.medium};
@@ -147,8 +148,7 @@ export const BreakdownLabel = styled.span`
 
 export const BreakdownValue = styled.span<{ $highlight?: boolean }>`
   font-size: ${({ theme }) => theme.font.size.sm};
-  font-weight: ${({ theme, $highlight }) => 
+  font-weight: ${({ theme, $highlight }) =>
     $highlight ? theme.font.weight.bold : theme.font.weight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
-

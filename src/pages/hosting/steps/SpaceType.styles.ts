@@ -36,7 +36,8 @@ export const TypeItem = styled.button<{ $selected?: boolean }>`
       ? `2px solid ${theme.colors.primary.main}`
       : `1px solid ${theme.colors.border.primary}`};
   border-radius: ${({ theme }) => theme.radius.md};
-  background-color: ${({ theme, $selected }) => ($selected ? theme.colors.background.hover : theme.colors.common.white)};
+  background-color: ${({ theme, $selected }) =>
+    $selected ? theme.colors.background.hover : theme.colors.common.white};
   cursor: pointer;
   transition: all ${({ theme }) => theme.transition.normal};
   text-align: left;
@@ -70,4 +71,3 @@ export const IconWrapper = styled.div`
   font-size: 32px;
   color: ${({ theme }) => theme.colors.text.primary};
 `;
-

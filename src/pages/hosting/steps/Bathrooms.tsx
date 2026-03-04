@@ -30,10 +30,15 @@ const Bathrooms = ({ data, onDataChange }: StepProps) => {
         <CounterItem>
           <TextSection>
             <Label>욕실 개수</Label>
-            <Description>게스트가 사용할 수 있는 욕실의 총 개수입니다.</Description>
+            <Description>
+              게스트가 사용할 수 있는 욕실의 총 개수입니다.
+            </Description>
           </TextSection>
           <CounterControls>
-            <IconButton onClick={() => updateCount(-1)} disabled={bathrooms === 0}>
+            <IconButton
+              onClick={() => updateCount(-1)}
+              disabled={bathrooms === 0}
+            >
               <Minus size={18} />
             </IconButton>
             <CounterValue>{bathrooms}</CounterValue>
@@ -48,4 +53,3 @@ const Bathrooms = ({ data, onDataChange }: StepProps) => {
 };
 
 export default Bathrooms;
-

@@ -46,17 +46,24 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
     <DetailsContainer>
       <TitleSection>
         <Title>몇 가지 세부사항을 입력해 주세요</Title>
-        <Subtitle>금융 규정 준수와 사기 방지를 위해 필요한 절차입니다.</Subtitle>
+        <Subtitle>
+          금융 규정 준수와 사기 방지를 위해 필요한 절차입니다.
+        </Subtitle>
       </TitleSection>
 
       <Section>
         <SectionTitle>거주지 주소 정보</SectionTitle>
-        <SectionDescription>이 정보는 게스트에게 공개되지 않습니다.</SectionDescription>
+        <SectionDescription>
+          이 정보는 게스트에게 공개되지 않습니다.
+        </SectionDescription>
 
         <FormGroup>
           <SelectWrapper>
             <SelectLabel>국가/지역</SelectLabel>
-            <Select value={location.country} onChange={(e) => updateLocation('country', e.target.value)}>
+            <Select
+              value={location.country}
+              onChange={(e) => updateLocation('country', e.target.value)}
+            >
               <option value="한국">한국</option>
               <option value="미국">미국</option>
               <option value="일본">일본</option>
@@ -115,7 +122,8 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
       <Section>
         <SectionTitle>사업자로 호스팅하시나요?</SectionTitle>
         <SectionDescription>
-          관할 세무서에 사업자로 등록하신 경우를 말합니다. <a href="#">자세히 알아보기</a>
+          관할 세무서에 사업자로 등록하신 경우를 말합니다.{' '}
+          <a href="#">자세히 알아보기</a>
         </SectionDescription>
 
         <ButtonGroup>
@@ -138,4 +146,3 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
 };
 
 export default HostDetails;
-

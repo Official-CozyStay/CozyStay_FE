@@ -37,7 +37,9 @@ const WeekendPricing = ({ data, onDataChange }: StepProps) => {
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPremium = parseInt(e.target.value, 10);
-    onDataChange({ pricing: { ...data.pricing, basePrice, weekendPremium: newPremium } });
+    onDataChange({
+      pricing: { ...data.pricing, basePrice, weekendPremium: newPremium },
+    });
   };
 
   return (
@@ -49,9 +51,7 @@ const WeekendPricing = ({ data, onDataChange }: StepProps) => {
 
       <PriceDisplaySection>
         <BigPrice>₩{formatPrice(weekendPrice)}</BigPrice>
-        <GuestPrice>
-          게스트 지불 요금: ₩{formatPrice(guestPrice)}
-        </GuestPrice>
+        <GuestPrice>게스트 지불 요금: ₩{formatPrice(guestPrice)}</GuestPrice>
       </PriceDisplaySection>
 
       <SliderSection>

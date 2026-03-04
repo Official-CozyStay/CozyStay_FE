@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitle,
   Subtitle as BaseSubtitle,
@@ -51,9 +51,10 @@ export const Checkbox = styled.div<{ $checked?: boolean }>`
   width: 24px;
   height: 24px;
   border-radius: ${({ theme }) => theme.radius.sm};
-  border: 2px solid ${({ theme, $checked }) => 
-    $checked ? theme.colors.text.primary : theme.colors.border.primary};
-  background-color: ${({ theme, $checked }) => 
+  border: 2px solid
+    ${({ theme, $checked }) =>
+      $checked ? theme.colors.text.primary : theme.colors.border.primary};
+  background-color: ${({ theme, $checked }) =>
     $checked ? theme.colors.text.primary : 'transparent'};
   display: flex;
   align-items: center;
@@ -90,9 +91,8 @@ export const DiscountDescription = styled.span`
 export const DiscountPercent = styled.span<{ $active?: boolean }>`
   font-size: ${({ theme }) => theme.font.size.xl};
   font-weight: ${({ theme }) => theme.font.weight.bold};
-  color: ${({ theme, $active }) => 
+  color: ${({ theme, $active }) =>
     $active ? theme.colors.text.primary : theme.colors.text.tertiary};
   transition: color ${({ theme }) => theme.transition.fast};
   flex-shrink: 0;
 `;
-

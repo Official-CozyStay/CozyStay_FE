@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import type { PublicUserProfileResponse } from "../../../api/types";
-import { CheckCircle } from "lucide-react";
+import styled from 'styled-components';
+import type { PublicUserProfileResponse } from '../../../api/types';
+import { CheckCircle } from 'lucide-react';
 
 interface Props {
   user: PublicUserProfileResponse;
@@ -11,7 +11,7 @@ export default function UserProfileCard({ user }: Props) {
     <Card>
       <ProfileImageWrapper>
         <ProfileImage
-          src={user.profileImageUrl || "https://via.placeholder.com/150"}
+          src={user.profileImageUrl || 'https://via.placeholder.com/150'}
           alt={user.nickName}
         />
       </ProfileImageWrapper>
@@ -73,7 +73,6 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   object-fit: cover;
 `;
-
 
 const Stats = styled.div`
   display: flex;
