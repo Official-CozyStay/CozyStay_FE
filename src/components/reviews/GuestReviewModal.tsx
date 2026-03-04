@@ -9,21 +9,22 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme }) => theme.colors.overlay.default};
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: ${({ theme }) => theme.zIndex.modalOverlay};
 `;
 
 const ModalContent = styled.div`
-  background: white;
+  background: ${({ theme }) => theme.colors.common.white};
   padding: 32px;
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.radius.md};
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  z-index: ${({ theme }) => theme.zIndex.modalContainer};
 `;
 
 const Title = styled.h2`
@@ -45,8 +46,8 @@ const Label = styled.label`
 const TextArea = styled.textarea`
   width: 100%;
   padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.border.light};
+  border-radius: ${({ theme }) => theme.radius.sm};
   min-height: 120px;
   font-family: inherit;
   resize: vertical;
@@ -61,13 +62,13 @@ const ButtonGroup = styled.div`
 
 const Button = styled.button<{ $primary?: boolean }>`
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: ${({ theme }) => theme.radius.sm};
   font-weight: bold;
   cursor: pointer;
   border: none;
   background-color: ${({ $primary, theme }) =>
-        $primary ? theme.colors.primary : "#e0e0e0"};
-  color: ${({ $primary }) => ($primary ? "white" : "black")};
+    $primary ? theme.colors.primary.main : theme.colors.background.active};
+  color: ${({ $primary, theme }) => ($primary ? theme.colors.common.white : theme.colors.text.primary)};
 
   &:hover {
     opacity: 0.9;
@@ -77,84 +78,84 @@ const Button = styled.button<{ $primary?: boolean }>`
 const Select = styled.select`
   width: 100%;
   padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+  border-radius: ${({ theme }) => theme.radius.xs};
+  border: 1px solid ${({ theme }) => theme.colors.border.light};
+  font-size: ${({ theme }) => theme.font.size.md};
 `;
 
 interface GuestReviewModalProps {
-    bookingId: number;
-    guestId: number;
-    onClose: () => void;
-    onSubmit: (data: UserReviewCreateRequest) => Promise<void>;
+  bookingId: number;
+  guestId: number;
+  onClose: () => void;
+  onSubmit: (data: UserReviewCreateRequest) => Promise<void>;
 }
 
 const GuestReviewModal = ({ bookingId, guestId, onClose, onSubmit }: GuestReviewModalProps) => {
-    const [rating, setRating] = useState<number>(5);
-    const [reviewComment, setReviewComment] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rating, setRating] = useState<number>(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!reviewComment.trim()) {
-            alert("리뷰 내용을 입력해주세요.");
-            return;
-        }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewComment.trim()) {
+      alert("리뷰 내용을 입력해주세요.");
+      return;
+    }
 
-        try {
-            setIsSubmitting(true);
-            await onSubmit({
-                bookingId,
-                targetGuestId: guestId,
-                rating,
-                reviewComment,
-            });
-            onClose();
-        } catch (error) {
-            console.error("리뷰 제출 실패:", error);
-            alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    try {
+      setIsSubmitting(true);
+      await onSubmit({
+        bookingId,
+        targetGuestId: guestId,
+        rating,
+        reviewComment,
+      });
+      onClose();
+    } catch (error) {
+      console.error("리뷰 제출 실패:", error);
+      alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-    return (
-        <ModalOverlay onClick={onClose}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>
-                <Title>게스트 리뷰 작성</Title>
-                <form onSubmit={handleSubmit}>
-                    <FormGroup>
-                        <Label>평점</Label>
-                        <Select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
-                            <option value={5}>5 - 아주 훌륭해요!</option>
-                            <option value={4}>4 - 좋아요</option>
-                            <option value={3}>3 - 보통이에요</option>
-                            <option value={2}>2 - 별로예요</option>
-                            <option value={1}>1 - 최악이에요</option>
-                        </Select>
-                    </FormGroup>
+  return (
+    <ModalOverlay onClick={onClose}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
+        <Title>게스트 리뷰 작성</Title>
+        <form onSubmit={handleSubmit}>
+          <FormGroup>
+            <Label>평점</Label>
+            <Select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
+              <option value={5}>5 - 아주 훌륭해요!</option>
+              <option value={4}>4 - 좋아요</option>
+              <option value={3}>3 - 보통이에요</option>
+              <option value={2}>2 - 별로예요</option>
+              <option value={1}>1 - 최악이에요</option>
+            </Select>
+          </FormGroup>
 
-                    <FormGroup>
-                        <Label>리뷰 코멘트</Label>
-                        <TextArea
-                            value={reviewComment}
-                            onChange={(e) => setReviewComment(e.target.value)}
-                            placeholder="게스트에 대한 솔직한 평가를 남겨주세요."
-                        />
-                    </FormGroup>
+          <FormGroup>
+            <Label>리뷰 코멘트</Label>
+            <TextArea
+              value={reviewComment}
+              onChange={(e) => setReviewComment(e.target.value)}
+              placeholder="게스트에 대한 솔직한 평가를 남겨주세요."
+            />
+          </FormGroup>
 
-                    <ButtonGroup>
-                        <Button type="button" onClick={onClose} disabled={isSubmitting}>
-                            취소
-                        </Button>
-                        <Button type="submit" $primary disabled={isSubmitting}>
-                            {isSubmitting ? "제출 중..." : "제출하기"}
-                        </Button>
-                    </ButtonGroup>
-                </form>
-            </ModalContent>
-        </ModalOverlay>
-    );
+          <ButtonGroup>
+            <Button type="button" onClick={onClose} disabled={isSubmitting}>
+              취소
+            </Button>
+            <Button type="submit" $primary disabled={isSubmitting}>
+              {isSubmitting ? "제출 중..." : "제출하기"}
+            </Button>
+          </ButtonGroup>
+        </form>
+      </ModalContent>
+    </ModalOverlay>
+  );
 };
 
 export default GuestReviewModal;
