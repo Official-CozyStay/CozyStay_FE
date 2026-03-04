@@ -22,21 +22,8 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
   const bathrooms = data.bathrooms || 1;
 
   const updateCount = (type: 'guests' | 'rooms' | 'bedrooms' | 'beds' | 'bathrooms', delta: number) => {
-    if (type === 'guests') {
-      onDataChange({ guests: Math.max(1, guests + delta) });
-    }
-    if (type === 'rooms') {
-      onDataChange({ rooms: Math.max(1, rooms + delta) });
-    }
-    if (type === 'bedrooms') {
-      onDataChange({ bedrooms: Math.max(1, bedrooms + delta) });
-    }
-    if (type === 'beds') {
-      onDataChange({ beds: Math.max(1, beds + delta) });
-    }
-    if (type === 'bathrooms') {
-      onDataChange({ bathrooms: Math.max(1, bathrooms + delta) });
-    }
+    const currentValue = data[type] || 1;
+    onDataChange({ [type]: Math.max(1, currentValue + delta) });
   };
 
   return (

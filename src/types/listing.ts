@@ -1,9 +1,11 @@
 // 숙소 리스팅 타입 정의
+export type SpaceType = 'entire_place' | 'private_room' | 'shared_room' | '';
+
 export interface Listing {
   id: string;
   title: string;
   description: string;
-  spaceType: string; // accommodationType: 'entire_place' | 'private_room' | 'shared_room'
+  spaceType: SpaceType;
   location: {
     country: string;
     province: string;
