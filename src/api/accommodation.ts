@@ -1,14 +1,13 @@
-import client from "./client";
+import client from './client';
 import type {
   AccommodationDetailDTO,
   HostelReviewDTO,
   ReviewListResponse,
-} from "./types";
-
+} from './types';
 
 // 숙소 상세 조회
 export async function fetchAccommodationDetail(
-  id: string
+  id: string,
 ): Promise<AccommodationDetailDTO> {
   // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
   if (!id || !/^\d+$/.test(id)) {
@@ -23,7 +22,7 @@ export async function fetchAccommodationDetail(
 
 // 숙소 리뷰 조회
 export async function fetchAccommodationReviews(
-  accId: string
+  accId: string,
 ): Promise<ReviewListResponse> {
   // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
   if (!accId || !/^\d+$/.test(accId)) {
@@ -62,11 +61,11 @@ export async function fetchAccommodationReviews(
     if (Array.isArray(reviews)) {
       reviewsToUse = reviews;
     } else {
-      console.warn("Expected array but got:", reviews);
+      console.warn('Expected array but got:', reviews);
       reviewsToUse = MOCK_REVIEWS; // 데이터 형식이 다르면 더미 사용
     }
   } catch (error) {
-    console.error("Failed to fetch reviews (using mock data):", error);
+    console.error('Failed to fetch reviews (using mock data):', error);
     reviewsToUse = MOCK_REVIEWS; // 에러(401 등) 발생 시 더미 사용
   }
 
@@ -88,7 +87,7 @@ export async function fetchAccommodationReviews(
       communication: 0,
       location: 0,
       checkIn: 0,
-    }
+    },
   );
 
   const average = count > 0 ? sums.overall / count : 0;
@@ -115,7 +114,7 @@ export async function fetchAccommodationReviews(
       },
       rating: Number(r.ratingOverall),
       content: r.reviewComment,
-      createdAt: "2024-02-02",
+      createdAt: '2024-02-02',
       reply: r.comment,
     })),
   };

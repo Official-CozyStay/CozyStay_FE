@@ -3,33 +3,33 @@
 export const size = {
   // 아이콘 크기
   icon: {
-    xs: "12px",
-    sm: "14px",
-    md: "16px",
-    lg: "20px",
-    xl: "24px",
-    xxl: "32px",
+    xs: '12px',
+    sm: '14px',
+    md: '16px',
+    lg: '20px',
+    xl: '24px',
+    xxl: '32px',
   },
   // 공통 버튼 크기
   button: {
-    sm: "32px",
-    md: "40px",
-    lg: "48px",
+    sm: '32px',
+    md: '40px',
+    lg: '48px',
   },
   // 공통 입력 필드 크기
   input: {
-    sm: "32px",
-    md: "40px",
-    lg: "48px",
+    sm: '32px',
+    md: '40px',
+    lg: '48px',
   },
   // 공통 너비
   width: {
-    xs: "120px",
-    sm: "320px",
-    md: "400px",
+    xs: '120px',
+    sm: '320px',
+    md: '400px',
   },
   // 카드 이미지 높이
   cardImage: {
-    default: "240px",
+    default: '240px',
   },
 };

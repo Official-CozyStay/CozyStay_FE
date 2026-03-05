@@ -1,5 +1,5 @@
-import { useState } from "react";
-import type { ComponentType } from "react";
+import { useState } from 'react';
+import type { ComponentType } from 'react';
 import {
   PageContainer,
   ContentWrapper,
@@ -11,7 +11,7 @@ import {
   NewBadge,
   SidebarDivider,
   MainContent,
-} from "./account.styles";
+} from './account.styles';
 import {
   User,
   Shield,
@@ -22,29 +22,29 @@ import {
   Globe,
   Briefcase,
   Building2,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import SimpleHeader from "@/components/SimpleHeader";
-import PersonalInfoSection from "./sections/PersonalInfoSection";
-import SecuritySection from "./sections/SecuritySection";
-import PrivacySection from "./sections/PrivacySection";
-import NotificationsSection from "./sections/NotificationsSection";
-import TaxSection from "./sections/TaxSection";
-import PaymentSection from "./sections/PaymentSection";
-import LanguageSection from "./sections/LanguageSection";
-import BusinessSection from "./sections/BusinessSection";
-import HostingToolsSection from "./sections/HostingToolsSection";
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import SimpleHeader from '@/components/SimpleHeader';
+import PersonalInfoSection from './sections/PersonalInfoSection';
+import SecuritySection from './sections/SecuritySection';
+import PrivacySection from './sections/PrivacySection';
+import NotificationsSection from './sections/NotificationsSection';
+import TaxSection from './sections/TaxSection';
+import PaymentSection from './sections/PaymentSection';
+import LanguageSection from './sections/LanguageSection';
+import BusinessSection from './sections/BusinessSection';
+import HostingToolsSection from './sections/HostingToolsSection';
 
 type MenuKey =
-  | "personal"
-  | "security"
-  | "privacy"
-  | "notifications"
-  | "tax"
-  | "payment"
-  | "language"
-  | "business"
-  | "hosting";
+  | 'personal'
+  | 'security'
+  | 'privacy'
+  | 'notifications'
+  | 'tax'
+  | 'payment'
+  | 'language'
+  | 'business'
+  | 'hosting';
 
 interface MenuItem {
   key: MenuKey;
@@ -57,60 +57,60 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   {
-    key: "personal",
+    key: 'personal',
     icon: User,
-    label: "개인 정보",
+    label: '개인 정보',
     component: PersonalInfoSection,
   },
   {
-    key: "security",
+    key: 'security',
     icon: Shield,
-    label: "로그인 및 보안",
+    label: '로그인 및 보안',
     component: SecuritySection,
   },
   {
-    key: "privacy",
+    key: 'privacy',
     icon: Lock,
-    label: "개인정보 보호",
+    label: '개인정보 보호',
     component: PrivacySection,
   },
   {
-    key: "notifications",
+    key: 'notifications',
     icon: Bell,
-    label: "알림",
+    label: '알림',
     component: NotificationsSection,
   },
-  { key: "tax", icon: FileText, label: "세금", component: TaxSection },
+  { key: 'tax', icon: FileText, label: '세금', component: TaxSection },
   {
-    key: "payment",
+    key: 'payment',
     icon: CreditCard,
-    label: "결제 및 대금 수령",
+    label: '결제 및 대금 수령',
     component: PaymentSection,
     isNew: true,
   },
   {
-    key: "language",
+    key: 'language',
     icon: Globe,
-    label: "언어 및 통화",
+    label: '언어 및 통화',
     component: LanguageSection,
   },
   {
-    key: "business",
+    key: 'business',
     icon: Briefcase,
-    label: "출장",
+    label: '출장',
     component: BusinessSection,
   },
   {
-    key: "hosting",
+    key: 'hosting',
     icon: Building2,
-    label: "전문 호스팅 도구",
+    label: '전문 호스팅 도구',
     component: HostingToolsSection,
     hasDividerBefore: true,
   },
 ];
 
 const AccountPage = () => {
-  const [activeMenu, setActiveMenu] = useState<MenuKey>("personal");
+  const [activeMenu, setActiveMenu] = useState<MenuKey>('personal');
 
   const activeItem = menuItems.find((item) => item.key === activeMenu);
   const ActiveComponent = activeItem?.component ?? PersonalInfoSection;

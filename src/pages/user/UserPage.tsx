@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { fetchUserProfile, fetchUserReviews } from "../../api/user";
-import type { ReviewListResponse, PublicUserProfileResponse } from "../../api/types";
-import UserProfileCard from "./components/UserProfileCard";
-import ReviewRatingBreakdown from "../../components/reviews/ReviewRatingBreakdown";
-import ReviewItem from "../../components/reviews/ReviewItem";
-import { media } from "../../styles/media";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { fetchUserProfile, fetchUserReviews } from '../../api/user';
+import type {
+  ReviewListResponse,
+  PublicUserProfileResponse,
+} from '../../api/types';
+import UserProfileCard from './components/UserProfileCard';
+import ReviewRatingBreakdown from '../../components/reviews/ReviewRatingBreakdown';
+import ReviewItem from '../../components/reviews/ReviewItem';
+import { media } from '../../styles/media';
 
 export default function UserPage() {
   const { id } = useParams<{ id: string }>();
@@ -26,7 +29,7 @@ export default function UserPage() {
         setUser(userData);
         setReviews(reviewData);
       } catch (error) {
-        console.error("Failed to fetch user data", error);
+        console.error('Failed to fetch user data', error);
       } finally {
         setLoading(false);
       }
@@ -62,7 +65,8 @@ export default function UserPage() {
             <Section>
               <ReviewHeader>
                 <SectionTitle>
-                  ★ {reviews.summary.average.toFixed(2)} 후기 {reviews.summary.count}개
+                  ★ {reviews.summary.average.toFixed(2)} 후기{' '}
+                  {reviews.summary.count}개
                 </SectionTitle>
               </ReviewHeader>
 
@@ -156,7 +160,6 @@ const About = styled.div`
     margin-bottom: ${({ theme }) => theme.spacing.lg};
   }
 `;
-
 
 const ReviewHeader = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.xl};

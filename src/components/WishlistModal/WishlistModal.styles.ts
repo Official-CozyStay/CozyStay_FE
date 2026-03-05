@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -38,7 +38,8 @@ export const ModalContainer = styled.div`
   ${media.mobile} {
     max-width: 100%;
     width: 100%;
-    border-radius: ${({ theme }) => theme.radius.xl} ${({ theme }) => theme.radius.xl} 0 0;
+    border-radius: ${({ theme }) => theme.radius.xl}
+      ${({ theme }) => theme.radius.xl} 0 0;
     max-height: 80vh;
   }
 `;
@@ -188,4 +189,3 @@ export const ModalCreateButton = styled(ModalButton)`
     background: ${({ theme }) => theme.colors.primary.hover};
   }
 `;
-

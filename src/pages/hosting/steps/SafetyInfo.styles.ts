@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitle,
-  Subtitle as BaseSubtitle,
 } from './shared.styles';
 
 // 공통 스타일 재사용
@@ -54,9 +53,10 @@ export const Checkbox = styled.div<{ $checked?: boolean }>`
   width: 24px;
   height: 24px;
   border-radius: ${({ theme }) => theme.radius.sm};
-  border: 2px solid ${({ theme, $checked }) => 
-    $checked ? theme.colors.text.primary : theme.colors.border.primary};
-  background-color: ${({ theme, $checked }) => 
+  border: 2px solid
+    ${({ theme, $checked }) =>
+      $checked ? theme.colors.text.primary : theme.colors.border.primary};
+  background-color: ${({ theme, $checked }) =>
     $checked ? theme.colors.text.primary : 'transparent'};
   display: flex;
   align-items: center;
@@ -133,7 +133,7 @@ export const CloseButton = styled.button`
   padding: ${({ theme }) => theme.spacing.sm};
   margin: -${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.text.primary};
-  
+
   &:hover {
     opacity: 0.7;
   }
@@ -199,4 +199,3 @@ export const ModalButton = styled.button`
     cursor: not-allowed;
   }
 `;
-

@@ -1,5 +1,5 @@
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitleLarge,
   Subtitle as BaseSubtitle,
@@ -20,4 +20,3 @@ export const OccupantItem = SelectableCardCompact;
 export const IconWrapper = CardIcon;
 export const Label = CardLabel;
 export const FooterText = BaseFooterText;
-

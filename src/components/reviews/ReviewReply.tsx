@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import type { CommentDTO } from "../../api/types";
-import { CornerDownRight } from "lucide-react";
-import { format, parseISO } from "date-fns";
+import styled from 'styled-components';
+import type { CommentDTO } from '../../api/types';
+import { CornerDownRight } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
 
 interface Props {
   reply: CommentDTO;
@@ -17,7 +17,7 @@ export default function ReviewReply({ reply }: Props) {
         <Header>
           <AuthorInfo>
             <Avatar
-              src={reply.authorProfileImage || "https://via.placeholder.com/40"}
+              src={reply.authorProfileImage || 'https://via.placeholder.com/40'}
               alt={reply.authorNickname}
             />
             <AuthorName>{reply.authorNickname} 님의 답글</AuthorName>

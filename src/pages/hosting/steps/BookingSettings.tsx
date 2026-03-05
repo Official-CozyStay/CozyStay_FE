@@ -40,7 +40,9 @@ const BookingSettings = ({ data, onDataChange }: StepProps) => {
             <OptionTitle>최초 5건 예약은 직접 검토 후 승인</OptionTitle>
             <RecommendTag>추천</RecommendTag>
             <OptionDescription>
-              처음 몇 건의 예약에 대해서는 요청을 직접 검토한 후 승인 여부를 결정하고, 그 이후에는 즉시 예약 기능을 사용해 예약을 자동 확정합니다.
+              처음 몇 건의 예약에 대해서는 요청을 직접 검토한 후 승인 여부를
+              결정하고, 그 이후에는 즉시 예약 기능을 사용해 예약을 자동
+              확정합니다.
             </OptionDescription>
           </OptionContent>
           <IconWrapper>
@@ -68,4 +70,3 @@ const BookingSettings = ({ data, onDataChange }: StepProps) => {
 };
 
 export default BookingSettings;
-

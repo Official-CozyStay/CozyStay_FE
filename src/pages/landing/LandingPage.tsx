@@ -215,7 +215,7 @@ const LandingPage = () => {
                   <CardPrice>₩120,000 / 박</CardPrice>
                 </CardBody>
               </Card>
-            )
+            ),
           )}
         </CardGrid>
         <LearnMoreButton>더 알아보기</LearnMoreButton>
@@ -242,7 +242,7 @@ const LandingPage = () => {
                   <CardPrice>₩150,000 / 박</CardPrice>
                 </CardBody>
               </Card>
-            )
+            ),
           )}
         </CardGrid>
         <LearnMoreButton>더 알아보기</LearnMoreButton>

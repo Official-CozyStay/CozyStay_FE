@@ -34,10 +34,11 @@ const Description = ({ data, onDataChange }: StepProps) => {
         maxLength={MAX_LENGTH}
       />
 
-      <CharCount>{description.length}/{MAX_LENGTH}</CharCount>
+      <CharCount>
+        {description.length}/{MAX_LENGTH}
+      </CharCount>
     </DescriptionContainer>
   );
 };
 
 export default Description;
-

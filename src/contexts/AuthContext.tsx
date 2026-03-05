@@ -70,7 +70,7 @@ const fetchUserProfile = async (token: string): Promise<User | null> => {
 
       const errorText = await response.text();
       throw new Error(
-        `API 호출 실패: ${response.status} ${response.statusText} - ${errorText}`
+        `API 호출 실패: ${response.status} ${response.statusText} - ${errorText}`,
       );
     }
 

@@ -130,8 +130,9 @@ const selectableCardBase = css<{ $selected?: boolean }>`
   flex-direction: column;
   align-items: flex-start;
   padding: ${({ theme }) => theme.spacing.lg};
-  border: 1px solid ${({ theme, $selected }) =>
-    $selected ? theme.colors.text.primary : theme.colors.border.light};
+  border: 1px solid
+    ${({ theme, $selected }) =>
+      $selected ? theme.colors.text.primary : theme.colors.border.light};
   border-radius: ${({ theme }) => theme.radius.lg};
   background-color: ${({ theme, $selected }) =>
     $selected ? theme.colors.background.hover : theme.colors.common.white};
@@ -369,8 +370,9 @@ export const RadioButton = styled.div<{ $selected?: boolean }>`
   height: 24px;
   min-width: 24px;
   border-radius: 50%;
-  border: 2px solid ${({ theme, $selected }) =>
-    $selected ? theme.colors.text.primary : theme.colors.border.primary};
+  border: 2px solid
+    ${({ theme, $selected }) =>
+      $selected ? theme.colors.text.primary : theme.colors.border.primary};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -383,7 +385,7 @@ export const RadioButton = styled.div<{ $selected?: boolean }>`
     height: 12px;
     border-radius: 50%;
     background-color: ${({ theme, $selected }) =>
-    $selected ? theme.colors.text.primary : 'transparent'};
+      $selected ? theme.colors.text.primary : 'transparent'};
     transition: all ${({ theme }) => theme.transition.fast};
   }
 `;
@@ -433,4 +435,3 @@ export const CharCount = styled.span`
   color: ${({ theme }) => theme.colors.text.secondary};
   align-self: flex-start;
 `;
-

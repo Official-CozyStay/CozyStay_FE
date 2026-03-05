@@ -36,8 +36,10 @@ const safetyOptions: SafetyOption[] = [
   {
     id: 'camera',
     label: '숙소 실외 공간을 모니터링하는 보안 카메라 있음',
-    modalTitle: '숙소의 실외 공간을 모니터링하는 보안 카메라에 대해 게스트에게 알려주세요',
-    modalDescription: '각 카메라가 모니터링하는 공간이 어디인지 알려주세요(예: 뒷마당, 수영장 등).',
+    modalTitle:
+      '숙소의 실외 공간을 모니터링하는 보안 카메라에 대해 게스트에게 알려주세요',
+    modalDescription:
+      '각 카메라가 모니터링하는 공간이 어디인지 알려주세요(예: 뒷마당, 수영장 등).',
   },
   {
     id: 'noise',
@@ -110,7 +112,10 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
           {safetyOptions.map((option) => {
             const isChecked = selectedItems[option.id]?.checked || false;
             return (
-              <CheckboxItem key={option.id} onClick={() => handleCheckboxClick(option.id)}>
+              <CheckboxItem
+                key={option.id}
+                onClick={() => handleCheckboxClick(option.id)}
+              >
                 <CheckboxLabel>{option.label}</CheckboxLabel>
                 <HiddenInput type="checkbox" checked={isChecked} readOnly />
                 <Checkbox $checked={isChecked}>
@@ -125,8 +130,9 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
       <NoticeSection>
         <NoticeTitle>중요사항</NoticeTitle>
         <NoticeText>
-          실내 공간을 모니터링하는 보안 카메라는 전원이 꺼져 있어도 허용되지 않습니다.
-          실외 공간을 모니터링하는 보안 카메라는 설치 위치를 모두 공개해야 합니다.
+          실내 공간을 모니터링하는 보안 카메라는 전원이 꺼져 있어도 허용되지
+          않습니다. 실외 공간을 모니터링하는 보안 카메라는 설치 위치를 모두
+          공개해야 합니다.
         </NoticeText>
       </NoticeSection>
 
@@ -141,7 +147,9 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
             </ModalHeader>
 
             <ModalTitle>{currentModalOption.modalTitle}</ModalTitle>
-            <ModalDescription>{currentModalOption.modalDescription}</ModalDescription>
+            <ModalDescription>
+              {currentModalOption.modalDescription}
+            </ModalDescription>
 
             <ModalTextArea
               value={tempDescription}
@@ -155,9 +163,7 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
             />
             <CharCount>{MAX_LENGTH - tempDescription.length}자 남음</CharCount>
 
-            <ModalButton onClick={handleModalSubmit}>
-              계속
-            </ModalButton>
+            <ModalButton onClick={handleModalSubmit}>계속</ModalButton>
           </ModalContent>
         </ModalOverlay>
       )}
@@ -166,4 +172,3 @@ const SafetyInfo = ({ data, onDataChange }: StepProps) => {
 };
 
 export default SafetyInfo;
-

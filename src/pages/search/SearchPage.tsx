@@ -257,7 +257,7 @@ declare global {
         load: (callback: () => void) => void;
         Map: new (
           container: HTMLElement,
-          options: { center: unknown; level: number }
+          options: { center: unknown; level: number },
         ) => KakaoMap;
         LatLng: new (lat: number, lng: number) => unknown;
         CustomOverlay: new (options: {
@@ -343,7 +343,7 @@ const SearchPage = () => {
         accommodations.forEach((acc) => {
           const position = new window.kakao.maps.LatLng(
             acc.latitude,
-            acc.longitude
+            acc.longitude,
           );
 
           // Create DOM element for clickable overlay
@@ -360,7 +360,8 @@ const SearchPage = () => {
 
           // Add hover effects using style constants
           markerElement.addEventListener('mouseenter', () => {
-            markerElement.style.cssText = MAP_MARKER_STYLES.base + MAP_MARKER_STYLES.hover;
+            markerElement.style.cssText =
+              MAP_MARKER_STYLES.base + MAP_MARKER_STYLES.hover;
           });
 
           markerElement.addEventListener('mouseleave', () => {

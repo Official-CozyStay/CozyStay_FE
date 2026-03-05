@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   CardContainer,
   CardImage,
@@ -9,9 +9,9 @@ import {
   CardDate,
   CardPrice,
   CardRating,
-} from "./AccommodationCard.styles";
-import { Heart, Star } from "lucide-react";
-import WishlistModal from "@/components/WishlistModal/WishlistModal";
+} from './AccommodationCard.styles';
+import { Heart, Star } from 'lucide-react';
+import WishlistModal from '@/components/WishlistModal/WishlistModal';
 
 export interface AccommodationCardProps {
   image: string;
@@ -43,7 +43,7 @@ const formatDateRange = (start: Date, end: Date): string => {
 
 // 가격 포맷팅 함수
 const formatPrice = (price: number): string => {
-  return `₩${price.toLocaleString("ko-KR")}`;
+  return `₩${price.toLocaleString('ko-KR')}`;
 };
 
 // 박수 포맷팅 함수
@@ -87,7 +87,7 @@ const AccommodationCard = ({
         <CardImage src={image} alt={title} />
         {badge && <CardBadge>{badge}</CardBadge>}
         <CardHeartButton onClick={handleHeartClick} $isFavorite={isFavorite}>
-          <Heart size={20} fill={isFavorite ? "currentColor" : "none"} />
+          <Heart size={20} fill={isFavorite ? 'currentColor' : 'none'} />
         </CardHeartButton>
         <CardBody>
           <CardTitle>{title}</CardTitle>
@@ -111,4 +111,3 @@ const AccommodationCard = ({
 };
 
 export default AccommodationCard;
-

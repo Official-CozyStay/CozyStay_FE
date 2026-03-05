@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
   @import url("./fonts.css");
@@ -15,6 +15,10 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    /* 스크롤바 없을 때도 공간만 비워 두어 메인/메시지 페이지에서 헤더 위치가 같아지도록 함 (스크롤바는 안 보임) */
+    scrollbar-gutter: stable;
+  }
   html, body, #root {
     height: 100%;
   }

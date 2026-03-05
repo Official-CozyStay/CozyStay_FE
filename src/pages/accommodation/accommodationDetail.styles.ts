@@ -1,10 +1,11 @@
-import styled, { css } from "styled-components";
-import { media } from "@/styles/media";
+import styled, { css } from 'styled-components';
+import { media } from '@/styles/media';
 
 export const Container = styled.div`
   max-width: ${({ theme }) => theme.layout.maxWidth};
   margin: 0 auto;
-  padding: 100px ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xl};
+  padding: 100px ${({ theme }) => theme.spacing.lg}
+    ${({ theme }) => theme.spacing.xl};
   color: ${({ theme }) => theme.colors.text.primary};
 
   ${media.mobile} {
@@ -93,7 +94,7 @@ export const Img = styled.img`
 export const Main = styled.div`
   display: grid;
   grid-template-columns: 1fr 360px;
-  gap: ${({ theme }) => theme.spacing["2xl"]};
+  gap: ${({ theme }) => theme.spacing['2xl']};
   align-items: start;
 
   ${media.tablet} {
@@ -376,7 +377,8 @@ export const ShowAllButton = styled.button`
   ${media.mobile} {
     bottom: ${({ theme }) => theme.spacing.sm};
     right: ${({ theme }) => theme.spacing.sm};
-    padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
+    padding: ${({ theme }) => theme.spacing.xs}
+      ${({ theme }) => theme.spacing.sm};
   }
 `;
 
@@ -434,7 +436,7 @@ export const PhotoGrid = styled.div`
 
   ${media.mobile} {
     grid-template-columns: 1fr;
-    
+
     & > div:nth-child(3n) {
       grid-column: span 1;
     }
@@ -444,7 +446,7 @@ export const PhotoGrid = styled.div`
 export const PhotoItem = styled.div`
   width: 100%;
   height: auto;
-  
+
   img {
     width: 100%;
     height: 100%;
