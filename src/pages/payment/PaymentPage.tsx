@@ -100,7 +100,7 @@ export default function PaymentPage() {
             const mockPaymentKey = `MOCK_${payment.paymentId}_${Date.now()}`;
 
             try {
-                const confirmed = await confirmPayment(payment.paymentId, {
+                await confirmPayment(payment.paymentId, {
                     paymentKey: mockPaymentKey,
                 });
 
