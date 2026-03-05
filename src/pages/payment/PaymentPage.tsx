@@ -127,26 +127,35 @@ export default function PaymentPage() {
                 );
             }
         } catch (e: unknown) {
+
+            let msg = "예약/결제 요청에 실패했습니다.";
+
             // createBooking / createPayment 단계에서의 에러
             if (axios.isAxiosError<{ message?: string }>(e)) {
                 const status = e.response?.status;
-                const msg =
+                msg =
                     status === 401
                         ? "로그인이 필요합니다."
-                        : e.response?.data?.message ?? "예약/결제 요청에 실패했습니다.";
-                setSubmitError(msg);
+                        : e.response?.data?.message ?? msg;
             } else {
-                setSubmitError("알 수 없는 오류가 발생했습니다.");
+                msg = "알 수 없는 오류가 발생했습니다.";
             }
             console.error(e);
 
-            // 여기서도 paymentId가 있으면 fail 처리하고 fail 페이지로 보낼 수 있음
-            // (지금은 createPayment 전에 실패하면 paymentId가 없을 수 있어서 기본은 에러 표시만)
-            if (bookingIdForNav && paymentIdForNav) {
-                navigate(
-                    `/payment/fail?bookingId=${bookingIdForNav}&paymentId=${paymentIdForNav}`
-                );
+            // 예약이 만들어진 상태면(Booking-PENDING) 실패 페이지로 보내서 재결제 안내
+            if(bookingIdForNav){
+                const params = new URLSearchParams();
+                params.set("bookingId", String(bookingIdForNav));
+
+                if(paymentIdForNav){
+                    params.set("paymentId", String(paymentIdForNav));
+                }
+                navigate(`/payment/fail?${params.toString()}`);
+                return;
             }
+            // 예약도 못 만든 경우만 현재 페이지에 에러 표시
+            setSubmitError(msg);
+
         } finally {
             setSubmitting(false);
         }
