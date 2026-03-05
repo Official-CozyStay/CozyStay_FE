@@ -176,8 +176,8 @@ export default function PaymentPage() {
             <BookingSummaryCard
                 title={detail.title}
                 thumbnailUrl={detail.images?.[0]?.imageUrl}
-                averageRating={5.0}
-                reviewCount={4}
+                averageRating={detail.reviewSummary?.average ?? 0}
+                reviewCount={detail.reviewSummary?.count ?? 0}
                 checkIn={checkIn}
                 checkOut={checkOut}
                 guests={guests}
