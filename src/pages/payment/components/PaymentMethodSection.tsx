@@ -26,7 +26,7 @@ export default function PaymentMethodSection({ value, onChange }: Props) {
                     <S.Input placeholder="카드 번호" />
                     <S.Row>
                         <S.Input placeholder="만료일" />
-                        <S.Input placeholder="CVV" />
+                        <S.Input type="password" placeholder="CVV" />
                     </S.Row>
                 </S.CardForm>
             )}
