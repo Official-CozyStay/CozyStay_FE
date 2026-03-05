@@ -104,10 +104,6 @@ export default function PaymentPage() {
                     paymentKey: mockPaymentKey,
                 });
 
-                console.log("booking: ", booking);
-                console.log("payment(created): ", payment);
-                console.log("payment(confirmed): ", confirmed);
-
                 // 결제 성공 페이지로 이동
                 navigate(
                     `/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`
