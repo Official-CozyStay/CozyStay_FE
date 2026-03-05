@@ -133,10 +133,24 @@ export default function PaymentPage() {
                     status === 401
                         ? "로그인이 필요합니다."
                         : e.response?.data?.message ?? msg;
+
+                // 민감 정보 노출 방지: DEV에서만 최소 정보 로그
+                if (import.meta.env.DEV) {
+                    console.error("[PaymentPage] AxiosError:", {
+                        status,
+                        message: e.message,
+                        url: e.config?.url,
+                        method: e.config?.method,
+                    });
+                }
             } else {
                 msg = "알 수 없는 오류가 발생했습니다.";
+
+                // DEV에서만 로그 (객체 전체 말고 메시지 위주)
+                if (import.meta.env.DEV) {
+                    console.error("[PaymentPage] Unknown error:", String(e));
+                }
             }
-            console.error(e);
 
             // 예약이 만들어진 상태면(Booking-PENDING) 실패 페이지로 보내서 재결제 안내
             if(bookingIdForNav){
