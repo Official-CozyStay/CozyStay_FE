@@ -46,7 +46,11 @@ const discountOptions: DiscountOption[] = [
 ];
 
 const Discounts = ({ data, onDataChange }: StepProps) => {
-  const discounts = data.discounts || { newListing: false, weekly: false, monthly: false };
+  const discounts = data.discounts || {
+    newListing: false,
+    weekly: false,
+    monthly: false,
+  };
 
   const toggleDiscount = (id: 'newListing' | 'weekly' | 'monthly') => {
     onDataChange({
@@ -82,7 +86,9 @@ const Discounts = ({ data, onDataChange }: StepProps) => {
                 </Checkbox>
                 <DiscountInfo>
                   <DiscountTitle>{option.title}</DiscountTitle>
-                  <DiscountDescription>{option.description}</DiscountDescription>
+                  <DiscountDescription>
+                    {option.description}
+                  </DiscountDescription>
                 </DiscountInfo>
               </DiscountLeft>
               <DiscountPercent $active={isChecked}>
@@ -97,4 +103,3 @@ const Discounts = ({ data, onDataChange }: StepProps) => {
 };
 
 export default Discounts;
-

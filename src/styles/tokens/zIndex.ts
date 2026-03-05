@@ -16,4 +16,3 @@ export const zIndex = {
   sidebarOverlay: 1100,
   sidebar: 1101,
 };
-

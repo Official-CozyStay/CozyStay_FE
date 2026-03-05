@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { media } from '@/styles/media';
-import { StepContainer, StepTitleLarge, SelectableGrid, SelectableCardCompact, CardLabel } from './shared.styles';
+import {
+  StepContainer,
+  StepTitleLarge,
+  SelectableGrid,
+  SelectableCardCompact,
+  CardLabel,
+} from './shared.styles';
 
 // 공통 스타일 재사용
 export const CategoryContainer = StepContainer;
@@ -18,9 +24,9 @@ export const Title = styled(StepTitleLarge)`
 `;
 
 export const CategoryItem = styled(SelectableCardCompact)`
-  border-color: ${({ theme, $selected }) => 
+  border-color: ${({ theme, $selected }) =>
     $selected ? theme.colors.primary.main : theme.colors.border.primary};
-  outline: ${({ $selected, theme }) => 
+  outline: ${({ $selected, theme }) =>
     $selected ? `2px solid ${theme.colors.primary.main}` : 'none'};
 
   &:hover {
@@ -31,4 +37,3 @@ export const CategoryItem = styled(SelectableCardCompact)`
 export const Icon = styled.div`
   font-size: 32px;
 `;
-

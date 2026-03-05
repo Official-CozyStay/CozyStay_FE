@@ -87,4 +87,3 @@ export const PlaceholderMap = styled.div`
   background-size: cover;
   background-position: center;
 `;
-

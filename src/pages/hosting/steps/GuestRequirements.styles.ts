@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection,
   StepTitle,
   Subtitle,
@@ -14,13 +14,13 @@ import {
 } from './shared.styles';
 
 // 공통 스타일 재export
-export { 
-  TitleSection, 
-  Subtitle, 
-  OptionList, 
-  OptionContent, 
-  OptionTitle, 
-  OptionDescription, 
+export {
+  TitleSection,
+  Subtitle,
+  OptionList,
+  OptionContent,
+  OptionTitle,
+  OptionDescription,
   RadioButton,
   HiddenInput as HiddenRadio,
 };

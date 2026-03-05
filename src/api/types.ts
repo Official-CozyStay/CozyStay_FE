@@ -1,4 +1,4 @@
-export type AccommodationType = "entire_place" | "private_room" | "shared_room";
+export type AccommodationType = 'entire_place' | 'private_room' | 'shared_room';
 
 export type AccommodationImageDTO = {
   imageId: number;
@@ -75,7 +75,7 @@ export type AccommodationDetailInfoDTO = {
   space?: string;
   access?: string;
   notes?: string;
-  // Assuming these numeric fields are inside detail info based on typical patterns, 
+  // Assuming these numeric fields are inside detail info based on typical patterns,
   // as they are missing from the top-level DTO provided by the user.
   bedrooms?: number;
   beds?: number;

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const CardContainer = styled.article`
   position: relative;
@@ -6,7 +6,8 @@ export const CardContainer = styled.article`
   overflow: hidden;
   background: ${({ theme }) => theme.colors.common.white};
   cursor: pointer;
-  transition: transform ${({ theme }) => theme.transition.normal},
+  transition:
+    transform ${({ theme }) => theme.transition.normal},
     box-shadow ${({ theme }) => theme.transition.normal};
 
   &:hover {
@@ -40,8 +41,8 @@ export const CardHeartButton = styled.button<{ $isFavorite?: boolean }>`
   right: ${({ theme }) => theme.spacing.md};
   top: ${({ theme }) => theme.spacing.md};
   z-index: ${({ theme }) => theme.zIndex.dropdown};
-  width: ${({ theme }) => theme.spacing["2xl"]};
-  height: ${({ theme }) => theme.spacing["2xl"]};
+  width: ${({ theme }) => theme.spacing['2xl']};
+  height: ${({ theme }) => theme.spacing['2xl']};
   border: none;
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.full};

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useRef, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   HeaderContainer,
   HeaderLeft,
@@ -7,20 +7,21 @@ import {
   LogoText,
   HeaderCenter,
   NavItem,
-  NavBadge,
   HeaderRight,
   HostButton,
-  ProfileDropdownWrapper,
   ProfileButton,
   ProfilePlaceholder,
   LoginButton,
-} from './Header.styles';
-import { Home, Sparkles, Bell, User } from 'lucide-react';
-import logo from '@/assets/images/logo.svg';
-import LoginModal from '@/pages/auth/LoginPage';
-import ProfileDropdown from '@/components/ProfileDropdown';
-import { useAuth } from '@/contexts/AuthContext';
-import SearchBar from '@/components/SearchBar/SearchBar';
+  MenuButton,
+  ProfileDropdownWrapper,
+} from "./Header.styles";
+import { Home, Sparkles, Bell, User, Menu } from "lucide-react";
+import logo from "@/assets/images/logo.svg";
+import LoginModal from "@/pages/auth/LoginPage";
+import SignupModal from "@/pages/auth/SignupModal";
+import { useAuth } from "@/contexts/AuthContext";
+import SearchBar from "@/components/SearchBar/SearchBar";
+import ProfileDropdown from "@/components/ProfileDropdown";
 
 interface HeaderProps {
   isScrolled?: boolean;
@@ -29,29 +30,26 @@ interface HeaderProps {
 const Header = ({ isScrolled = false }: HeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isMainPage = location.pathname === '/';
-  const [isLoginOpen, setIsLoginOpen] = React.useState(false);
-  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+  const isMainPage = location.pathname === "/";
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { isAuthenticated, user } = useAuth();
-  const profileButtonRef = React.useRef<HTMLButtonElement>(null);
-
-  const toggleProfile = () => {
-    setIsProfileOpen((prev) => !prev);
-  };
 
   // 경로에 따라 활성 네비게이션 결정
-  const activeNav = React.useMemo(() => {
+  const activeNav = useMemo(() => {
     const path = location.pathname;
-    if (path === '/' || path.startsWith('/accommodation')) {
-      return '숙소';
+    if (path === "/" || path.startsWith("/accommodation")) {
+      return "숙소";
     }
-    if (path.startsWith('/experience')) {
-      return '체험';
+    if (path.startsWith("/experience")) {
+      return "체험";
     }
-    if (path.startsWith('/service')) {
-      return '서비스';
+    if (path.startsWith("/service")) {
+      return "서비스";
     }
-    return '숙소'; // 기본값
+    return "숙소"; // 기본값
   }, [location.pathname]);
 
   return (
@@ -67,15 +65,15 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
             <SearchBar isCompact={true} />
           ) : (
             <>
-              <NavItem $active={activeNav === '숙소'}>
+              <NavItem $active={activeNav === "숙소"}>
                 <Home size={18} />
                 <span>숙소</span>
               </NavItem>
-              <NavItem $active={activeNav === '체험'}>
+              <NavItem $active={activeNav === "체험"}>
                 <Sparkles size={18} />
                 <span>체험</span>
               </NavItem>
-              <NavItem $active={activeNav === '서비스'}>
+              <NavItem $active={activeNav === "서비스"}>
                 <Bell size={18} />
                 <span>서비스</span>
               </NavItem>
@@ -84,31 +82,19 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
         </HeaderCenter>
 
         <HeaderRight>
-          <HostButton type="button" onClick={() => navigate('/hosting')}>
+          <HostButton type="button" onClick={() => navigate("/hosting")}>
             호스트로 등록하기
           </HostButton>
 
           {isAuthenticated && user ? (
-            <ProfileDropdownWrapper>
-              <ProfileButton
-                ref={profileButtonRef}
-                type="button"
-                onClick={toggleProfile}
-              >
-                <ProfilePlaceholder>
-                  {user.nickname?.charAt(0)?.toUpperCase() || '?'}
-                </ProfilePlaceholder>
-              </ProfileButton>
-              {isProfileOpen && (
-                <ProfileDropdown
-                  onClose={() => setIsProfileOpen(false)}
-                  buttonRef={profileButtonRef}
-                />
-              )}
-            </ProfileDropdownWrapper>
+            <ProfileButton type="button" onClick={() => navigate("/profile")}>
+              <ProfilePlaceholder>
+                {user.nickname?.charAt(0)?.toUpperCase() || "?"}
+              </ProfilePlaceholder>
+            </ProfileButton>
           ) : (
             <>
-              <ProfileButton type="button" onClick={() => setIsLoginOpen(true)}>
+              <ProfileButton type="button" onClick={() => navigate("/profile")}>
                 <ProfilePlaceholder>
                   <User size={18} />
                 </ProfilePlaceholder>
@@ -118,9 +104,36 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
               </LoginButton>
             </>
           )}
+
+          <ProfileDropdownWrapper>
+            <MenuButton
+              ref={menuButtonRef}
+              type="button"
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+            >
+              <Menu size={20} />
+            </MenuButton>
+            {isMenuOpen && (
+              <ProfileDropdown
+                onClose={() => setIsMenuOpen(false)}
+                buttonRef={menuButtonRef}
+              />
+            )}
+          </ProfileDropdownWrapper>
         </HeaderRight>
       </HeaderContainer>
-      <LoginModal open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <LoginModal
+        open={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onOpenSignup={() => {
+          setIsLoginOpen(false);
+          setIsSignupOpen(true);
+        }}
+      />
+      <SignupModal
+        open={isSignupOpen}
+        onClose={() => setIsSignupOpen(false)}
+      />
     </>
   );
 };

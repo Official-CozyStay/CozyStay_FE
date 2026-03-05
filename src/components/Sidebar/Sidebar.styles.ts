@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export const SidebarOverlay = styled.div<{ $isOpen: boolean }>`
   position: fixed;
@@ -10,9 +10,9 @@ export const SidebarOverlay = styled.div<{ $isOpen: boolean }>`
   background: ${({ theme }) => theme.colors.overlay.default};
   z-index: ${({ theme }) => theme.zIndex.sidebarOverlay};
   opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-  visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
+  visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   transition: ${({ theme }) => theme.transition.normal};
-  pointer-events: ${({ $isOpen }) => ($isOpen ? "auto" : "none")};
+  pointer-events: ${({ $isOpen }) => ($isOpen ? 'auto' : 'none')};
 `;
 
 export const SidebarContainer = styled.aside<{
@@ -21,25 +21,27 @@ export const SidebarContainer = styled.aside<{
 }>`
   position: fixed;
   top: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.spacing["5xl"] : theme.spacing["6xl"]};
+    $isScrolled ? theme.spacing['5xl'] : theme.spacing['6xl']};
   right: 0;
   bottom: 0;
   width: 100%;
   max-width: 400px;
   background: ${({ theme }) => theme.colors.common.white};
   z-index: ${({ theme }) => theme.zIndex.sidebar};
-  transform: translateX(${({ $isOpen }) => ($isOpen ? "0" : "100%")});
-  transition: transform ${({ theme }) => theme.transition.slow},
+  transform: translateX(${({ $isOpen }) => ($isOpen ? '0' : '100%')});
+  transition:
+    transform ${({ theme }) => theme.transition.slow},
     top ${({ theme }) => theme.transition.slow};
   display: flex;
   flex-direction: column;
-  box-shadow: -${({ theme }) => theme.spacing.xs} 0 ${({ theme }) => theme.spacing.lg} rgba(0, 0, 0, 0.1);
-  pointer-events: ${({ $isOpen }) => ($isOpen ? "auto" : "none")};
+  box-shadow: -${({ theme }) => theme.spacing.xs} 0
+    ${({ theme }) => theme.spacing.lg} rgba(0, 0, 0, 0.1);
+  pointer-events: ${({ $isOpen }) => ($isOpen ? 'auto' : 'none')};
 
   ${media.mobile} {
     max-width: 100%;
     top: ${({ $isScrolled, theme }) =>
-      $isScrolled ? theme.spacing["4xl"] : theme.spacing["5xl"]};
+      $isScrolled ? theme.spacing['4xl'] : theme.spacing['5xl']};
   }
 `;
 
@@ -57,8 +59,8 @@ export const SidebarHeader = styled.div`
 `;
 
 export const SidebarCloseButton = styled.button`
-  width: ${({ theme }) => theme.spacing["3xl"]};
-  height: ${({ theme }) => theme.spacing["3xl"]};
+  width: ${({ theme }) => theme.spacing['3xl']};
+  height: ${({ theme }) => theme.spacing['3xl']};
   border-radius: ${({ theme }) => theme.radius.full};
   border: none;
   background: ${({ theme }) => theme.colors.common.white};
@@ -74,8 +76,8 @@ export const SidebarCloseButton = styled.button`
   }
 
   ${media.mobile} {
-    width: ${({ theme }) => theme.spacing["2xl"]};
-    height: ${({ theme }) => theme.spacing["2xl"]};
+    width: ${({ theme }) => theme.spacing['2xl']};
+    height: ${({ theme }) => theme.spacing['2xl']};
   }
 `;
 
@@ -155,8 +157,8 @@ export const SidebarHostIllustration = styled.div`
   position: absolute;
   right: ${({ theme }) => theme.spacing.xl};
   bottom: ${({ theme }) => theme.spacing.xl};
-  width: ${({ theme }) => theme.spacing["6xl"]};
-  height: ${({ theme }) => theme.spacing["6xl"]};
+  width: ${({ theme }) => theme.spacing['6xl']};
+  height: ${({ theme }) => theme.spacing['6xl']};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,8 +171,8 @@ export const SidebarHostIllustration = styled.div`
   }
 
   ${media.mobile} {
-    width: ${({ theme }) => theme.spacing["5xl"]};
-    height: ${({ theme }) => theme.spacing["5xl"]};
+    width: ${({ theme }) => theme.spacing['5xl']};
+    height: ${({ theme }) => theme.spacing['5xl']};
     right: ${({ theme }) => theme.spacing.lg};
     bottom: ${({ theme }) => theme.spacing.lg};
   }

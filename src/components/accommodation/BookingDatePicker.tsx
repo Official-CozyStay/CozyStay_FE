@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState, useRef } from "react";
-import { createPortal } from "react-dom";
-import "react-day-picker/dist/style.css";
-import { ko } from "date-fns/locale/ko";
-import { DayPicker, type DateRange, type Matcher } from "react-day-picker";
-import { format, parse, addDays, startOfDay } from "date-fns";
-import { useTheme } from "styled-components";
+import { useEffect, useMemo, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import 'react-day-picker/dist/style.css';
+import { ko } from 'date-fns/locale/ko';
+import { DayPicker, type DateRange, type Matcher } from 'react-day-picker';
+import { format, parse, addDays, startOfDay } from 'date-fns';
+import { useTheme } from 'styled-components';
 
-import * as S from "./BookingDatePicker.styles";
+import * as S from './BookingDatePicker.styles';
 
 type Props = {
   checkIn?: string;
@@ -15,7 +15,7 @@ type Props = {
   minDate?: Date;
 };
 
-const FMT = "yyyy-MM-dd";
+const FMT = 'yyyy-MM-dd';
 const toDate = (s?: string) => (s ? parse(s, FMT, new Date()) : undefined);
 const toStr = (d?: Date) => (d ? format(d, FMT) : undefined);
 
@@ -29,7 +29,7 @@ export default function BookingDatePicker({
   const today = useMemo(() => startOfDay(new Date()), []);
   const minStart = useMemo(
     () => startOfDay(minDate ?? today),
-    [minDate, today]
+    [minDate, today],
   );
 
   const [open, setOpen] = useState(false);
@@ -59,12 +59,12 @@ export default function BookingDatePicker({
     }
 
     updatePosition();
-    window.addEventListener("scroll", updatePosition, true);
-    window.addEventListener("resize", updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    window.addEventListener('resize', updatePosition);
 
     return () => {
-      window.removeEventListener("scroll", updatePosition, true);
-      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+      window.removeEventListener('resize', updatePosition);
     };
   }, [open]);
 
@@ -73,19 +73,19 @@ export default function BookingDatePicker({
     if (!open) return;
 
     function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === 'Escape') setOpen(false);
     }
 
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, [open]);
 
   const label =
     range?.from && range?.to
-      ? `${format(range.from, "MM.dd")} - ${format(range.to, "MM.dd")}`
+      ? `${format(range.from, 'MM.dd')} - ${format(range.to, 'MM.dd')}`
       : range?.from
-      ? `${format(range.from, "MM.dd")} - 체크아웃`
-      : "날짜 선택";
+        ? `${format(range.from, 'MM.dd')} - 체크아웃`
+        : '날짜 선택';
 
   const handleSelect = (newRange: DateRange | undefined) => {
     setRange(newRange);
@@ -129,7 +129,7 @@ export default function BookingDatePicker({
           top:
             buttonRect.top +
             buttonRect.height +
-            Number(theme.spacing.sm.replace("px", "")) +
+            Number(theme.spacing.sm.replace('px', '')) +
             window.scrollY,
           left: buttonRect.left + window.scrollX,
         }}
@@ -146,7 +146,7 @@ export default function BookingDatePicker({
           styles={S.dayPickerStyles}
         />
       </S.PopoverContainer>,
-      document.body
+      document.body,
     );
 
   return (

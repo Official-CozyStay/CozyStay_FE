@@ -1,12 +1,12 @@
-import * as S from "../accommodationDetail.styles";
-import BookingDatePicker from "../../../components/accommodation/BookingDatePicker";
-import { nightsBetween, calcTotal, formatKRW } from "../../../utils/price";
+import * as S from '../accommodationDetail.styles';
+import BookingDatePicker from '../../../components/accommodation/BookingDatePicker';
+import { nightsBetween, calcTotal, formatKRW } from '../../../utils/price';
 
-import type { AccommodationDetailDTO } from "../../../api/types.ts";
+import type { AccommodationDetailDTO } from '../../../api/types.ts';
 
 type BookingDetail = Pick<
   AccommodationDetailDTO,
-  "pricePerNight" | "cleaningFee" | "serviceFeePercentage" | "maxGuests"
+  'pricePerNight' | 'cleaningFee' | 'serviceFeePercentage' | 'maxGuests'
 >;
 
 type Props = {
@@ -32,7 +32,7 @@ export default function BookingCard({
     nights,
     detail.pricePerNight,
     detail.cleaningFee,
-    detail.serviceFeePercentage
+    detail.serviceFeePercentage,
   );
 
   const guestError =
@@ -42,7 +42,7 @@ export default function BookingCard({
 
   const dateError =
     checkIn && checkOut && nights === 0
-      ? "최소 1박 이상 선택해주세요."
+      ? '최소 1박 이상 선택해주세요.'
       : undefined;
 
   const canReserve =
@@ -111,9 +111,7 @@ export default function BookingCard({
               </S.SummaryTotal>
             </>
           ) : (
-            <S.Small>
-              날짜를 선택하면 예상 총액이 계산됩니다.
-            </S.Small>
+            <S.Small>날짜를 선택하면 예상 총액이 계산됩니다.</S.Small>
           )}
         </S.Summary>
 
@@ -127,12 +125,12 @@ export default function BookingCard({
             if (!canReserve) return;
             alert(
               `예약 요청: ${checkIn} ~ ${checkOut}, ${guests}명 (총액: ₩${formatKRW(
-                total
-              )})`
+                total,
+              )})`,
             );
           }}
         >
-          {canReserve ? "예약 요청하기" : "날짜와 인원을 선택해주세요"}
+          {canReserve ? '예약 요청하기' : '날짜와 인원을 선택해주세요'}
         </S.ReserveButton>
       </S.StickyCard>
     </S.Right>

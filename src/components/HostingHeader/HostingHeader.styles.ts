@@ -8,8 +8,8 @@ export const HeaderContainer = styled.header`
   left: 0;
   right: 0;
   height: ${({ theme }) => theme.spacing['6xl']};
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing['3xl']};
   background: ${({ theme }) => theme.colors.background.default};
@@ -17,7 +17,6 @@ export const HeaderContainer = styled.header`
   z-index: ${({ theme }) => theme.zIndex.header};
 
   ${media.mobile} {
-    grid-template-columns: 1fr auto;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     height: ${({ theme }) => theme.spacing['5xl']};
   }
@@ -27,7 +26,7 @@ export const HeaderLeft = styled(Link)`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
-  justify-self: start;
+  text-decoration: none;
 `;
 
 export const Logo = styled.img`
@@ -62,7 +61,8 @@ export const NavItem = styled.button<{ $active?: boolean }>`
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
   cursor: pointer;
   font-size: ${({ theme }) => theme.font.size.md};
-  font-weight: ${({ theme, $active }) => ($active ? theme.font.weight.bold : theme.font.weight.medium)};
+  font-weight: ${({ theme, $active }) =>
+    $active ? theme.font.weight.bold : theme.font.weight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
   position: relative;
   transition: color ${({ theme }) => theme.transition.normal};
@@ -88,7 +88,6 @@ export const HeaderRight = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
-  justify-self: end;
 
   ${media.mobile} {
     gap: ${({ theme }) => theme.spacing.sm};
@@ -143,6 +142,10 @@ export const ProfilePlaceholder = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border.light};
 `;
 
+export const MenuDropdownWrapper = styled.div`
+  position: relative;
+`;
+
 export const MenuIconButton = styled.button`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
@@ -161,4 +164,3 @@ export const MenuIconButton = styled.button`
     background-color: ${({ theme }) => theme.colors.background.hover};
   }
 `;
-

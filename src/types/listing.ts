@@ -73,4 +73,3 @@ export const defaultListing: Omit<Listing, 'id' | 'createdAt'> = {
   isBusiness: false,
   status: 'draft',
 };
-

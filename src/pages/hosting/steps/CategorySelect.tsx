@@ -46,4 +46,3 @@ const CategorySelect = ({ data, onDataChange }: StepProps) => {
 };
 
 export default CategorySelect;
-

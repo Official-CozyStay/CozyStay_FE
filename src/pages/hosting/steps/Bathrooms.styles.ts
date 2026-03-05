@@ -1,5 +1,5 @@
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   StepTitleLarge,
   CounterList as BaseCounterList,
   CounterItem as BaseCounterItem,
@@ -22,4 +22,3 @@ export const Description = CounterDescription;
 export const CounterControls = BaseCounterControls;
 export const IconButton = CounterButton;
 export const CounterValue = BaseCounterValue;
-

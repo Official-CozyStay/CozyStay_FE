@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export function useLightbox(totalImages: number) {
   const [lightboxOpen, setLightboxOpen] = useState(false);

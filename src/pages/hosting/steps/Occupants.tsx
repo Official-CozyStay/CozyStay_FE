@@ -37,7 +37,9 @@ const Occupants = ({ data, onDataChange }: StepProps) => {
     <OccupantsContainer>
       <TitleSection>
         <Title>게스트 외에 숙소에 있을 수 있는 사람은 누구인가요?</Title>
-        <Subtitle>숙박 중 다른 사람과 마주치는지 여부를 게스트에게 알려야 합니다.</Subtitle>
+        <Subtitle>
+          숙박 중 다른 사람과 마주치는지 여부를 게스트에게 알려야 합니다.
+        </Subtitle>
       </TitleSection>
 
       <OccupantGrid>
@@ -59,4 +61,3 @@ const Occupants = ({ data, onDataChange }: StepProps) => {
 };
 
 export default Occupants;
-

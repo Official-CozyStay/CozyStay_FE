@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { fetchAccommodationDetail } from "../api/accommodation.ts";
-import type { AccommodationDetailDTO } from "../api/types";
+import { create } from 'zustand';
+import { fetchAccommodationDetail } from '../api/accommodation.ts';
+import type { AccommodationDetailDTO } from '../api/types';
 
 type State = {
   detail: AccommodationDetailDTO | undefined;
@@ -35,7 +35,7 @@ export const useAccommodationStore = create<State & Actions>((set) => ({
       const data = await fetchAccommodationDetail(id);
       set({ detail: data });
     } catch (e: unknown) {
-      let message = "불러오기 실패";
+      let message = '불러오기 실패';
       if (e instanceof Error) message = e.message;
       set({ error: message });
     } finally {

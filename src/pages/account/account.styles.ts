@@ -1,20 +1,20 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export const PageContainer = styled.div`
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const PageHeader = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing["3xl"]}`};
+  padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing['3xl']}`};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   position: sticky;
   top: 0;
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
   z-index: ${({ theme }) => theme.zIndex.header};
 
   ${media.mobile} {
@@ -22,9 +22,26 @@ export const PageHeader = styled.header`
   }
 `;
 
-export const Logo = styled.img`
-  height: 32px;
+export const LogoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
   cursor: pointer;
+`;
+
+export const Logo = styled.img`
+  width: ${({ theme }) => theme.spacing['2xl']};
+  height: ${({ theme }) => theme.spacing['2xl']};
+`;
+
+export const LogoText = styled.span`
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.primary.main};
+
+  ${media.mobile} {
+    font-size: ${({ theme }) => theme.font.size.md};
+  }
 `;
 
 export const CompleteButton = styled.button`
@@ -47,8 +64,8 @@ export const ContentWrapper = styled.div`
   display: flex;
   max-width: 1200px;
   margin: 0 auto;
-  padding: ${({ theme }) => `${theme.spacing["3xl"]} ${theme.spacing["3xl"]}`};
-  gap: ${({ theme }) => theme.spacing["5xl"]};
+  padding: ${({ theme }) => `${theme.spacing['3xl']} ${theme.spacing['3xl']}`};
+  gap: ${({ theme }) => theme.spacing['5xl']};
 
   ${media.tablet} {
     flex-direction: column;
@@ -88,7 +105,7 @@ export const SidebarMenuItem = styled.button<{ $active?: boolean }>`
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ $active, theme }) =>
-    $active ? theme.colors.background.hover : "transparent"};
+    $active ? theme.colors.background.hover : 'transparent'};
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.regular};
   color: ${({ theme }) => theme.colors.text.primary};
@@ -134,7 +151,7 @@ export const ContentTitle = styled.h1`
   font-size: ${({ theme }) => theme.font.size.xxl};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
-  margin-bottom: ${({ theme }) => theme.spacing["2xl"]};
+  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 export const InfoList = styled.div`
@@ -183,8 +200,13 @@ export const InfoAction = styled.button`
   flex-shrink: 0;
   margin-left: ${({ theme }) => theme.spacing.lg};
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: ${({ theme }) => theme.colors.text.secondary};
+  }
+
+  &:disabled {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+    cursor: not-allowed;
   }
 `;
 
@@ -193,7 +215,7 @@ export const TabNav = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
-  margin-bottom: ${({ theme }) => theme.spacing["2xl"]};
+  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 export const TabItem = styled.button<{ $active?: boolean }>`
@@ -209,14 +231,14 @@ export const TabItem = styled.button<{ $active?: boolean }>`
   transition: ${({ theme }) => theme.transition.normal};
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -1px;
     left: 0;
     right: 0;
     height: 2px;
     background: ${({ $active, theme }) =>
-      $active ? theme.colors.text.primary : "transparent"};
+      $active ? theme.colors.text.primary : 'transparent'};
     transition: ${({ theme }) => theme.transition.normal};
   }
 
@@ -227,7 +249,7 @@ export const TabItem = styled.button<{ $active?: boolean }>`
 
 // 섹션 스타일 (로그인 및 보안 페이지 등에서 사용)
 export const Section = styled.section`
-  margin-bottom: ${({ theme }) => theme.spacing["3xl"]};
+  margin-bottom: ${({ theme }) => theme.spacing['3xl']};
 `;
 
 export const SectionTitle = styled.h2`

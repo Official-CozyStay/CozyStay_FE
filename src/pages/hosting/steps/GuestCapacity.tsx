@@ -47,7 +47,10 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
         <CounterItem>
           <CounterLabel>게스트</CounterLabel>
           <CounterControls>
-            <IconButton onClick={() => updateCount('guests', -1)} disabled={guests <= 1}>
+            <IconButton
+              onClick={() => updateCount('guests', -1)}
+              disabled={guests <= 1}
+            >
               <Minus size={18} />
             </IconButton>
             <CounterValue>{guests}</CounterValue>
@@ -60,7 +63,10 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
         <CounterItem>
           <CounterLabel>침실</CounterLabel>
           <CounterControls>
-            <IconButton onClick={() => updateCount('bedrooms', -1)} disabled={bedrooms <= 1}>
+            <IconButton
+              onClick={() => updateCount('bedrooms', -1)}
+              disabled={bedrooms <= 1}
+            >
               <Minus size={18} />
             </IconButton>
             <CounterValue>{bedrooms}</CounterValue>
@@ -73,7 +79,10 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
         <CounterItem>
           <CounterLabel>침대</CounterLabel>
           <CounterControls>
-            <IconButton onClick={() => updateCount('beds', -1)} disabled={beds <= 1}>
+            <IconButton
+              onClick={() => updateCount('beds', -1)}
+              disabled={beds <= 1}
+            >
               <Minus size={18} />
             </IconButton>
             <CounterValue>{beds}</CounterValue>
@@ -88,19 +97,11 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
         <Subtitle>모든 침실에 잠금 장치가 설치되어 있나요?</Subtitle>
         <RadioGroup>
           <RadioOption>
-            <RadioInput 
-              type="radio" 
-              name="lock" 
-              value="yes" 
-            />
+            <RadioInput type="radio" name="lock" value="yes" />
             <RadioLabel>예</RadioLabel>
           </RadioOption>
           <RadioOption>
-            <RadioInput 
-              type="radio" 
-              name="lock" 
-              value="no" 
-            />
+            <RadioInput type="radio" name="lock" value="no" />
             <RadioLabel>아니요</RadioLabel>
           </RadioOption>
         </RadioGroup>
@@ -110,4 +111,3 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
 };
 
 export default GuestCapacity;
-

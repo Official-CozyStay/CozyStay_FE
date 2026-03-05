@@ -1,5 +1,5 @@
-import React from "react";
-import { createPortal } from "react-dom";
+import React from 'react';
+import { createPortal } from 'react-dom';
 import {
   SidebarOverlay,
   SidebarContainer,
@@ -14,7 +14,7 @@ import {
   SidebarHostTitle,
   SidebarHostDesc,
   SidebarHostIllustration,
-} from "./Sidebar.styles";
+} from './Sidebar.styles';
 import {
   Heart,
   Plane,
@@ -27,7 +27,7 @@ import {
   UserPlus,
   LogOut,
   X,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -37,18 +37,18 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onClose, isScrolled = false }: SidebarProps) => {
   const menuItems = [
-    { icon: Heart, text: "위시리스트" },
-    { icon: Plane, text: "여행" },
-    { icon: MessageSquare, text: "메시지" },
-    { icon: User, text: "프로필" },
-    { icon: Settings, text: "계정 관리" },
-    { icon: Globe, text: "언어 및 통화" },
-    { icon: HelpCircle, text: "도움말 센터" },
+    { icon: Heart, text: '위시리스트' },
+    { icon: Plane, text: '여행' },
+    { icon: MessageSquare, text: '메시지' },
+    { icon: User, text: '프로필' },
+    { icon: Settings, text: '계정 관리' },
+    { icon: Globe, text: '언어 및 통화' },
+    { icon: HelpCircle, text: '도움말 센터' },
   ];
 
   const hostItems = [
-    { icon: Home, text: "호스트 추천하기" },
-    { icon: UserPlus, text: "공동 호스트 찾기" },
+    { icon: Home, text: '호스트 추천하기' },
+    { icon: UserPlus, text: '공동 호스트 찾기' },
   ];
 
   if (!isOpen) return null;
@@ -110,9 +110,8 @@ const Sidebar = ({ isOpen, onClose, isScrolled = false }: SidebarProps) => {
         </SidebarContent>
       </SidebarContainer>
     </>,
-    document.body
+    document.body,
   );
 };
 
 export default Sidebar;
-
