@@ -277,8 +277,10 @@ export const IntroImageSection = styled.div`
 /** 인트로 일러스트 이미지 */
 export const IntroIllustration = styled.img`
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   height: auto;
+  border-radius: ${({ theme }) => theme.radius.lg};
+  object-fit: cover;
 `;
 
 /** 인트로 설명 텍스트 */

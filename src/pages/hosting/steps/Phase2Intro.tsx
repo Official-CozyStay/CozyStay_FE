@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   IntroContainer,
   TextSection,
@@ -8,7 +7,6 @@ import {
   ImageSection,
   Illustration,
 } from './Phase2Intro.styles';
-import hostingStep2Image from '@/assets/images/hosting_step2.svg';
 
 const Phase2Intro = () => {
   return (
@@ -22,7 +20,10 @@ const Phase2Intro = () => {
         </Description>
       </TextSection>
       <ImageSection>
-        <Illustration src={hostingStep2Image} alt="Step 2 Illustration" />
+        <Illustration
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+          alt="아늑한 거실 인테리어"
+        />
       </ImageSection>
     </IntroContainer>
   );
