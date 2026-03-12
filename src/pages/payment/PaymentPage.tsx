@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
-import { useAccommodationStore } from "@/store/accommodationStore.ts";
+import { useAccommodationStore } from "@/store/accommodationStore";
 import { nightsBetween, calcTotal } from "../../utils/price";
 
 import BookingSummaryCard from "./components/BookngSummaryCard";
