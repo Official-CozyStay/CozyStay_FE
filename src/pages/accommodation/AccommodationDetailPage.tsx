@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAccommodationStore } from '../../store/accommodationStore';
 import * as S from './accommodationDetail.styles';
 
@@ -21,6 +21,7 @@ type ThumbImage = AccommodationImageDTO & { idx: number };
 
 export default function AccommodationDetailPage() {
   const { id = '1' } = useParams();
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
 
   // 전체 사진 모달 상태
@@ -110,6 +111,18 @@ export default function AccommodationDetailPage() {
   const averageRating = reviews?.summary?.average ?? 0;
   const reviewCount = reviews?.summary?.count ?? 0;
 
+  const handleGoToPayment = () => {
+    const params = new URLSearchParams();
+
+    if (checkIn) params.set('checkin', checkIn);
+    if (checkOut) params.set('checkout', checkOut);
+
+    params.set('numberOfGuests', String(guests));
+    params.set('guestCurrency', 'KRW');
+
+    navigate(`/payment/${id}?${params.toString()}`);
+  };
+
   return (
     <S.Container>
       <S.Header>
@@ -150,6 +163,7 @@ export default function AccommodationDetailPage() {
             guests={guests}
             setDates={(ci, co) => setDates(ci ?? null, co ?? null)}
             setGuests={setGuests}
+            onReserve={handleGoToPayment}
           />
         </S.Right>
       </S.Main>

@@ -145,6 +145,8 @@ export type AccommodationDetailInfoDTO = {
 export type AccommodationDetailDTO = {
   accommodationId: number;
   hostId: number;
+  hostNickname: string;
+  hostProfileImageUrl?: string | null;
   title: string;
   description: string;
   accommodationType: AccommodationType;
@@ -167,6 +169,8 @@ export type AccommodationDetailDTO = {
 
   images: AccommodationImageDTO[];
   amenities: AmenityDTO[];
+
+  reviewSummary?: ReviewSummaryDTO;
 
   // Frontend specific or optional fields if needed for compatibility (e.g. from reviews)
   // host: HostDTO; // Removing this as backend only sends hostId
@@ -203,4 +207,9 @@ export type ReviewListResponse = {
     count: number;
   };
   breakdown?: ReviewRatingBreakdown;
+};
+
+export type ReviewSummryDTO = {
+  average: number;
+  count: number;
 };

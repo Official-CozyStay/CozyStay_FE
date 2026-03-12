@@ -12,5 +12,14 @@ export default defineConfig({
   define: {
     // sockjs-client 등이 Node 스타일 global을 참조할 때 브라우저에서 쓰이도록
     global: "globalThis",
+
+  server: {
+    proxy: {
+      "/api" : {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });
