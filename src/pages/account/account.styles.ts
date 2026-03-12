@@ -84,7 +84,7 @@ export const Sidebar = styled.aside`
 `;
 
 export const SidebarTitle = styled.h2`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
@@ -148,7 +148,7 @@ export const MainContent = styled.main`
 `;
 
 export const ContentTitle = styled.h1`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing['2xl']};

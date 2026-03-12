@@ -154,12 +154,14 @@ declare module 'styled-components' {
         md: string;
         lg: string;
         xl: string;
-        xxl: string;
+        "2xl": string;
+        "3xl": string;
         display: string;
       };
       weight: {
         regular: number;
         medium: number;
+        semibold: number;
         bold: number;
         extrabold: number;
       };

@@ -11,13 +11,13 @@ export async function fetchComment(
     return null;
   }
 
-  try {
-    const response = (await client.get<ApiResponse<CommentDTO>>(
-      `/api/comments/${commentId}`,
-    )) as unknown as ApiResponse<CommentDTO>;
-    return response.data;
-  } catch (error) {
-    console.error(`Failed to fetch comment ${commentId}`, error);
-    return null;
-  }
+    try {
+        const response = await client.get(
+            `/api/comments/${commentId}`
+        ) as ApiResponse<CommentDTO>;
+        return response.data;
+    } catch (error) {
+        console.error(`Failed to fetch comment ${commentId}`, error);
+        return null;
+    }
 }

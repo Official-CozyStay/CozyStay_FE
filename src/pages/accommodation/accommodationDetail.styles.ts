@@ -20,7 +20,7 @@ export const Header = styled.header`
 
 export const Title = styled.h1`
   margin: 0 0 ${({ theme }) => theme.spacing.sm};
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   line-height: ${({ theme }) => theme.font.lineHeight.tight};
   font-weight: ${({ theme }) => theme.font.weight.extrabold};
   color: ${({ theme }) => theme.colors.text.primary};
@@ -308,7 +308,7 @@ export const LightboxClose = styled.button`
   border: none;
   background: transparent;
   color: ${({ theme }) => theme.colors.common.white};
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   cursor: pointer;
   transition: ${({ theme }) => theme.transition.colors.normal};
 

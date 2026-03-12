@@ -97,10 +97,11 @@ const Container = styled.div`
   max-width: ${({ theme }) => theme.layout.maxWidth};
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg};
+  padding-top: calc(${({ theme }) => theme.layout.headerHeight.default} + ${({ theme }) => theme.spacing.xl});
 
   ${media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg}
-      ${({ theme }) => theme.spacing.md};
+    padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.md};
+    padding-top: calc(${({ theme }) => theme.layout.headerHeight.scrolled} + ${({ theme }) => theme.spacing.lg});
   }
 `;
 
@@ -132,7 +133,7 @@ const Section = styled.div`
 `;
 
 const H1 = styled.h1`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   margin: 0 0 ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.text.primary};

@@ -61,7 +61,7 @@ export const StepTitle = styled.h1`
 
 /** 큰 타이틀 (h2, xxl) - 선택 화면용 */
 export const StepTitleLarge = styled.h2`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size["2xl"]};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
 

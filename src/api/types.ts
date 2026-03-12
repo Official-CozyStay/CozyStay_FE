@@ -44,6 +44,8 @@ export type CommentDTO = {
 export type HostelReviewDTO = {
   id: number;
   bookingId: number;
+  userNickName: string;
+  userProfileImageUrl: string | null;
   ratingOverall: number;
   ratingCleanliness: number;
   ratingAccuracy: number;
@@ -55,9 +57,67 @@ export type HostelReviewDTO = {
 };
 
 export type UserReviewDTO = {
+  id?: number;
+  targetGuestId: number;
+  bookingId: number;
+  userNickName?: string;
+  userProfileImageUrl?: string | null;
+  rating: number;
+  reviewComment: string;
+  comment?: CommentDTO | null;
+};
+
+export type UserReviewCreateRequest = {
   targetGuestId: number;
   bookingId: number;
   rating: number;
+  reviewComment: string;
+};
+
+export type BookingResponse = {
+  bookingId: number;
+  accommodationId: number;
+  guestId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: number;
+  totalPrice: number;
+  bookingStatus: string;
+};
+
+export type HostBookingListItemResponse = {
+  bookingId: number;
+  accommodationId: number;
+  accommodationTitle: string;
+  guestId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: number;
+  status: string;
+  totalPrice: number;
+  createdAt: string;
+};
+
+export type AccommodationReviewRequest = {
+  bookingId: number;
+  ratingOverall: number;
+  ratingCleanliness: number;
+  ratingAccuracy: number;
+  ratingCheckin: number;
+  ratingCommunication: number;
+  ratingLocation: number;
+  reviewComment: string;
+};
+
+export type AccommodationReviewResponse = {
+  id: number;
+  bookingId: number;
+  ratingOverall: number;
+  ratingCleanliness: number;
+  ratingAccuracy: number;
+  ratingCheckin: number;
+  ratingCommunication: number;
+  ratingLocation: number;
   reviewComment: string;
   comment?: CommentDTO | null;
 };
