@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   IntroContainer,
   TextSection,
@@ -23,8 +22,8 @@ const Phase1Intro = () => {
       </TextSection>
       <ImageSection>
         <Illustration
-          src="https://a0.muscache.com/im/pictures/content-listing-assets/72002598-a00e-436f-8012-680f4f780879/original/8701918a-f509-4828-89f4-18080a25694b.png"
-          alt="Step 1 Illustration"
+          src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80"
+          alt="모던한 숙소 인테리어"
         />
       </ImageSection>
     </IntroContainer>
