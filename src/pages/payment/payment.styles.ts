@@ -121,3 +121,27 @@ export const HostAvatar = styled.div`
   border-radius: 50%;
   background: #ddd;
 `;
+
+export const PaymentPageLayout = styled.div`
+  display: grid;
+  grid-template-columns: 360px minmax(0, 700px);
+  gap: 24px;
+  padding: 24px;
+  padding-top: 24px;
+  justify-content: center;
+`;
+
+export const PaymentContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+export const SubmitErrorBox = styled.div`
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 14px;
+`;

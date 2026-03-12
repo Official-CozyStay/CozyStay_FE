@@ -14,6 +14,12 @@ import RequestConfirmSection from "./components/RequestConfirmSection";
 import { createBooking } from "@/api/booking";
 import { createPayment, confirmPayment, failPayment, type PaymentMethod as ApiPaymentMethod, } from "@/api/payment";
 
+import {
+    PaymentPageLayout,
+    PaymentContent,
+    SubmitErrorBox,
+} from "./payment.styles";
+
 export default function PaymentPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -170,16 +176,7 @@ export default function PaymentPage() {
     };
 
     return (
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: "360px minmax(0,700px)",
-                gap: 24,
-                padding: 24,
-                paddingTop: 24,
-                justifyContent: "center",
-            }}
-        >
+        <PaymentPageLayout>
             {/* 왼쪽: 숙소 요약 */}
             <BookingSummaryCard
                 title={detail.title}
@@ -195,28 +192,25 @@ export default function PaymentPage() {
             />
 
             {/* 오른쪽: 결제 영역 */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <PaymentMethodSection value={paymentMethod} onChange={setPaymentMethod} />
+            <PaymentContent>
+                <PaymentMethodSection
+                    value={paymentMethod}
+                    onChange={setPaymentMethod}
+                />
 
-                <HostMessageSection value={hostMessage} onChange={setHostMessage} hostName={detail.hostNickname ?? "호스트"} />
+                <HostMessageSection
+                    value={hostMessage}
+                    onChange={setHostMessage}
+                    hostName={detail.hostNickname ?? "호스트"}
+                />
 
-                {submitError && (
-                    <div
-                        style={{
-                            padding: 12,
-                            borderRadius: 12,
-                            border: "1px solid #fca5a5",
-                            background: "#fef2f2",
-                            color: "#991b1b",
-                            fontSize: 14,
-                        }}
-                    >
-                        {submitError}
-                    </div>
-                )}
+                {submitError && <SubmitErrorBox>{submitError}</SubmitErrorBox>}
 
-                <RequestConfirmSection disabled={!canSubmit} onSubmit={handleSubmit} />
-            </div>
-        </div>
+                <RequestConfirmSection
+                    disabled={!canSubmit}
+                    onSubmit={handleSubmit}
+                />
+            </PaymentContent>
+        </PaymentPageLayout>
     );
 }
