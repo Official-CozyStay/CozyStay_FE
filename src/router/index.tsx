@@ -12,8 +12,8 @@ import ProfileEditPage from "../pages/profile/edit/ProfileEditPage";
 import ReviewsPage from "../pages/profile/reviews/ReviewsPage";
 import UserPage from "../pages/user/UserPage";
 import PaymentPage from "../pages/payment/PaymentPage";
-import PaymentSuccessPage from "../pages/payment/PaymentSuccessPage.tsx";
-import PaymentFailPage from "../pages/payment/PaymentFailPage.tsx";
+import PaymentSuccessPage from "../pages/payment/PaymentSuccessPage";
+import PaymentFailPage from "../pages/payment/PaymentFailPage";
 
 export const router = createBrowserRouter([
   {
