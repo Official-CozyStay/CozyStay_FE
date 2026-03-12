@@ -16,6 +16,7 @@ type Props = {
   guests: number;
   setDates: (ci: string | null, co: string | null) => void;
   setGuests: (n: number) => void;
+  onReserve: () => void;
 };
 
 export default function BookingCard({
@@ -25,6 +26,7 @@ export default function BookingCard({
   guests,
   setDates,
   setGuests,
+  onReserve,
 }: Props) {
   const nights = nightsBetween(checkIn ?? undefined, checkOut ?? undefined);
 
@@ -123,14 +125,15 @@ export default function BookingCard({
           disabled={!canReserve}
           onClick={() => {
             if (!canReserve) return;
-            alert(
-              `예약 요청: ${checkIn} ~ ${checkOut}, ${guests}명 (총액: ₩${formatKRW(
-                total,
-              )})`,
-            );
+            onReserve();
+            // alert(
+            //   `예약 요청: ${checkIn} ~ ${checkOut}, ${guests}명 (총액: ₩${formatKRW(
+            //     total
+            //   )})`
+            // );
           }}
         >
-          {canReserve ? '예약 요청하기' : '날짜와 인원을 선택해주세요'}
+          {canReserve ? '예약하기' : '날짜와 인원을 선택해주세요'}
         </S.ReserveButton>
       </S.StickyCard>
     </S.Right>
