@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import {
   SidebarOverlay,
@@ -36,14 +37,16 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, onClose, isScrolled = false }: SidebarProps) => {
+  const navigate = useNavigate();
+
   const menuItems = [
-    { icon: Heart, text: '위시리스트' },
-    { icon: Plane, text: '여행' },
-    { icon: MessageSquare, text: '메시지' },
-    { icon: User, text: '프로필' },
-    { icon: Settings, text: '계정 관리' },
-    { icon: Globe, text: '언어 및 통화' },
-    { icon: HelpCircle, text: '도움말 센터' },
+    { icon: Heart, text: '위시리스트', path: '/wishlist' },
+    { icon: Plane, text: '여행', path: undefined },
+    { icon: MessageSquare, text: '메시지', path: '/messages' },
+    { icon: User, text: '프로필', path: '/profile' },
+    { icon: Settings, text: '계정 관리', path: '/account' },
+    { icon: Globe, text: '언어 및 통화', path: undefined },
+    { icon: HelpCircle, text: '도움말 센터', path: undefined },
   ];
 
   const hostItems = [
@@ -66,7 +69,16 @@ const Sidebar = ({ isOpen, onClose, isScrolled = false }: SidebarProps) => {
           {menuItems.map((item, index) => {
             const Icon = item.icon;
             return (
-              <SidebarMenuItem key={index}>
+              <SidebarMenuItem
+                key={index}
+                type="button"
+                onClick={() => {
+                  if (item.path) {
+                    navigate(item.path);
+                    onClose();
+                  }
+                }}
+              >
                 <SidebarMenuIcon>
                   <Icon size={20} />
                 </SidebarMenuIcon>
