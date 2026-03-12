@@ -3,103 +3,168 @@ import { media } from '@/styles/media';
 
 export const ModalOverlay = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: ${({ theme }) => theme.colors.overlay.default};
   z-index: ${({ theme }) => theme.zIndex.modalOverlay};
   display: flex;
   align-items: center;
   justify-content: center;
   padding: ${({ theme }) => theme.spacing.lg};
-  box-sizing: border-box;
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.md};
     align-items: flex-end;
-    justify-content: center;
   }
 `;
 
 export const ModalContainer = styled.div`
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.xl};
+  width: 100%;
   max-width: 568px;
-  width: calc(100% - ${({ theme }) => theme.spacing.xl} * 2);
+  height: 720px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
   box-shadow: ${({ theme }) => theme.shadow.lg};
   overflow: hidden;
-  z-index: ${({ theme }) => theme.zIndex.modalContainer};
-  box-sizing: border-box;
 
   ${media.mobile} {
-    max-width: 100%;
-    width: 100%;
+    height: 80vh;
+    max-height: 80vh;
     border-radius: ${({ theme }) => theme.radius.xl}
       ${({ theme }) => theme.radius.xl} 0 0;
-    max-height: 80vh;
   }
 `;
 
 export const ModalHeader = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
   align-items: center;
-  justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.xl};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
-
-  ${media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg};
-  }
 `;
 
 export const ModalTitle = styled.h2`
+  grid-column: 2;
+  justify-self: center;
+  margin: 0;
   font-size: ${({ theme }) => theme.font.size.xl};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
-  margin: 0;
-
-  ${media.mobile} {
-    font-size: ${({ theme }) => theme.font.size.lg};
-  }
+  text-align: center;
 `;
 
 export const ModalCloseButton = styled.button`
+  grid-column: 3;
+  justify-self: end;
   width: 32px;
   height: 32px;
-  border-radius: ${({ theme }) => theme.radius.full};
+  padding: 0;
   border: none;
-  background: ${({ theme }) => theme.colors.common.white};
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text.primary};
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: ${({ theme }) => theme.transition.normal};
-  color: ${({ theme }) => theme.colors.text.primary};
 
   &:hover {
     background: ${({ theme }) => theme.colors.border.light};
   }
-
-  ${media.mobile} {
-    width: 28px;
-    height: 28px;
-  }
 `;
 
 export const ModalContent = styled.div`
-  padding: ${({ theme }) => theme.spacing.xl};
   flex: 1;
-  overflow-y: auto;
+  padding: ${({ theme }) => theme.spacing.xl};
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.lg};
   }
 `;
 
+/* 목록 뷰: 스크롤 영역 + 하단 버튼 */
+export const ListScroll = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  padding-right: ${({ theme }) => theme.spacing.md};
+`;
+
+export const WishlistList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: ${({ theme }) => theme.spacing.md};
+
+  ${media.mobile} {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const WishlistItem = styled.button`
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.lg};
+  background: ${({ theme }) => theme.colors.common.white};
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.border.light};
+  transition: ${({ theme }) => theme.transition.normal};
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.shadow.md};
+  }
+`;
+
+export const WishlistItemThumb = styled.div<{ $imageUrl?: string | null }>`
+  width: 100%;
+  aspect-ratio: 1;
+  background: ${({ $imageUrl, theme }) =>
+    $imageUrl
+      ? `url(${$imageUrl}) center/cover`
+      : `linear-gradient(135deg, ${theme.colors.border.light} 0%, ${theme.colors.border.primary} 100%)`};
+`;
+
+export const WishlistItemBody = styled.div`
+  padding: ${({ theme }) => theme.spacing.md};
+`;
+
+export const WishlistItemTitle = styled.div`
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
+
+export const WishlistItemCount = styled.div`
+  font-size: ${({ theme }) => theme.font.size.sm};
+  color: ${({ theme }) => theme.colors.text.secondary};
+`;
+
+export const ModalNewWishlistButton = styled.button`
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  background: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors.common.white};
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+/* 만들기 뷰 */
 export const ModalInputLabel = styled.label`
   display: block;
   font-size: ${({ theme }) => theme.font.size.md};
@@ -116,13 +181,11 @@ export const ModalInput = styled.input`
   font-size: ${({ theme }) => theme.font.size.md};
   color: ${({ theme }) => theme.colors.text.primary};
   background: ${({ theme }) => theme.colors.common.white};
-  transition: ${({ theme }) => theme.transition.colors.normal};
   box-sizing: border-box;
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary.main};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.light};
   }
 
   &::placeholder {
@@ -139,20 +202,44 @@ export const ModalCharCount = styled.div`
 
 export const ModalFooter = styled.div`
   display: flex;
-  align-items: center;
   justify-content: flex-end;
   gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.xl};
   border-top: 1px solid ${({ theme }) => theme.colors.border.light};
+`;
 
-  ${media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg};
-    flex-direction: column-reverse;
-    gap: ${({ theme }) => theme.spacing.sm};
+export const ModalCancelButton = styled.button`
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  background: ${({ theme }) => theme.colors.common.white};
+  color: ${({ theme }) => theme.colors.text.primary};
+  cursor: pointer;
 
-    button {
-      width: 100%;
-    }
+  &:hover {
+    background: ${({ theme }) => theme.colors.border.light};
+  }
+`;
+
+export const ModalCreateButton = styled.button`
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  border: none;
+  background: ${({ theme }) => theme.colors.primary.main};
+  color: ${({ theme }) => theme.colors.common.white};
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: ${({ theme }) => theme.colors.primary.hover};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 
@@ -161,31 +248,13 @@ export const ModalButton = styled.button`
   border-radius: ${({ theme }) => theme.radius.md};
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.medium};
-  cursor: pointer;
-  transition: ${({ theme }) => theme.transition.colors.normal};
   border: none;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`;
-
-export const ModalCancelButton = styled(ModalButton)`
-  background: ${({ theme }) => theme.colors.common.white};
+  background: transparent;
   color: ${({ theme }) => theme.colors.text.primary};
-  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  cursor: pointer;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 
-  &:hover:not(:disabled) {
+  &:hover {
     background: ${({ theme }) => theme.colors.border.light};
-  }
-`;
-
-export const ModalCreateButton = styled(ModalButton)`
-  background: ${({ theme }) => theme.colors.primary.main};
-  color: ${({ theme }) => theme.colors.common.white};
-
-  &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors.primary.hover};
   }
 `;
