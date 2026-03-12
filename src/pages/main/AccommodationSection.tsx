@@ -92,6 +92,7 @@ const AccommodationSection = ({
           {accommodations.map((accommodation) => (
             <AccommodationCard
               key={accommodation.id}
+              accommodationId={accommodation.id}
               image={accommodation.image}
               badge={accommodation.badge}
               title={accommodation.title}
