@@ -50,8 +50,6 @@ export default function PaymentPage() {
     if (error) return <div>에러: {error}</div>;
     if (!detail) return <div>데이터 없음</div>;
 
-    const HEADER_OFFSET = 80;
-
     const canSubmit =
         !!price &&
         !!checkIn &&
@@ -178,7 +176,7 @@ export default function PaymentPage() {
                 gridTemplateColumns: "360px minmax(0,700px)",
                 gap: 24,
                 padding: 24,
-                paddingTop: 24 + HEADER_OFFSET,
+                paddingTop: 24,
                 justifyContent: "center",
             }}
         >
