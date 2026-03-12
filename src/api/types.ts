@@ -74,6 +74,13 @@ export type UserReviewCreateRequest = {
   reviewComment: string;
 };
 
+export type BookingCreateRequest = {
+  accommodationId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: number;
+};
+
 export type BookingResponse = {
   bookingId: number;
   accommodationId: number;
