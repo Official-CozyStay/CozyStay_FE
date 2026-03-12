@@ -86,7 +86,12 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
           <Home />
           {MENU_LABELS.trips}
         </DropdownItem>
-        <DropdownItem>
+        <DropdownItem
+          onClick={() => {
+            navigate('/messages');
+            onClose();
+          }}
+        >
           <MessageCircle />
           {MENU_LABELS.messages}
         </DropdownItem>

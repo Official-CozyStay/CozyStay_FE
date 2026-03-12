@@ -1,35 +1,36 @@
-import styled from "styled-components";
-import type { ReviewListResponse } from "../../../api/types";
-import ReviewRatingBreakdown from "../../../components/reviews/ReviewRatingBreakdown";
-import ReviewItem from "../../../components/reviews/ReviewItem";
-import { media } from "../../../styles/media";
+import styled from 'styled-components';
+import type { ReviewListResponse } from '../../../api/types';
+import ReviewRatingBreakdown from '../../../components/reviews/ReviewRatingBreakdown';
+import ReviewItem from '../../../components/reviews/ReviewItem';
+import { media } from '../../../styles/media';
 
 interface Props {
-    reviews: ReviewListResponse;
+  reviews: ReviewListResponse;
 }
 
 export default function ReviewSection({ reviews }: Props) {
-    return (
-        <Container id="reviews">
-            <Header>
-                <Title>
-                    ★ {reviews.summary.average.toFixed(2)} · 후기 {reviews.summary.count}개
-                </Title>
-            </Header>
+  return (
+    <Container id="reviews">
+      <Header>
+        <Title>
+          ★ {reviews.summary.average.toFixed(2)} · 후기 {reviews.summary.count}
+          개
+        </Title>
+      </Header>
 
-            {reviews.breakdown && (
-                <BreakdownWrapper>
-                    <ReviewRatingBreakdown data={reviews.breakdown} />
-                </BreakdownWrapper>
-            )}
+      {reviews.breakdown && (
+        <BreakdownWrapper>
+          <ReviewRatingBreakdown data={reviews.breakdown} />
+        </BreakdownWrapper>
+      )}
 
-            <ReviewGrid>
-                {reviews.reviews.map((review) => (
-                    <ReviewItem key={review.reviewId} review={review} />
-                ))}
-            </ReviewGrid>
-        </Container>
-    );
+      <ReviewGrid>
+        {reviews.reviews.map((review) => (
+          <ReviewItem key={review.reviewId} review={review} />
+        ))}
+      </ReviewGrid>
+    </Container>
+  );
 }
 
 const Container = styled.section`

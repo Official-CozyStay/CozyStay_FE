@@ -1,17 +1,18 @@
 // 타이포그래피
 export const fontSize = {
-  xs: "12px",
-  sm: "14px",
-  md: "16px",
-  lg: "20px",
-  xl: "24px",
-  xxl: "32px",
-  display: "40px",
+  xs: '12px',
+  sm: '14px',
+  md: '16px',
+  lg: '20px',
+  xl: '24px',
+  xxl: '32px',
+  display: '40px',
 };
 
 export const fontWeight = {
   regular: 400,
   medium: 500,
+  semibold: 600,
   bold: 700,
   extrabold: 800,
 };
@@ -21,4 +22,3 @@ export const lineHeight = {
   normal: 1.5,
   relaxed: 1.7,
 };
-

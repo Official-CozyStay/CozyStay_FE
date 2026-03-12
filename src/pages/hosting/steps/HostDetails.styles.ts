@@ -75,7 +75,8 @@ export const SelectLabel = styled.span`
 
 export const Select = styled.select`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing['2xl']} ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing['2xl']}
+    ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   font-size: ${({ theme }) => theme.font.size.md};
@@ -154,8 +155,9 @@ export const ButtonGroup = styled.div`
 export const OptionButton = styled.button<{ $selected?: boolean }>`
   flex: 1;
   padding: ${({ theme }) => theme.spacing.lg};
-  border: 1px solid ${({ theme, $selected }) => 
-    $selected ? theme.colors.text.primary : theme.colors.border.primary};
+  border: 1px solid
+    ${({ theme, $selected }) =>
+      $selected ? theme.colors.text.primary : theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
   background-color: ${({ theme }) => theme.colors.common.white};
   font-size: ${({ theme }) => theme.font.size.md};
@@ -164,7 +166,9 @@ export const OptionButton = styled.button<{ $selected?: boolean }>`
   cursor: pointer;
   transition: all ${({ theme }) => theme.transition.fast};
 
-  ${({ $selected, theme }) => $selected && `
+  ${({ $selected, theme }) =>
+    $selected &&
+    `
     border-width: 2px;
     background-color: ${theme.colors.background.hover};
   `}

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitleLarge,
   CounterList as BaseCounterList,
@@ -61,4 +61,3 @@ export const RadioLabel = styled.span`
   font-size: ${({ theme }) => theme.font.size.md};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
-

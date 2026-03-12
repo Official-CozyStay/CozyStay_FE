@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export const HostingContainer = styled.div`
-  padding-top: ${({ theme }) => theme.spacing["6xl"]};
+  padding-top: ${({ theme }) => theme.spacing['6xl']};
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background.default};
   display: flex;
@@ -13,14 +13,14 @@ export const HostingContainer = styled.div`
 export const TabSection = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md};
-  margin-top: ${({ theme }) => theme.spacing["4xl"]};
+  margin-top: ${({ theme }) => theme.spacing['4xl']};
   flex-shrink: 0;
 `;
 
 export const ListingsSection = styled.div`
   width: 100%;
   max-width: 1200px;
-  padding: ${({ theme }) => theme.spacing["3xl"]};
+  padding: ${({ theme }) => theme.spacing['3xl']};
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.lg};
@@ -118,7 +118,7 @@ export const ListingPrice = styled.p`
   }
 `;
 
-export const ListingStatus = styled.span<{ $status: "draft" | "published" }>`
+export const ListingStatus = styled.span<{ $status: 'draft' | 'published' }>`
   display: inline-block;
   padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.radius.sm};
@@ -127,7 +127,7 @@ export const ListingStatus = styled.span<{ $status: "draft" | "published" }>`
   margin-top: ${({ theme }) => theme.spacing.sm};
 
   ${({ $status, theme }) =>
-    $status === "published"
+    $status === 'published'
       ? `
     background-color: ${theme.colors.status.success}20;
     color: ${theme.colors.status.success};
@@ -168,7 +168,7 @@ export const ContentArea = styled.div`
   width: 100%;
   padding: 0 ${({ theme }) => theme.spacing.lg};
   /* 상단바와 버튼 영역만큼의 오프셋을 고려하여 시각적 중앙을 맞춤 */
-  padding-bottom: ${({ theme }) => theme.spacing["6xl"]};
+  padding-bottom: ${({ theme }) => theme.spacing['6xl']};
 `;
 
 export const EmptyIcon = styled.div`
@@ -187,12 +187,12 @@ export const EmptyTitle = styled.h2`
 export const EmptyDesc = styled.p`
   font-size: ${({ theme }) => theme.font.size.md};
   color: ${({ theme }) => theme.colors.text.secondary};
-  margin-bottom: ${({ theme }) => theme.spacing["2xl"]};
+  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 export const ActionButton = styled.button`
   padding: ${({ theme }) => theme.spacing.md}
-    ${({ theme }) => theme.spacing["2xl"]};
+    ${({ theme }) => theme.spacing['2xl']};
   background-color: ${({ theme }) => theme.colors.background.hover};
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};

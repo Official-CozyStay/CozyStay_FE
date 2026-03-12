@@ -1,7 +1,7 @@
 // 모듈 보강 - styled-components의 DefaultTheme 타입 확장
-import "styled-components";
+import 'styled-components';
 
-declare module "styled-components" {
+declare module 'styled-components' {
   export interface DefaultTheme {
     colors: {
       primary: {
@@ -59,18 +59,18 @@ declare module "styled-components" {
       md: string;
       lg: string;
       xl: string;
-      "2xl": string;
-      "3xl": string;
-      "4xl": string;
-      "5xl": string;
-      "6xl": string;
-      "1px": string;
-      "2px": string;
-      "6px": string;
-      "10px": string;
-      "18px": string;
-      "20px": string;
-      "40px": string;
+      '2xl': string;
+      '3xl': string;
+      '4xl': string;
+      '5xl': string;
+      '6xl': string;
+      '1px': string;
+      '2px': string;
+      '6px': string;
+      '10px': string;
+      '18px': string;
+      '20px': string;
+      '40px': string;
     };
     size: {
       icon: {
@@ -154,12 +154,14 @@ declare module "styled-components" {
         md: string;
         lg: string;
         xl: string;
-        xxl: string;
+        "2xl": string;
+        "3xl": string;
         display: string;
       };
       weight: {
         regular: number;
         medium: number;
+        semibold: number;
         bold: number;
         extrabold: number;
       };

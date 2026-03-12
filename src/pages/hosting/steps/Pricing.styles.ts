@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection as BaseTitleSection,
   StepTitle,
   Subtitle as BaseSubtitle,
@@ -85,12 +85,13 @@ export const QuickPriceButtons = styled.div`
 
 export const QuickPriceButton = styled.button<{ $active?: boolean }>`
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
-  border: 1px solid ${({ theme, $active }) => 
-    $active ? theme.colors.text.primary : theme.colors.border.primary};
+  border: 1px solid
+    ${({ theme, $active }) =>
+      $active ? theme.colors.text.primary : theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.full};
-  background-color: ${({ theme, $active }) => 
+  background-color: ${({ theme, $active }) =>
     $active ? theme.colors.text.primary : theme.colors.common.white};
-  color: ${({ theme, $active }) => 
+  color: ${({ theme, $active }) =>
     $active ? theme.colors.common.white : theme.colors.text.primary};
   font-size: ${({ theme }) => theme.font.size.sm};
   font-weight: ${({ theme }) => theme.font.weight.medium};
@@ -147,8 +148,58 @@ export const BreakdownLabel = styled.span`
 
 export const BreakdownValue = styled.span<{ $highlight?: boolean }>`
   font-size: ${({ theme }) => theme.font.size.sm};
-  font-weight: ${({ theme, $highlight }) => 
+  font-weight: ${({ theme, $highlight }) =>
     $highlight ? theme.font.weight.bold : theme.font.weight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
+// 청소비 스타일
+export const CleaningFeeSection = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding-top: ${({ theme }) => theme.spacing.xl};
+  border-top: 1px solid ${({ theme }) => theme.colors.border.light};
+`;
+
+export const CleaningFeeLabel = styled.label`
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
+`;
+
+export const CleaningFeeInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const CleaningFeeInput = styled.input`
+  width: 150px;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text.primary};
+  transition: all ${({ theme }) => theme.transition.fast};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.text.primary};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.tertiary};
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance: textfield;
+`;

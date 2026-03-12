@@ -11,4 +11,3 @@ export const media = {
   desktop: `@media (min-width: ${breakpoints.tablet}px)`,
   desktopLarge: `@media (min-width: ${breakpoints.desktop}px)`,
 };
-

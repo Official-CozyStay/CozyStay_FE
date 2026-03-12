@@ -11,43 +11,39 @@ import {
   CounterControls,
   IconButton,
   CounterValue,
-  QuestionSection,
-  RadioGroup,
-  RadioOption,
-  RadioInput,
-  RadioLabel,
 } from './GuestCapacity.styles';
 import type { StepProps } from '../BecomeHostPage';
 
 const GuestCapacity = ({ data, onDataChange }: StepProps) => {
   const guests = data.guests || 1;
+  const rooms = data.rooms || 1;
   const bedrooms = data.bedrooms || 1;
   const beds = data.beds || 1;
+  const bathrooms = data.bathrooms || 1;
 
-  const updateCount = (type: 'guests' | 'bedrooms' | 'beds', delta: number) => {
-    if (type === 'guests') {
-      onDataChange({ guests: Math.max(1, guests + delta) });
-    }
-    if (type === 'bedrooms') {
-      onDataChange({ bedrooms: Math.max(1, bedrooms + delta) });
-    }
-    if (type === 'beds') {
-      onDataChange({ beds: Math.max(1, beds + delta) });
-    }
+  const updateCount = (
+    type: 'guests' | 'rooms' | 'bedrooms' | 'beds' | 'bathrooms',
+    delta: number,
+  ) => {
+    const currentValue = data[type] || 1;
+    onDataChange({ [type]: Math.max(1, currentValue + delta) });
   };
 
   return (
     <BasicsContainer>
       <TitleSection>
         <Title>기본 사항 작성하기</Title>
-        <Subtitle>숙박 가능한 인원은 몇 명인가요?</Subtitle>
+        <Subtitle>숙소의 기본 정보를 알려주세요.</Subtitle>
       </TitleSection>
 
       <CounterList>
         <CounterItem>
           <CounterLabel>게스트</CounterLabel>
           <CounterControls>
-            <IconButton onClick={() => updateCount('guests', -1)} disabled={guests <= 1}>
+            <IconButton
+              onClick={() => updateCount('guests', -1)}
+              disabled={guests <= 1}
+            >
               <Minus size={18} />
             </IconButton>
             <CounterValue>{guests}</CounterValue>
@@ -58,9 +54,28 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
         </CounterItem>
 
         <CounterItem>
+          <CounterLabel>방</CounterLabel>
+          <CounterControls>
+            <IconButton
+              onClick={() => updateCount('rooms', -1)}
+              disabled={rooms <= 1}
+            >
+              <Minus size={18} />
+            </IconButton>
+            <CounterValue>{rooms}</CounterValue>
+            <IconButton onClick={() => updateCount('rooms', 1)}>
+              <Plus size={18} />
+            </IconButton>
+          </CounterControls>
+        </CounterItem>
+
+        <CounterItem>
           <CounterLabel>침실</CounterLabel>
           <CounterControls>
-            <IconButton onClick={() => updateCount('bedrooms', -1)} disabled={bedrooms <= 1}>
+            <IconButton
+              onClick={() => updateCount('bedrooms', -1)}
+              disabled={bedrooms <= 1}
+            >
               <Minus size={18} />
             </IconButton>
             <CounterValue>{bedrooms}</CounterValue>
@@ -73,7 +88,10 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
         <CounterItem>
           <CounterLabel>침대</CounterLabel>
           <CounterControls>
-            <IconButton onClick={() => updateCount('beds', -1)} disabled={beds <= 1}>
+            <IconButton
+              onClick={() => updateCount('beds', -1)}
+              disabled={beds <= 1}
+            >
               <Minus size={18} />
             </IconButton>
             <CounterValue>{beds}</CounterValue>
@@ -82,32 +100,25 @@ const GuestCapacity = ({ data, onDataChange }: StepProps) => {
             </IconButton>
           </CounterControls>
         </CounterItem>
-      </CounterList>
 
-      <QuestionSection>
-        <Subtitle>모든 침실에 잠금 장치가 설치되어 있나요?</Subtitle>
-        <RadioGroup>
-          <RadioOption>
-            <RadioInput 
-              type="radio" 
-              name="lock" 
-              value="yes" 
-            />
-            <RadioLabel>예</RadioLabel>
-          </RadioOption>
-          <RadioOption>
-            <RadioInput 
-              type="radio" 
-              name="lock" 
-              value="no" 
-            />
-            <RadioLabel>아니요</RadioLabel>
-          </RadioOption>
-        </RadioGroup>
-      </QuestionSection>
+        <CounterItem>
+          <CounterLabel>욕실</CounterLabel>
+          <CounterControls>
+            <IconButton
+              onClick={() => updateCount('bathrooms', -1)}
+              disabled={bathrooms <= 1}
+            >
+              <Minus size={18} />
+            </IconButton>
+            <CounterValue>{bathrooms}</CounterValue>
+            <IconButton onClick={() => updateCount('bathrooms', 1)}>
+              <Plus size={18} />
+            </IconButton>
+          </CounterControls>
+        </CounterItem>
+      </CounterList>
     </BasicsContainer>
   );
 };
 
 export default GuestCapacity;
-

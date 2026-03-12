@@ -61,7 +61,8 @@ export const NavItem = styled.button<{ $active?: boolean }>`
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
   cursor: pointer;
   font-size: ${({ theme }) => theme.font.size.md};
-  font-weight: ${({ theme, $active }) => ($active ? theme.font.weight.bold : theme.font.weight.medium)};
+  font-weight: ${({ theme, $active }) =>
+    $active ? theme.font.weight.bold : theme.font.weight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
   position: relative;
   transition: color ${({ theme }) => theme.transition.normal};
@@ -163,4 +164,3 @@ export const MenuIconButton = styled.button`
     background-color: ${({ theme }) => theme.colors.background.hover};
   }
 `;
-

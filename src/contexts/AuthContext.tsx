@@ -9,11 +9,15 @@ import {
 } from 'react';
 import type { ReactNode } from 'react';
 
+export type UserRole = "USER" | "HOST" | "ADMIN";
+
 export type User = {
   id: string;
   nickname: string;
   profileImage?: string;
   email?: string;
+  role?: UserRole;
+  grade?: string;
 };
 
 type ApiResponse<T> = {
@@ -27,6 +31,8 @@ type UserProfileResponse = {
   nickName: string;
   profileImageUrl?: string;
   email?: string;
+  role?: string;
+  grade?: string;
 };
 
 type AuthContextType = {
@@ -64,7 +70,7 @@ const fetchUserProfile = async (token: string): Promise<User | null> => {
 
       const errorText = await response.text();
       throw new Error(
-        `API 호출 실패: ${response.status} ${response.statusText} - ${errorText}`
+        `API 호출 실패: ${response.status} ${response.statusText} - ${errorText}`,
       );
     }
 
@@ -81,6 +87,8 @@ const fetchUserProfile = async (token: string): Promise<User | null> => {
       nickname: data.nickName || '사용자',
       profileImage: data.profileImageUrl || undefined,
       email: data.email || undefined,
+      role: (data.role as UserRole) || 'USER',
+      grade: data.grade || undefined,
     };
 
     return userInfo;

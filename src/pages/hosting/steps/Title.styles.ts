@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { 
-  StepContainer, 
+import {
+  StepContainer,
   TitleSection,
   StepTitle,
   Subtitle,

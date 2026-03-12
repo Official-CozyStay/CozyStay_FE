@@ -12,14 +12,16 @@ export const MainContent = styled.main`
   flex: 1;
   display: flex;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing['6xl']} ${({ theme }) => theme.spacing['3xl']};
+  padding: ${({ theme }) => theme.spacing['6xl']}
+    ${({ theme }) => theme.spacing['3xl']};
   max-width: 1200px;
   margin: 0 auto;
   gap: ${({ theme }) => theme.spacing['6xl']};
 
   ${media.tablet} {
     flex-direction: column;
-    padding: ${({ theme }) => theme.spacing['4xl']} ${({ theme }) => theme.spacing.lg};
+    padding: ${({ theme }) => theme.spacing['4xl']}
+      ${({ theme }) => theme.spacing.lg};
     gap: ${({ theme }) => theme.spacing['4xl']};
     text-align: center;
   }
@@ -102,7 +104,8 @@ export const NextButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary.main};
   color: ${({ theme }) => theme.colors.common.white};
   border: none;
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing['2xl']};
+  padding: ${({ theme }) => theme.spacing.md}
+    ${({ theme }) => theme.spacing['2xl']};
   border-radius: ${({ theme }) => theme.radius.md};
   font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -113,7 +116,3 @@ export const NextButton = styled.button`
     background-color: ${({ theme }) => theme.colors.primary.hover};
   }
 `;
-
-
-
-

@@ -61,7 +61,7 @@ export const StepTitle = styled.h1`
 
 /** 큰 타이틀 (h2, xxl) - 선택 화면용 */
 export const StepTitleLarge = styled.h2`
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size['2xl']};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
 
@@ -130,10 +130,11 @@ const selectableCardBase = css<{ $selected?: boolean }>`
   flex-direction: column;
   align-items: flex-start;
   padding: ${({ theme }) => theme.spacing.lg};
-  border: 1px solid ${({ theme, $selected }) => 
-    $selected ? theme.colors.text.primary : theme.colors.border.light};
+  border: 1px solid
+    ${({ theme, $selected }) =>
+      $selected ? theme.colors.text.primary : theme.colors.border.light};
   border-radius: ${({ theme }) => theme.radius.lg};
-  background-color: ${({ theme, $selected }) => 
+  background-color: ${({ theme, $selected }) =>
     $selected ? theme.colors.background.hover : theme.colors.common.white};
   cursor: pointer;
   transition: all ${({ theme }) => theme.transition.fast};
@@ -276,8 +277,10 @@ export const IntroImageSection = styled.div`
 /** 인트로 일러스트 이미지 */
 export const IntroIllustration = styled.img`
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   height: auto;
+  border-radius: ${({ theme }) => theme.radius.lg};
+  object-fit: cover;
 `;
 
 /** 인트로 설명 텍스트 */
@@ -330,7 +333,7 @@ export const OptionCard = styled.div<{ $selected?: boolean }>`
       ? `2px solid ${theme.colors.text.primary}`
       : `1px solid ${theme.colors.border.primary}`};
   border-radius: ${({ theme }) => theme.radius.lg};
-  background-color: ${({ theme, $selected }) => 
+  background-color: ${({ theme, $selected }) =>
     $selected ? theme.colors.background.hover : theme.colors.common.white};
   cursor: pointer;
   transition: all ${({ theme }) => theme.transition.normal};
@@ -369,8 +372,9 @@ export const RadioButton = styled.div<{ $selected?: boolean }>`
   height: 24px;
   min-width: 24px;
   border-radius: 50%;
-  border: 2px solid ${({ theme, $selected }) => 
-    $selected ? theme.colors.text.primary : theme.colors.border.primary};
+  border: 2px solid
+    ${({ theme, $selected }) =>
+      $selected ? theme.colors.text.primary : theme.colors.border.primary};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -382,7 +386,7 @@ export const RadioButton = styled.div<{ $selected?: boolean }>`
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: ${({ theme, $selected }) => 
+    background-color: ${({ theme, $selected }) =>
       $selected ? theme.colors.text.primary : 'transparent'};
     transition: all ${({ theme }) => theme.transition.fast};
   }
@@ -433,4 +437,3 @@ export const CharCount = styled.span`
   color: ${({ theme }) => theme.colors.text.secondary};
   align-self: flex-start;
 `;
-
