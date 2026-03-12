@@ -25,8 +25,8 @@ interface MenuItem {
   icon: string;
   label: string;
   component:
-    | ComponentType<{ userName: string; userInitial: string }>
-    | ComponentType;
+  | ComponentType<{ userName: string; userInitial: string }>
+  | ComponentType;
 }
 
 const menuItems: MenuItem[] = [
@@ -34,7 +34,7 @@ const menuItems: MenuItem[] = [
   {
     key: "trips",
     icon: "luggage",
-    label: "이전 여행",
+    label: "예약",
     component: PastTripsSection,
   },
   {

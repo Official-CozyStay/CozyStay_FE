@@ -24,7 +24,7 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
     grid-template-columns: 1fr auto;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     height: ${({ $isScrolled, theme }) =>
-      $isScrolled ? `${theme.spacing["3xl"]}` : `${theme.spacing["4xl"]}`};
+    $isScrolled ? `${theme.spacing["3xl"]}` : `${theme.spacing["4xl"]}`};
   }
 `;
 
@@ -229,4 +229,40 @@ export const HostButton = styled.button`
   ${media.mobile} {
     display: none;
   }
+`;
+
+export const NotificationButton = styled.button`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.text.primary};
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs};
+  border-radius: 50%;
+  transition: all ${({ theme }) => theme.transition.fast};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background.hover};
+  }
+`;
+
+export const NotificationBadge = styled.span`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: ${({ theme }) => theme.colors.status.error};
+  color: ${({ theme }) => theme.colors.common.white};
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(25%, -25%);
+  border: 2px solid ${({ theme }) => theme.colors.common.white};
 `;
