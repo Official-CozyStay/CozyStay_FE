@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import type { ReviewDTO } from "../../api/types";
-import { Star } from "lucide-react";
-import ReviewReply from "./ReviewReply";
+import styled from 'styled-components';
+import type { ReviewDTO } from '../../api/types';
+import { Star } from 'lucide-react';
+import ReviewReply from './ReviewReply';
 
 interface ReviewItemProps {
   review: ReviewDTO;
@@ -12,9 +12,9 @@ export default function ReviewItem({
   review,
   showAccommodationName = false,
 }: ReviewItemProps) {
-  const authorName = review.author?.nickName || "익명";
+  const authorName = review.author?.nickName || '익명';
   const profileImage =
-    review.author?.profileImageUrl || "https://via.placeholder.com/48";
+    review.author?.profileImageUrl || 'https://via.placeholder.com/48';
 
   return (
     <Container>
@@ -36,8 +36,8 @@ export default function ReviewItem({
           <Star
             key={i}
             size={14}
-            fill={i < review.rating ? "currentColor" : "none"}
-            className={i < review.rating ? "active" : "inactive"}
+            fill={i < review.rating ? 'currentColor' : 'none'}
+            className={i < review.rating ? 'active' : 'inactive'}
           />
         ))}
       </Rating>

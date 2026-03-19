@@ -1,4 +1,4 @@
-export type AccommodationType = "entire_place" | "private_room" | "shared_room";
+export type AccommodationType = 'entire_place' | 'private_room' | 'shared_room';
 
 export type AccommodationImageDTO = {
   imageId: number;
@@ -44,6 +44,8 @@ export type CommentDTO = {
 export type HostelReviewDTO = {
   id: number;
   bookingId: number;
+  userNickName: string;
+  userProfileImageUrl: string | null;
   ratingOverall: number;
   ratingCleanliness: number;
   ratingAccuracy: number;
@@ -55,9 +57,74 @@ export type HostelReviewDTO = {
 };
 
 export type UserReviewDTO = {
+  id?: number;
+  targetGuestId: number;
+  bookingId: number;
+  userNickName?: string;
+  userProfileImageUrl?: string | null;
+  rating: number;
+  reviewComment: string;
+  comment?: CommentDTO | null;
+};
+
+export type UserReviewCreateRequest = {
   targetGuestId: number;
   bookingId: number;
   rating: number;
+  reviewComment: string;
+};
+
+export type BookingCreateRequest = {
+  accommodationId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: number;
+};
+
+export type BookingResponse = {
+  bookingId: number;
+  accommodationId: number;
+  guestId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: number;
+  totalPrice: number;
+  bookingStatus: string;
+};
+
+export type HostBookingListItemResponse = {
+  bookingId: number;
+  accommodationId: number;
+  accommodationTitle: string;
+  guestId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  numberOfGuests: number;
+  status: string;
+  totalPrice: number;
+  createdAt: string;
+};
+
+export type AccommodationReviewRequest = {
+  bookingId: number;
+  ratingOverall: number;
+  ratingCleanliness: number;
+  ratingAccuracy: number;
+  ratingCheckin: number;
+  ratingCommunication: number;
+  ratingLocation: number;
+  reviewComment: string;
+};
+
+export type AccommodationReviewResponse = {
+  id: number;
+  bookingId: number;
+  ratingOverall: number;
+  ratingCleanliness: number;
+  ratingAccuracy: number;
+  ratingCheckin: number;
+  ratingCommunication: number;
+  ratingLocation: number;
   reviewComment: string;
   comment?: CommentDTO | null;
 };
@@ -75,7 +142,7 @@ export type AccommodationDetailInfoDTO = {
   space?: string;
   access?: string;
   notes?: string;
-  // Assuming these numeric fields are inside detail info based on typical patterns, 
+  // Assuming these numeric fields are inside detail info based on typical patterns,
   // as they are missing from the top-level DTO provided by the user.
   bedrooms?: number;
   beds?: number;
@@ -85,6 +152,8 @@ export type AccommodationDetailInfoDTO = {
 export type AccommodationDetailDTO = {
   accommodationId: number;
   hostId: number;
+  hostNickname: string;
+  hostProfileImageUrl?: string | null;
   title: string;
   description: string;
   accommodationType: AccommodationType;
@@ -107,6 +176,8 @@ export type AccommodationDetailDTO = {
 
   images: AccommodationImageDTO[];
   amenities: AmenityDTO[];
+
+  reviewSummary?: ReviewSummaryDTO;
 
   // Frontend specific or optional fields if needed for compatibility (e.g. from reviews)
   // host: HostDTO; // Removing this as backend only sends hostId
@@ -144,3 +215,40 @@ export type ReviewListResponse = {
   };
   breakdown?: ReviewRatingBreakdown;
 };
+
+export type ReviewSummryDTO = {
+  average: number;
+  count: number;
+};
+
+export interface InviteGuestRequest {
+  guestUserId?: number;
+  guestName: string;
+  guestEmail: string;
+  guestPhone: string;
+  guestIdentityValid: boolean;
+}
+
+export interface InviteGuestResponse {
+  bookingGuestId: number;
+  invitationStatus: string;
+  invitedAt: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+}
+
+export interface MyInvitationResponse {
+  bookingGuestId: number;
+  bookingId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  invitationStatus: string;
+  invitedAt: string;
+  respondedAt?: string;
+}

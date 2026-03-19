@@ -1,19 +1,19 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export const MainContainer = styled.div`
-  padding-top: ${({ theme }) => theme.spacing["6xl"]};
+  padding-top: ${({ theme }) => theme.spacing['6xl']};
   background: ${({ theme }) => theme.colors.background.default};
 
   ${media.mobile} {
-    padding-top: ${({ theme }) => theme.spacing["5xl"]};
+    padding-top: ${({ theme }) => theme.spacing['5xl']};
   }
 `;
 
 export const SearchBarWrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing["3xl"]}`};
+  padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing['3xl']}`};
   background: ${({ theme }) => theme.colors.background.default};
   width: 100%;
   align-items: center;
@@ -25,12 +25,12 @@ export const SearchBarWrapper = styled.div`
 
 export const Section = styled.section`
   max-width: ${({ theme }) => theme.layout.maxWidth};
-  margin: 0 auto ${({ theme }) => theme.spacing["5xl"]};
-  padding: 0 ${({ theme }) => theme.spacing["3xl"]};
+  margin: 0 auto ${({ theme }) => theme.spacing['5xl']};
+  padding: 0 ${({ theme }) => theme.spacing['3xl']};
 
   ${media.mobile} {
     padding: 0 ${({ theme }) => theme.spacing.lg};
-    margin-bottom: ${({ theme }) => theme.spacing["4xl"]};
+    margin-bottom: ${({ theme }) => theme.spacing['4xl']};
   }
 `;
 
@@ -56,8 +56,8 @@ export const CardListWrapper = styled.div`
   position: relative;
 `;
 
-export const CARD_WIDTH = "300px";
-const CARD_WIDTH_MOBILE = "260px";
+export const CARD_WIDTH = '300px';
+const CARD_WIDTH_MOBILE = '260px';
 
 export const CardList = styled.div`
   display: flex;
@@ -90,7 +90,7 @@ export const CardList = styled.div`
 
 export const ScrollButtonGroup = styled.div`
   position: absolute;
-  top: -${({ theme }) => theme.spacing["4xl"]};
+  top: -${({ theme }) => theme.spacing['4xl']};
   right: 0;
   display: flex;
   gap: ${({ theme }) => theme.spacing.sm};
@@ -103,16 +103,16 @@ export const ScrollButtonGroup = styled.div`
 `;
 
 export const ScrollButton = styled.button<{
-  $position: "left" | "right";
+  $position: 'left' | 'right';
   $disabled?: boolean;
 }>`
-  width: ${({ theme }) => theme.spacing["3xl"]};
-  height: ${({ theme }) => theme.spacing["3xl"]};
+  width: ${({ theme }) => theme.spacing['3xl']};
+  height: ${({ theme }) => theme.spacing['3xl']};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: ${({ theme }) => theme.shadow.sm};
-  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,13 +143,13 @@ export const Footer = styled.footer`
   color: ${({ theme }) => theme.colors.text.primary};
   opacity: 0.7;
   font-size: ${({ theme }) => theme.font.size.xs};
-  padding: ${({ theme }) => theme.spacing["3xl"]} 0;
-  margin-top: ${({ theme }) => theme.spacing["6xl"]};
+  padding: ${({ theme }) => theme.spacing['3xl']} 0;
+  margin-top: ${({ theme }) => theme.spacing['6xl']};
   background: ${({ theme }) => theme.colors.background.default};
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.xl} 0;
-    margin-top: ${({ theme }) => theme.spacing["4xl"]};
+    margin-top: ${({ theme }) => theme.spacing['4xl']};
     font-size: ${({ theme }) => theme.font.size.xs};
   }
 `;

@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import AccommodationCard from "@/components/AccommodationCard/AccommodationCard";
-import type { Accommodation } from "@/types/accommodation";
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import AccommodationCard from '@/components/AccommodationCard/AccommodationCard';
+import type { Accommodation } from '@/types/accommodation';
 import {
   Section,
   SectionHeader,
@@ -9,8 +9,8 @@ import {
   CardList,
   ScrollButtonGroup,
   ScrollButton,
-} from "./MainPage.styles";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+} from './MainPage.styles';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface AccommodationSectionProps {
   title: string;
@@ -38,27 +38,27 @@ const AccommodationSection = ({
     if (!list) return;
 
     checkScrollPosition();
-    list.addEventListener("scroll", checkScrollPosition);
-    window.addEventListener("resize", checkScrollPosition);
+    list.addEventListener('scroll', checkScrollPosition);
+    window.addEventListener('resize', checkScrollPosition);
 
     return () => {
-      list.removeEventListener("scroll", checkScrollPosition);
-      window.removeEventListener("resize", checkScrollPosition);
+      list.removeEventListener('scroll', checkScrollPosition);
+      window.removeEventListener('resize', checkScrollPosition);
     };
   }, [accommodations]);
 
-  const scrollList = useCallback((direction: "left" | "right") => {
+  const scrollList = useCallback((direction: 'left' | 'right') => {
     if (listRef.current) {
       // 실제 렌더링된 첫 번째 카드 요소의 크기를 사용하여 스크롤 양 계산
       const firstCard = listRef.current.children[0] as HTMLElement;
       if (firstCard) {
         const cardWidth = firstCard.offsetWidth;
-        const gap = parseFloat(getComputedStyle(listRef.current).gap || "0");
+        const gap = parseFloat(getComputedStyle(listRef.current).gap || '0');
         const scrollAmount = cardWidth + gap;
 
         listRef.current.scrollBy({
-          left: direction === "left" ? -scrollAmount : scrollAmount,
-          behavior: "smooth",
+          left: direction === 'left' ? -scrollAmount : scrollAmount,
+          behavior: 'smooth',
         });
       }
     }
@@ -73,7 +73,7 @@ const AccommodationSection = ({
         <ScrollButtonGroup>
           <ScrollButton
             $position="left"
-            onClick={() => scrollList("left")}
+            onClick={() => scrollList('left')}
             disabled={!canScrollLeft}
             $disabled={!canScrollLeft}
           >
@@ -81,7 +81,7 @@ const AccommodationSection = ({
           </ScrollButton>
           <ScrollButton
             $position="right"
-            onClick={() => scrollList("right")}
+            onClick={() => scrollList('right')}
             disabled={!canScrollRight}
             $disabled={!canScrollRight}
           >

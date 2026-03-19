@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SearchPageContainer = styled.div`
   position: relative;
@@ -6,7 +6,7 @@ export const SearchPageContainer = styled.div`
   flex-direction: column;
   min-height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default});
   padding-top: ${({ theme }) =>
-    theme.spacing["5xl"]}; /* 헤더 높이만큼 패딩 추가 */
+    theme.spacing['5xl']}; /* 헤더 높이만큼 패딩 추가 */
   background: ${({ theme }) => theme.colors.common.white};
 `;
 
@@ -14,21 +14,20 @@ export const FilterBar = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
-  padding: ${({ theme }) => theme.spacing.md}
-    ${({ theme }) => theme.spacing.xl};
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   background: ${({ theme }) => theme.colors.common.white};
   flex-shrink: 0;
   position: sticky;
-  top: ${({ theme }) => theme.spacing["4xl"]}; /* 헤더가 작아졌을 때의 높이 */
+  top: ${({ theme }) => theme.spacing['4xl']}; /* 헤더가 작아졌을 때의 높이 */
   z-index: ${({ theme }) => theme.zIndex.sticky};
 `;
 
 export const FilterButton = styled.button<{ $active?: boolean }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing["6px"]};
-  padding: ${({ theme }) => theme.spacing["10px"]}
+  gap: ${({ theme }) => theme.spacing['6px']};
+  padding: ${({ theme }) => theme.spacing['10px']}
     ${({ theme }) => theme.spacing.lg};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid
@@ -54,7 +53,7 @@ export const FilterButton = styled.button<{ $active?: boolean }>`
 `;
 
 export const FilterDivider = styled.div`
-  width: ${({ theme }) => theme.spacing["1px"]};
+  width: ${({ theme }) => theme.spacing['1px']};
   height: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.border.light};
 `;
@@ -67,13 +66,16 @@ export const ResultCount = styled.span`
 
 export const ContentArea = styled.div`
   display: flex;
-  min-height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default} - ${({ theme }) => theme.layout.filterBarHeight});
+  min-height: calc(
+    100vh - ${({ theme }) => theme.layout.headerHeight.default} -
+      ${({ theme }) => theme.layout.filterBarHeight}
+  );
 `;
 
 export const ListSection = styled.section`
   width: 55%;
   min-width: ${({ theme }) => theme.size.width.md};
-  padding: ${({ theme }) => theme.spacing["20px"]}
+  padding: ${({ theme }) => theme.spacing['20px']}
     ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.common.white};
 `;
@@ -103,7 +105,8 @@ export const AccommodationGrid = styled.div`
 
 export const AccommodationCard = styled.article<{ $selected?: boolean }>`
   cursor: pointer;
-  transition: ${({ theme }) => theme.transition.transform.fast},
+  transition:
+    ${({ theme }) => theme.transition.transform.fast},
     box-shadow ${({ theme }) => theme.transition.fast};
   border-radius: ${({ theme }) => theme.radius.lg};
   padding: ${({ theme }) => theme.spacing.sm};
@@ -136,10 +139,9 @@ export const CardImage = styled.img`
 
 export const CardBadge = styled.span`
   position: absolute;
-  top: ${({ theme }) => theme.spacing["10px"]};
-  left: ${({ theme }) => theme.spacing["10px"]};
-  padding: ${({ theme }) => theme.spacing.xs}
-    ${({ theme }) => theme.spacing.sm};
+  top: ${({ theme }) => theme.spacing['10px']};
+  left: ${({ theme }) => theme.spacing['10px']};
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.sm};
   font-size: ${({ theme }) => theme.font.size.xs};
@@ -149,8 +151,8 @@ export const CardBadge = styled.span`
 
 export const FavoriteButton = styled.button`
   position: absolute;
-  top: ${({ theme }) => theme.spacing["10px"]};
-  right: ${({ theme }) => theme.spacing["10px"]};
+  top: ${({ theme }) => theme.spacing['10px']};
+  right: ${({ theme }) => theme.spacing['10px']};
   width: ${({ theme }) => theme.size.button.sm};
   height: ${({ theme }) => theme.size.button.sm};
   border: none;
@@ -175,7 +177,7 @@ export const FavoriteButton = styled.button`
 `;
 
 export const CardContent = styled.div`
-  padding: ${({ theme }) => theme.spacing["10px"]} 0;
+  padding: ${({ theme }) => theme.spacing['10px']} 0;
 `;
 
 export const CardHeader = styled.div`
@@ -228,9 +230,15 @@ export const CardPrice = styled.p`
 export const MapSection = styled.section`
   flex: 1;
   position: sticky;
-  top: calc(${({ theme }) => theme.layout.headerHeight.default} + ${({ theme }) => theme.layout.filterBarHeight});
-  height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default} - ${({ theme }) => theme.layout.filterBarHeight});
-  padding: 0 ${({ theme }) => theme.spacing["40px"]}
+  top: calc(
+    ${({ theme }) => theme.layout.headerHeight.default} +
+      ${({ theme }) => theme.layout.filterBarHeight}
+  );
+  height: calc(
+    100vh - ${({ theme }) => theme.layout.headerHeight.default} -
+      ${({ theme }) => theme.layout.filterBarHeight}
+  );
+  padding: 0 ${({ theme }) => theme.spacing['40px']}
     ${({ theme }) => theme.spacing.xl} 0;
   background: ${({ theme }) =>
     theme.colors.common.white}; /* 배경색을 흰색으로 설정 */
@@ -247,8 +255,8 @@ export const MapContainer = styled.div`
 `;
 
 export const MapPriceMarker = styled.button<{ $selected?: boolean }>`
-  padding: ${({ theme }) => theme.spacing["6px"]}
-    ${({ theme }) => theme.spacing["10px"]};
+  padding: ${({ theme }) => theme.spacing['6px']}
+    ${({ theme }) => theme.spacing['10px']};
   border-radius: ${({ theme }) => theme.radius.full};
   border: none;
   background: ${({ theme, $selected }) =>
@@ -303,12 +311,12 @@ export const FilterDropdown = styled.div`
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.lg};
   box-shadow: ${({ theme }) => theme.shadow.lg};
-  padding: ${({ theme }) => theme.spacing["20px"]};
+  padding: ${({ theme }) => theme.spacing['20px']};
   z-index: ${({ theme }) => theme.zIndex.dropdown};
 `;
 
 export const FilterSection = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing["20px"]};
+  margin-bottom: ${({ theme }) => theme.spacing['20px']};
 
   &:last-child {
     margin-bottom: 0;
@@ -324,7 +332,7 @@ export const FilterLabel = styled.label`
 
 export const FilterInput = styled.input`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing["10px"]}
+  padding: ${({ theme }) => theme.spacing['10px']}
     ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
@@ -405,7 +413,7 @@ export const CounterButton = styled.button`
 `;
 
 export const CounterValue = styled.span`
-  min-width: ${({ theme }) => theme.spacing["20px"]};
+  min-width: ${({ theme }) => theme.spacing['20px']};
   text-align: center;
   font-size: ${({ theme }) => theme.font.size.md};
 `;
@@ -433,8 +441,8 @@ export const ClearButton = styled.button`
 `;
 
 export const ApplyButton = styled.button`
-  padding: ${({ theme }) => theme.spacing["10px"]}
-    ${({ theme }) => theme.spacing["20px"]};
+  padding: ${({ theme }) => theme.spacing['10px']}
+    ${({ theme }) => theme.spacing['20px']};
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme }) => theme.colors.primary.main};
@@ -453,8 +461,8 @@ export const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing["5xl"]}
-    ${({ theme }) => theme.spacing["2xl"]};
+  padding: ${({ theme }) => theme.spacing['5xl']}
+    ${({ theme }) => theme.spacing['2xl']};
   gap: ${({ theme }) => theme.spacing.xxs};
 `;
 
@@ -465,7 +473,7 @@ export const PaginationButton = styled.button<{ $active?: boolean }>`
   border: none;
   border-radius: ${({ theme }) => theme.radius.md};
   background: ${({ theme, $active }) =>
-    $active ? theme.colors.text.primary : "transparent"};
+    $active ? theme.colors.text.primary : 'transparent'};
   color: ${({ theme, $active }) =>
     $active ? theme.colors.common.white : theme.colors.text.primary};
   font-size: ${({ theme }) => theme.font.size.sm};

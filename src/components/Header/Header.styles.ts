@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { media } from '@/styles/media';
 
 export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   position: fixed;
@@ -8,23 +8,27 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
   left: 0;
   right: 0;
   height: ${({ $isScrolled, theme }) =>
-    $isScrolled ? `${theme.spacing["5xl"]}` : `${theme.spacing["6xl"]}`};
+    $isScrolled ? `${theme.spacing['5xl']}` : `${theme.spacing['6xl']}`};
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0 ${({ theme }) => theme.spacing["3xl"]};
+  padding: 0 ${({ theme }) => theme.spacing['3xl']};
   background: ${({ theme }) => theme.colors.background.default};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   z-index: ${({ theme }) => theme.zIndex.header};
   transition: all ${({ theme }) => theme.transition.slow};
   box-shadow: ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.shadow.sm : "none"};
+    $isScrolled ? theme.shadow.sm : 'none'};
 
   ${media.mobile} {
     grid-template-columns: 1fr auto;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     height: ${({ $isScrolled, theme }) =>
+<<<<<<< HEAD
     $isScrolled ? `${theme.spacing["3xl"]}` : `${theme.spacing["4xl"]}`};
+=======
+      $isScrolled ? `${theme.spacing['3xl']}` : `${theme.spacing['4xl']}`};
+>>>>>>> 57c54191ca0126b24534fd535c6bb0047dd2ddd5
   }
 `;
 
@@ -46,8 +50,8 @@ export const HeaderLeft = styled(Link)`
 `;
 
 export const Logo = styled.img`
-  width: ${({ theme }) => theme.spacing["2xl"]};
-  height: ${({ theme }) => theme.spacing["2xl"]};
+  width: ${({ theme }) => theme.spacing['2xl']};
+  height: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 export const LogoText = styled.span`
@@ -63,7 +67,7 @@ export const LogoText = styled.span`
 export const HeaderCenter = styled.nav<{ $isScrolled?: boolean }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing["2xl"]};
+  gap: ${({ theme }) => theme.spacing['2xl']};
   justify-content: center;
   justify-self: center;
 
@@ -93,7 +97,7 @@ export const NavItem = styled.button<{ $active?: boolean }>`
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: ${({ theme }) => theme.spacing.lg};
@@ -130,7 +134,7 @@ export const HeaderRight = styled.div`
 `;
 
 export const HostModeToggle = styled.button<{ $active?: boolean }>`
-  width: ${({ theme }) => theme.spacing["3xl"]};
+  width: ${({ theme }) => theme.spacing['3xl']};
   height: ${({ theme }) => theme.spacing.xl};
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
@@ -148,8 +152,8 @@ export const HostModeToggle = styled.button<{ $active?: boolean }>`
 `;
 
 export const MenuButton = styled.button`
-  width: ${({ theme }) => theme.spacing["3xl"]};
-  height: ${({ theme }) => theme.spacing["3xl"]};
+  width: ${({ theme }) => theme.spacing['3xl']};
+  height: ${({ theme }) => theme.spacing['3xl']};
   border-radius: ${({ theme }) => theme.radius.md};
   border: 1px solid ${({ theme }) => theme.colors.border.primary};
   background: ${({ theme }) => theme.colors.common.white};

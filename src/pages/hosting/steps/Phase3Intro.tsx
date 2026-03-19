@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   IntroContainer,
   TextSection,
@@ -16,13 +15,14 @@ const Phase3Intro = () => {
         <StepLabel>3단계</StepLabel>
         <Title>등록을 완료하세요</Title>
         <Description>
-          마지막으로, 예약 설정을 선택하고 요금을 설정한 후 숙소 등록을 완료할 차례입니다.
+          마지막으로, 예약 설정을 선택하고 요금을 설정한 후 숙소 등록을 완료할
+          차례입니다.
         </Description>
       </TextSection>
       <ImageSection>
-        <Illustration 
-          src="https://a0.muscache.com/im/pictures/65ec27a0-2900-41e7-8cf0-908042739983.jpg" 
-          alt="Step 3 Illustration" 
+        <Illustration
+          src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80"
+          alt="밝은 주방과 거실 공간"
         />
       </ImageSection>
     </IntroContainer>
@@ -30,4 +30,3 @@ const Phase3Intro = () => {
 };
 
 export default Phase3Intro;
-

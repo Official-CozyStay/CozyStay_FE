@@ -18,6 +18,6 @@ export const parseSpacingValue = (spacingValue: string): number => {
 export const sumSpacingValues = (...spacingValues: string[]): number => {
   return spacingValues.reduce(
     (sum, value) => sum + parseSpacingValue(value),
-    0
+    0,
   );
 };

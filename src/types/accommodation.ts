@@ -11,4 +11,3 @@ export interface Accommodation {
   nights: number;
   rating: number;
 }
-

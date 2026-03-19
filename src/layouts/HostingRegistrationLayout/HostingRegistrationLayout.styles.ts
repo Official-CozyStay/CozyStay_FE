@@ -12,7 +12,8 @@ export const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing['3xl']};
+  padding: ${({ theme }) => theme.spacing.xl}
+    ${({ theme }) => theme.spacing['3xl']};
   background-color: ${({ theme }) => theme.colors.background.default};
 
   ${media.mobile} {
@@ -92,7 +93,10 @@ export const ProgressBarContainer = styled.div`
   }
 `;
 
-export const ProgressSegment = styled.div<{ $active?: boolean; $completed?: boolean }>`
+export const ProgressSegment = styled.div<{
+  $active?: boolean;
+  $completed?: boolean;
+}>`
   flex: 1;
   position: relative;
   overflow: hidden;
@@ -105,7 +109,9 @@ export const ProgressSegment = styled.div<{ $active?: boolean; $completed?: bool
     inset: 0;
     background-color: ${({ theme }) => theme.colors.primary.main};
     transform-origin: left center;
-    transform: scaleX(${({ $active, $completed }) => ($completed ? 1 : $active ? 1 : 0)});
+    transform: scaleX(
+      ${({ $active, $completed }) => ($completed ? 1 : $active ? 1 : 0)}
+    );
     transition: transform ${({ theme }) => theme.transition.slow};
     border-radius: ${({ theme }) => theme.radius.full};
   }
@@ -158,4 +164,3 @@ export const NextButton = styled.button`
     cursor: not-allowed;
   }
 `;
-

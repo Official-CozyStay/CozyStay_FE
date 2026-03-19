@@ -111,7 +111,9 @@ const HostingPage = () => {
         <ListingsSection>
           <SectionHeader>
             <SectionTitle>내 숙소 ({listings.length})</SectionTitle>
-            <AddListingButton onClick={() => navigate('/hosting/become-a-host')}>
+            <AddListingButton
+              onClick={() => navigate('/hosting/become-a-host')}
+            >
               + 새 숙소 등록
             </AddListingButton>
           </SectionHeader>
@@ -119,9 +121,7 @@ const HostingPage = () => {
           <ListingsGrid>
             {listings.map((listing) => (
               <ListingCard key={listing.id}>
-                <ListingImagePlaceholder>
-                  🏠
-                </ListingImagePlaceholder>
+                <ListingImagePlaceholder>🏠</ListingImagePlaceholder>
                 <ListingInfo>
                   <ListingTitle>{listing.title}</ListingTitle>
                   <ListingLocation>
@@ -144,4 +144,3 @@ const HostingPage = () => {
 };
 
 export default HostingPage;
-

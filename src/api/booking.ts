@@ -1,79 +1,82 @@
-import client from "./client";
+import client from './client';
+import type {
+  BookingCreateRequest,
+  BookingResponse,
+  HostBookingListItemResponse,
+  InviteGuestRequest,
+  InviteGuestResponse,
+  PageResponse,
+  MyInvitationResponse,
+} from './types';
 
-export interface HostBookingListItemResponse {
-    bookingId: number;
-    accommodationId: number;
-    accommodationTitle: string;
-    guestId: number;
-    checkInDate: string;
-    checkOutDate: string;
-    numberOfGuests: number;
-    status: string;
-    totalPrice: number;
-    createdAt: string;
+/**
+ * 사용자의 예약 목록 조회
+ */
+export async function fetchUserBookings(): Promise<BookingResponse[]> {
+  const response = (await client.get(`/api/bookings`)) as BookingResponse[];
+  return response;
 }
 
-export const fetchHostBookings = async (
-    status?: string
-): Promise<HostBookingListItemResponse[]> => {
-    const params = status ? { status } : {};
-    const response = await client.get<HostBookingListItemResponse[]>("/api/bookings", { params }) as unknown as HostBookingListItemResponse[];
-    return response;
-};
-
-export interface InviteGuestRequest {
-    guestUserId?: number;
-    guestName: string;
-    guestEmail: string;
-    guestPhone: string;
-    guestIdentityValid: boolean;
+/**
+ * 호스트의 내 숙소 예약 목록 조회
+ */
+export async function fetchHostBookings(
+  status?: string,
+): Promise<HostBookingListItemResponse[]> {
+  const params = status ? { status } : {};
+  const response = (await client.get(`/api/bookings/host`, {
+    params,
+  })) as HostBookingListItemResponse[];
+  return response;
 }
 
-export interface InviteGuestResponse {
-    bookingGuestId: number;
-    invitationStatus: string;
-    invitedAt: string;
+/**
+ * 예약 생성
+ */
+export async function createBooking(
+  req: BookingCreateRequest,
+): Promise<BookingResponse> {
+  const response = (await client.post(`/api/bookings`, req)) as BookingResponse;
+  return response;
 }
 
-export const inviteGuest = async (
-    bookingId: number,
-    data: InviteGuestRequest
-): Promise<InviteGuestResponse> => {
-    const response = await client.post<InviteGuestResponse>(
-        `/api/bookings/${bookingId}/guests`,
-        data
-    ) as unknown as InviteGuestResponse;
-    return response;
-};
-
-export interface PageResponse<T> {
-    content: T[];
-    totalElements: number;
-    totalPages: number;
-    number: number;
-    size: number;
+/**
+ * 게스트 초대
+ */
+export async function inviteGuest(
+  bookingId: number,
+  data: InviteGuestRequest,
+): Promise<InviteGuestResponse> {
+  const response = (await client.post(
+    `/api/bookings/${bookingId}/guests`,
+    data,
+  )) as InviteGuestResponse;
+  return response;
 }
 
-export interface MyInvitationResponse {
-    bookingGuestId: number;
-    bookingId: number;
-    checkInDate: string;
-    checkOutDate: string;
-    invitationStatus: string;
-    invitedAt: string;
-    respondedAt?: string;
+/**
+ * 내 초대 목록 조회
+ */
+export async function getMyInvitations(
+  status?: string,
+): Promise<PageResponse<MyInvitationResponse>> {
+  const params = status ? { status } : {};
+  const response = (await client.get(`/api/booking-guests/me`, {
+    params,
+  })) as PageResponse<MyInvitationResponse>;
+  return response;
 }
 
-export const getMyInvitations = async (status?: string): Promise<PageResponse<MyInvitationResponse>> => {
-    const params = status ? { status } : {};
-    const response = await client.get<PageResponse<MyInvitationResponse>>("/api/booking-guests/me", { params }) as unknown as PageResponse<MyInvitationResponse>;
-    return response;
-};
+/**
+ * 초대 수락
+ */
+export async function acceptInvitation(bookingGuestId: number): Promise<void> {
+  await client.patch(`/api/booking-guests/${bookingGuestId}/accept`);
+}
 
-export const acceptInvitation = async (bookingGuestId: number): Promise<void> => {
-    await client.patch(`/api/booking-guests/${bookingGuestId}/accept`);
-};
-
-export const declineInvitation = async (bookingGuestId: number): Promise<void> => {
-    await client.patch(`/api/booking-guests/${bookingGuestId}/decline`);
-};
+/**
+ * 초대 거절
+ */
+export async function declineInvitation(bookingGuestId: number): Promise<void> {
+  await client.patch(`/api/booking-guests/${bookingGuestId}/decline`);
+}

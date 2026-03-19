@@ -57,15 +57,16 @@ const Photos = ({ data, onDataChange }: StepProps) => {
       <TitleSection>
         <Title>숙소 사진 추가하기</Title>
         <Subtitle>
-          숙소 등록을 시작하려면 사진 5장을 제출하셔야 합니다. 나중에 추가하거나 변경하실 수 있습니다.
+          숙소 등록을 시작하려면 사진 5장을 제출하셔야 합니다. 나중에 추가하거나
+          변경하실 수 있습니다.
         </Subtitle>
       </TitleSection>
 
       {photos.length === 0 ? (
         <DropZone onClick={handleAddClick}>
-          <CameraImage 
-            src="https://a0.muscache.com/im/pictures/mediaverse/mys-camera-light/original/f5418259-0bbc-42ea-8bc3-4c6fa4792c03.png" 
-            alt="Camera" 
+          <CameraImage
+            src="https://a0.muscache.com/im/pictures/mediaverse/mys-camera-light/original/f5418259-0bbc-42ea-8bc3-4c6fa4792c03.png"
+            alt="Camera"
           />
           <AddButton type="button">사진 추가하기</AddButton>
         </DropZone>
@@ -99,4 +100,3 @@ const Photos = ({ data, onDataChange }: StepProps) => {
 };
 
 export default Photos;
-

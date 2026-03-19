@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   position: relative;
@@ -48,6 +48,6 @@ export const PopoverContainer = styled.div`
 `;
 
 export const dayPickerStyles = {
-  months: { display: "flex", flexWrap: "nowrap" },
-  month: { width: 320, margin: "0 8px" },
+  months: { display: 'flex', flexWrap: 'nowrap' },
+  month: { width: 320, margin: '0 8px' },
 } as const;
