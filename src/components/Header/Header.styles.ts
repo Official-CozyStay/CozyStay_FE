@@ -24,11 +24,7 @@ export const HeaderContainer = styled.header<{ $isScrolled?: boolean }>`
     grid-template-columns: 1fr auto;
     padding: 0 ${({ theme }) => theme.spacing.lg};
     height: ${({ $isScrolled, theme }) =>
-<<<<<<< HEAD
-    $isScrolled ? `${theme.spacing["3xl"]}` : `${theme.spacing["4xl"]}`};
-=======
       $isScrolled ? `${theme.spacing['3xl']}` : `${theme.spacing['4xl']}`};
->>>>>>> 57c54191ca0126b24534fd535c6bb0047dd2ddd5
   }
 `;
 
