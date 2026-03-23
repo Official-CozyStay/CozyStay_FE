@@ -22,8 +22,13 @@ export type {
 /**
  * 사용자의 예약 목록 조회
  */
-export async function fetchUserBookings(): Promise<BookingResponse[]> {
-  const response = (await client.get(`/api/bookings`)) as BookingResponse[];
+export async function fetchUserBookings(
+  status?: string,
+): Promise<BookingResponse[]> {
+  const params = status ? { status } : {};
+  const response = (await client.get(`/api/bookings`, {
+    params,
+  })) as BookingResponse[];
   return response;
 }
 
