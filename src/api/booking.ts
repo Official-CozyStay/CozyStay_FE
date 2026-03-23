@@ -9,6 +9,16 @@ import type {
   MyInvitationResponse,
 } from './types';
 
+export type {
+  BookingCreateRequest,
+  BookingResponse,
+  HostBookingListItemResponse,
+  InviteGuestRequest,
+  InviteGuestResponse,
+  PageResponse,
+  MyInvitationResponse,
+};
+
 /**
  * 사용자의 예약 목록 조회
  */
