@@ -223,10 +223,10 @@ export type ReviewSummryDTO = {
 
 export interface InviteGuestRequest {
   guestUserId?: number;
-  guestName: string;
+  guestName?: string;
   guestEmail: string;
-  guestPhone: string;
-  guestIdentityValid: boolean;
+  guestPhone?: string;
+  guestIdentityValid?: boolean;
 }
 
 export interface InviteGuestResponse {
