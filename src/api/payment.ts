@@ -1,4 +1,4 @@
-import axios from 'axios';
+import client from './client';
 
 export type PaymentMethod = 'MOCK' | 'CARD' | 'EASY_PAY';
 
@@ -16,8 +16,11 @@ export type PaymentCreateResponse = {
 };
 
 export async function createPayment(req: PaymentCreateRequest) {
-  const res = await axios.post<PaymentCreateResponse>('/api/payments', req);
-  return res.data;
+  const response = (await client.post(
+    '/api/payments',
+    req,
+  )) as PaymentCreateResponse;
+  return response;
 }
 
 export type PaymentConfirmRequest = {
@@ -38,13 +41,16 @@ export type PaymentResponse = {
 };
 
 export async function confirmPayment(req: PaymentConfirmRequest) {
-  const res = await axios.post<PaymentResponse>('/api/payments/confirm', req);
-  return res.data;
+  const response = (await client.post(
+    '/api/payments/confirm',
+    req,
+  )) as PaymentResponse;
+  return response;
 }
 
 export async function failPayment(paymentId: number) {
-  const res = await axios.post<PaymentResponse>(
+  const response = (await client.post(
     `/api/payments/${paymentId}/fail`,
-  );
-  return res.data;
+  )) as PaymentResponse;
+  return response;
 }
