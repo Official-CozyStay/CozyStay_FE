@@ -78,6 +78,39 @@ export default function PaymentPage() {
     return 'EASY_PAY';
   };
 
+  const getUserFriendlyErrorMessage = (
+    status?: number,
+    serverMessage?: string,
+  ) => {
+    const message = serverMessage ?? '';
+
+    if (status === 401) {
+      return '로그인이 필요합니다.';
+    }
+
+    if (status === 409) {
+      if (message.includes('겹치는 예약')) {
+        return '선택한 날짜에 이미 예약이 있어요. 다른 날짜를 선택해주세요.';
+      }
+
+      if (message.includes('이미 결제 진행 중')) {
+        return '이미 결제가 진행 중인 예약입니다. 잠시 후 다시 확인해주세요.';
+      }
+
+      if (message.includes('이미 결제 완료된 예약')) {
+        return '이미 결제가 완료된 예약입니다.';
+      }
+
+      return '요청을 처리할 수 없어요. 입력한 정보를 다시 확인해주세요.';
+    }
+
+    if (status === 400) {
+      return '입력한 정보가 올바르지 않습니다. 다시 확인해주세요.';
+    }
+
+    return message || '예약/결제 요청에 실패했습니다.';
+  };
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
@@ -124,14 +157,14 @@ export default function PaymentPage() {
 
       if (axios.isAxiosError<{ message?: string }>(e)) {
         const status = e.response?.status;
-        msg =
-          status === 401
-            ? '로그인이 필요합니다.'
-            : (e.response?.data?.message ?? msg);
+        const serverMessage = e.response?.data?.message;
+
+        msg = getUserFriendlyErrorMessage(status, serverMessage);
 
         if (import.meta.env.DEV) {
           console.error('[PaymentPage] AxiosError:', {
             status,
+            serverMessage,
             message: e.message,
             url: e.config?.url,
             method: e.config?.method,
