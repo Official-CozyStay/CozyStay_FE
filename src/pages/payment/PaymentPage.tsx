@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
 import { useAccommodationStore } from '@/store/accommodationStore';
 import { nightsBetween, calcTotal } from '../../utils/price';
@@ -16,8 +17,6 @@ import RequestConfirmSection from './components/RequestConfirmSection';
 import { createBooking } from '@/api/booking';
 import {
   createPayment,
-  confirmPayment,
-  failPayment,
   type PaymentMethod as ApiPaymentMethod,
 } from '@/api/payment';
 
@@ -27,15 +26,16 @@ import {
   SubmitErrorBox,
 } from './payment.styles';
 
+const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY;
+const frontBaseUrl =
+  import.meta.env.VITE_FRONT_BASE_URL ?? window.location.origin;
+
 export default function PaymentPage() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { detail, loading, error, load } = useAccommodationStore();
 
-  /** 결제수단 */
   const [paymentMethod, setPaymentMethod] = useState<UiPaymentMethod>('CARD');
-
   const [hostMessage, setHostMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -73,25 +73,22 @@ export default function PaymentPage() {
     guests <= detail.maxGuests &&
     !submitting;
 
-  /** UI → 서버 PaymentMethod 매핑 */
   const toApiPaymentMethod = (m: UiPaymentMethod): ApiPaymentMethod => {
     if (m === 'CARD') return 'CARD';
-    // NAVERPAY / KAKAOPAY는 서버에서는 EASY_PAY
     return 'EASY_PAY';
   };
 
-  /** 예약 + 결제 생성 */
   const handleSubmit = async () => {
     if (!canSubmit) return;
-
-    let bookingIdForNav: number | null = null;
-    let paymentIdForNav: number | null = null;
 
     try {
       setSubmitting(true);
       setSubmitError(null);
 
-      // 1) 예약 생성
+      if (!tossClientKey) {
+        throw new Error('토스 클라이언트 키가 설정되지 않았습니다.');
+      }
+
       const booking = await createBooking({
         accommodationId: Number(id),
         checkInDate: checkIn!,
@@ -99,46 +96,32 @@ export default function PaymentPage() {
         numberOfGuests: guests,
       });
 
-      bookingIdForNav = booking.bookingId;
-
-      // 2) 결제 생성
       const payment = await createPayment({
         bookingId: booking.bookingId,
         paymentMethod: toApiPaymentMethod(paymentMethod),
       });
 
-      paymentIdForNav = payment.paymentId;
+      const tossPayments = await loadTossPayments(tossClientKey);
 
-      // 3) 결제 confirm (PG 연동 전이라 임시 키 생성)
-      const mockPaymentKey = `MOCK_${payment.paymentId}_${Date.now()}`;
+      const paymentSdk = tossPayments.payment({
+        customerKey: `booking_${booking.bookingId}`,
+      });
 
-      try {
-        await confirmPayment(payment.paymentId, {
-          paymentKey: mockPaymentKey,
-        });
-
-        // 결제 성공 페이지로 이동
-        navigate(
-          `/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
-        );
-      } catch {
-        // confirm 실패 → failPayment 호출(백엔드 상태 FAIL로)
-        try {
-          await failPayment(payment.paymentId);
-        } catch (failErr) {
-          // failPayment도 실패할 수 있으니 로그 남김
-          console.error('failPayment 호출 실패:', failErr);
-        }
-
-        // 실패 페이지로 이동
-        navigate(
-          `/payment/fail?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
-        );
-      }
+      await paymentSdk.requestPayment({
+        method: 'CARD',
+        amount: {
+          currency: 'KRW',
+          value: Number(payment.amount),
+        },
+        orderId: payment.orderId,
+        orderName: `${detail.title} 예약`,
+        successUrl: `${frontBaseUrl}/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
+        failUrl: `${frontBaseUrl}/payment/fail?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
+        customerName: '고객',
+      });
     } catch (e: unknown) {
       let msg = '예약/결제 요청에 실패했습니다.';
 
-      // createBooking / createPayment 단계에서의 에러
       if (axios.isAxiosError<{ message?: string }>(e)) {
         const status = e.response?.status;
         msg =
@@ -146,7 +129,6 @@ export default function PaymentPage() {
             ? '로그인이 필요합니다.'
             : (e.response?.data?.message ?? msg);
 
-        // 민감 정보 노출 방지: DEV에서만 최소 정보 로그
         if (import.meta.env.DEV) {
           console.error('[PaymentPage] AxiosError:', {
             status,
@@ -155,27 +137,20 @@ export default function PaymentPage() {
             method: e.config?.method,
           });
         }
+      } else if (e instanceof Error) {
+        msg = e.message;
+
+        if (import.meta.env.DEV) {
+          console.error('[PaymentPage] Error:', e.message);
+        }
       } else {
         msg = '알 수 없는 오류가 발생했습니다.';
 
-        // DEV에서만 로그 (객체 전체 말고 메시지 위주)
         if (import.meta.env.DEV) {
           console.error('[PaymentPage] Unknown error:', String(e));
         }
       }
 
-      // 예약이 만들어진 상태면(Booking-PENDING) 실패 페이지로 보내서 재결제 안내
-      if (bookingIdForNav) {
-        const params = new URLSearchParams();
-        params.set('bookingId', String(bookingIdForNav));
-
-        if (paymentIdForNav) {
-          params.set('paymentId', String(paymentIdForNav));
-        }
-        navigate(`/payment/fail?${params.toString()}`);
-        return;
-      }
-      // 예약도 못 만든 경우만 현재 페이지에 에러 표시
       setSubmitError(msg);
     } finally {
       setSubmitting(false);
@@ -184,7 +159,6 @@ export default function PaymentPage() {
 
   return (
     <PaymentPageLayout>
-      {/* 왼쪽: 숙소 요약 */}
       <BookingSummaryCard
         title={detail.title}
         thumbnailUrl={detail.images?.[0]?.imageUrl}
@@ -198,7 +172,6 @@ export default function PaymentPage() {
         total={price?.total}
       />
 
-      {/* 오른쪽: 결제 영역 */}
       <PaymentContent>
         <PaymentMethodSection
           value={paymentMethod}

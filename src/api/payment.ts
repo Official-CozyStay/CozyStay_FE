@@ -9,6 +9,7 @@ export type PaymentCreateRequest = {
 
 export type PaymentCreateResponse = {
   paymentId: number;
+  orderId: string;
   paymentStatus: string;
   paymentMethod: PaymentMethod;
   amount: string;
@@ -21,6 +22,8 @@ export async function createPayment(req: PaymentCreateRequest) {
 
 export type PaymentConfirmRequest = {
   paymentKey: string;
+  orderId: string;
+  amount: number;
 };
 
 export type PaymentResponse = {
@@ -34,14 +37,8 @@ export type PaymentResponse = {
   cancelledAt: string | null;
 };
 
-export async function confirmPayment(
-  paymentId: number,
-  req: PaymentConfirmRequest,
-) {
-  const res = await axios.post<PaymentResponse>(
-    `/api/payments/${paymentId}/confirm`,
-    req,
-  );
+export async function confirmPayment(req: PaymentConfirmRequest) {
+  const res = await axios.post<PaymentResponse>('/api/payments/confirm', req);
   return res.data;
 }
 
