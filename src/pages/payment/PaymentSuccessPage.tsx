@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { confirmPayment } from '@/api/payment';
@@ -17,20 +17,29 @@ import {
 
 export default function PaymentSuccessPage() {
   const [sp] = useSearchParams();
+  const navigate = useNavigate();
 
   const bookingId = sp.get('bookingId');
+  const paymentId = sp.get('paymentId');
   const paymentKey = sp.get('paymentKey');
   const orderId = sp.get('orderId');
   const amount = sp.get('amount');
 
+  const checkIn = sp.get('checkin');
+  const checkOut = sp.get('checkout');
+  const guests = sp.get('guests');
+
   const [confirming, setConfirming] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const runConfirm = async () => {
       if (!paymentKey || !orderId || !amount) {
-        setErrorMessage('결제 승인에 필요한 정보가 없습니다.');
-        setConfirming(false);
+        navigate(
+          `/payment/fail?bookingId=${bookingId ?? ''}&paymentId=${paymentId ?? ''}&message=${encodeURIComponent(
+            '결제 승인에 필요한 정보가 없습니다.',
+          )}`,
+          { replace: true },
+        );
         return;
       }
 
@@ -41,79 +50,90 @@ export default function PaymentSuccessPage() {
           amount: Number(amount),
         });
       } catch (e: unknown) {
+        let errorMessage = '결제 승인 처리 중 오류가 발생했습니다.';
+
         if (axios.isAxiosError<{ message?: string }>(e)) {
-          setErrorMessage(
-            e.response?.data?.message ?? '결제 승인 처리에 실패했습니다.',
-          );
+          errorMessage =
+            e.response?.data?.message ?? '결제 승인 처리에 실패했습니다.';
         } else if (e instanceof Error) {
-          setErrorMessage(e.message);
-        } else {
-          setErrorMessage('결제 승인 처리 중 오류가 발생했습니다.');
+          errorMessage = e.message;
         }
+
+        navigate(
+          `/payment/fail?bookingId=${bookingId ?? ''}&paymentId=${paymentId ?? ''}&message=${encodeURIComponent(
+            errorMessage,
+          )}`,
+          { replace: true },
+        );
+        return;
       } finally {
         setConfirming(false);
       }
     };
 
     runConfirm();
-  }, [paymentKey, orderId, amount]);
+  }, [paymentKey, orderId, amount, bookingId, paymentId, navigate]);
 
-  const title = errorMessage
-    ? '결제 승인에 실패했습니다'
-    : confirming
-      ? '결제를 확인하고 있습니다'
-      : '결제가 완료되었습니다';
-
-  const description = errorMessage
-    ? errorMessage
-    : confirming
-      ? '결제 정보를 확인하고 있어요. 잠시만 기다려주세요.'
-      : '예약이 정상적으로 접수되었어요. 아래에서 예약 정보를 확인해보세요.';
+  if (confirming) {
+    return (
+      <PaymentSuccessContainer>
+        <PaymentSuccessTitle>결제를 확인하고 있습니다</PaymentSuccessTitle>
+        <PaymentSuccessDescription>
+          결제 정보를 확인하고 있어요. 잠시만 기다려주세요.
+        </PaymentSuccessDescription>
+      </PaymentSuccessContainer>
+    );
+  }
 
   return (
     <PaymentSuccessContainer>
-      <PaymentSuccessTitle>{title}</PaymentSuccessTitle>
-      <PaymentSuccessDescription>{description}</PaymentSuccessDescription>
+      <PaymentSuccessTitle>결제가 완료되었습니다</PaymentSuccessTitle>
 
-      {!confirming && !errorMessage && (
-        <PaymentSuccessSummaryCard>
-          {bookingId && (
-            <PaymentSuccessSummaryRow>
-              <PaymentSuccessSummaryLabel>예약 번호</PaymentSuccessSummaryLabel>
-              <PaymentSuccessSummaryValue>
-                #{bookingId}
-              </PaymentSuccessSummaryValue>
-            </PaymentSuccessSummaryRow>
-          )}
+      <PaymentSuccessDescription>
+        예약이 정상적으로 접수되었어요. 아래에서 예약 정보를 확인해보세요.
+      </PaymentSuccessDescription>
 
-          {amount && (
-            <PaymentSuccessSummaryRow>
-              <PaymentSuccessSummaryLabel>결제 금액</PaymentSuccessSummaryLabel>
-              <PaymentSuccessSummaryValue>
-                ₩{Number(amount).toLocaleString()}
-              </PaymentSuccessSummaryValue>
-            </PaymentSuccessSummaryRow>
-          )}
-        </PaymentSuccessSummaryCard>
-      )}
+      <PaymentSuccessSummaryCard>
+        {checkIn && (
+          <PaymentSuccessSummaryRow>
+            <PaymentSuccessSummaryLabel>체크인</PaymentSuccessSummaryLabel>
+            <PaymentSuccessSummaryValue>{checkIn}</PaymentSuccessSummaryValue>
+          </PaymentSuccessSummaryRow>
+        )}
 
-      {!confirming && (
-        <PaymentSuccessButtonGroup>
-          {bookingId && !errorMessage && (
-            <PaymentSuccessLink to={`/bookings/${bookingId}`}>
-              예약 상세 보기
-            </PaymentSuccessLink>
-          )}
+        {checkOut && (
+          <PaymentSuccessSummaryRow>
+            <PaymentSuccessSummaryLabel>체크아웃</PaymentSuccessSummaryLabel>
+            <PaymentSuccessSummaryValue>{checkOut}</PaymentSuccessSummaryValue>
+          </PaymentSuccessSummaryRow>
+        )}
 
-          <PaymentSuccessLink to="/">홈으로</PaymentSuccessLink>
+        {guests && (
+          <PaymentSuccessSummaryRow>
+            <PaymentSuccessSummaryLabel>게스트</PaymentSuccessSummaryLabel>
+            <PaymentSuccessSummaryValue>{guests}명</PaymentSuccessSummaryValue>
+          </PaymentSuccessSummaryRow>
+        )}
 
-          {errorMessage && (
-            <PaymentSuccessLink to="/payment/fail">
-              실패 페이지로 이동
-            </PaymentSuccessLink>
-          )}
-        </PaymentSuccessButtonGroup>
-      )}
+        {amount && (
+          <PaymentSuccessSummaryRow>
+            <PaymentSuccessSummaryLabel>결제 금액</PaymentSuccessSummaryLabel>
+            <PaymentSuccessSummaryValue>
+              ₩{Number(amount).toLocaleString()}
+            </PaymentSuccessSummaryValue>
+          </PaymentSuccessSummaryRow>
+        )}
+      </PaymentSuccessSummaryCard>
+
+      <PaymentSuccessButtonGroup>
+        {bookingId && (
+          <PaymentSuccessLink to={`/bookings/${bookingId}`}>
+            예약 상세보기
+          </PaymentSuccessLink>
+        )}
+
+        <PaymentSuccessLink to="/">홈으로</PaymentSuccessLink>
+      </PaymentSuccessButtonGroup>
     </PaymentSuccessContainer>
   );
 }

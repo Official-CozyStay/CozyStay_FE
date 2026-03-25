@@ -148,8 +148,8 @@ export default function PaymentPage() {
         },
         orderId: payment.orderId,
         orderName: `${detail.title} 예약`,
-        successUrl: `${frontBaseUrl}/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
-        failUrl: `${frontBaseUrl}/payment/fail?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
+        successUrl: `${frontBaseUrl}/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}&checkin=${checkIn}&checkout=${checkOut}&guests=${guests}`,
+        failUrl: `${frontBaseUrl}/payment/fail?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}&checkin=${checkIn}&checkout=${checkOut}&guests=${guests}`,
         customerName: '고객',
       });
     } catch (e: unknown) {
