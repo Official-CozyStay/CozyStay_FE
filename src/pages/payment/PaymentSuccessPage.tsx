@@ -60,9 +60,14 @@ export default function PaymentSuccessPage() {
         }
 
         navigate(
-          `/payment/fail?bookingId=${bookingId ?? ''}&paymentId=${paymentId ?? ''}&message=${encodeURIComponent(
-            errorMessage,
-          )}`,
+          `/payment/fail?bookingId=${bookingId ?? ''}` +
+            `&paymentId=${paymentId ?? ''}` +
+            `&message=${encodeURIComponent(errorMessage)}` +
+            `&title=${encodeURIComponent(sp.get('title') ?? '')}` +
+            `&checkin=${encodeURIComponent(sp.get('checkin') ?? '')}` +
+            `&checkout=${encodeURIComponent(sp.get('checkout') ?? '')}` +
+            `&guests=${encodeURIComponent(sp.get('guests') ?? '')}` +
+            `&amount=${encodeURIComponent(sp.get('amount') ?? '')}`,
           { replace: true },
         );
         return;
