@@ -16,7 +16,6 @@ export default function PaymentFailPage() {
 
   const bookingId = sp.get('bookingId');
   const code = sp.get('code');
-  const message = sp.get('message');
 
   const canRetry = useMemo(() => {
     return !!bookingId;
@@ -27,10 +26,10 @@ export default function PaymentFailPage() {
       <PaymentFailTitle>결제에 실패했습니다</PaymentFailTitle>
 
       <PaymentFailDescription>
-        {message ??
-          '네트워크 문제 또는 결제 과정에서 오류가 발생했을 수 있어요.'}
+        결제에 실패했지만 예약은 아직 유지되고 있어요.
         <br />
-        다시 시도하거나, 문제가 계속되면 잠시 후 재시도해주세요.
+        약 10분 동안 예약이 대기 상태로 유지됩니다.
+        <br />그 전에 다시 결제를 진행해주세요.
       </PaymentFailDescription>
 
       {code && (
@@ -49,7 +48,7 @@ export default function PaymentFailPage() {
             navigate(-1);
           }}
         >
-          결제 다시 시도
+          다시 결제하기
         </PaymentFailRetryButton>
 
         <PaymentFailLinkButton to="/">홈으로</PaymentFailLinkButton>
@@ -62,9 +61,9 @@ export default function PaymentFailPage() {
       </PaymentFailButtonGroup>
 
       <PaymentFailNotice>
-        <div>• 결제가 실패해도 예약이 자동으로 확정되진 않아요.</div>
+        <div>• 결제가 완료되지 않으면 예약은 자동으로 취소됩니다.</div>
         <div>
-          • 문제가 지속되면 결제 수단을 바꾸거나 잠시 후 다시 시도해보세요.
+          • 문제가 지속되면 결제 수단을 변경하거나 잠시 후 다시 시도해주세요.
         </div>
       </PaymentFailNotice>
     </PaymentFailPageContainer>
