@@ -15,6 +15,8 @@ export default function PaymentFailPage() {
   const [sp] = useSearchParams();
 
   const bookingId = sp.get('bookingId');
+  const code = sp.get('code');
+  const message = sp.get('message');
 
   const canRetry = useMemo(() => {
     return !!bookingId;
@@ -25,21 +27,25 @@ export default function PaymentFailPage() {
       <PaymentFailTitle>결제에 실패했습니다</PaymentFailTitle>
 
       <PaymentFailDescription>
-        네트워크 문제 또는 결제 과정에서 오류가 발생했을 수 있어요.
+        {message ??
+          '네트워크 문제 또는 결제 과정에서 오류가 발생했을 수 있어요.'}
         <br />
         다시 시도하거나, 문제가 계속되면 잠시 후 재시도해주세요.
       </PaymentFailDescription>
 
+      {code && (
+        <PaymentFailNotice>
+          <div>• 오류 코드: {code}</div>
+        </PaymentFailNotice>
+      )}
+
       <PaymentFailButtonGroup>
-        {/* 결제 재시도: 다시 PaymentPage로 */}
         <PaymentFailRetryButton
           type="button"
           disabled={!canRetry}
           $disabled={!canRetry}
           onClick={() => {
             if (!bookingId) return;
-
-            // 간단 재시도: 뒤로 가기(= PaymentPage로 복귀)
             navigate(-1);
           }}
         >
@@ -48,7 +54,6 @@ export default function PaymentFailPage() {
 
         <PaymentFailLinkButton to="/">홈으로</PaymentFailLinkButton>
 
-        {/* 예약 상세로 이동 */}
         {bookingId && (
           <PaymentFailLinkButton to={`/bookings/${bookingId}`}>
             예약 상세 보기
