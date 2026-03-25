@@ -9,6 +9,10 @@ import {
   PaymentSuccessDescription,
   PaymentSuccessButtonGroup,
   PaymentSuccessLink,
+  PaymentSuccessSummaryCard,
+  PaymentSuccessSummaryRow,
+  PaymentSuccessSummaryLabel,
+  PaymentSuccessSummaryValue,
 } from './paymentSuccess.styles';
 
 export default function PaymentSuccessPage() {
@@ -57,26 +61,47 @@ export default function PaymentSuccessPage() {
   const title = errorMessage
     ? '결제 승인에 실패했습니다'
     : confirming
-      ? '결제 승인 중입니다'
+      ? '결제를 확인하고 있습니다'
       : '결제가 완료되었습니다';
 
   const description = errorMessage
     ? errorMessage
     : confirming
       ? '결제 정보를 확인하고 있어요. 잠시만 기다려주세요.'
-      : '예약이 정상적으로 접수되었어요.';
+      : '예약이 정상적으로 접수되었어요. 아래에서 예약 정보를 확인해보세요.';
 
   return (
     <PaymentSuccessContainer>
       <PaymentSuccessTitle>{title}</PaymentSuccessTitle>
-
       <PaymentSuccessDescription>{description}</PaymentSuccessDescription>
+
+      {!confirming && !errorMessage && (
+        <PaymentSuccessSummaryCard>
+          {bookingId && (
+            <PaymentSuccessSummaryRow>
+              <PaymentSuccessSummaryLabel>예약 번호</PaymentSuccessSummaryLabel>
+              <PaymentSuccessSummaryValue>
+                #{bookingId}
+              </PaymentSuccessSummaryValue>
+            </PaymentSuccessSummaryRow>
+          )}
+
+          {amount && (
+            <PaymentSuccessSummaryRow>
+              <PaymentSuccessSummaryLabel>결제 금액</PaymentSuccessSummaryLabel>
+              <PaymentSuccessSummaryValue>
+                ₩{Number(amount).toLocaleString()}
+              </PaymentSuccessSummaryValue>
+            </PaymentSuccessSummaryRow>
+          )}
+        </PaymentSuccessSummaryCard>
+      )}
 
       {!confirming && (
         <PaymentSuccessButtonGroup>
           {bookingId && !errorMessage && (
             <PaymentSuccessLink to={`/bookings/${bookingId}`}>
-              예약 상세로 이동
+              예약 상세 보기
             </PaymentSuccessLink>
           )}
 
