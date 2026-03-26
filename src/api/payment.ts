@@ -15,12 +15,13 @@ export type PaymentCreateResponse = {
   amount: string;
 };
 
-export async function createPayment(req: PaymentCreateRequest) {
-  const response = await client.post<PaymentCreateResponse>(
+export async function createPayment(
+  req: PaymentCreateRequest,
+): Promise<PaymentCreateResponse> {
+  return client.post<PaymentCreateResponse, PaymentCreateResponse>(
     '/api/payments',
     req,
   );
-  return response.data;
 }
 
 export type PaymentConfirmRequest = {
@@ -40,17 +41,17 @@ export type PaymentResponse = {
   cancelledAt: string | null;
 };
 
-export async function confirmPayment(req: PaymentConfirmRequest) {
-  const response = await client.post<PaymentResponse>(
+export async function confirmPayment(
+  req: PaymentConfirmRequest,
+): Promise<PaymentResponse> {
+  return client.post<PaymentResponse, PaymentResponse>(
     '/api/payments/confirm',
     req,
   );
-  return response;
 }
 
-export async function failPayment(paymentId: number) {
-  const response = await client.post<PaymentResponse>(
+export async function failPayment(paymentId: number): Promise<PaymentResponse> {
+  return client.post<PaymentResponse, PaymentResponse>(
     `/api/payments/${paymentId}/fail`,
   );
-  return response.data;
 }
