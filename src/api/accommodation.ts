@@ -3,6 +3,8 @@ import type {
   AccommodationDetailDTO,
   HostelReviewDTO,
   ReviewListResponse,
+  AccommodationSearchRequest,
+  AccommodationSearchResponse,
 } from './types';
 
 // 숙소 상세 조회
@@ -14,9 +16,9 @@ export async function fetchAccommodationDetail(
     throw new Error(`Invalid id format: ${id}`);
   }
 
-  const data = await client.get(
-    `/api/accommodations/${encodeURIComponent(id)}`
-  ) as AccommodationDetailDTO;
+  const data = (await client.get(
+    `/api/accommodations/${encodeURIComponent(id)}`,
+  )) as AccommodationDetailDTO;
   return data;
 }
 
@@ -37,26 +39,28 @@ export async function fetchAccommodationReviews(
   let reviewsToUse: HostelReviewDTO[] = [];
 
   // 더미 데이터 정의
-  const MOCK_REVIEWS: HostelReviewDTO[] = Array.from({ length: 3 }).map((_, i) => ({
-    id: 100 + i,
-    bookingId: 200 + i,
-    userNickName: `더미 유저 ${i + 1}`,
-    userProfileImageUrl: `https://i.pravatar.cc/150?u=${100 + i}`,
-    ratingOverall: 4.5 + (i * 0.1),
-    ratingCleanliness: 5,
-    ratingAccuracy: 4,
-    ratingCheckin: 5,
-    ratingCommunication: 5,
-    ratingLocation: 4,
-    reviewComment: `정말 멋진 숙소였습니다! (테스트 후기 ${i + 1})`,
-    comment: null,
-  }));
+  const MOCK_REVIEWS: HostelReviewDTO[] = Array.from({ length: 3 }).map(
+    (_, i) => ({
+      id: 100 + i,
+      bookingId: 200 + i,
+      userNickName: `더미 유저 ${i + 1}`,
+      userProfileImageUrl: `https://i.pravatar.cc/150?u=${100 + i}`,
+      ratingOverall: 4.5 + i * 0.1,
+      ratingCleanliness: 5,
+      ratingAccuracy: 4,
+      ratingCheckin: 5,
+      ratingCommunication: 5,
+      ratingLocation: 4,
+      reviewComment: `정말 멋진 숙소였습니다! (테스트 후기 ${i + 1})`,
+      comment: null,
+    }),
+  );
 
   try {
     // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
-    const reviews = await client.get(
-      `/api/review/accommodation/${safeAccId}`
-    ) as HostelReviewDTO[];
+    const reviews = (await client.get(
+      `/api/review/accommodation/${safeAccId}`,
+    )) as HostelReviewDTO[];
 
     if (Array.isArray(reviews)) {
       reviewsToUse = reviews;
@@ -110,7 +114,8 @@ export async function fetchAccommodationReviews(
       author: {
         userId: 0,
         nickName: r.userNickName || `게스트 ${r.id}`,
-        profileImageUrl: r.userProfileImageUrl || `https://i.pravatar.cc/150?u=${r.id}`,
+        profileImageUrl:
+          r.userProfileImageUrl || `https://i.pravatar.cc/150?u=${r.id}`,
       },
       rating: Number(r.ratingOverall),
       content: r.reviewComment,
@@ -118,4 +123,29 @@ export async function fetchAccommodationReviews(
       reply: r.comment,
     })),
   };
+}
+
+// 숙소 검색
+export async function searchAccommodations(
+  params: AccommodationSearchRequest,
+): Promise<AccommodationSearchResponse> {
+  const queryParams = new URLSearchParams();
+
+  if (params.city) queryParams.append('city', params.city);
+  if (params.title) queryParams.append('title', params.title);
+  if (params.minPrice !== undefined)
+    queryParams.append('minPrice', params.minPrice.toString());
+  if (params.maxPrice !== undefined)
+    queryParams.append('maxPrice', params.maxPrice.toString());
+  if (params.numberOfBeds !== undefined)
+    queryParams.append('numberOfBeds', params.numberOfBeds.toString());
+  if (params.checkInDate) queryParams.append('checkInDate', params.checkInDate);
+  if (params.checkOutDate)
+    queryParams.append('checkOutDate', params.checkOutDate);
+
+  const queryString = queryParams.toString();
+  const url = queryString ? `/api/v1/search?${queryString}` : '/api/v1/search';
+
+  const data = (await client.get(url)) as AccommodationSearchResponse;
+  return data;
 }

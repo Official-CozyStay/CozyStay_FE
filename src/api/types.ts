@@ -252,3 +252,27 @@ export interface MyInvitationResponse {
   invitedAt: string;
   respondedAt?: string;
 }
+
+export interface AccommodationSearchRequest {
+  city?: string;
+  title?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  numberOfBeds?: number;
+  checkInDate?: string;
+  checkOutDate?: string;
+}
+
+export interface AccommodationInfo {
+  id: number;
+  title: string;
+  description: string;
+  address: string;
+  city: string;
+  pricePerNight: number;
+  mainImageUrl: string;
+}
+
+export interface AccommodationSearchResponse {
+  accommodations: AccommodationInfo[];
+}

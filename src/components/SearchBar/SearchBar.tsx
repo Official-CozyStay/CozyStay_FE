@@ -16,6 +16,9 @@ import {
   CounterValue,
 } from './SearchBar.styles';
 import { Search, Minus, Plus } from 'lucide-react';
+import { format } from 'date-fns';
+import RegionPopup from './RegionPopup';
+import DatePopup from './DatePopup';
 
 interface SearchBarProps {
   isCompact?: boolean;
@@ -65,6 +68,17 @@ const GuestCounterRow = React.memo(
 const SearchBar = ({ isCompact = false }: SearchBarProps) => {
   const navigate = useNavigate();
   const [showGuestPopup, setShowGuestPopup] = useState(false);
+  const [showRegionPopup, setShowRegionPopup] = useState(false);
+  const [showDatePopup, setShowDatePopup] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<{
+    province: string;
+    city: string;
+    district?: string;
+  } | null>(null);
+  const [dateRange, setDateRange] = useState<{
+    startDate: Date;
+    endDate: Date;
+  } | null>(null);
   const [guests, setGuests] = useState({
     adults: 0,
     children: 0,
@@ -85,12 +99,48 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
 
     if (showGuestPopup) {
       document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showGuestPopup]);
+
+  // Click outside for RegionPopup
+  const regionPopupRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        regionPopupRef.current &&
+        !regionPopupRef.current.contains(event.target as Node)
+      ) {
+        setShowRegionPopup(false);
+      }
+    };
+    if (showRegionPopup)
+      document.addEventListener('mousedown', handleClickOutside);
+    else document.removeEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showRegionPopup]);
+
+  // Click outside for DatePopup
+  const datePopupRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        datePopupRef.current &&
+        !datePopupRef.current.contains(event.target as Node)
+      ) {
+        setShowDatePopup(false);
+      }
+    };
+    if (showDatePopup)
+      document.addEventListener('mousedown', handleClickOutside);
+    else document.removeEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showDatePopup]);
 
   const updateGuest = useCallback((type: GuestType, delta: number) => {
     setGuests((prev) => ({
@@ -106,36 +156,95 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
     <SearchBarContainer $isCompact={isCompact}>
       <SearchField
         onClick={() => {
-          // TODO: 여행지 검색 기능 구현
+          setShowRegionPopup(!showRegionPopup);
+          setShowDatePopup(false);
+          setShowGuestPopup(false);
         }}
+        $hasPopup={showRegionPopup}
         $isCompact={isCompact}
       >
         {!isCompact && <SearchFieldLabel>여행지</SearchFieldLabel>}
         <SearchFieldContent>
-          {!isCompact && <span>여행지 검색</span>}
-          {isCompact && <span>어디든지</span>}
+          {!isCompact && (
+            <span>
+              {selectedLocation
+                ? `${selectedLocation.province} ${selectedLocation.city} ${selectedLocation.district || ''}`.trim()
+                : '여행지 검색'}
+            </span>
+          )}
+          {isCompact && (
+            <span>
+              {selectedLocation
+                ? `${selectedLocation.district || selectedLocation.city}`
+                : '어디든지'}
+            </span>
+          )}
         </SearchFieldContent>
+        {showRegionPopup && (
+          <RegionPopup
+            ref={regionPopupRef}
+            selectedProvince={selectedLocation?.province}
+            selectedCity={selectedLocation?.city}
+            selectedDistrict={selectedLocation?.district}
+            onSelect={(province, city, district) => {
+              setSelectedLocation({ province, city, district });
+              setShowRegionPopup(false);
+              setShowDatePopup(true); // Automatically open date picker after region selection
+            }}
+          />
+        )}
       </SearchField>
 
       <SearchDivider $isCompact={isCompact} />
 
       <SearchField
         onClick={() => {
-          // TODO: 날짜 선택 기능 구현
+          setShowDatePopup(!showDatePopup);
+          setShowRegionPopup(false);
+          setShowGuestPopup(false);
         }}
+        $hasPopup={showDatePopup}
         $isCompact={isCompact}
       >
         {!isCompact && <SearchFieldLabel>날짜</SearchFieldLabel>}
         <SearchFieldContent>
-          {!isCompact && <span>날짜 추가</span>}
-          {isCompact && <span>언제든지</span>}
+          {!isCompact && (
+            <span>
+              {dateRange
+                ? `${format(dateRange.startDate, 'M월 d일')} - ${format(dateRange.endDate, 'M월 d일')}`
+                : '날짜 추가'}
+            </span>
+          )}
+          {isCompact && (
+            <span>
+              {dateRange
+                ? `${format(dateRange.startDate, 'M.d')}-${format(dateRange.endDate, 'M.d')}`
+                : '언제든지'}
+            </span>
+          )}
         </SearchFieldContent>
+        {showDatePopup && (
+          <DatePopup
+            ref={datePopupRef}
+            startDate={dateRange?.startDate}
+            endDate={dateRange?.endDate}
+            onChange={(startDate, endDate) => {
+              setDateRange({ startDate, endDate });
+              setShowDatePopup(false);
+              setShowGuestPopup(true); // Automatically open guest popup after date selection
+            }}
+          />
+        )}
       </SearchField>
 
       <SearchDivider $isCompact={isCompact} />
 
       <SearchField
-        onClick={() => setShowGuestPopup(!showGuestPopup)}
+        onClick={() => {
+          setShowGuestPopup(!showGuestPopup);
+          setShowRegionPopup(false);
+          setShowDatePopup(false);
+        }}
         $hasPopup={showGuestPopup}
         $isCompact={isCompact}
       >
@@ -182,7 +291,32 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
       <SearchButton
         type="button"
         $isCompact={isCompact}
-        onClick={() => navigate('/search')}
+        onClick={() => {
+          const params = new URLSearchParams();
+          if (selectedLocation?.city) {
+            // "전체"나 "도 단위"만 있는 경우도 있을 수 있지만, 기본적으로 city를 보냅니다.
+            params.append('city', selectedLocation.city);
+          }
+          if (dateRange?.startDate) {
+            params.append(
+              'checkInDate',
+              format(dateRange.startDate, 'yyyy-MM-dd'),
+            );
+          }
+          if (dateRange?.endDate) {
+            params.append(
+              'checkOutDate',
+              format(dateRange.endDate, 'yyyy-MM-dd'),
+            );
+          }
+
+          const totalGuests = guests.adults + guests.children;
+          if (totalGuests > 0) {
+            params.append('numberOfBeds', totalGuests.toString());
+          }
+
+          navigate(`/search?${params.toString()}`);
+        }}
       >
         <Search size={18} />
         {!isCompact && <span>검색</span>}
