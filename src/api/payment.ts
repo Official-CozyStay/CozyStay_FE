@@ -49,8 +49,8 @@ export async function confirmPayment(req: PaymentConfirmRequest) {
 }
 
 export async function failPayment(paymentId: number) {
-  const response = (await client.post(
+  const response = await client.post<PaymentResponse>(
     `/api/payments/${paymentId}/fail`,
-  )) as PaymentResponse;
+  );
   return response;
 }
