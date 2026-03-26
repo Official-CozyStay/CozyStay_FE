@@ -20,6 +20,7 @@ export default function PaymentFailPage() {
   const [sp] = useSearchParams();
 
   const bookingId = sp.get('bookingId');
+  const accommodationId = sp.get('accommodationId');
   const code = sp.get('code');
   const message = sp.get('message');
 
@@ -30,8 +31,8 @@ export default function PaymentFailPage() {
   const amount = sp.get('amount');
 
   const canRetry = useMemo(() => {
-    return !!bookingId;
-  }, [bookingId]);
+    return !!bookingId && !!accommodationId;
+  }, [bookingId, accommodationId]);
 
   return (
     <PaymentFailPageContainer>
@@ -99,10 +100,16 @@ export default function PaymentFailPage() {
           disabled={!canRetry}
           $disabled={!canRetry}
           onClick={() => {
-            if (!bookingId) return;
+            if (!bookingId || !accommodationId) return;
 
-            // TODO: navigate(-!) 대신 bookingId 기반 재결제 진입 경로로 교체
-            navigate(-1);
+            const params = new URLSearchParams();
+            params.set('bookingId', bookingId);
+
+            if (checkIn) params.set('checkin', checkIn);
+            if (checkOut) params.set('checkout', checkOut);
+            if (guests) params.set('numberOfGuests', guests);
+
+            navigate(`/payment/retry/${accommodationId}?${params.toString()}`);
           }}
         >
           다시 결제하기

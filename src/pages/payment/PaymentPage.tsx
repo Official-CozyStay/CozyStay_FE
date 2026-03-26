@@ -41,6 +41,8 @@ export default function PaymentPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const retryBookingId = searchParams.get('bookingId');
+
   const checkIn = searchParams.get('checkin');
   const checkOut = searchParams.get('checkout');
   const guests = Number(searchParams.get('numberOfGuests') ?? 1);
@@ -115,7 +117,9 @@ export default function PaymentPage() {
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
-    let bookingIdForNav: number | null = null;
+    let bookingIdForNav: number | null = retryBookingId
+      ? Number(retryBookingId)
+      : null;
     let paymentIdForNav: number | null = null;
 
     try {
@@ -126,17 +130,19 @@ export default function PaymentPage() {
         throw new Error('토스 클라이언트 키가 설정되지 않았습니다.');
       }
 
-      const booking = await createBooking({
-        accommodationId: Number(id),
-        checkInDate: checkIn!,
-        checkOutDate: checkOut!,
-        numberOfGuests: guests,
-      });
+      if (!bookingIdForNav) {
+        const booking = await createBooking({
+          accommodationId: Number(id),
+          checkInDate: checkIn!,
+          checkOutDate: checkOut!,
+          numberOfGuests: guests,
+        });
 
-      bookingIdForNav = booking.bookingId;
+        bookingIdForNav = booking.bookingId;
+      }
 
       const payment = await createPayment({
-        bookingId: booking.bookingId,
+        bookingId: bookingIdForNav,
         paymentMethod: toApiPaymentMethod(paymentMethod),
       });
 
@@ -145,12 +151,13 @@ export default function PaymentPage() {
       const tossPayments = await loadTossPayments(tossClientKey);
 
       const paymentSdk = tossPayments.payment({
-        customerKey: `booking_${booking.bookingId}`,
+        customerKey: `booking_${bookingIdForNav}`,
       });
 
       const commonParams = new URLSearchParams({
-        bookingId: String(booking.bookingId),
+        bookingId: String(bookingIdForNav),
         paymentId: String(payment.paymentId),
+        accommodationId: String(id),
         checkin: String(checkIn),
         checkout: String(checkOut),
         guests: String(guests),
@@ -205,6 +212,7 @@ export default function PaymentPage() {
       if (bookingIdForNav) {
         const params = new URLSearchParams();
         params.set('bookingId', String(bookingIdForNav));
+        params.set('accommodationId', String(id));
 
         if (paymentIdForNav) {
           params.set('paymentId', String(paymentIdForNav));
