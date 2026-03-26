@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
+import { useAuth } from '@/contexts/AuthContext';
 
 import { useAccommodationStore } from '@/store/accommodationStore';
 import { nightsBetween, calcTotal } from '../../utils/price';
@@ -35,6 +36,7 @@ export default function PaymentPage() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const { detail, loading, error, load } = useAccommodationStore();
+  const { user } = useAuth();
 
   const [paymentMethod, setPaymentMethod] = useState<UiPaymentMethod>('CARD');
   const [hostMessage, setHostMessage] = useState('');
@@ -175,7 +177,7 @@ export default function PaymentPage() {
         orderName: `${detail.title} 예약`,
         successUrl: `${frontBaseUrl}/payment/success?${commonParams.toString()}`,
         failUrl: `${frontBaseUrl}/payment/fail?${commonParams.toString()}`,
-        customerName: '고객',
+        customerName: user?.nickname ?? '고객',
       });
     } catch (e: unknown) {
       let msg = '예약/결제 요청에 실패했습니다.';
