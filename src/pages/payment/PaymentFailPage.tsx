@@ -86,10 +86,10 @@ export default function PaymentFailPage() {
         </PaymentFailSummaryCard>
       )}
 
-      {code && (
+      {(code || message) && (
         <PaymentFailNotice>
-          <div>• 오류 코드: {code}</div>
-          {message && <div>• 상세 메시지: {message}</div>}
+          {code && <div>• 오류 코드: {code}</div>}
+          {message && <div>• 안내 메시지: {message}</div>}
         </PaymentFailNotice>
       )}
 
@@ -100,6 +100,8 @@ export default function PaymentFailPage() {
           $disabled={!canRetry}
           onClick={() => {
             if (!bookingId) return;
+
+            // TODO: navigate(-!) 대신 bookingId 기반 재결제 진입 경로로 교체
             navigate(-1);
           }}
         >

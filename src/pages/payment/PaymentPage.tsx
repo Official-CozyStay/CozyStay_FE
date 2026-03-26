@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
@@ -31,6 +31,7 @@ const frontBaseUrl =
   import.meta.env.VITE_FRONT_BASE_URL ?? window.location.origin;
 
 export default function PaymentPage() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const { detail, loading, error, load } = useAccommodationStore();
@@ -114,6 +115,9 @@ export default function PaymentPage() {
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
+    let bookingIdForNav: number | null = null;
+    let paymentIdForNav: number | null = null;
+
     try {
       setSubmitting(true);
       setSubmitError(null);
@@ -129,15 +133,29 @@ export default function PaymentPage() {
         numberOfGuests: guests,
       });
 
+      bookingIdForNav = booking.bookingId;
+
       const payment = await createPayment({
         bookingId: booking.bookingId,
         paymentMethod: toApiPaymentMethod(paymentMethod),
       });
 
+      paymentIdForNav = payment.paymentId;
+
       const tossPayments = await loadTossPayments(tossClientKey);
 
       const paymentSdk = tossPayments.payment({
         customerKey: `booking_${booking.bookingId}`,
+      });
+
+      const commonParams = new URLSearchParams({
+        bookingId: String(booking.bookingId),
+        paymentId: String(payment.paymentId),
+        checkin: String(checkIn),
+        checkout: String(checkOut),
+        guests: String(guests),
+        title: detail.title,
+        amount: String(payment.amount),
       });
 
       await paymentSdk.requestPayment({
@@ -148,8 +166,8 @@ export default function PaymentPage() {
         },
         orderId: payment.orderId,
         orderName: `${detail.title} 예약`,
-        successUrl: `${frontBaseUrl}/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}&checkin=${checkIn}&checkout=${checkOut}&guests=${guests}&title=${encodeURIComponent(detail.title)}&amount=${payment.amount}`,
-        failUrl: `${frontBaseUrl}/payment/fail?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}&checkin=${checkIn}&checkout=${checkOut}&guests=${guests}&title=${encodeURIComponent(detail.title)}&amount=${payment.amount}`,
+        successUrl: `${frontBaseUrl}/payment/success?${commonParams.toString()}`,
+        failUrl: `${frontBaseUrl}/payment/fail?${commonParams.toString()}`,
         customerName: '고객',
       });
     } catch (e: unknown) {
@@ -182,6 +200,25 @@ export default function PaymentPage() {
         if (import.meta.env.DEV) {
           console.error('[PaymentPage] Unknown error:', String(e));
         }
+      }
+
+      if (bookingIdForNav) {
+        const params = new URLSearchParams();
+        params.set('bookingId', String(bookingIdForNav));
+
+        if (paymentIdForNav) {
+          params.set('paymentId', String(paymentIdForNav));
+        }
+
+        params.set('checkin', String(checkIn));
+        params.set('checkout', String(checkOut));
+        params.set('guests', String(guests));
+        params.set('title', detail.title);
+        params.set('amount', String(price?.total ?? ''));
+        params.set('message', msg);
+
+        navigate(`/payment/fail?${params.toString()}`);
+        return;
       }
 
       setSubmitError(msg);
