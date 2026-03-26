@@ -20,7 +20,6 @@ export default function PaymentSuccessPage() {
   const navigate = useNavigate();
 
   const bookingId = sp.get('bookingId');
-  const paymentId = sp.get('paymentId');
   const paymentKey = sp.get('paymentKey');
   const orderId = sp.get('orderId');
   const amount = sp.get('amount');
@@ -32,12 +31,12 @@ export default function PaymentSuccessPage() {
   const [confirming, setConfirming] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     const runConfirm = async () => {
       if (!paymentKey || !orderId || !amount) {
         const failParams = new URLSearchParams(sp.toString());
         failParams.set('message', '결제 승인에 필요한 정보가 없습니다.');
-
-        // fail 페이지에서 불필요한 값 제거
         failParams.delete('paymentKey');
         failParams.delete('orderId');
 
@@ -64,25 +63,27 @@ export default function PaymentSuccessPage() {
         }
 
         const failParams = new URLSearchParams(sp.toString());
-
         failParams.set('message', errorMessage);
-
-        // Toss successUrl에서 들어온 paymentKey, orderId는 fail 페이지에서 불필요
         failParams.delete('paymentKey');
         failParams.delete('orderId');
 
         navigate(`/payment/fail?${failParams.toString()}`, {
           replace: true,
         });
-
         return;
       } finally {
-        setConfirming(false);
+        if (isMounted) {
+          setConfirming(false);
+        }
       }
     };
 
     runConfirm();
-  }, [paymentKey, orderId, amount, bookingId, paymentId, navigate]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [paymentKey, orderId, amount, navigate, sp]);
 
   if (confirming) {
     return (
