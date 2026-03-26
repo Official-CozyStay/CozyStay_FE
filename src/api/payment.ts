@@ -41,10 +41,10 @@ export type PaymentResponse = {
 };
 
 export async function confirmPayment(req: PaymentConfirmRequest) {
-  const response = (await client.post(
+  const response = await client.post<PaymentResponse>(
     '/api/payments/confirm',
     req,
-  )) as PaymentResponse;
+  );
   return response;
 }
 
