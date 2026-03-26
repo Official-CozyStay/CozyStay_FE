@@ -34,6 +34,13 @@ export default function PaymentFailPage() {
     return !!bookingId && !!accommodationId;
   }, [bookingId, accommodationId]);
 
+  const parsedAmount = useMemo(() => {
+    if (!amount) return null;
+
+    const value = Number(amount);
+    return Number.isFinite(value) ? value : null;
+  }, [amount]);
+
   return (
     <PaymentFailPageContainer>
       <PaymentFailTitle>결제에 실패했습니다</PaymentFailTitle>
@@ -44,7 +51,7 @@ export default function PaymentFailPage() {
         진행해주세요.
       </PaymentFailDescription>
 
-      {(title || checkIn || checkOut || guests || amount) && (
+      {(title || checkIn || checkOut || guests || parsedAmount !== null) && (
         <PaymentFailSummaryCard>
           <PaymentFailSummaryTitle>예약 정보</PaymentFailSummaryTitle>
 
@@ -76,11 +83,11 @@ export default function PaymentFailPage() {
             </PaymentFailSummaryRow>
           )}
 
-          {amount && (
+          {parsedAmount !== null && (
             <PaymentFailSummaryRow>
               <PaymentFailSummaryLabel>결제 예정 금액</PaymentFailSummaryLabel>
               <PaymentFailSummaryValue>
-                ₩{Number(amount).toLocaleString()}
+                ₩{parsedAmount.toLocaleString()}
               </PaymentFailSummaryValue>
             </PaymentFailSummaryRow>
           )}
