@@ -16,10 +16,10 @@ export type PaymentCreateResponse = {
 };
 
 export async function createPayment(req: PaymentCreateRequest) {
-  const response = (await client.post(
+  const response = await client.post<PaymentCreateResponse>(
     '/api/payments',
     req,
-  )) as PaymentCreateResponse;
+  );
   return response;
 }
 
