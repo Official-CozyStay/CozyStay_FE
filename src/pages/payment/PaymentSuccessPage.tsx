@@ -34,12 +34,16 @@ export default function PaymentSuccessPage() {
   useEffect(() => {
     const runConfirm = async () => {
       if (!paymentKey || !orderId || !amount) {
-        navigate(
-          `/payment/fail?bookingId=${bookingId ?? ''}&paymentId=${paymentId ?? ''}&message=${encodeURIComponent(
-            '결제 승인에 필요한 정보가 없습니다.',
-          )}`,
-          { replace: true },
-        );
+        const failParams = new URLSearchParams(sp.toString());
+        failParams.set('message', '결제 승인에 필요한 정보가 없습니다.');
+
+        // fail 페이지에서 불필요한 값 제거
+        failParams.delete('paymentKey');
+        failParams.delete('orderId');
+
+        navigate(`/payment/fail?${failParams.toString()}`, {
+          replace: true,
+        });
         return;
       }
 
