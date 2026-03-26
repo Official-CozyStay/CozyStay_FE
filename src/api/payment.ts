@@ -20,7 +20,7 @@ export async function createPayment(req: PaymentCreateRequest) {
     '/api/payments',
     req,
   );
-  return response;
+  return response.data;
 }
 
 export type PaymentConfirmRequest = {
@@ -52,5 +52,5 @@ export async function failPayment(paymentId: number) {
   const response = await client.post<PaymentResponse>(
     `/api/payments/${paymentId}/fail`,
   );
-  return response;
+  return response.data;
 }

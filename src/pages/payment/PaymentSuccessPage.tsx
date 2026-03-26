@@ -59,17 +59,18 @@ export default function PaymentSuccessPage() {
           errorMessage = e.message;
         }
 
-        navigate(
-          `/payment/fail?bookingId=${bookingId ?? ''}` +
-            `&paymentId=${paymentId ?? ''}` +
-            `&message=${encodeURIComponent(errorMessage)}` +
-            `&title=${encodeURIComponent(sp.get('title') ?? '')}` +
-            `&checkin=${encodeURIComponent(sp.get('checkin') ?? '')}` +
-            `&checkout=${encodeURIComponent(sp.get('checkout') ?? '')}` +
-            `&guests=${encodeURIComponent(sp.get('guests') ?? '')}` +
-            `&amount=${encodeURIComponent(sp.get('amount') ?? '')}`,
-          { replace: true },
-        );
+        const failParams = new URLSearchParams(sp.toString());
+
+        failParams.set('message', errorMessage);
+
+        // Toss successUrl에서 들어온 paymentKey, orderId는 fail 페이지에서 불필요
+        failParams.delete('paymentKey');
+        failParams.delete('orderId');
+
+        navigate(`/payment/fail?${failParams.toString()}`, {
+          replace: true,
+        });
+
         return;
       } finally {
         setConfirming(false);
