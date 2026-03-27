@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import AccommodationCard from '@/components/AccommodationCard/AccommodationCard';
 import type { Accommodation } from '@/types/accommodation';
 import {
