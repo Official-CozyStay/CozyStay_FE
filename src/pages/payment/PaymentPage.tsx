@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
+import { useAuth } from '@/contexts/AuthContext';
 
 import { useAccommodationStore } from '@/store/accommodationStore';
 import { nightsBetween, calcTotal } from '../../utils/price';
@@ -16,8 +18,6 @@ import RequestConfirmSection from './components/RequestConfirmSection';
 import { createBooking } from '@/api/booking';
 import {
   createPayment,
-  confirmPayment,
-  failPayment,
   type PaymentMethod as ApiPaymentMethod,
 } from '@/api/payment';
 
@@ -27,18 +27,23 @@ import {
   SubmitErrorBox,
 } from './payment.styles';
 
+const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY;
+const frontBaseUrl =
+  import.meta.env.VITE_FRONT_BASE_URL ?? window.location.origin;
+
 export default function PaymentPage() {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const { detail, loading, error, load } = useAccommodationStore();
+  const { user } = useAuth();
 
-  /** 결제수단 */
   const [paymentMethod, setPaymentMethod] = useState<UiPaymentMethod>('CARD');
-
   const [hostMessage, setHostMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const retryBookingId = searchParams.get('bookingId');
 
   const checkIn = searchParams.get('checkin');
   const checkOut = searchParams.get('checkout');
@@ -73,109 +78,159 @@ export default function PaymentPage() {
     guests <= detail.maxGuests &&
     !submitting;
 
-  /** UI → 서버 PaymentMethod 매핑 */
   const toApiPaymentMethod = (m: UiPaymentMethod): ApiPaymentMethod => {
     if (m === 'CARD') return 'CARD';
-    // NAVERPAY / KAKAOPAY는 서버에서는 EASY_PAY
     return 'EASY_PAY';
   };
 
-  /** 예약 + 결제 생성 */
+  const getUserFriendlyErrorMessage = (
+    status?: number,
+    serverMessage?: string,
+  ) => {
+    const message = serverMessage ?? '';
+
+    if (status === 401) {
+      return '로그인이 필요합니다.';
+    }
+
+    if (status === 409) {
+      if (message.includes('겹치는 예약')) {
+        return '선택한 날짜에 이미 예약이 있어요. 다른 날짜를 선택해주세요.';
+      }
+
+      if (message.includes('이미 결제 진행 중')) {
+        return '이미 결제가 진행 중인 예약입니다. 잠시 후 다시 확인해주세요.';
+      }
+
+      if (message.includes('이미 결제 완료된 예약')) {
+        return '이미 결제가 완료된 예약입니다.';
+      }
+
+      return '요청을 처리할 수 없어요. 입력한 정보를 다시 확인해주세요.';
+    }
+
+    if (status === 400) {
+      return '입력한 정보가 올바르지 않습니다. 다시 확인해주세요.';
+    }
+
+    return message || '예약/결제 요청에 실패했습니다.';
+  };
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
-    let bookingIdForNav: number | null = null;
+    let bookingIdForNav: number | null = retryBookingId
+      ? Number(retryBookingId)
+      : null;
     let paymentIdForNav: number | null = null;
 
     try {
       setSubmitting(true);
       setSubmitError(null);
 
-      // 1) 예약 생성
-      const booking = await createBooking({
-        accommodationId: Number(id),
-        checkInDate: checkIn!,
-        checkOutDate: checkOut!,
-        numberOfGuests: guests,
-      });
+      if (!tossClientKey) {
+        throw new Error('토스 클라이언트 키가 설정되지 않았습니다.');
+      }
 
-      bookingIdForNav = booking.bookingId;
+      if (!bookingIdForNav) {
+        const booking = await createBooking({
+          accommodationId: Number(id),
+          checkInDate: checkIn!,
+          checkOutDate: checkOut!,
+          numberOfGuests: guests,
+        });
 
-      // 2) 결제 생성
+        bookingIdForNav = booking.bookingId;
+      }
+
       const payment = await createPayment({
-        bookingId: booking.bookingId,
+        bookingId: bookingIdForNav,
         paymentMethod: toApiPaymentMethod(paymentMethod),
       });
 
       paymentIdForNav = payment.paymentId;
 
-      // 3) 결제 confirm (PG 연동 전이라 임시 키 생성)
-      const mockPaymentKey = `MOCK_${payment.paymentId}_${Date.now()}`;
+      const tossPayments = await loadTossPayments(tossClientKey);
 
-      try {
-        await confirmPayment(payment.paymentId, {
-          paymentKey: mockPaymentKey,
-        });
+      const paymentSdk = tossPayments.payment({
+        customerKey: `booking_${bookingIdForNav}`,
+      });
 
-        // 결제 성공 페이지로 이동
-        navigate(
-          `/payment/success?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
-        );
-      } catch {
-        // confirm 실패 → failPayment 호출(백엔드 상태 FAIL로)
-        try {
-          await failPayment(payment.paymentId);
-        } catch (failErr) {
-          // failPayment도 실패할 수 있으니 로그 남김
-          console.error('failPayment 호출 실패:', failErr);
-        }
+      const commonParams = new URLSearchParams({
+        bookingId: String(bookingIdForNav),
+        paymentId: String(payment.paymentId),
+        accommodationId: String(id),
+        checkin: String(checkIn),
+        checkout: String(checkOut),
+        guests: String(guests),
+        title: detail.title,
+        amount: String(payment.amount),
+      });
 
-        // 실패 페이지로 이동
-        navigate(
-          `/payment/fail?bookingId=${booking.bookingId}&paymentId=${payment.paymentId}`,
-        );
-      }
+      await paymentSdk.requestPayment({
+        method: 'CARD',
+        amount: {
+          currency: 'KRW',
+          value: Number(payment.amount),
+        },
+        orderId: payment.orderId,
+        orderName: `${detail.title} 예약`,
+        successUrl: `${frontBaseUrl}/payment/success?${commonParams.toString()}`,
+        failUrl: `${frontBaseUrl}/payment/fail?${commonParams.toString()}`,
+        customerName: user?.nickname ?? '고객',
+      });
     } catch (e: unknown) {
       let msg = '예약/결제 요청에 실패했습니다.';
 
-      // createBooking / createPayment 단계에서의 에러
       if (axios.isAxiosError<{ message?: string }>(e)) {
         const status = e.response?.status;
-        msg =
-          status === 401
-            ? '로그인이 필요합니다.'
-            : (e.response?.data?.message ?? msg);
+        const serverMessage = e.response?.data?.message;
 
-        // 민감 정보 노출 방지: DEV에서만 최소 정보 로그
+        msg = getUserFriendlyErrorMessage(status, serverMessage);
+
         if (import.meta.env.DEV) {
           console.error('[PaymentPage] AxiosError:', {
             status,
+            serverMessage,
             message: e.message,
             url: e.config?.url,
             method: e.config?.method,
           });
         }
+      } else if (e instanceof Error) {
+        msg = e.message;
+
+        if (import.meta.env.DEV) {
+          console.error('[PaymentPage] Error:', e.message);
+        }
       } else {
         msg = '알 수 없는 오류가 발생했습니다.';
 
-        // DEV에서만 로그 (객체 전체 말고 메시지 위주)
         if (import.meta.env.DEV) {
           console.error('[PaymentPage] Unknown error:', String(e));
         }
       }
 
-      // 예약이 만들어진 상태면(Booking-PENDING) 실패 페이지로 보내서 재결제 안내
       if (bookingIdForNav) {
         const params = new URLSearchParams();
         params.set('bookingId', String(bookingIdForNav));
+        params.set('accommodationId', String(id));
 
         if (paymentIdForNav) {
           params.set('paymentId', String(paymentIdForNav));
         }
+
+        params.set('checkin', String(checkIn));
+        params.set('checkout', String(checkOut));
+        params.set('guests', String(guests));
+        params.set('title', detail.title);
+        params.set('amount', String(price?.total ?? ''));
+        params.set('message', msg);
+
         navigate(`/payment/fail?${params.toString()}`);
         return;
       }
-      // 예약도 못 만든 경우만 현재 페이지에 에러 표시
+
       setSubmitError(msg);
     } finally {
       setSubmitting(false);
@@ -184,7 +239,6 @@ export default function PaymentPage() {
 
   return (
     <PaymentPageLayout>
-      {/* 왼쪽: 숙소 요약 */}
       <BookingSummaryCard
         title={detail.title}
         thumbnailUrl={detail.images?.[0]?.imageUrl}
@@ -198,7 +252,6 @@ export default function PaymentPage() {
         total={price?.total}
       />
 
-      {/* 오른쪽: 결제 영역 */}
       <PaymentContent>
         <PaymentMethodSection
           value={paymentMethod}
