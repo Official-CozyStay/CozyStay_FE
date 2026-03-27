@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Menu, User } from "lucide-react";
-import logo from "@/assets/images/logo.svg";
-import { useAuth } from "@/contexts/AuthContext";
-import ProfileDropdown from "@/components/ProfileDropdown";
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Menu, User } from 'lucide-react';
+import logo from '@/assets/images/logo.svg';
+import { useAuth } from '@/contexts/AuthContext';
+import ProfileDropdown from '@/components/ProfileDropdown';
 import {
   HeaderContainer,
   HeaderLeft,
@@ -15,7 +15,7 @@ import {
   ProfilePlaceholder,
   MenuIconButton,
   MenuDropdownWrapper,
-} from "./HostingHeader.styles";
+} from './HostingHeader.styles';
 
 const HostingHeader = () => {
   const navigate = useNavigate();
@@ -31,18 +31,18 @@ const HostingHeader = () => {
       </HeaderLeft>
 
       <HeaderRight>
-        <SwitchModeButton onClick={() => navigate("/")}>
+        <SwitchModeButton onClick={() => navigate('/')}>
           게스트 모드로 전환
         </SwitchModeButton>
 
         {isAuthenticated && user ? (
-          <ProfileButton type="button" onClick={() => navigate("/profile")}>
+          <ProfileButton type="button" onClick={() => navigate('/profile')}>
             <ProfilePlaceholder>
-              {user.nickname?.charAt(0)?.toUpperCase() || "?"}
+              {user.nickname?.charAt(0)?.toUpperCase() || '?'}
             </ProfilePlaceholder>
           </ProfileButton>
         ) : (
-          <ProfileButton type="button" onClick={() => navigate("/profile")}>
+          <ProfileButton type="button" onClick={() => navigate('/profile')}>
             <ProfilePlaceholder>
               <User size={18} />
             </ProfilePlaceholder>
