@@ -1,4 +1,5 @@
-import { ChevronDown } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import {
   DetailsContainer,
   TitleSection,
@@ -8,12 +9,15 @@ import {
   SectionTitle,
   SectionDescription,
   FormGroup,
-  SelectWrapper,
-  SelectLabel,
-  Select,
-  SelectIcon,
-  InputGroup,
   Input,
+  MapSearchWrapper,
+  MapSearchInput,
+  MapSearchButton,
+  MapContainer,
+  MapErrorMessage,
+  SelectedAddressCard,
+  SelectedAddressLabel,
+  SelectedAddressValue,
 } from './HostDetails.styles';
 import type { StepProps } from '../BecomeHostPage';
 
@@ -28,13 +32,104 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
     postalCode: '',
   };
 
-  const updateLocation = (field: string, value: string) => {
-    onDataChange({
-      location: {
-        ...location,
-        [field]: value,
-      },
+  const mapRef = useRef<HTMLDivElement>(null);
+  const kakaoMapRef = useRef<kakao.maps.Map | null>(null);
+  const markerRef = useRef<kakao.maps.Marker | null>(null);
+
+  const [query, setQuery] = useState(location.streetAddress || '');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [isMapVisible, setIsMapVisible] = useState(!!location.latitude);
+  const [selectedAddress, setSelectedAddress] = useState(
+    location.streetAddress || '',
+  );
+  const [pendingLatLng, setPendingLatLng] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(
+    location.latitude && location.longitude
+      ? { lat: location.latitude, lng: location.longitude }
+      : null,
+  );
+
+  // pendingLatLng가 설정되면 지도 생성 (최초 1회만)
+  useEffect(() => {
+    if (
+      !pendingLatLng ||
+      kakaoMapRef.current ||
+      !mapRef.current ||
+      !window.kakao?.maps
+    )
+      return;
+
+    window.kakao.maps.load(() => {
+      if (!mapRef.current || kakaoMapRef.current) return;
+      const center = new kakao.maps.LatLng(
+        pendingLatLng.lat,
+        pendingLatLng.lng,
+      );
+      const map = new kakao.maps.Map(mapRef.current, {
+        center,
+        level: 4,
+      });
+      const marker = new kakao.maps.Marker({ map, position: center });
+      kakaoMapRef.current = map;
+      markerRef.current = marker;
     });
+  }, [pendingLatLng]);
+
+  const handleSearch = () => {
+    if (!query.trim()) return;
+
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    geocoder.addressSearch(query, (results, status) => {
+      if (
+        status !== window.kakao.maps.services.Status.OK ||
+        results.length === 0
+      ) {
+        setErrorMsg('주소를 찾을 수 없습니다. 다시 확인해주세요.');
+        return;
+      }
+
+      setErrorMsg('');
+      const result = results[0];
+      const lat = parseFloat(result.y);
+      const lng = parseFloat(result.x);
+      const addr = result.address;
+      const roadAddr = result.road_address;
+      const displayAddress = roadAddr?.address_name || addr.address_name;
+
+      setSelectedAddress(displayAddress);
+
+      if (!isMapVisible) {
+        // 최초 검색: 지도 표시 + useEffect로 지도 생성
+        setIsMapVisible(true);
+        setPendingLatLng({ lat, lng });
+      } else {
+        // 이후 검색: 기존 지도 위치만 이동
+        const newLatLng = new kakao.maps.LatLng(lat, lng);
+        kakaoMapRef.current?.setCenter(newLatLng);
+        markerRef.current?.setPosition(newLatLng);
+      }
+
+      onDataChange({
+        location: {
+          ...location,
+          country: '한국',
+          province: addr.region_1depth_name,
+          city: addr.region_2depth_name,
+          district: addr.region_3depth_name,
+          streetAddress: displayAddress,
+          detailAddress: location.detailAddress || '',
+          postalCode: roadAddr?.zone_no || '',
+          latitude: lat,
+          longitude: lng,
+        },
+      });
+    });
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') handleSearch();
   };
 
   return (
@@ -50,67 +145,48 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
       <Section>
         <SectionTitle>주소 정보</SectionTitle>
         <SectionDescription>
-          숙소의 정확한 위치를 입력해주세요.
+          주소를 검색하면 지도에서 위치를 확인할 수 있습니다.
         </SectionDescription>
 
         <FormGroup>
-          <SelectWrapper>
-            <SelectLabel>국가/지역</SelectLabel>
-            <Select
-              value={location.country}
-              onChange={(e) => updateLocation('country', e.target.value)}
-            >
-              <option value="한국">한국</option>
-              <option value="미국">미국</option>
-              <option value="일본">일본</option>
-              <option value="중국">중국</option>
-            </Select>
-            <SelectIcon>
-              <ChevronDown size={20} />
-            </SelectIcon>
-          </SelectWrapper>
+          <MapSearchWrapper>
+            <MapSearchInput
+              type="text"
+              placeholder="도로명 주소 또는 지번 주소를 입력하세요"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <MapSearchButton type="button" onClick={handleSearch}>
+              검색
+            </MapSearchButton>
+          </MapSearchWrapper>
+          {errorMsg && <MapErrorMessage>{errorMsg}</MapErrorMessage>}
         </FormGroup>
 
-        <FormGroup>
-          <InputGroup>
-            <Input
-              type="text"
-              placeholder="도/특별·광역시 *"
-              value={location.province}
-              onChange={(e) => updateLocation('province', e.target.value)}
-            />
-            <Input
-              type="text"
-              placeholder="시/군/구 *"
-              value={location.city}
-              onChange={(e) => updateLocation('city', e.target.value)}
-            />
-            <Input
-              type="text"
-              placeholder="읍/면/동(해당하는 경우)"
-              value={location.district}
-              onChange={(e) => updateLocation('district', e.target.value)}
-            />
-            <Input
-              type="text"
-              placeholder="도로명 주소 *"
-              value={location.streetAddress}
-              onChange={(e) => updateLocation('streetAddress', e.target.value)}
-            />
+        {isMapVisible && <MapContainer ref={mapRef} />}
+
+        {selectedAddress && (
+          <SelectedAddressCard>
+            <SelectedAddressLabel>선택된 주소</SelectedAddressLabel>
+            <SelectedAddressValue>{selectedAddress}</SelectedAddressValue>
+          </SelectedAddressCard>
+        )}
+
+        {isMapVisible && (
+          <FormGroup>
             <Input
               type="text"
               placeholder="상세주소 (아파트 동/호수, 건물명 등)"
               value={location.detailAddress}
-              onChange={(e) => updateLocation('detailAddress', e.target.value)}
+              onChange={(e) =>
+                onDataChange({
+                  location: { ...location, detailAddress: e.target.value },
+                })
+              }
             />
-            <Input
-              type="text"
-              placeholder="우편번호"
-              value={location.postalCode}
-              onChange={(e) => updateLocation('postalCode', e.target.value)}
-            />
-          </InputGroup>
-        </FormGroup>
+          </FormGroup>
+        )}
       </Section>
     </DetailsContainer>
   );
