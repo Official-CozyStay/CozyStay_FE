@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DayPicker } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
+import 'react-day-picker/style.css';
 import {
   SearchBarContainer,
   SearchField,
@@ -9,11 +12,14 @@ import {
   SearchButton,
   GuestPopup,
   GuestSection,
+  GuestInfo,
   GuestLabel,
   GuestAge,
   GuestCounter,
   CounterButton,
   CounterValue,
+  DatePopup,
+  DayPickerWrapper,
 } from './SearchBar.styles';
 import { Search, Minus, Plus } from 'lucide-react';
 
@@ -34,10 +40,10 @@ interface GuestCounterRowProps {
 const GuestCounterRow = React.memo(
   ({ label, age, count, guestType, onUpdate }: GuestCounterRowProps) => (
     <GuestSection>
-      <div>
+      <GuestInfo>
         <GuestLabel>{label}</GuestLabel>
         <GuestAge>{age}</GuestAge>
-      </div>
+      </GuestInfo>
       <GuestCounter>
         <CounterButton
           onClick={(e) => {
@@ -62,9 +68,16 @@ const GuestCounterRow = React.memo(
   ),
 );
 
+GuestCounterRow.displayName = 'GuestCounterRow';
+
+const formatDate = (date: Date): string =>
+  `${date.getMonth() + 1}월 ${date.getDate()}일`;
+
 const SearchBar = ({ isCompact = false }: SearchBarProps) => {
   const navigate = useNavigate();
   const [showGuestPopup, setShowGuestPopup] = useState(false);
+  const [showDatePopup, setShowDatePopup] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [guests, setGuests] = useState({
     adults: 0,
     children: 0,
@@ -72,6 +85,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
     pets: 0,
   });
   const popupRef = useRef<HTMLDivElement>(null);
+  const datePopupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -81,16 +95,22 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
       ) {
         setShowGuestPopup(false);
       }
+      if (
+        datePopupRef.current &&
+        !datePopupRef.current.contains(event.target as Node)
+      ) {
+        setShowDatePopup(false);
+      }
     };
 
-    if (showGuestPopup) {
+    if (showGuestPopup || showDatePopup) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showGuestPopup]);
+  }, [showGuestPopup, showDatePopup]);
 
   const updateGuest = useCallback((type: GuestType, delta: number) => {
     setGuests((prev) => ({
@@ -99,8 +119,28 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
     }));
   }, []);
 
+  const handleDateSelect = useCallback((range: DateRange | undefined) => {
+    // from === to이면 "시작일만 선택된 상태"로 정규화
+    const normalized: DateRange | undefined =
+      range?.from && range?.to && range.from.getTime() === range.to.getTime()
+        ? { from: range.from, to: undefined }
+        : range;
+
+    setDateRange(normalized);
+
+    if (normalized?.from && normalized?.to) {
+      setShowDatePopup(false);
+    }
+  }, []);
+
   const totalGuests =
     guests.adults + guests.children + guests.infants + guests.pets;
+
+  const dateLabel = dateRange?.from
+    ? dateRange.to
+      ? `${formatDate(dateRange.from)} - ${formatDate(dateRange.to)}`
+      : `${formatDate(dateRange.from)} ~`
+    : '날짜 추가';
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
@@ -121,21 +161,43 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
 
       <SearchField
         onClick={() => {
-          // TODO: 날짜 선택 기능 구현
+          if (isCompact) return;
+          // 팝업을 열 때 이미 완성된 범위가 있으면 초기화 → 무조건 2번 새로 선택
+          if (!showDatePopup && dateRange?.from && dateRange?.to) {
+            setDateRange(undefined);
+          }
+          setShowDatePopup((prev) => !prev);
+          setShowGuestPopup(false);
         }}
+        $hasPopup={showDatePopup}
         $isCompact={isCompact}
       >
         {!isCompact && <SearchFieldLabel>날짜</SearchFieldLabel>}
         <SearchFieldContent>
-          {!isCompact && <span>날짜 추가</span>}
+          {!isCompact && <span>{dateLabel}</span>}
           {isCompact && <span>언제든지</span>}
         </SearchFieldContent>
+        {showDatePopup && !isCompact && (
+          <DatePopup ref={datePopupRef} onClick={(e) => e.stopPropagation()}>
+            <DayPickerWrapper>
+              <DayPicker
+                mode="range"
+                selected={dateRange}
+                onSelect={handleDateSelect}
+                numberOfMonths={2}
+              />
+            </DayPickerWrapper>
+          </DatePopup>
+        )}
       </SearchField>
 
       <SearchDivider $isCompact={isCompact} />
 
       <SearchField
-        onClick={() => setShowGuestPopup(!showGuestPopup)}
+        onClick={() => {
+          setShowGuestPopup((prev) => !prev);
+          setShowDatePopup(false);
+        }}
         $hasPopup={showGuestPopup}
         $isCompact={isCompact}
       >
@@ -146,7 +208,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
           </span>
         </SearchFieldContent>
         {showGuestPopup && (
-          <GuestPopup ref={popupRef}>
+          <GuestPopup ref={popupRef} onClick={(e) => e.stopPropagation()}>
             <GuestCounterRow
               label="성인"
               age="13세 이상"
