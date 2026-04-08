@@ -42,6 +42,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import FilterDropdownPanel from './components/FilterDropdown';
+import RegionPopup from '@/components/SearchBar/RegionPopup';
 
 // Types
 export type Accommodation = {
@@ -282,7 +283,7 @@ type KakaoOverlay = {
 };
 
 const SearchPage = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [accommodations, setAccommodations] =
     useState<Accommodation[]>(mockAccommodations);
@@ -295,7 +296,7 @@ const SearchPage = () => {
   const mapInstanceRef = useRef<KakaoMap | null>(null);
   const overlaysRef = useRef<KakaoOverlay[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
-  const locationButtonRef = useRef<HTMLButtonElement>(null);
+  const locationButtonRef = useRef<HTMLDivElement>(null);
   const datesButtonRef = useRef<HTMLButtonElement>(null);
   const guestsButtonRef = useRef<HTMLButtonElement>(null);
   const filtersButtonRef = useRef<HTMLButtonElement>(null);
@@ -586,16 +587,34 @@ const SearchPage = () => {
   return (
     <SearchPageContainer data-search-container>
       <FilterBar data-filter-bar>
-        <FilterButton
-          ref={locationButtonRef}
-          $active={activeFilter === 'location'}
-          onClick={() =>
-            setActiveFilter(activeFilter === 'location' ? null : 'location')
-          }
-        >
-          <MapPin />
-          {filters.location}
-        </FilterButton>
+        <div style={{ position: 'relative' }} ref={locationButtonRef}>
+          <FilterButton
+            $active={activeFilter === 'location'}
+            onClick={() =>
+              setActiveFilter(activeFilter === 'location' ? null : 'location')
+            }
+          >
+            <MapPin />
+            {filters.location}
+          </FilterButton>
+
+          {activeFilter === 'location' && (
+            <RegionPopup
+              onSelect={(p, c, d) => {
+                const locStr =
+                  d && d !== '전체' ? `${p} ${c} ${d}` : `${p} ${c}`;
+                setFilters((prev) => ({ ...prev, location: locStr }));
+
+                // URL 쿼리 파라미터 업데이트하여 검색 실행
+                const newParams = new URLSearchParams(searchParams);
+                newParams.set('city', c); // 백엔드 스펙에 따라 city만 전달 (혹은 필요한 경우 d 포함)
+                setSearchParams(newParams);
+
+                setActiveFilter(null);
+              }}
+            />
+          )}
+        </div>
 
         <FilterButton
           ref={datesButtonRef}
@@ -637,7 +656,7 @@ const SearchPage = () => {
         <ResultCount>숙소 {accommodations.length}개</ResultCount>
       </FilterBar>
 
-      {activeFilter && (
+      {activeFilter && activeFilter !== 'location' && (
         <FilterDropdownPanel
           activeFilter={activeFilter}
           filters={filters}
