@@ -151,7 +151,6 @@ export type FavoriteResponseDTO = {
   name: string;
   description: string;
   isPrivate?: boolean;
-  private?: boolean;
   accommodationCount: number;
   coverImageUrl?: string | null;
 };
@@ -180,7 +179,6 @@ export type FavoriteDetailResponseDTO = {
   name: string;
   description: string;
   isPrivate?: boolean;
-  private?: boolean;
   accommodations: FavoriteAccommodationDTO[];
 };
 
