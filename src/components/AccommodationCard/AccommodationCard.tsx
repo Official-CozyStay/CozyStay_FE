@@ -83,6 +83,7 @@ const AccommodationCard = ({
       const list = await fetchFavorites();
       setFavoritesList(list);
     } catch {
+      alert('위시리스트 목록을 불러오는 데 실패했습니다.');
       setFavoritesList([]);
     } finally {
       setIsListLoading(false);
