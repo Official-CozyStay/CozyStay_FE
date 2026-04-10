@@ -60,7 +60,6 @@ const WishlistModal = ({
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       setView(hasFavorites ? 'list' : 'create');
-      if (!hasFavorites) setTimeout(() => inputRef.current?.focus(), 100);
     } else {
       document.body.style.overflow = '';
       setName('');
