@@ -254,13 +254,17 @@ export interface MyInvitationResponse {
 }
 
 export interface AccommodationSearchRequest {
+  state?: string;
   city?: string;
+  district?: string;
   title?: string;
   minPrice?: number;
   maxPrice?: number;
   numberOfBeds?: number;
   checkInDate?: string;
   checkOutDate?: string;
+  page?: number;
+  size?: number;
 }
 
 export interface AccommodationInfo {

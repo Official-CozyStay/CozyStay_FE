@@ -6,6 +6,7 @@ import {
   FilterBar,
   FilterButton,
   FilterDivider,
+  FilterInput,
   ResultCount,
   ContentArea,
   ListSection,
@@ -40,6 +41,7 @@ import {
   MapPin,
   ChevronLeft,
   ChevronRight,
+  Search,
 } from 'lucide-react';
 import FilterDropdownPanel from './components/FilterDropdown';
 import RegionPopup from '@/components/SearchBar/RegionPopup';
@@ -292,6 +294,10 @@ const SearchPage = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('title') || '');
+  const [totalElements, setTotalElements] = useState(0);
+  const [serverTotalPages, setServerTotalPages] = useState(1);
+  const itemsPerPage = 6;
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<KakaoMap | null>(null);
   const overlaysRef = useRef<KakaoOverlay[]>([]);
@@ -304,10 +310,19 @@ const SearchPage = () => {
   const totalGuests = filters.adults + filters.children;
 
   useEffect(() => {
+    const p = searchParams.get('state');
+    const c = searchParams.get('city');
+    const d = searchParams.get('district');
+
+    let locationStr = '근처의 숙소';
+    if (p || c) {
+      locationStr = [p, c, d].filter(Boolean).join(' ');
+    }
+
     // URL 쿼리에 맞춰 필터 UI 상태 업데이트
     setFilters((prev) => ({
       ...prev,
-      location: searchParams.get('city') || '근처의 숙소',
+      location: locationStr,
       checkIn: searchParams.get('checkInDate') || '',
       checkOut: searchParams.get('checkOutDate') || '',
       adults: searchParams.get('numberOfBeds')
@@ -321,12 +336,17 @@ const SearchPage = () => {
         setLoading(true);
         setHasNoResults(false);
         const res = await searchAccommodations({
+          title: searchParams.get('title') || undefined,
+          state: searchParams.get('state') || undefined,
           city: searchParams.get('city') || undefined,
+          district: searchParams.get('district') || undefined,
           checkInDate: searchParams.get('checkInDate') || undefined,
           checkOutDate: searchParams.get('checkOutDate') || undefined,
           numberOfBeds: searchParams.get('numberOfBeds')
             ? parseInt(searchParams.get('numberOfBeds')!)
             : undefined,
+          page: Math.max(0, currentPage - 1),
+          size: itemsPerPage,
         });
 
         if (res && res.accommodations) {
@@ -353,7 +373,7 @@ const SearchPage = () => {
                 : 1,
               dates:
                 searchParams.get('checkInDate') &&
-                searchParams.get('checkOutDate')
+                  searchParams.get('checkOutDate')
                   ? `${searchParams.get('checkInDate')} ~ ${searchParams.get('checkOutDate')}`
                   : '날짜 미정',
             }),
@@ -361,35 +381,36 @@ const SearchPage = () => {
 
           if (mappedAccs.length > 0) {
             setAccommodations(mappedAccs);
+            setTotalElements(res.totalElements || mappedAccs.length);
+            setServerTotalPages(res.totalPages || 1);
             setHasNoResults(false);
           } else {
             // 결과가 없을 경우 사용자 요청에 따라 기본 더미 데이터 표시
             console.warn('검색 결과가 0개여서 더미 데이터를 표시합니다.');
-            setAccommodations(mockAccommodations);
+            setAccommodations(mockAccommodations.slice(0, itemsPerPage));
+            setTotalElements(mockAccommodations.length);
+            setServerTotalPages(Math.ceil(mockAccommodations.length / itemsPerPage));
             setHasNoResults(true);
           }
         } else {
-          setAccommodations(mockAccommodations);
+          setAccommodations(mockAccommodations.slice(0, itemsPerPage));
+          setTotalElements(mockAccommodations.length);
+          setServerTotalPages(Math.ceil(mockAccommodations.length / itemsPerPage));
           setHasNoResults(true);
         }
       } catch (error) {
         console.error('Failed to search accommodations:', error);
         // 에러 시에도 더미 데이터 폴백
-        setAccommodations(mockAccommodations);
+        setAccommodations(mockAccommodations.slice(0, itemsPerPage));
+        setTotalElements(mockAccommodations.length);
+        setServerTotalPages(Math.ceil(mockAccommodations.length / itemsPerPage));
         setHasNoResults(true);
       } finally {
         setLoading(false);
       }
     };
     fetchResults();
-  }, [searchParams]);
-
-  // Pagination settings
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(accommodations.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedAccommodations = accommodations.slice(startIndex, endIndex);
+  }, [searchParams, currentPage]);
 
   // Handle marker click - scroll to accommodation card
   const handleMarkerClick = (accId: string) => {
@@ -482,6 +503,19 @@ const SearchPage = () => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleSearchSubmit = () => {
+    const newParams = new URLSearchParams(searchParams);
+    if (searchQuery.trim()) {
+      newParams.set('title', searchQuery.trim());
+    } else {
+      newParams.delete('title');
+    }
+    // reset to page 1 on new query search
+    newParams.delete('page');
+    setSearchParams(newParams);
+    setCurrentPage(1);
+  };
+
   const formatPrice = (price: number) => {
     return `₩${price.toLocaleString()}`;
   };
@@ -496,6 +530,7 @@ const SearchPage = () => {
   const renderPagination = () => {
     const pages: (number | string)[] = [];
     const maxVisiblePages = 4;
+    const totalPages = serverTotalPages;
 
     if (totalPages <= maxVisiblePages + 2) {
       // Show all pages if total is small
@@ -587,6 +622,33 @@ const SearchPage = () => {
   return (
     <SearchPageContainer data-search-container>
       <FilterBar data-filter-bar>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <FilterInput
+            placeholder="숙소명 검색"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearchSubmit();
+            }}
+            style={{ borderRadius: '9999px', width: '200px', paddingRight: '40px' }}
+          />
+          <button
+            onClick={handleSearchSubmit}
+            style={{
+              position: 'absolute',
+              right: '12px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              padding: 0,
+              color: '#666',
+            }}
+          >
+            <Search size={16} />
+          </button>
+        </div>
+
         <div style={{ position: 'relative' }} ref={locationButtonRef}>
           <FilterButton
             $active={activeFilter === 'location'}
@@ -607,8 +669,12 @@ const SearchPage = () => {
 
                 // URL 쿼리 파라미터 업데이트하여 검색 실행
                 const newParams = new URLSearchParams(searchParams);
-                newParams.set('city', c); // 백엔드 스펙에 따라 city만 전달 (혹은 필요한 경우 d 포함)
+                if (p) newParams.set('state', p); else newParams.delete('state');
+                if (c) newParams.set('city', c); else newParams.delete('city');
+                if (d && d !== '전체') newParams.set('district', d); else newParams.delete('district');
+                newParams.delete('page');
                 setSearchParams(newParams);
+                setCurrentPage(1);
 
                 setActiveFilter(null);
               }}
@@ -653,7 +719,7 @@ const SearchPage = () => {
           필터
         </FilterButton>
 
-        <ResultCount>숙소 {accommodations.length}개</ResultCount>
+        <ResultCount>숙소 {totalElements}개</ResultCount>
       </FilterBar>
 
       {activeFilter && activeFilter !== 'location' && (
@@ -707,11 +773,11 @@ const SearchPage = () => {
                 <ListTitle>
                   {filters.location} · {filters.checkIn || '날짜 미정'}
                 </ListTitle>
-                <ListCount>숙소 {accommodations.length}개</ListCount>
+                <ListCount>숙소 {totalElements}개</ListCount>
               </ListHeader>
 
               <AccommodationGrid ref={listRef}>
-                {displayedAccommodations.map((acc) => (
+                {accommodations.map((acc) => (
                   <AccommodationCard
                     key={acc.id}
                     data-acc-id={acc.id}
@@ -757,7 +823,7 @@ const SearchPage = () => {
         )}
       </ContentArea>
 
-      {totalPages > 1 && renderPagination()}
+      {serverTotalPages > 1 && renderPagination()}
     </SearchPageContainer>
   );
 };

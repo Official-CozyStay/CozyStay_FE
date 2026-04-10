@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { media } from '@/styles/media';
 
 const SEARCH_BAR_MAX_WIDTH_COMPACT = '340px';
-const SEARCH_BAR_MAX_WIDTH = '850px';
+const SEARCH_BAR_MAX_WIDTH = '1050px';
 const SEARCH_BAR_MAX_WIDTH_MOBILE = '300px';
 
 export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
@@ -24,37 +24,42 @@ export const SearchBarContainer = styled.div<{ $isCompact?: boolean }>`
 
   ${media.mobile} {
     padding: ${({ $isCompact, theme }) =>
-      $isCompact
-        ? `${theme.spacing.xs} ${theme.spacing.md}`
-        : `${theme.spacing.md} ${theme.spacing.md} ${theme.spacing.md} ${theme.spacing.lg}`};
+    $isCompact
+      ? `${theme.spacing.xs} ${theme.spacing.md}`
+      : `${theme.spacing.md} ${theme.spacing.md} ${theme.spacing.md} ${theme.spacing.lg}`};
     max-width: ${({ $isCompact }) =>
-      $isCompact ? SEARCH_BAR_MAX_WIDTH_MOBILE : '100%'};
+    $isCompact ? SEARCH_BAR_MAX_WIDTH_MOBILE : '100%'};
   }
 `;
 
 export const SearchField = styled.div<{
   $isCompact?: boolean;
   $hasPopup?: boolean;
+  $isInput?: boolean;
 }>`
   flex: ${({ $isCompact }) => ($isCompact ? '0 1 auto' : '1')};
   display: flex;
   flex-direction: ${({ $isCompact }) => ($isCompact ? 'row' : 'column')};
   align-items: ${({ $isCompact }) => ($isCompact ? 'center' : 'flex-start')};
   gap: ${({ theme }) => theme.spacing.xs};
-  cursor: pointer;
+  cursor: ${({ $isInput }) => ($isInput ? 'text' : 'pointer')};
   padding: ${({ $isCompact, theme }) =>
     $isCompact ? `0 ${theme.spacing.sm}` : `0 ${theme.spacing.lg}`};
   position: ${({ $hasPopup }) => ($hasPopup ? 'relative' : 'static')};
   white-space: nowrap;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.border.light};
-    border-radius: ${({ theme }) => theme.radius.md};
+    ${({ $isInput, theme }) =>
+    !$isInput &&
+    `
+      background: ${theme.colors.border.light};
+      border-radius: ${theme.radius.md};
+    `}
   }
 
   ${media.mobile} {
     padding: ${({ $isCompact, theme }) =>
-      $isCompact ? `0 ${theme.spacing.md}` : `0 ${theme.spacing.md}`};
+    $isCompact ? `0 ${theme.spacing.md}` : `0 ${theme.spacing.md}`};
   }
 `;
 
@@ -73,6 +78,19 @@ export const SearchFieldContent = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+export const SearchInput = styled.input`
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: ${({ theme }) => theme.font.size.sm};
+  color: ${({ theme }) => theme.colors.text.primary};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
 `;
 
 export const SearchDivider = styled.div<{ $isCompact?: boolean }>`
@@ -110,9 +128,9 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
 
   ${media.mobile} {
     padding: ${({ $isCompact, theme }) =>
-      $isCompact
-        ? theme.spacing.sm
-        : `${theme.spacing.sm} ${theme.spacing.lg}`};
+    $isCompact
+      ? theme.spacing.sm
+      : `${theme.spacing.sm} ${theme.spacing.lg}`};
     font-size: ${({ theme }) => theme.font.size.sm};
   }
 `;

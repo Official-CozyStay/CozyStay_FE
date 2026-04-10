@@ -131,7 +131,9 @@ export async function searchAccommodations(
 ): Promise<AccommodationSearchResponse> {
   const queryParams = new URLSearchParams();
 
+  if (params.state) queryParams.append('state', params.state);
   if (params.city) queryParams.append('city', params.city);
+  if (params.district) queryParams.append('district', params.district);
   if (params.title) queryParams.append('title', params.title);
   if (params.minPrice !== undefined)
     queryParams.append('minPrice', params.minPrice.toString());
@@ -142,6 +144,8 @@ export async function searchAccommodations(
   if (params.checkInDate) queryParams.append('checkInDate', params.checkInDate);
   if (params.checkOutDate)
     queryParams.append('checkOutDate', params.checkOutDate);
+  if (params.page !== undefined) queryParams.append('page', params.page.toString());
+  if (params.size !== undefined) queryParams.append('size', params.size.toString());
 
   const queryString = queryParams.toString();
   const url = queryString ? `/api/v1/search?${queryString}` : '/api/v1/search';

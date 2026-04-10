@@ -5,6 +5,7 @@ import {
   SearchField,
   SearchFieldLabel,
   SearchFieldContent,
+  SearchInput,
   SearchDivider,
   SearchButton,
   GuestPopup,
@@ -70,6 +71,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
   const [showGuestPopup, setShowGuestPopup] = useState(false);
   const [showRegionPopup, setShowRegionPopup] = useState(false);
   const [showDatePopup, setShowDatePopup] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<{
     province: string;
     city: string;
@@ -85,6 +87,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
     infants: 0,
     pets: 0,
   });
+  const inputRef = useRef<HTMLInputElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -154,6 +157,30 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
+      <SearchField
+        $isInput
+        onClick={() => {
+          setShowRegionPopup(false);
+          setShowDatePopup(false);
+          setShowGuestPopup(false);
+          inputRef.current?.focus();
+        }}
+        $isCompact={isCompact}
+      >
+        {!isCompact && <SearchFieldLabel>숙소명</SearchFieldLabel>}
+        <SearchFieldContent>
+          <SearchInput
+            ref={inputRef}
+            type="text"
+            placeholder="숙소명 검색"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </SearchFieldContent>
+      </SearchField>
+
+      <SearchDivider $isCompact={isCompact} />
+
       <SearchField
         onClick={() => {
           setShowRegionPopup(!showRegionPopup);
@@ -293,9 +320,17 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
         $isCompact={isCompact}
         onClick={() => {
           const params = new URLSearchParams();
+          if (searchQuery.trim()) {
+            params.append('title', searchQuery.trim());
+          }
+          if (selectedLocation?.province) {
+            params.append('state', selectedLocation.province);
+          }
           if (selectedLocation?.city) {
-            // "전체"나 "도 단위"만 있는 경우도 있을 수 있지만, 기본적으로 city를 보냅니다.
             params.append('city', selectedLocation.city);
+          }
+          if (selectedLocation?.district && selectedLocation.district !== '전체') {
+            params.append('district', selectedLocation.district);
           }
           if (dateRange?.startDate) {
             params.append(
