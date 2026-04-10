@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MoreHorizontal, Heart } from 'lucide-react';
 import {
@@ -45,7 +45,7 @@ export default function WishlistDetailPage() {
   const [renameOpen, setRenameOpen] = useState(false);
   const [renameLoading, setRenameLoading] = useState(false);
 
-  const loadDetail = async () => {
+  const loadDetail = useCallback(async () => {
     if (!favoriteId) return;
     setLoading(true);
     try {
@@ -56,11 +56,11 @@ export default function WishlistDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [favoriteId]);
 
   useEffect(() => {
     loadDetail();
-  }, [favoriteId]);
+  }, [loadDetail]);
 
   const handleRename = () => {
     setRenameOpen(true);
