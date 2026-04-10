@@ -163,9 +163,7 @@ export default function WishlistDetailPage() {
                 <AccCardMeta>
                   {[acc.city, acc.country].filter(Boolean).join(' · ')}
                 </AccCardMeta>
-                <AccCardPrice>
-                  {formatPrice(Number(acc.pricePerNight))}
-                </AccCardPrice>
+                <AccCardPrice>{formatPrice(acc.pricePerNight)}</AccCardPrice>
               </AccCardBody>
               <AccCardMemo>메모 추가</AccCardMemo>
             </AccCard>
