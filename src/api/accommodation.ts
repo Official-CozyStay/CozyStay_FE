@@ -22,11 +22,11 @@ import type {
 export async function createAccommodation(
   data: CreateAccommodationRequest,
 ): Promise<CreateAccommodationResponse> {
-  const response = await client.post<CreateAccommodationResponse>(
-    '/api/accommodations',
-    data,
-  );
-  return response as unknown as CreateAccommodationResponse;
+  const response = await client.post<
+    CreateAccommodationResponse,
+    CreateAccommodationResponse
+  >('/api/accommodations', data);
+  return response;
 }
 
 // 2. 숙소 상세정보 등록
@@ -34,11 +34,11 @@ export async function createAccommodationDetails(
   accommodationId: number,
   data: CreateAccommodationDetailsRequest,
 ): Promise<CreateAccommodationDetailsResponse> {
-  const response = await client.post<CreateAccommodationDetailsResponse>(
-    `/api/accommodations/details/${accommodationId}`,
-    data,
-  );
-  return response as unknown as CreateAccommodationDetailsResponse;
+  const response = await client.post<
+    CreateAccommodationDetailsResponse,
+    CreateAccommodationDetailsResponse
+  >(`/api/accommodations/details/${accommodationId}`, data);
+  return response;
 }
 
 // 3. 숙소 편의시설 추가
@@ -46,11 +46,11 @@ export async function createAccommodationAmenities(
   accommodationId: number,
   amenities: CreateAmenityRequest[],
 ): Promise<CreateAmenitiesResponse> {
-  const response = await client.post<CreateAmenitiesResponse>(
-    `/api/accommodations/amenities/${accommodationId}`,
-    amenities,
-  );
-  return response as unknown as CreateAmenitiesResponse;
+  const response = await client.post<
+    CreateAmenitiesResponse,
+    CreateAmenitiesResponse
+  >(`/api/accommodations/amenities/${accommodationId}`, amenities);
+  return response;
 }
 
 // 4. 숙소 이미지 추가
@@ -58,11 +58,11 @@ export async function createAccommodationImages(
   accommodationId: number,
   images: CreateImageRequest[],
 ): Promise<CreateImagesResponse> {
-  const response = await client.post<CreateImagesResponse>(
-    `/api/accommodations/images/${accommodationId}`,
-    images,
-  );
-  return response as unknown as CreateImagesResponse;
+  const response = await client.post<
+    CreateImagesResponse,
+    CreateImagesResponse
+  >(`/api/accommodations/images/${accommodationId}`, images);
+  return response;
 }
 
 // 5. 숙소 발행 (상태 변경)
@@ -80,9 +80,10 @@ export async function publishAccommodation(
 export async function fetchAccommodations(): Promise<
   AccommodationListItemDTO[]
 > {
-  const response = (await client.get(
-    '/api/accommodations',
-  )) as AccommodationListItemDTO[];
+  const response = await client.get<
+    AccommodationListItemDTO[],
+    AccommodationListItemDTO[]
+  >('/api/accommodations');
   return response;
 }
 
@@ -95,9 +96,9 @@ export async function fetchAccommodationDetail(
     throw new Error(`Invalid id format: ${id}`);
   }
 
-  const data = (await client.get(
+  const data = await client.get<AccommodationDetailDTO, AccommodationDetailDTO>(
     `/api/accommodations/${encodeURIComponent(id)}`,
-  )) as AccommodationDetailDTO;
+  );
   return data;
 }
 
@@ -137,9 +138,9 @@ export async function fetchAccommodationReviews(
 
   try {
     // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
-    const reviews = (await client.get(
+    const reviews = await client.get<HostelReviewDTO[], HostelReviewDTO[]>(
       `/api/review/accommodation/${safeAccId}`,
-    )) as HostelReviewDTO[];
+    );
 
     if (Array.isArray(reviews)) {
       reviewsToUse = reviews;

@@ -8,8 +8,8 @@ const fadeIn = keyframes`
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1000;
+  background-color: ${({ theme }) => theme.colors.overlay.default};
+  z-index: ${({ theme }) => theme.zIndex.modalOverlay};
 `;
 
 const Dialog = styled.div`
@@ -17,7 +17,7 @@ const Dialog = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1001;
+  z-index: ${({ theme }) => theme.zIndex.modalContainer};
   background-color: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.lg};
   padding: ${({ theme }) => theme.spacing['2xl']};
@@ -34,6 +34,7 @@ const Message = styled.p`
   color: ${({ theme }) => theme.colors.text.primary};
   line-height: 1.6;
   margin: 0;
+  white-space: pre-wrap;
 `;
 
 const ConfirmButton = styled.button`

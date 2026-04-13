@@ -36,16 +36,33 @@ export interface StepProps {
 }
 
 interface StepConfig {
+  id: StepId;
   component: React.ComponentType<StepProps> | React.ComponentType;
   showProgress: boolean;
   nextLabel?: string;
   needsData: boolean;
 }
 
+type LocationData = Listing['location'];
+type StepId =
+  | 'OVERVIEW'
+  | 'PHASE1_INTRO'
+  | 'SPACE_TYPE'
+  | 'GUEST_CAPACITY'
+  | 'PHASE2_INTRO'
+  | 'AMENITIES'
+  | 'PHOTOS'
+  | 'TITLE'
+  | 'DESCRIPTION'
+  | 'PHASE3_INTRO'
+  | 'BOOKING_SETTINGS'
+  | 'HOST_DETAILS';
+
 // 스텝 설정 배열 - 백엔드 API에 맞게 정리
 const STEPS: StepConfig[] = [
   // Phase 0: 시작
   {
+    id: 'OVERVIEW',
     component: Overview,
     showProgress: false,
     nextLabel: '시작하기',
@@ -53,21 +70,62 @@ const STEPS: StepConfig[] = [
   },
 
   // Phase 1: 숙소 기본 정보
-  { component: Phase1Intro, showProgress: true, needsData: false },
-  { component: SpaceType, showProgress: true, needsData: true },
-  { component: GuestCapacity, showProgress: true, needsData: true },
+  {
+    id: 'PHASE1_INTRO',
+    component: Phase1Intro,
+    showProgress: true,
+    needsData: false,
+  },
+  {
+    id: 'SPACE_TYPE',
+    component: SpaceType,
+    showProgress: true,
+    needsData: true,
+  },
+  {
+    id: 'GUEST_CAPACITY',
+    component: GuestCapacity,
+    showProgress: true,
+    needsData: true,
+  },
 
   // Phase 2: 편의시설 & 사진
-  { component: Phase2Intro, showProgress: true, needsData: false },
-  { component: Amenities, showProgress: true, needsData: true },
-  { component: Photos, showProgress: true, needsData: true },
-  { component: TitleStep, showProgress: true, needsData: true },
-  { component: Description, showProgress: true, needsData: true },
+  {
+    id: 'PHASE2_INTRO',
+    component: Phase2Intro,
+    showProgress: true,
+    needsData: false,
+  },
+  {
+    id: 'AMENITIES',
+    component: Amenities,
+    showProgress: true,
+    needsData: true,
+  },
+  { id: 'PHOTOS', component: Photos, showProgress: true, needsData: true },
+  { id: 'TITLE', component: TitleStep, showProgress: true, needsData: true },
+  {
+    id: 'DESCRIPTION',
+    component: Description,
+    showProgress: true,
+    needsData: true,
+  },
 
   // Phase 3: 가격 & 마무리
-  { component: Phase3Intro, showProgress: true, needsData: false },
-  { component: BookingSettings, showProgress: true, needsData: true },
   {
+    id: 'PHASE3_INTRO',
+    component: Phase3Intro,
+    showProgress: true,
+    needsData: false,
+  },
+  {
+    id: 'BOOKING_SETTINGS',
+    component: BookingSettings,
+    showProgress: true,
+    needsData: true,
+  },
+  {
+    id: 'HOST_DETAILS',
     component: HostDetails,
     showProgress: true,
     nextLabel: '리스팅 만들기',
@@ -75,21 +133,14 @@ const STEPS: StepConfig[] = [
   },
 ];
 
-// 스텝 인덱스 (STEPS 배열 순서와 일치)
-const STEP = {
-  OVERVIEW: 0,
-  PHASE1_INTRO: 1,
-  SPACE_TYPE: 2,
-  GUEST_CAPACITY: 3,
-  PHASE2_INTRO: 4,
-  AMENITIES: 5,
-  PHOTOS: 6,
-  TITLE: 7,
-  DESCRIPTION: 8,
-  PHASE3_INTRO: 9,
-  BOOKING_SETTINGS: 10,
-  HOST_DETAILS: 11,
-};
+// 스텝 인덱스를 배열에서 계산해 순서 변경 시 수동 동기화 부담을 줄인다.
+const STEP = STEPS.reduce(
+  (acc, step, index) => {
+    acc[step.id] = index;
+    return acc;
+  },
+  {} as Record<StepId, number>,
+);
 
 // 스텝별 필수 항목 유효성 검사
 const validateStep = (step: number, data: Partial<Listing>): string | null => {
@@ -120,21 +171,68 @@ const validateStep = (step: number, data: Partial<Listing>): string | null => {
     case STEP.HOST_DETAILS:
       if (!data.location?.streetAddress?.trim())
         return '주소를 검색하여 숙소 위치를 설정해주세요.';
-      if (!data.location?.city?.trim())
-        return '주소 검색을 통해 도시 정보를 입력해주세요.';
+      if (!getResolvedCity(data.location || {}))
+        return '주소 검색 결과에서 도시 정보를 확인할 수 없습니다. 다른 주소로 다시 검색해주세요.';
       break;
   }
   return null;
 };
 
+const getLocationDefaults = (): LocationData => ({
+  country: '한국',
+  province: '',
+  city: '',
+  district: '',
+  streetAddress: '',
+  detailAddress: '',
+  postalCode: '',
+});
+
+const getResolvedCity = (location: Partial<LocationData>): string =>
+  location.city?.trim() || location.district?.trim() || '';
+
+const validateBeforeSubmit = (data: Partial<Listing>): string | null => {
+  const requiredSteps = [
+    STEP.SPACE_TYPE,
+    STEP.GUEST_CAPACITY,
+    STEP.AMENITIES,
+    STEP.TITLE,
+    STEP.HOST_DETAILS,
+  ];
+
+  for (const step of requiredSteps) {
+    const validationError = validateStep(step, data);
+    if (validationError) {
+      return validationError;
+    }
+  }
+
+  const location = data.location || getLocationDefaults();
+
+  if (!getResolvedCity(location)) {
+    return '주소 검색 결과에서 도시 정보를 확인할 수 없습니다. 다른 주소로 다시 검색해주세요.';
+  }
+
+  if (
+    typeof location.latitude !== 'number' ||
+    typeof location.longitude !== 'number'
+  ) {
+    return '주소 검색을 통해 지도 위치를 먼저 설정해주세요.';
+  }
+
+  return null;
+};
+
 // 프론트 spaceType을 백엔드 API 타입으로 변환
-const toAccommodationTypeAPI = (spaceType: string): AccommodationTypeAPI => {
+const toAccommodationTypeAPI = (
+  spaceType: Listing['spaceType'],
+): AccommodationTypeAPI | null => {
   const mapping: Record<string, AccommodationTypeAPI> = {
     entire_place: 'ENTIRE_PLACE',
     private_room: 'PRIVATE_ROOM',
     shared_room: 'SHARED_ROOM',
   };
-  return mapping[spaceType] || 'ENTIRE_PLACE';
+  return mapping[spaceType] ?? null;
 };
 
 const BecomeHostPage = () => {
@@ -167,28 +265,40 @@ const BecomeHostPage = () => {
     }
 
     if (isLastStep) {
+      const submitValidationError = validateBeforeSubmit(listingData);
+      if (submitValidationError) {
+        setAlertMessage(submitValidationError);
+        return;
+      }
+
       setIsSubmitting(true);
 
       try {
         // 1. 숙소 생성 API 호출
-        const location = listingData.location || {
-          country: '한국',
-          province: '',
-          city: '',
-          district: '',
-          streetAddress: '',
-          detailAddress: '',
-          postalCode: '',
-        };
+        const location = listingData.location || getLocationDefaults();
+        const accommodationType = toAccommodationTypeAPI(
+          listingData.spaceType ?? '',
+        );
+        const resolvedCity = getResolvedCity(location);
+
+        if (!accommodationType) {
+          setAlertMessage('숙소 유형을 다시 선택해주세요.');
+          return;
+        }
+
+        if (!resolvedCity) {
+          setAlertMessage(
+            '주소 검색 결과에서 도시 정보를 확인할 수 없습니다. 다른 주소로 다시 검색해주세요.',
+          );
+          return;
+        }
 
         const accommodationRequest: CreateAccommodationRequest = {
           title: listingData.title || '새로운 숙소',
           description: listingData.description || '',
-          accommodationType: toAccommodationTypeAPI(
-            listingData.spaceType || '',
-          ),
+          accommodationType,
           address: `${location.streetAddress} ${location.detailAddress}`.trim(),
-          city: location.city || location.district || '',
+          city: resolvedCity,
           state: location.province,
           country: location.country,
           postalCode: location.postalCode,

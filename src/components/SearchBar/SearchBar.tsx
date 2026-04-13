@@ -84,20 +84,26 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
     infants: 0,
     pets: 0,
   });
+  const guestFieldRef = useRef<HTMLDivElement>(null);
+  const dateFieldRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const datePopupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+
       if (
         popupRef.current &&
-        !popupRef.current.contains(event.target as Node)
+        !popupRef.current.contains(target) &&
+        !guestFieldRef.current?.contains(target)
       ) {
         setShowGuestPopup(false);
       }
       if (
         datePopupRef.current &&
-        !datePopupRef.current.contains(event.target as Node)
+        !datePopupRef.current.contains(target) &&
+        !dateFieldRef.current?.contains(target)
       ) {
         setShowDatePopup(false);
       }
@@ -160,6 +166,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
       <SearchDivider $isCompact={isCompact} />
 
       <SearchField
+        ref={dateFieldRef}
         onClick={() => {
           if (isCompact) return;
           // 팝업을 열 때 이미 완성된 범위가 있으면 초기화 → 무조건 2번 새로 선택
@@ -194,6 +201,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
       <SearchDivider $isCompact={isCompact} />
 
       <SearchField
+        ref={guestFieldRef}
         onClick={() => {
           setShowGuestPopup((prev) => !prev);
           setShowDatePopup(false);

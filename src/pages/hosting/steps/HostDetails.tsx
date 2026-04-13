@@ -79,6 +79,10 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
 
   const handleSearch = () => {
     if (!query.trim()) return;
+    if (!window.kakao?.maps?.services) {
+      setErrorMsg('지도를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
 
     const geocoder = new window.kakao.maps.services.Geocoder();
     geocoder.addressSearch(query, (results, status) => {

@@ -35,7 +35,7 @@ export type CreateAccommodationRequest = {
 export type CreateAccommodationResponse = {
   accommodationId: number;
   accommodationName: string;
-  accommodationImage: string;
+  accommodationImage: string | null;
   accommodationPrice: number;
 };
 
