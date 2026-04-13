@@ -6,7 +6,6 @@ import {
   FilterBar,
   FilterButton,
   FilterDivider,
-  FilterInput,
   ResultCount,
   ContentArea,
   ListSection,
@@ -31,6 +30,10 @@ import {
   PaginationButton,
   PaginationEllipsis,
   MAP_MARKER_STYLES,
+  SearchInputWrapper,
+  SearchInputField,
+  SearchSubmitButton,
+  FilterItemWrapper,
 } from './search.styles';
 import {
   Calendar,
@@ -618,34 +621,21 @@ const SearchPage = () => {
   return (
     <SearchPageContainer data-search-container>
       <FilterBar data-filter-bar>
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <FilterInput
+        <SearchInputWrapper>
+          <SearchInputField
             placeholder="숙소명 검색"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSearchSubmit();
             }}
-            style={{ borderRadius: '9999px', width: '200px', paddingRight: '40px' }}
           />
-          <button
-            onClick={handleSearchSubmit}
-            style={{
-              position: 'absolute',
-              right: '12px',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              padding: 0,
-              color: '#666',
-            }}
-          >
+          <SearchSubmitButton onClick={handleSearchSubmit}>
             <Search size={16} />
-          </button>
-        </div>
+          </SearchSubmitButton>
+        </SearchInputWrapper>
 
-        <div style={{ position: 'relative' }} ref={locationButtonRef}>
+        <FilterItemWrapper ref={locationButtonRef}>
           <FilterButton
             $active={activeFilter === 'location'}
             onClick={() =>
@@ -676,7 +666,7 @@ const SearchPage = () => {
               }}
             />
           )}
-        </div>
+        </FilterItemWrapper>
 
         <FilterButton
           ref={datesButtonRef}

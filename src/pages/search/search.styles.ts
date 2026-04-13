@@ -32,7 +32,7 @@ export const FilterButton = styled.button<{ $active?: boolean }>`
   border-radius: ${({ theme }) => theme.radius.full};
   border: 1px solid
     ${({ theme, $active }) =>
-      $active ? theme.colors.primary.main : theme.colors.border.primary};
+    $active ? theme.colors.primary.main : theme.colors.border.primary};
   background: ${({ theme, $active }) =>
     $active ? theme.colors.primary.light : theme.colors.common.white};
   color: ${({ theme }) => theme.colors.text.primary};
@@ -350,6 +350,37 @@ export const FilterInput = styled.input`
   }
 `;
 
+export const SearchInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+export const SearchInputField = styled(FilterInput)`
+  border-radius: ${({ theme }) => theme.radius.full};
+  width: 200px;
+  padding-right: 40px;
+`;
+
+export const SearchSubmitButton = styled.button`
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  padding: 0;
+  color: ${({ theme }) => theme.colors.text.secondary};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text.primary};
+  }
+`;
+
+export const FilterItemWrapper = styled.div`
+  position: relative;
+`;
+
 export const PriceRangeWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -493,7 +524,7 @@ export const PaginationButton = styled.button<{ $active?: boolean }>`
 
   &:hover:not(:disabled) {
     background: ${({ theme, $active }) =>
-      $active ? theme.colors.text.primary : theme.colors.border.light};
+    $active ? theme.colors.text.primary : theme.colors.border.light};
   }
 
   &:disabled {
