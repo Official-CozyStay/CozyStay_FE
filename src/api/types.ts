@@ -279,4 +279,6 @@ export interface AccommodationInfo {
 
 export interface AccommodationSearchResponse {
   accommodations: AccommodationInfo[];
+  totalElements: number;
+  totalPages: number;
 }
