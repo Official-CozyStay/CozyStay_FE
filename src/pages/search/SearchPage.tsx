@@ -384,25 +384,22 @@ const SearchPage = () => {
             setServerTotalPages(res.totalPages || 1);
             setHasNoResults(false);
           } else {
-            // 결과가 없을 경우 사용자 요청에 따라 기본 더미 데이터 표시
-            console.warn('검색 결과가 0개여서 더미 데이터를 표시합니다.');
-            setAccommodations(mockAccommodations.slice(0, itemsPerPage));
-            setTotalElements(mockAccommodations.length);
-            setServerTotalPages(Math.ceil(mockAccommodations.length / itemsPerPage));
+            setAccommodations([]);
+            setTotalElements(0);
+            setServerTotalPages(1);
             setHasNoResults(true);
           }
         } else {
-          setAccommodations(mockAccommodations.slice(0, itemsPerPage));
-          setTotalElements(mockAccommodations.length);
-          setServerTotalPages(Math.ceil(mockAccommodations.length / itemsPerPage));
+          setAccommodations([]);
+          setTotalElements(0);
+          setServerTotalPages(1);
           setHasNoResults(true);
         }
       } catch (error) {
         console.error('Failed to search accommodations:', error);
-        // 에러 시에도 더미 데이터 폴백
-        setAccommodations(mockAccommodations.slice(0, itemsPerPage));
-        setTotalElements(mockAccommodations.length);
-        setServerTotalPages(Math.ceil(mockAccommodations.length / itemsPerPage));
+        setAccommodations([]);
+        setTotalElements(0);
+        setServerTotalPages(1);
         setHasNoResults(true);
       } finally {
         setLoading(false);
@@ -765,7 +762,7 @@ const SearchPage = () => {
                     border: '1px solid #ffe1e6',
                   }}
                 >
-                  검색 된 결과가 없습니다. 아래 숙소들은 어떠신가요?!
+                  검색 조건에 맞는 숙소가 없습니다. 다른 조건으로 검색해 보세요.
                 </div>
               )}
               <ListHeader>
