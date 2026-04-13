@@ -272,9 +272,15 @@ export interface AccommodationInfo {
   title: string;
   description: string;
   address: string;
+  state?: string;
   city: string;
+  district?: string;
   pricePerNight: number;
   mainImageUrl: string;
+  latitude?: number;
+  longitude?: number;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export interface AccommodationSearchResponse {

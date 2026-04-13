@@ -363,11 +363,10 @@ const SearchPage = () => {
                 a.mainImageUrl ||
                 `https://picsum.photos/seed/room${idx}/400/380`,
               price: a.pricePerNight,
-              rating: 5.0, // 임시 고정값
-              reviewCount: 0, // 임시 고정값
-              // 좌표 정보가 DTO에 없으므로 지도 마커 겹침 방지를 위해 임의 좌표 부여
-              latitude: 36.815 + idx * 0.005,
-              longitude: 127.114 + idx * 0.005,
+              rating: a.averageRating || 0.0,
+              reviewCount: a.reviewCount || 0,
+              latitude: a.latitude || 37.5665,
+              longitude: a.longitude || 126.9780,
               beds: searchParams.get('numberOfBeds')
                 ? parseInt(searchParams.get('numberOfBeds')!)
                 : 1,
