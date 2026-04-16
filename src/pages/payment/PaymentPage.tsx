@@ -65,6 +65,15 @@ export default function PaymentPage() {
     );
   }, [detail, checkIn, checkOut, nights]);
 
+  const summaryThumbnailUrl = useMemo(() => {
+    if (!detail?.images?.length) return undefined;
+
+    return (
+      detail.images.find((image) => image.isPrimary)?.imageUrl ??
+      detail.images[0]?.imageUrl
+    );
+  }, [detail]);
+
   if (!id) return <div>잘못된 접근</div>;
   if (loading) return <div>불러오는 중...</div>;
   if (error) return <div>에러: {error}</div>;
@@ -241,7 +250,7 @@ export default function PaymentPage() {
     <PaymentPageLayout>
       <BookingSummaryCard
         title={detail.title}
-        thumbnailUrl={detail.images?.[0]?.imageUrl}
+        thumbnailUrl={summaryThumbnailUrl}
         averageRating={detail.reviewSummary?.average ?? 0}
         reviewCount={detail.reviewSummary?.count ?? 0}
         checkIn={checkIn}
