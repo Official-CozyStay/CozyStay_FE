@@ -36,6 +36,8 @@ export default function AllPhotosModal({
     (category) => category.images.length > 0,
   );
   const hasCategorizedImages = validCategories.length > 0;
+  const getCategoryLabel = (categoryName: string) =>
+    !categoryName || categoryName === '미분류' ? '숙소 내부' : categoryName;
 
   return (
     <S.PhotoModalOverlay>
@@ -52,13 +54,15 @@ export default function AllPhotosModal({
               <S.CategorySection
                 key={category.categoryId ?? category.categoryName}
               >
-                <S.CategoryTitle>{category.categoryName}</S.CategoryTitle>
+                <S.CategoryTitle>
+                  {getCategoryLabel(category.categoryName)}
+                </S.CategoryTitle>
                 <S.PhotoGrid>
                   {category.images.map((img) => (
                     <S.PhotoItem key={img.imageId}>
                       <img
                         src={img.imageUrl}
-                        alt={`${category.categoryName} 이미지 ${img.imageId}`}
+                        alt={`${getCategoryLabel(category.categoryName)} ${img.imageId}`}
                       />
                     </S.PhotoItem>
                   ))}
