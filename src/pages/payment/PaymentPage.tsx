@@ -118,6 +118,8 @@ export default function PaymentPage() {
     !submitting;
 
   const paymentMethod: ApiPaymentMethod = 'EASY_PAY';
+  // Toss SDK 통합 결제창은 CARD method로 진입해 카드/간편결제를 함께 노출한다.
+  const tossMethod = 'CARD' as const;
 
   const getUserFriendlyErrorMessage = (
     status?: number,
@@ -235,7 +237,7 @@ export default function PaymentPage() {
       });
 
       await paymentSdk.requestPayment({
-        method: 'CARD',
+        method: tossMethod,
         amount: {
           currency: 'KRW',
           value: Number(payment.amount),
