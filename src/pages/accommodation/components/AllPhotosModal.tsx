@@ -1,16 +1,24 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import * as S from '../accommodationDetail.styles';
-import type { AccommodationImageDTO } from '../../../api/types';
+import type {
+  AccommodationImageCategoryDTO,
+  AccommodationImageDTO,
+} from '../../../api/types';
 import { ChevronLeft } from 'lucide-react';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
   images: AccommodationImageDTO[];
+  categories?: AccommodationImageCategoryDTO[];
 };
 
-export default function AllPhotosModal({ isOpen, onClose, images }: Props) {
-  // 모달이 열리면 바디 스크롤 막기
+export default function AllPhotosModal({
+  isOpen,
+  onClose,
+  images,
+  categories = [],
+}: Props) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -24,6 +32,11 @@ export default function AllPhotosModal({ isOpen, onClose, images }: Props) {
 
   if (!isOpen) return null;
 
+  const validCategories = categories.filter(
+    (category) => category.images.length > 0,
+  );
+  const hasCategorizedImages = validCategories.length > 0;
+
   return (
     <S.PhotoModalOverlay>
       <S.PhotoModalHeader>
@@ -33,13 +46,35 @@ export default function AllPhotosModal({ isOpen, onClose, images }: Props) {
       </S.PhotoModalHeader>
 
       <S.PhotoModalBody>
-        <S.PhotoGrid>
-          {images.map((img) => (
-            <S.PhotoItem key={img.imageId}>
-              <img src={img.imageUrl} alt={`숙소 이미지 ${img.imageId}`} />
-            </S.PhotoItem>
-          ))}
-        </S.PhotoGrid>
+        {hasCategorizedImages ? (
+          <S.CategorySectionList>
+            {validCategories.map((category) => (
+              <S.CategorySection
+                key={category.categoryId ?? category.categoryName}
+              >
+                <S.CategoryTitle>{category.categoryName}</S.CategoryTitle>
+                <S.PhotoGrid>
+                  {category.images.map((img) => (
+                    <S.PhotoItem key={img.imageId}>
+                      <img
+                        src={img.imageUrl}
+                        alt={`${category.categoryName} 이미지 ${img.imageId}`}
+                      />
+                    </S.PhotoItem>
+                  ))}
+                </S.PhotoGrid>
+              </S.CategorySection>
+            ))}
+          </S.CategorySectionList>
+        ) : (
+          <S.PhotoGrid>
+            {images.map((img) => (
+              <S.PhotoItem key={img.imageId}>
+                <img src={img.imageUrl} alt={`숙소 이미지 ${img.imageId}`} />
+              </S.PhotoItem>
+            ))}
+          </S.PhotoGrid>
+        )}
       </S.PhotoModalBody>
     </S.PhotoModalOverlay>
   );
