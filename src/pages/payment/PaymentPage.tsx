@@ -159,13 +159,10 @@ export default function PaymentPage() {
       return;
     }
 
-    const conversation = await createOrGetConversation(
-      {
-        hostId: detail.hostId,
-        accommodationId: Number(id),
-      },
-      accessToken,
-    );
+    const conversation = await createOrGetConversation({
+      hostId: detail.hostId,
+      accommodationId: Number(id),
+    });
 
     const stompClient = await getOrCreateStompClient(accessToken);
     sendMessageOverWs(stompClient, conversation.conversationId, trimmedMessage);

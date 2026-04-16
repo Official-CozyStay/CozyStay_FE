@@ -1,3 +1,5 @@
+﻿import client from './client';
+
 const getBaseUrl = () =>
   import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:8080';
 
@@ -12,7 +14,6 @@ function authHeaders(accessToken: string | null): HeadersInit {
   return headers;
 }
 
-// 대화 목록 응답 한 건
 export type ConversationResponseDTO = {
   conversationId: number;
   accommodationId: number;
@@ -32,7 +33,6 @@ export type ConversationCreateResponseDTO = {
   conversationId: number;
 };
 
-// 메시지 응답 한 건
 export type MessageResponseDTO = {
   id: number;
   conversationId: number;
@@ -41,7 +41,6 @@ export type MessageResponseDTO = {
   createdAt: string;
 };
 
-// 메시지 목록 응답
 type ChatMessageListResponseDTO = {
   messages: Array<{
     messageId: number;
@@ -54,7 +53,6 @@ type ChatMessageListResponseDTO = {
   hasMore: boolean;
 };
 
-// 응답이 { success, data } 래핑인 경우
 type ApiResponse<T> = {
   success: boolean;
   data: T;
@@ -92,7 +90,6 @@ function normalizeCreatedAt(value: unknown): string {
   return '';
 }
 
-// 에러 응답 시 JSON에서 message 추출 후 사용자용 메시지로 throw
 async function throwApiError(res: Response, fallback: string): Promise<never> {
   const text = await res.text();
   try {
@@ -108,10 +105,6 @@ async function throwApiError(res: Response, fallback: string): Promise<never> {
   }
 }
 
-/**
- * 대화 목록 조회
- * - 인증: Authorization Bearer 토큰 사용 (accessToken 전달)
- */
 export async function fetchConversations(
   accessToken: string | null,
 ): Promise<ConversationResponseDTO[]> {
@@ -132,21 +125,11 @@ export async function fetchConversations(
 
 export async function createOrGetConversation(
   req: ConversationCreateRequestDTO,
-  accessToken: string | null,
 ): Promise<ConversationCreateResponseDTO> {
-  const url = `${getBaseUrl()}/api/conversations`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: authHeaders(accessToken),
-    body: JSON.stringify(req),
-  });
-
-  if (!res.ok) {
-    await throwApiError(res, '대화방을 생성하지 못했습니다.');
-  }
-
-  const body = await res.json();
-  return unwrap<ConversationCreateResponseDTO>(body);
+  return client.post<
+    ConversationCreateResponseDTO,
+    ConversationCreateResponseDTO
+  >('/api/conversations', req);
 }
 
 export type FetchMessagesResult = {
@@ -155,11 +138,6 @@ export type FetchMessagesResult = {
   hasMore: boolean;
 };
 
-/**
- * 특정 대화의 메시지 목록 조회
- * 백엔드: GET /api/conversations/{id}/messages → { messages, nextCursor, hasMore }
- * @param before - 이 ID보다 오래된 메시지 조회 (스크롤 시 이전 페이지용), 없으면 최근 size개
- */
 export async function fetchMessages(
   conversationId: number,
   accessToken: string | null,
@@ -199,7 +177,7 @@ export async function fetchMessages(
     }
     return m as unknown as MessageResponseDTO;
   });
-  // 백엔드는 최신순(Id 내림차순)으로 반환 → 채팅 UI용으로 오래된 순으로 뒤집기
+
   const messages = mapped.reverse();
   return {
     messages,
