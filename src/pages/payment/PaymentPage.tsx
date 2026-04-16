@@ -9,10 +9,12 @@ import { nightsBetween, calcTotal } from '../../utils/price';
 
 import BookingSummaryCard from './components/BookngSummaryCard';
 import { createBooking } from '@/api/booking';
+import { createOrGetConversation } from '@/api/messages';
 import {
   createPayment,
   type PaymentMethod as ApiPaymentMethod,
 } from '@/api/payment';
+import { getOrCreateStompClient, sendMessageOverWs } from '@/api/chatWebSocket';
 
 import {
   PaymentPageLayout,
@@ -56,7 +58,7 @@ export default function PaymentPage() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const { detail, loading, error, load } = useAccommodationStore();
-  const { user } = useAuth();
+  const { user, accessToken } = useAuth();
 
   const [hostMessage, setHostMessage] = useState('');
   const [agreementChecked, setAgreementChecked] = useState(false);
@@ -150,6 +152,25 @@ export default function PaymentPage() {
     return message || '예약 또는 결제 요청에 실패했습니다.';
   };
 
+  const sendHostMessageToConversation = async () => {
+    const trimmedMessage = hostMessage.trim();
+
+    if (!trimmedMessage || !accessToken) {
+      return;
+    }
+
+    const conversation = await createOrGetConversation(
+      {
+        hostId: detail.hostId,
+        accommodationId: Number(id),
+      },
+      accessToken,
+    );
+
+    const stompClient = await getOrCreateStompClient(accessToken);
+    sendMessageOverWs(stompClient, conversation.conversationId, trimmedMessage);
+  };
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
@@ -175,6 +196,19 @@ export default function PaymentPage() {
         });
 
         bookingIdForNav = booking.bookingId;
+      }
+
+      if (hostMessage.trim()) {
+        try {
+          await sendHostMessageToConversation();
+        } catch (chatError) {
+          if (import.meta.env.DEV) {
+            console.warn(
+              '[PaymentPage] Failed to send host message:',
+              chatError,
+            );
+          }
+        }
       }
 
       const payment = await createPayment({
