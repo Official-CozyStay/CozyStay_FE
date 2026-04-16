@@ -7,6 +7,13 @@ export type AccommodationImageDTO = {
   displayOrder: number;
 };
 
+export type AccommodationImageCategoryDTO = {
+  categoryId: number | null;
+  categoryName: string;
+  displayOrder: number;
+  images: AccommodationImageDTO[];
+};
+
 export type AmenityDTO = {
   amenityId: number;
   name: string;
