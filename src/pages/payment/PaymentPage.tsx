@@ -5,7 +5,7 @@ import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import { useAuth } from '@/contexts/AuthContext';
 
 import { useAccommodationStore } from '@/store/accommodationStore';
-import { nightsBetween, calcTotal } from '../../utils/price';
+import { nightsBetween, calcTotal, formatKRW } from '../../utils/price';
 
 import BookingSummaryCard from './components/BookngSummaryCard';
 import { createBooking } from '@/api/booking';
@@ -50,8 +50,6 @@ import {
 const tossClientKey = import.meta.env.VITE_TOSS_CLIENT_KEY;
 const frontBaseUrl =
   import.meta.env.VITE_FRONT_BASE_URL ?? window.location.origin;
-
-const formatWon = (value: number) => `₩${value.toLocaleString()}`;
 
 export default function PaymentPage() {
   const navigate = useNavigate();
@@ -376,19 +374,19 @@ export default function PaymentPage() {
           <SummaryCard>
             <SummaryRow>
               <SummaryLabel>숙박 금액</SummaryLabel>
-              <SummaryValue>{formatWon(stayAmount)}</SummaryValue>
+              <SummaryValue>₩{formatKRW(stayAmount)}</SummaryValue>
             </SummaryRow>
 
             <SummaryRow>
               <SummaryLabel>수수료/청소비</SummaryLabel>
-              <SummaryValue>{formatWon(extraAmount)}</SummaryValue>
+              <SummaryValue>₩{formatKRW(extraAmount)}</SummaryValue>
             </SummaryRow>
 
             <SummaryDivider />
 
             <SummaryRow $isTotal>
               <SummaryLabel>총 결제 금액</SummaryLabel>
-              <SummaryValue>{formatWon(price?.total ?? 0)}</SummaryValue>
+              <SummaryValue>₩{formatKRW(price?.total ?? 0)}</SummaryValue>
             </SummaryRow>
           </SummaryCard>
 
