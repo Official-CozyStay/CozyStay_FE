@@ -1,3 +1,4 @@
+import type { ChangeEvent } from 'react';
 import {
   PricingContainer,
   TitleSection,
@@ -34,29 +35,33 @@ const formatPrice = (price: number): string => {
 const Pricing = ({ data, onDataChange }: StepProps) => {
   const price = data.pricing?.basePrice || 50000;
   const cleaningFee = data.pricing?.cleaningFee || 0;
+  const pricing = {
+    basePrice: data.pricing?.basePrice ?? 50000,
+    cleaningFee: data.pricing?.cleaningFee ?? 0,
+  };
 
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     const numValue = parseInt(value, 10);
     if (!isNaN(numValue)) {
-      onDataChange({ pricing: { ...data.pricing, basePrice: numValue } });
+      onDataChange({ pricing: { ...pricing, basePrice: numValue } });
     } else if (value === '') {
-      onDataChange({ pricing: { ...data.pricing, basePrice: 0 } });
+      onDataChange({ pricing: { ...pricing, basePrice: 0 } });
     }
   };
 
-  const handleCleaningFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCleaningFeeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     const numValue = parseInt(value, 10);
     if (!isNaN(numValue)) {
-      onDataChange({ pricing: { ...data.pricing, cleaningFee: numValue } });
+      onDataChange({ pricing: { ...pricing, cleaningFee: numValue } });
     } else if (value === '') {
-      onDataChange({ pricing: { ...data.pricing, cleaningFee: 0 } });
+      onDataChange({ pricing: { ...pricing, cleaningFee: 0 } });
     }
   };
 
   const setPrice = (newPrice: number) => {
-    onDataChange({ pricing: { ...data.pricing, basePrice: newPrice } });
+    onDataChange({ pricing: { ...pricing, basePrice: newPrice } });
   };
 
   const serviceFee = Math.round(price * SERVICE_FEE_RATE);

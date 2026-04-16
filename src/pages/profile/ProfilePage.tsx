@@ -1,10 +1,9 @@
-import { useState } from "react";
-import type { ComponentType } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import SimpleHeader from "@/components/SimpleHeader";
-import IntroSection from "./sections/IntroSection";
-import PastTripsSection from "./sections/PastTripsSection";
-import ConnectionsSection from "./sections/ConnectionsSection";
+import { useState } from 'react';
+import type { ComponentType } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import IntroSection from './sections/IntroSection';
+import PastTripsSection from './sections/PastTripsSection';
+import ConnectionsSection from './sections/ConnectionsSection';
 import {
   PageContainer,
   ContentWrapper,
@@ -16,9 +15,9 @@ import {
   UserInitialIcon,
   MenuItemText,
   MainContent,
-} from "./profile.styles";
+} from './profile.styles';
 
-type MenuKey = "intro" | "trips" | "connections";
+type MenuKey = 'intro' | 'trips' | 'connections';
 
 interface MenuItem {
   key: MenuKey;
@@ -30,43 +29,43 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { key: "intro", icon: "user", label: "자기소개", component: IntroSection },
+  { key: 'intro', icon: 'user', label: '자기소개', component: IntroSection },
   {
-    key: "trips",
-    icon: "luggage",
-    label: "이전 여행",
+    key: 'trips',
+    icon: 'luggage',
+    label: '예약',
     component: PastTripsSection,
   },
   {
-    key: "connections",
-    icon: "users",
-    label: "인연",
+    key: 'connections',
+    icon: 'users',
+    label: '인연',
     component: ConnectionsSection,
   },
 ];
 
 const ProfilePage = () => {
   const { user } = useAuth();
-  const [activeMenu, setActiveMenu] = useState<MenuKey>("intro");
+  const [activeMenu, setActiveMenu] = useState<MenuKey>('intro');
 
-  const userName = user?.nickname || "예은";
+  const userName = user?.nickname || '예은';
   const userInitial = userName.charAt(0);
 
   const renderIcon = (iconType: string) => {
     switch (iconType) {
-      case "user":
+      case 'user':
         return (
           <MenuIcon>
             <UserInitialIcon>{userInitial}</UserInitialIcon>
           </MenuIcon>
         );
-      case "luggage":
+      case 'luggage':
         return (
           <MenuIcon>
             <span style={{ fontSize: 28 }}>🧳</span>
           </MenuIcon>
         );
-      case "users":
+      case 'users':
         return (
           <MenuIcon>
             <span style={{ fontSize: 28 }}>👥</span>
@@ -82,8 +81,6 @@ const ProfilePage = () => {
 
   return (
     <PageContainer>
-      <SimpleHeader />
-
       <ContentWrapper>
         <Sidebar>
           <SidebarTitle>프로필</SidebarTitle>
@@ -103,7 +100,7 @@ const ProfilePage = () => {
 
         <MainContent>
           {ActiveComponent &&
-            (activeMenu === "intro" ? (
+            (activeMenu === 'intro' ? (
               <IntroSection userName={userName} userInitial={userInitial} />
             ) : (
               <ActiveComponent userName={userName} userInitial={userInitial} />

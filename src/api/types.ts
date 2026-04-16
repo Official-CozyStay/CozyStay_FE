@@ -220,3 +220,35 @@ export type ReviewSummryDTO = {
   average: number;
   count: number;
 };
+
+export interface InviteGuestRequest {
+  guestUserId?: number;
+  guestName?: string;
+  guestEmail: string;
+  guestPhone?: string;
+  guestIdentityValid?: boolean;
+}
+
+export interface InviteGuestResponse {
+  bookingGuestId: number;
+  invitationStatus: string;
+  invitedAt: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+}
+
+export interface MyInvitationResponse {
+  bookingGuestId: number;
+  bookingId: number;
+  checkInDate: string;
+  checkOutDate: string;
+  invitationStatus: string;
+  invitedAt: string;
+  respondedAt?: string;
+}

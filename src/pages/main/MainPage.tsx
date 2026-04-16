@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import AccommodationSection from './AccommodationSection';
 import {
