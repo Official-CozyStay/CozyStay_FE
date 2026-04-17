@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { searchAccommodations } from '@/api/accommodation';
 import {
   SearchPageContainer,
   FilterBar,
@@ -28,6 +30,10 @@ import {
   PaginationButton,
   PaginationEllipsis,
   MAP_MARKER_STYLES,
+  SearchInputWrapper,
+  SearchInputField,
+  SearchSubmitButton,
+  FilterItemWrapper,
 } from './search.styles';
 import {
   Calendar,
@@ -38,8 +44,10 @@ import {
   MapPin,
   ChevronLeft,
   ChevronRight,
+  Search,
 } from 'lucide-react';
 import FilterDropdownPanel from './components/FilterDropdown';
+import RegionPopup from '@/components/SearchBar/RegionPopup';
 
 // Types
 export type Accommodation = {
@@ -280,28 +288,130 @@ type KakaoOverlay = {
 };
 
 const SearchPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<FilterState>(initialFilters);
-  const [accommodations] = useState<Accommodation[]>(mockAccommodations);
+  const [accommodations, setAccommodations] =
+    useState<Accommodation[]>(mockAccommodations);
+  const [hasNoResults, setHasNoResults] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get('title') || '',
+  );
+  const [totalElements, setTotalElements] = useState(0);
+  const [serverTotalPages, setServerTotalPages] = useState(1);
+  const itemsPerPage = 6;
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<KakaoMap | null>(null);
   const overlaysRef = useRef<KakaoOverlay[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
-  const locationButtonRef = useRef<HTMLButtonElement>(null);
+  const locationButtonRef = useRef<HTMLDivElement>(null);
   const datesButtonRef = useRef<HTMLButtonElement>(null);
   const guestsButtonRef = useRef<HTMLButtonElement>(null);
   const filtersButtonRef = useRef<HTMLButtonElement>(null);
 
   const totalGuests = filters.adults + filters.children;
 
-  // Pagination settings
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(accommodations.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedAccommodations = accommodations.slice(startIndex, endIndex);
+  useEffect(() => {
+    const p = searchParams.get('state');
+    const c = searchParams.get('city');
+    const d = searchParams.get('district');
+
+    let locationStr = '근처의 숙소';
+    if (p || c) {
+      locationStr = [p, c, d].filter(Boolean).join(' ');
+    }
+
+    // URL 쿼리에 맞춰 필터 UI 상태 업데이트
+    setFilters((prev) => ({
+      ...prev,
+      location: locationStr,
+      checkIn: searchParams.get('checkInDate') || '',
+      checkOut: searchParams.get('checkOutDate') || '',
+      adults: searchParams.get('numberOfBeds')
+        ? parseInt(searchParams.get('numberOfBeds')!)
+        : 1,
+    }));
+
+    // API 호출
+    const fetchResults = async () => {
+      try {
+        setLoading(true);
+        setHasNoResults(false);
+        const res = await searchAccommodations({
+          title: searchParams.get('title') || undefined,
+          state: searchParams.get('state') || undefined,
+          city: searchParams.get('city') || undefined,
+          district: searchParams.get('district') || undefined,
+          checkInDate: searchParams.get('checkInDate') || undefined,
+          checkOutDate: searchParams.get('checkOutDate') || undefined,
+          numberOfBeds: searchParams.get('numberOfBeds')
+            ? parseInt(searchParams.get('numberOfBeds')!)
+            : undefined,
+          page: Math.max(0, currentPage - 1),
+          size: itemsPerPage,
+        });
+
+        if (res && res.accommodations) {
+          const mappedAccs: Accommodation[] = res.accommodations.map(
+            (a, idx) => ({
+              id: String(a.id),
+              title: a.title,
+              location:
+                a.city ||
+                a.address ||
+                searchParams.get('city') ||
+                '위치 정보 없음',
+              imageUrl:
+                a.mainImageUrl ||
+                `https://picsum.photos/seed/room${idx}/400/380`,
+              price: a.pricePerNight,
+              rating: a.averageRating || 0.0,
+              reviewCount: a.reviewCount || 0,
+              latitude: a.latitude || 37.5665,
+              longitude: a.longitude || 126.978,
+              beds: searchParams.get('numberOfBeds')
+                ? parseInt(searchParams.get('numberOfBeds')!)
+                : 1,
+              dates:
+                searchParams.get('checkInDate') &&
+                searchParams.get('checkOutDate')
+                  ? `${searchParams.get('checkInDate')} ~ ${searchParams.get('checkOutDate')}`
+                  : '날짜 미정',
+            }),
+          );
+
+          if (mappedAccs.length > 0) {
+            setAccommodations(mappedAccs);
+            setTotalElements(res.totalElements || mappedAccs.length);
+            setServerTotalPages(res.totalPages || 1);
+            setHasNoResults(false);
+          } else {
+            setAccommodations([]);
+            setTotalElements(0);
+            setServerTotalPages(1);
+            setHasNoResults(true);
+          }
+        } else {
+          setAccommodations([]);
+          setTotalElements(0);
+          setServerTotalPages(1);
+          setHasNoResults(true);
+        }
+      } catch (error) {
+        console.error('Failed to search accommodations:', error);
+        setAccommodations([]);
+        setTotalElements(0);
+        setServerTotalPages(1);
+        setHasNoResults(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResults();
+  }, [searchParams, currentPage]);
 
   // Handle marker click - scroll to accommodation card
   const handleMarkerClick = (accId: string) => {
@@ -394,6 +504,19 @@ const SearchPage = () => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleSearchSubmit = () => {
+    const newParams = new URLSearchParams(searchParams);
+    if (searchQuery.trim()) {
+      newParams.set('title', searchQuery.trim());
+    } else {
+      newParams.delete('title');
+    }
+    // reset to page 1 on new query search
+    newParams.delete('page');
+    setSearchParams(newParams);
+    setCurrentPage(1);
+  };
+
   const formatPrice = (price: number) => {
     return `₩${price.toLocaleString()}`;
   };
@@ -408,6 +531,7 @@ const SearchPage = () => {
   const renderPagination = () => {
     const pages: (number | string)[] = [];
     const maxVisiblePages = 4;
+    const totalPages = serverTotalPages;
 
     if (totalPages <= maxVisiblePages + 2) {
       // Show all pages if total is small
@@ -499,16 +623,55 @@ const SearchPage = () => {
   return (
     <SearchPageContainer data-search-container>
       <FilterBar data-filter-bar>
-        <FilterButton
-          ref={locationButtonRef}
-          $active={activeFilter === 'location'}
-          onClick={() =>
-            setActiveFilter(activeFilter === 'location' ? null : 'location')
-          }
-        >
-          <MapPin />
-          {filters.location}
-        </FilterButton>
+        <SearchInputWrapper>
+          <SearchInputField
+            placeholder="숙소명 검색"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearchSubmit();
+            }}
+          />
+          <SearchSubmitButton onClick={handleSearchSubmit}>
+            <Search size={16} />
+          </SearchSubmitButton>
+        </SearchInputWrapper>
+
+        <FilterItemWrapper ref={locationButtonRef}>
+          <FilterButton
+            $active={activeFilter === 'location'}
+            onClick={() =>
+              setActiveFilter(activeFilter === 'location' ? null : 'location')
+            }
+          >
+            <MapPin />
+            {filters.location}
+          </FilterButton>
+
+          {activeFilter === 'location' && (
+            <RegionPopup
+              onSelect={(p, c, d) => {
+                const locStr =
+                  d && d !== '전체' ? `${p} ${c} ${d}` : `${p} ${c}`;
+                setFilters((prev) => ({ ...prev, location: locStr }));
+
+                // URL 쿼리 파라미터 업데이트하여 검색 실행
+                const newParams = new URLSearchParams(searchParams);
+                if (p) newParams.set('state', p);
+                else newParams.delete('state');
+                if (c) newParams.set('city', c);
+                else newParams.delete('city');
+                if (d && d !== '전체') newParams.set('district', d);
+                else newParams.delete('district');
+                newParams.delete('page');
+                setSearchParams(newParams);
+                setCurrentPage(1);
+
+                setActiveFilter(null);
+              }}
+            />
+          )}
+        </FilterItemWrapper>
 
         <FilterButton
           ref={datesButtonRef}
@@ -547,10 +710,10 @@ const SearchPage = () => {
           필터
         </FilterButton>
 
-        <ResultCount>숙소 {accommodations.length}개</ResultCount>
+        <ResultCount>숙소 {totalElements}개</ResultCount>
       </FilterBar>
 
-      {activeFilter && (
+      {activeFilter && activeFilter !== 'location' && (
         <FilterDropdownPanel
           activeFilter={activeFilter}
           filters={filters}
@@ -566,60 +729,92 @@ const SearchPage = () => {
       )}
 
       <ContentArea>
-        <ListSection>
-          <ListHeader>
-            <ListTitle>
-              {filters.location} · {filters.checkIn || '날짜 미정'}
-            </ListTitle>
-            <ListCount>숙소 {accommodations.length}개</ListCount>
-          </ListHeader>
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '400px',
+              width: '100%',
+            }}
+          >
+            <h2>검색 중...</h2>
+          </div>
+        ) : (
+          <>
+            <ListSection>
+              {hasNoResults && (
+                <div
+                  style={{
+                    padding: '16px',
+                    backgroundColor: '#fff3f5',
+                    borderRadius: '12px',
+                    marginBottom: '24px',
+                    color: '#ff385c',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    border: '1px solid #ffe1e6',
+                  }}
+                >
+                  검색 조건에 맞는 숙소가 없습니다. 다른 조건으로 검색해 보세요.
+                </div>
+              )}
+              <ListHeader>
+                <ListTitle>
+                  {filters.location} · {filters.checkIn || '날짜 미정'}
+                </ListTitle>
+                <ListCount>숙소 {totalElements}개</ListCount>
+              </ListHeader>
 
-          <AccommodationGrid ref={listRef}>
-            {displayedAccommodations.map((acc) => (
-              <AccommodationCard
-                key={acc.id}
-                data-acc-id={acc.id}
-                $selected={selectedId === acc.id}
-                onMouseEnter={() => setSelectedId(acc.id)}
-                onMouseLeave={() => setSelectedId(null)}
-              >
-                <CardImageWrapper>
-                  <CardImage
-                    src={acc.imageUrl}
-                    alt={acc.title}
-                    loading="lazy"
-                  />
-                  {acc.badge && <CardBadge>{acc.badge}</CardBadge>}
-                  <FavoriteButton type="button" aria-label="찜하기">
-                    <Heart />
-                  </FavoriteButton>
-                </CardImageWrapper>
+              <AccommodationGrid ref={listRef}>
+                {accommodations.map((acc) => (
+                  <AccommodationCard
+                    key={acc.id}
+                    data-acc-id={acc.id}
+                    $selected={selectedId === acc.id}
+                    onMouseEnter={() => setSelectedId(acc.id)}
+                    onMouseLeave={() => setSelectedId(null)}
+                  >
+                    <CardImageWrapper>
+                      <CardImage
+                        src={acc.imageUrl}
+                        alt={acc.title}
+                        loading="lazy"
+                      />
+                      {acc.badge && <CardBadge>{acc.badge}</CardBadge>}
+                      <FavoriteButton type="button" aria-label="찜하기">
+                        <Heart />
+                      </FavoriteButton>
+                    </CardImageWrapper>
 
-                <CardContent>
-                  <CardHeader>
-                    <CardTitle>{acc.title}</CardTitle>
-                    <CardRating>
-                      <Star />
-                      {acc.rating.toFixed(2)} ({acc.reviewCount})
-                    </CardRating>
-                  </CardHeader>
-                  <CardMeta>{acc.dates}</CardMeta>
-                  <CardMeta>침대 {acc.beds}개</CardMeta>
-                  <CardPrice>
-                    <strong>{formatPrice(acc.price)}</strong> /3박
-                  </CardPrice>
-                </CardContent>
-              </AccommodationCard>
-            ))}
-          </AccommodationGrid>
-        </ListSection>
+                    <CardContent>
+                      <CardHeader>
+                        <CardTitle>{acc.title}</CardTitle>
+                        <CardRating>
+                          <Star />
+                          {acc.rating.toFixed(2)} ({acc.reviewCount})
+                        </CardRating>
+                      </CardHeader>
+                      <CardMeta>{acc.dates}</CardMeta>
+                      <CardMeta>침대 {acc.beds}개</CardMeta>
+                      <CardPrice>
+                        <strong>{formatPrice(acc.price)}</strong> /1박
+                      </CardPrice>
+                    </CardContent>
+                  </AccommodationCard>
+                ))}
+              </AccommodationGrid>
+            </ListSection>
 
-        <MapSection>
-          <MapContainer ref={mapRef} />
-        </MapSection>
+            <MapSection>
+              <MapContainer ref={mapRef} />
+            </MapSection>
+          </>
+        )}
       </ContentArea>
 
-      {totalPages > 1 && renderPagination()}
+      {serverTotalPages > 1 && renderPagination()}
     </SearchPageContainer>
   );
 };

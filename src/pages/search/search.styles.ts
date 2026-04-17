@@ -99,8 +99,14 @@ export const ListCount = styled.p`
 
 export const AccommodationGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* 가변 그리드 설정: 최소 260px를 유지하며 여유 공간에 맞게 열 개수 자동 조절 */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: ${({ theme }) => theme.spacing.xl};
+
+  /* 모바일/테블릿 등 작은 화면에서는 최소 너비를 더 작게 조절하여 공간 최적화 */
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
 `;
 
 export const AccommodationCard = styled.article<{ $selected?: boolean }>`
@@ -342,6 +348,37 @@ export const FilterInput = styled.input`
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary.main};
   }
+`;
+
+export const SearchInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+export const SearchInputField = styled(FilterInput)`
+  border-radius: ${({ theme }) => theme.radius.full};
+  width: 200px;
+  padding-right: 40px;
+`;
+
+export const SearchSubmitButton = styled.button`
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  padding: 0;
+  color: ${({ theme }) => theme.colors.text.secondary};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text.primary};
+  }
+`;
+
+export const FilterItemWrapper = styled.div`
+  position: relative;
 `;
 
 export const PriceRangeWrapper = styled.div`
