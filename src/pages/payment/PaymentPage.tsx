@@ -101,6 +101,15 @@ export default function PaymentPage() {
     return Math.max(price.total - stayAmount - detail.cleaningFee, 0);
   }, [price, stayAmount, detail]);
 
+  const summaryThumbnailUrl = useMemo(() => {
+    if (!detail?.images?.length) return undefined;
+
+    return (
+      detail.images.find((image) => image.isPrimary)?.imageUrl ??
+      detail.images[0]?.imageUrl
+    );
+  }, [detail]);
+
   if (!id) return <div>잘못된 접근입니다.</div>;
   if (loading) return <div>불러오는 중...</div>;
   if (error) return <div>오류: {error}</div>;
@@ -305,7 +314,7 @@ export default function PaymentPage() {
     <PaymentPageLayout>
       <BookingSummaryCard
         title={detail.title}
-        thumbnailUrl={detail.images?.[0]?.imageUrl}
+        thumbnailUrl={summaryThumbnailUrl}
         averageRating={detail.reviewSummary?.average ?? 0}
         reviewCount={detail.reviewSummary?.count ?? 0}
         checkIn={checkIn}

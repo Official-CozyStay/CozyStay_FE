@@ -106,6 +106,13 @@ export type AccommodationImageDTO = {
   displayOrder: number;
 };
 
+export type AccommodationImageCategoryDTO = {
+  categoryId: number | null;
+  categoryName: string;
+  displayOrder: number;
+  images: AccommodationImageDTO[];
+};
+
 export type AmenityDTO = {
   amenityId: number;
   name: string;
@@ -237,15 +244,20 @@ export type PublicUserProfileResponse = {
 };
 
 export type AccommodationDetailInfoDTO = {
-  summary?: string;
-  space?: string;
-  access?: string;
-  notes?: string;
-  // Assuming these numeric fields are inside detail info based on typical patterns,
-  // as they are missing from the top-level DTO provided by the user.
-  bedrooms?: number;
-  beds?: number;
-  bathrooms?: number;
+  roomCount?: number;
+  bedroomCount?: number;
+  bedCount?: number;
+  bathroomCount?: number;
+  airConditionerCount?: number;
+  hairDryerCount?: number;
+  refrigeratorCount?: number;
+  televisionCount?: number;
+  washerCount?: number;
+  dryerCount?: number;
+  wifiAvailable?: boolean;
+  parkingAvailable?: boolean;
+  petAvailable?: boolean;
+  kitchenAvailable?: boolean;
 };
 
 export type AccommodationDetailDTO = {

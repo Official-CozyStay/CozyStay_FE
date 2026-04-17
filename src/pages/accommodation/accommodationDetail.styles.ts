@@ -20,7 +20,7 @@ export const Header = styled.header`
 
 export const Title = styled.h1`
   margin: 0 0 ${({ theme }) => theme.spacing.sm};
-  font-size: ${({ theme }) => theme.font.size["2xl"]};
+  font-size: ${({ theme }) => theme.font.size['2xl']};
   line-height: ${({ theme }) => theme.font.lineHeight.tight};
   font-weight: ${({ theme }) => theme.font.weight.extrabold};
   color: ${({ theme }) => theme.colors.text.primary};
@@ -308,7 +308,7 @@ export const LightboxClose = styled.button`
   border: none;
   background: transparent;
   color: ${({ theme }) => theme.colors.common.white};
-  font-size: ${({ theme }) => theme.font.size["2xl"]};
+  font-size: ${({ theme }) => theme.font.size['2xl']};
   cursor: pointer;
   transition: ${({ theme }) => theme.transition.colors.normal};
 
@@ -422,6 +422,25 @@ export const PhotoModalBody = styled.div`
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl};
   width: 100%;
+`;
+
+export const CategorySectionList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xl};
+`;
+
+export const CategorySection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+export const CategoryTitle = styled.h3`
+  margin: 0;
+  font-size: ${({ theme }) => theme.font.size.xl};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const PhotoGrid = styled.div`

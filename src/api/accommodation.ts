@@ -2,6 +2,7 @@ import client from './client';
 import type {
   AccommodationDetailDTO,
   AccommodationListItemDTO,
+  AccommodationImageCategoryDTO,
   HostelReviewDTO,
   ReviewListResponse,
   CreateAccommodationRequest,
@@ -100,6 +101,21 @@ export async function fetchAccommodationDetail(
     `/api/accommodations/${encodeURIComponent(id)}`,
   );
   return data;
+}
+
+export async function fetchAccommodationImageCategories(
+  id: string,
+): Promise<AccommodationImageCategoryDTO[]> {
+  if (!id || !/^\d+$/.test(id)) {
+    throw new Error(`Invalid id format: ${id}`);
+  }
+
+  const data = await client.get<
+    AccommodationImageCategoryDTO[],
+    AccommodationImageCategoryDTO[]
+  >(`/api/accommodations/${encodeURIComponent(id)}/image-categories`);
+
+  return Array.isArray(data) ? data : [];
 }
 
 // 숙소 리뷰 조회
