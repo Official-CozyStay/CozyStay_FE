@@ -363,3 +363,45 @@ export interface MyInvitationResponse {
   invitedAt: string;
   respondedAt?: string;
 }
+// --- Favorite (즐겨찾기) API ---
+export type FavoriteResponseDTO = {
+  favoriteId: number;
+  name: string;
+  description: string;
+  isPrivate?: boolean;
+  accommodationCount: number;
+  coverImageUrl?: string | null;
+};
+
+export type FavoriteCreateRequestDTO = {
+  name: string;
+  description: string;
+  isPrivate: boolean;
+};
+
+export type FavoriteCreateResponseDTO = {
+  favoriteId: number;
+};
+
+export type FavoriteAccommodationDTO = {
+  accommodationId: number;
+  title: string;
+  city: string;
+  country: string;
+  pricePerNight: number;
+  imageUrl: string | null;
+};
+
+export type FavoriteDetailResponseDTO = {
+  favoriteId: number;
+  name: string;
+  description: string;
+  isPrivate?: boolean;
+  accommodations: FavoriteAccommodationDTO[];
+};
+
+export type FavoriteUpdateRequestDTO = {
+  name?: string;
+  description?: string;
+  isPrivate?: boolean;
+};

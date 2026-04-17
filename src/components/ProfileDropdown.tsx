@@ -78,7 +78,7 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
   return (
     <DropdownMenu ref={dropdownRef}>
       <DropdownSection>
-        <DropdownItem>
+        <DropdownItem onClick={() => handleNavigate('/wishlist')}>
           <Heart />
           {MENU_LABELS.wishlist}
         </DropdownItem>
