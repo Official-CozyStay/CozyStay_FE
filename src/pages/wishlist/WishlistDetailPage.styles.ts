@@ -49,7 +49,7 @@ export const BackButton = styled(Link)`
 export const DetailTitle = styled.h1`
   flex: 1;
   min-width: 0;
-  font-size: ${({ theme }) => theme.font.size.xxl};
+  font-size: ${({ theme }) => theme.font.size['2xl']};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
   margin: 0;
