@@ -39,10 +39,10 @@ type FilterDropdownPanelProps = {
   onFilterChange: (key: keyof FilterState, value: unknown) => void;
   onClose: () => void;
   buttonRefs: {
-    location: RefObject<HTMLButtonElement | null>;
-    dates: RefObject<HTMLButtonElement | null>;
-    guests: RefObject<HTMLButtonElement | null>;
-    filters: RefObject<HTMLButtonElement | null>;
+    location: RefObject<HTMLElement | null>;
+    dates: RefObject<HTMLElement | null>;
+    guests: RefObject<HTMLElement | null>;
+    filters: RefObject<HTMLElement | null>;
   };
 };
 
