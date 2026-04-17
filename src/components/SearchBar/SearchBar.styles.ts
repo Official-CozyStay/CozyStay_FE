@@ -117,7 +117,37 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   }
 `;
 
-const GUEST_POPUP_MIN_WIDTH = '280px';
+// ── 날짜 팝업 ──────────────────────────────────────────────
+
+export const DatePopup = styled.div`
+  position: absolute;
+  top: calc(100% + ${({ theme }) => theme.spacing.md});
+  left: 50%;
+  transform: translateX(-50%);
+  background: ${({ theme }) => theme.colors.common.white};
+  border-radius: ${({ theme }) => theme.radius.lg};
+  box-shadow: ${({ theme }) => theme.shadow.lg};
+  padding: ${({ theme }) => theme.spacing.lg};
+  z-index: ${({ theme }) => theme.zIndex.searchBar};
+  white-space: normal;
+
+  ${media.mobile} {
+    left: 0;
+    transform: none;
+  }
+`;
+
+export const DayPickerWrapper = styled.div`
+  .rdp-root {
+    --rdp-accent-color: ${({ theme }) => theme.colors.primary.main};
+    --rdp-accent-color-dark: ${({ theme }) => theme.colors.primary.hover};
+    --rdp-background-color: ${({ theme }) => theme.colors.primary.main}20;
+    font-family: inherit;
+    font-size: ${({ theme }) => theme.font.size.sm};
+  }
+`;
+
+// ── 여행자 팝업 ────────────────────────────────────────────
 
 export const GuestPopup = styled.div`
   position: absolute;
@@ -128,12 +158,13 @@ export const GuestPopup = styled.div`
   border-radius: ${({ theme }) => theme.radius.lg};
   box-shadow: ${({ theme }) => theme.shadow.lg};
   padding: ${({ theme }) => theme.spacing.lg};
-  min-width: ${GUEST_POPUP_MIN_WIDTH};
+  min-width: 320px;
   z-index: ${({ theme }) => theme.zIndex.searchBar};
+  white-space: normal;
 
   ${media.mobile} {
     padding: ${({ theme }) => theme.spacing.md};
-    min-width: 240px;
+    min-width: 280px;
   }
 `;
 
@@ -141,11 +172,18 @@ export const GuestSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.lg} 0;
 
   &:not(:last-child) {
     border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
   }
+`;
+
+// 텍스트 영역: flex-shrink 허용, 긴 설명도 줄바꿈 처리
+export const GuestInfo = styled.div`
+  flex: 1 1 auto;
+  min-width: 0;
 `;
 
 export const GuestLabel = styled.div`
@@ -158,12 +196,15 @@ export const GuestLabel = styled.div`
 export const GuestAge = styled.div`
   font-size: ${({ theme }) => theme.font.size.sm};
   color: ${({ theme }) => theme.colors.text.secondary};
+  white-space: normal;
+  word-break: keep-all;
 `;
 
 export const GuestCounter = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.lg};
+  flex-shrink: 0;
 `;
 
 export const CounterButton = styled.button`

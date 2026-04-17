@@ -24,7 +24,6 @@ import {
   Building2,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import SimpleHeader from '@/components/SimpleHeader';
 import PersonalInfoSection from './sections/PersonalInfoSection';
 import SecuritySection from './sections/SecuritySection';
 import PrivacySection from './sections/PrivacySection';
@@ -117,8 +116,6 @@ const AccountPage = () => {
 
   return (
     <PageContainer>
-      <SimpleHeader />
-
       <ContentWrapper>
         <Sidebar>
           <SidebarTitle>계정 관리</SidebarTitle>

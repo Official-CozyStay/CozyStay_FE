@@ -153,3 +153,19 @@ export const Footer = styled.footer`
     font-size: ${({ theme }) => theme.font.size.xs};
   }
 `;
+
+export const StatusMessage = styled.div`
+  max-width: ${({ theme }) => theme.layout.maxWidth};
+  margin: 0 auto ${({ theme }) => theme.spacing['5xl']};
+  padding: ${({ theme }) => theme.spacing['5xl']}
+    ${({ theme }) => theme.spacing['3xl']};
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.font.size.md};
+
+  ${media.mobile} {
+    padding: ${({ theme }) => theme.spacing['4xl']}
+      ${({ theme }) => theme.spacing.lg};
+    margin-bottom: ${({ theme }) => theme.spacing['4xl']};
+  }
+`;

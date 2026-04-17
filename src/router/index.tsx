@@ -25,6 +25,7 @@ export const router = createBrowserRouter([
       { path: 'landing', element: <LandingPage /> },
       { path: 'accommodation/:id', element: <AccommodationDetailPage /> },
       { path: 'payment/:id', element: <PaymentPage /> },
+      { path: 'payment/retry/:id', element: <PaymentPage /> },
       { path: 'payment/success', element: <PaymentSuccessPage /> },
       { path: 'payment/fail', element: <PaymentFailPage /> },
       { path: 'search', element: <SearchPage /> },

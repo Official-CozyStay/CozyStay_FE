@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import {
   TypeContainer,
   Title,
@@ -11,9 +11,15 @@ import {
 } from './SpaceType.styles';
 import { Home, DoorOpen, Users } from 'lucide-react';
 import type { StepProps } from '../BecomeHostPage';
+import type { SpaceType as ListingSpaceType } from '@/types/listing';
 
 // 백엔드 API accommodationType 값에 맞춤
-const types = [
+const types: Array<{
+  id: Exclude<ListingSpaceType, ''>;
+  label: string;
+  description: string;
+  icon: ReactNode;
+}> = [
   {
     id: 'entire_place',
     label: '공간 전체',
@@ -38,7 +44,7 @@ const types = [
 const SpaceType = ({ data, onDataChange }: StepProps) => {
   const selected = data.spaceType || null;
 
-  const handleSelect = (spaceTypeId: string) => {
+  const handleSelect = (spaceTypeId: Exclude<ListingSpaceType, ''>) => {
     onDataChange({ spaceType: spaceTypeId });
   };
 

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import client from './client';
 
 export type PaymentMethod = 'MOCK' | 'CARD' | 'EASY_PAY';
 
@@ -9,18 +9,25 @@ export type PaymentCreateRequest = {
 
 export type PaymentCreateResponse = {
   paymentId: number;
+  orderId: string;
   paymentStatus: string;
   paymentMethod: PaymentMethod;
   amount: string;
 };
 
-export async function createPayment(req: PaymentCreateRequest) {
-  const res = await axios.post<PaymentCreateResponse>('/api/payments', req);
-  return res.data;
+export async function createPayment(
+  req: PaymentCreateRequest,
+): Promise<PaymentCreateResponse> {
+  return client.post<PaymentCreateResponse, PaymentCreateResponse>(
+    '/api/payments',
+    req,
+  );
 }
 
 export type PaymentConfirmRequest = {
   paymentKey: string;
+  orderId: string;
+  amount: number;
 };
 
 export type PaymentResponse = {
@@ -35,19 +42,16 @@ export type PaymentResponse = {
 };
 
 export async function confirmPayment(
-  paymentId: number,
   req: PaymentConfirmRequest,
-) {
-  const res = await axios.post<PaymentResponse>(
-    `/api/payments/${paymentId}/confirm`,
+): Promise<PaymentResponse> {
+  return client.post<PaymentResponse, PaymentResponse>(
+    '/api/payments/confirm',
     req,
   );
-  return res.data;
 }
 
-export async function failPayment(paymentId: number) {
-  const res = await axios.post<PaymentResponse>(
+export async function failPayment(paymentId: number): Promise<PaymentResponse> {
+  return client.post<PaymentResponse, PaymentResponse>(
     `/api/payments/${paymentId}/fail`,
   );
-  return res.data;
 }

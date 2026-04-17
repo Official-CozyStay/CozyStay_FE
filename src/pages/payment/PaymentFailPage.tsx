@@ -8,6 +8,11 @@ import {
   PaymentFailPageContainer,
   PaymentFailRetryButton,
   PaymentFailTitle,
+  PaymentFailSummaryCard,
+  PaymentFailSummaryTitle,
+  PaymentFailSummaryRow,
+  PaymentFailSummaryLabel,
+  PaymentFailSummaryValue,
 } from './paymentFail.styles';
 
 export default function PaymentFailPage() {
@@ -15,40 +20,110 @@ export default function PaymentFailPage() {
   const [sp] = useSearchParams();
 
   const bookingId = sp.get('bookingId');
+  const accommodationId = sp.get('accommodationId');
+  const code = sp.get('code');
+  const message = sp.get('message');
+
+  const title = sp.get('title');
+  const checkIn = sp.get('checkin');
+  const checkOut = sp.get('checkout');
+  const guests = sp.get('guests');
+  const amount = sp.get('amount');
 
   const canRetry = useMemo(() => {
-    return !!bookingId;
-  }, [bookingId]);
+    return !!bookingId && !!accommodationId;
+  }, [bookingId, accommodationId]);
+
+  const parsedAmount = useMemo(() => {
+    if (!amount) return null;
+
+    const value = Number(amount);
+    return Number.isFinite(value) ? value : null;
+  }, [amount]);
 
   return (
     <PaymentFailPageContainer>
       <PaymentFailTitle>결제에 실패했습니다</PaymentFailTitle>
 
       <PaymentFailDescription>
-        네트워크 문제 또는 결제 과정에서 오류가 발생했을 수 있어요.
-        <br />
-        다시 시도하거나, 문제가 계속되면 잠시 후 재시도해주세요.
+        결제에 실패했지만 예약은 아직 유지되고 있어요.
+        <br />약 10분 동안 예약이 대기 상태로 유지됩니다. 그 전에 다시 결제를
+        진행해주세요.
       </PaymentFailDescription>
 
+      {(title || checkIn || checkOut || guests || parsedAmount !== null) && (
+        <PaymentFailSummaryCard>
+          <PaymentFailSummaryTitle>예약 정보</PaymentFailSummaryTitle>
+
+          {title && (
+            <PaymentFailSummaryRow>
+              <PaymentFailSummaryLabel>숙소</PaymentFailSummaryLabel>
+              <PaymentFailSummaryValue>{title}</PaymentFailSummaryValue>
+            </PaymentFailSummaryRow>
+          )}
+
+          {checkIn && (
+            <PaymentFailSummaryRow>
+              <PaymentFailSummaryLabel>체크인</PaymentFailSummaryLabel>
+              <PaymentFailSummaryValue>{checkIn}</PaymentFailSummaryValue>
+            </PaymentFailSummaryRow>
+          )}
+
+          {checkOut && (
+            <PaymentFailSummaryRow>
+              <PaymentFailSummaryLabel>체크아웃</PaymentFailSummaryLabel>
+              <PaymentFailSummaryValue>{checkOut}</PaymentFailSummaryValue>
+            </PaymentFailSummaryRow>
+          )}
+
+          {guests && (
+            <PaymentFailSummaryRow>
+              <PaymentFailSummaryLabel>게스트</PaymentFailSummaryLabel>
+              <PaymentFailSummaryValue>{guests}명</PaymentFailSummaryValue>
+            </PaymentFailSummaryRow>
+          )}
+
+          {parsedAmount !== null && (
+            <PaymentFailSummaryRow>
+              <PaymentFailSummaryLabel>결제 예정 금액</PaymentFailSummaryLabel>
+              <PaymentFailSummaryValue>
+                ₩{parsedAmount.toLocaleString()}
+              </PaymentFailSummaryValue>
+            </PaymentFailSummaryRow>
+          )}
+        </PaymentFailSummaryCard>
+      )}
+
+      {(code || message) && (
+        <PaymentFailNotice>
+          {code && <div>• 오류 코드: {code}</div>}
+          {message && <div>• 안내 메시지: {message}</div>}
+        </PaymentFailNotice>
+      )}
+
       <PaymentFailButtonGroup>
-        {/* 결제 재시도: 다시 PaymentPage로 */}
         <PaymentFailRetryButton
           type="button"
           disabled={!canRetry}
           $disabled={!canRetry}
           onClick={() => {
-            if (!bookingId) return;
+            if (!bookingId || !accommodationId) return;
 
-            // 간단 재시도: 뒤로 가기(= PaymentPage로 복귀)
-            navigate(-1);
+            const params = new URLSearchParams();
+            params.set('bookingId', bookingId);
+
+            if (checkIn) params.set('checkin', checkIn);
+            if (checkOut) params.set('checkout', checkOut);
+            if (guests) params.set('numberOfGuests', guests);
+
+            navigate(`/payment/retry/${accommodationId}?${params.toString()}`);
           }}
         >
-          결제 다시 시도
+          다시 결제하기
         </PaymentFailRetryButton>
 
         <PaymentFailLinkButton to="/">홈으로</PaymentFailLinkButton>
 
-        {/* 예약 상세로 이동 */}
         {bookingId && (
           <PaymentFailLinkButton to={`/bookings/${bookingId}`}>
             예약 상세 보기
@@ -57,9 +132,9 @@ export default function PaymentFailPage() {
       </PaymentFailButtonGroup>
 
       <PaymentFailNotice>
-        <div>• 결제가 실패해도 예약이 자동으로 확정되진 않아요.</div>
+        <div>• 결제가 완료되지 않으면 예약은 자동으로 취소됩니다.</div>
         <div>
-          • 문제가 지속되면 결제 수단을 바꾸거나 잠시 후 다시 시도해보세요.
+          • 문제가 지속되면 결제 수단을 변경하거나 잠시 후 다시 시도해주세요.
         </div>
       </PaymentFailNotice>
     </PaymentFailPageContainer>

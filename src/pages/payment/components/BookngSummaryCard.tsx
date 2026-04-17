@@ -1,4 +1,4 @@
-import * as S from '../payment.styles';
+﻿import * as S from '../payment.styles';
 
 type Props = {
   title: string;
@@ -10,6 +10,8 @@ type Props = {
   guests: number;
   nights: number;
   pricePerNight: number;
+  cleaningFee: number;
+  serviceFee: number;
   total?: number;
 };
 
@@ -23,48 +25,62 @@ export default function BookingSummaryCard({
   guests,
   nights,
   pricePerNight,
+  cleaningFee,
+  serviceFee,
   total,
 }: Props) {
   return (
-    <S.SummaryCard>
-      <S.SummaryTop>
-        {thumbnailUrl && <S.Thumbnail src={thumbnailUrl} />}
+    <S.SideCard>
+      <S.SideTop>
+        {thumbnailUrl && <S.Thumbnail src={thumbnailUrl} alt={title} />}
         <div>
-          <S.SummaryTitle>{title}</S.SummaryTitle>
-          <S.SummaryMeta>
+          <S.SideTitle>{title}</S.SideTitle>
+          <S.SideMeta>
             ★ {averageRating.toFixed(1)} (후기 {reviewCount}개)
-          </S.SummaryMeta>
+          </S.SideMeta>
         </div>
-      </S.SummaryTop>
+      </S.SideTop>
 
       <S.Divider />
 
-      <S.SummaryRow>
+      <S.SideInfoRow>
         <span>날짜</span>
         <span>
-          {checkIn} ~ {checkOut}
+          {checkIn} - {checkOut}
         </span>
-      </S.SummaryRow>
+      </S.SideInfoRow>
 
-      <S.SummaryRow>
+      <S.SideInfoRow>
         <span>게스트</span>
         <span>{guests}명</span>
-      </S.SummaryRow>
+      </S.SideInfoRow>
 
       <S.Divider />
 
-      <S.SummaryRow>
-        <span>
-          ₩{pricePerNight.toLocaleString()} × {nights}박
-        </span>
-      </S.SummaryRow>
+      <S.SidePriceRow>
+        ₩ {pricePerNight.toLocaleString()} × {nights}박
+      </S.SidePriceRow>
+
+      {nights > 0 && (
+        <>
+          <S.SideInfoRow>
+            <span>청소비</span>
+            <span>₩{cleaningFee.toLocaleString()}</span>
+          </S.SideInfoRow>
+
+          <S.SideInfoRow>
+            <span>서비스 수수료</span>
+            <span>₩{serviceFee.toLocaleString()}</span>
+          </S.SideInfoRow>
+        </>
+      )}
 
       {total && (
-        <S.TotalRow>
+        <S.SideTotalRow>
           <span>총액 KRW</span>
-          <span>₩{total.toLocaleString()}</span>
-        </S.TotalRow>
+          <strong>₩{total.toLocaleString()}</strong>
+        </S.SideTotalRow>
       )}
-    </S.SummaryCard>
+    </S.SideCard>
   );
 }

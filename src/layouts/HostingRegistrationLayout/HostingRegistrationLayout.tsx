@@ -6,6 +6,7 @@ import {
   Header,
   LogoLink,
   LogoImage,
+  LogoText,
   HeaderButtons,
   HeaderButton,
   Main,
@@ -47,6 +48,7 @@ const HostingRegistrationLayout = ({
       <Header>
         <LogoLink onClick={() => navigate('/')}>
           <LogoImage src={logo} alt="CozyStay Logo" />
+          <LogoText>CozyStay</LogoText>
         </LogoLink>
         <HeaderButtons>
           <HeaderButton onClick={() => {}}>궁금하신 점이 있나요?</HeaderButton>
