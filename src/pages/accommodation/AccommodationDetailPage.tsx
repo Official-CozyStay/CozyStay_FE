@@ -13,9 +13,13 @@ import { useLightbox } from './hooks/useLightbox';
 
 import type {
   AccommodationImageDTO,
+  AccommodationImageCategoryDTO,
   ReviewListResponse,
 } from '../../api/types';
-import { fetchAccommodationReviews } from '../../api/accommodation';
+import {
+  fetchAccommodationImageCategories,
+  fetchAccommodationReviews,
+} from '../../api/accommodation';
 
 type ThumbImage = AccommodationImageDTO & { idx: number };
 
@@ -23,6 +27,9 @@ export default function AccommodationDetailPage() {
   const { id = '1' } = useParams();
   const navigate = useNavigate();
   const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
+  const [imageCategories, setImageCategories] = useState<
+    AccommodationImageCategoryDTO[]
+  >([]);
 
   // 전체 사진 모달 상태
   const [isAllPhotosOpen, setIsAllPhotosOpen] = useState(false);
@@ -44,6 +51,12 @@ export default function AccommodationDetailPage() {
 
   useEffect(() => {
     load(id);
+    fetchAccommodationImageCategories(id)
+      .then(setImageCategories)
+      .catch((err) => {
+        console.error('이미지 카테고리 로딩 실패:', err);
+        setImageCategories([]);
+      });
     fetchAccommodationReviews(id)
       .then(setReviews)
       .catch((err) => {
@@ -183,6 +196,7 @@ export default function AccommodationDetailPage() {
         isOpen={isAllPhotosOpen}
         onClose={closeAllPhotos}
         images={images}
+        categories={imageCategories}
       />
     </S.Container>
   );
