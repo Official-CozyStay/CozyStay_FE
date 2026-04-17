@@ -14,6 +14,8 @@ export interface Listing {
     streetAddress: string;
     detailAddress: string;
     postalCode: string;
+    latitude?: number;
+    longitude?: number;
   };
   guests: number; // maxGuests
   rooms: number; // roomCount (방 수)

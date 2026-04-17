@@ -14,7 +14,7 @@ export const Title = StepTitle;
 export const DetailsContainer = styled(StepContainer)`
   gap: ${({ theme }) => theme.spacing['2xl']};
   align-items: flex-start;
-  max-width: 560px;
+  max-width: 800px;
 `;
 
 export const Subtitle = styled(BaseSubtitle)`
@@ -150,6 +150,87 @@ export const ButtonGroup = styled.div`
   ${media.mobile} {
     flex-direction: column;
   }
+`;
+
+export const MapSearchWrapper = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+export const MapSearchInput = styled.input`
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing.lg};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-family: inherit;
+  color: ${({ theme }) => theme.colors.text.primary};
+  outline: none;
+  transition: border-color ${({ theme }) => theme.transition.fast};
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.text.primary};
+    border-width: 2px;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
+`;
+
+export const MapSearchButton = styled.button`
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xl}`};
+  background-color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.colors.common.white};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity ${({ theme }) => theme.transition.fast};
+
+  &:hover {
+    opacity: 0.85;
+  }
+`;
+
+export const MapContainer = styled.div`
+  width: 100%;
+  height: 300px;
+  border-radius: ${({ theme }) => theme.radius.md};
+  overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+export const MapErrorMessage = styled.p`
+  font-size: ${({ theme }) => theme.font.size.sm};
+  color: #e53e3e;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const SelectedAddressCard = styled.div`
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.lg};
+  background-color: ${({ theme }) => theme.colors.background.hover};
+  border-radius: ${({ theme }) => theme.radius.md};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs};
+`;
+
+export const SelectedAddressLabel = styled.span`
+  font-size: ${({ theme }) => theme.font.size.xs};
+  color: ${({ theme }) => theme.colors.text.secondary};
+`;
+
+export const SelectedAddressValue = styled.span`
+  font-size: ${({ theme }) => theme.font.size.md};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const OptionButton = styled.button<{ $selected?: boolean }>`

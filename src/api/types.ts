@@ -1,5 +1,104 @@
 export type AccommodationType = 'entire_place' | 'private_room' | 'shared_room';
 
+// 백엔드 API에서 사용하는 대문자 ENUM
+export type AccommodationTypeAPI =
+  | 'ENTIRE_PLACE'
+  | 'PRIVATE_ROOM'
+  | 'SHARED_ROOM';
+
+// ============================================
+// 숙소 등록 API Request/Response DTOs
+// ============================================
+
+// [POST] /api/accommodations - 숙소 생성 요청
+export type CreateAccommodationRequest = {
+  title: string;
+  description: string;
+  accommodationType: AccommodationTypeAPI;
+  address: string;
+  city: string;
+  state?: string;
+  country: string;
+  postalCode?: string;
+  latitude?: number;
+  longitude?: number;
+  maxGuests: number;
+  pricePerNight: number;
+  cleaningFee?: number;
+  serviceFeePercentage?: number;
+  instantBooking: boolean;
+  checkInTime?: string;
+  checkOutTime?: string;
+};
+
+// [POST] /api/accommodations - 숙소 생성 응답
+export type CreateAccommodationResponse = {
+  accommodationId: number;
+  accommodationName: string;
+  accommodationImage: string | null;
+  accommodationPrice: number;
+};
+
+// [POST] /api/accommodations/details/{id} - 상세정보 등록 요청
+export type CreateAccommodationDetailsRequest = {
+  roomCount: number;
+  bedroomCount: number;
+  bedCount: number;
+  bathroomCount: number;
+  airConditionerCount: number;
+  hairDryerCount: number;
+  refrigeratorCount: number;
+  televisionCount: number;
+  washerCount: number;
+  dryerCount: number;
+  wifiAvailable: boolean;
+  parkingAvailable: boolean;
+  petAvailable: boolean;
+  kitchenAvailable: boolean;
+};
+
+// [POST] /api/accommodations/details/{id} - 상세정보 등록 응답
+export type CreateAccommodationDetailsResponse = {
+  message: string;
+  accommodationId: number;
+};
+
+// [POST] /api/accommodations/amenities/{id} - 편의시설 추가 요청
+export type CreateAmenityRequest = {
+  name: string;
+  icon: string;
+  category: string;
+};
+
+// [POST] /api/accommodations/amenities/{id} - 편의시설 추가 응답
+export type CreateAmenitiesResponse = {
+  accommodationId: number;
+  count: number;
+  message: string;
+};
+
+// [POST] /api/accommodations/images/{id} - 이미지 추가 요청
+export type CreateImageRequest = {
+  imageUrl: string;
+  displayOrder: number;
+  isPrimary: boolean;
+};
+
+// [POST] /api/accommodations/images/{id} - 이미지 추가 응답
+export type CreateImagesResponse = {
+  accommodationId: number;
+  imageId: number[];
+  message: string;
+};
+
+// [GET] /api/accommodations - 숙소 목록 조회 응답
+export type AccommodationListItemDTO = {
+  accommodationId: number;
+  accommodationName: string;
+  accommodationImage: string | null;
+  accommodationPrice: number;
+};
+
 export type AccommodationImageDTO = {
   imageId: number;
   imageUrl: string;

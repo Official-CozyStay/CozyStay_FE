@@ -32,6 +32,13 @@ export const LogoImage = styled.img`
   height: ${({ theme }) => theme.spacing['3xl']};
 `;
 
+export const LogoText = styled.span`
+  font-size: ${({ theme }) => theme.font.size.lg};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.colors.primary.main};
+  margin-left: ${({ theme }) => theme.spacing.sm};
+`;
+
 export const HeaderButtons = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md};

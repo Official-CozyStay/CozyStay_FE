@@ -17,13 +17,13 @@ export interface AccommodationCardProps {
   image: string;
   badge?: string;
   title: string;
-  date: {
+  date?: {
     start: Date;
     end: Date;
   };
   price: number;
-  nights: number;
-  rating: number;
+  nights?: number;
+  rating?: number | null;
   isFavorite?: boolean;
   onFavoriteClick?: () => void;
 }
@@ -63,6 +63,9 @@ const AccommodationCard = ({
   onFavoriteClick,
 }: AccommodationCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const hasDate = !!date;
+  const hasNights = typeof nights === 'number' && nights > 0;
+  const hasRating = typeof rating === 'number' && rating > 0;
 
   const handleHeartClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -91,14 +94,19 @@ const AccommodationCard = ({
         </CardHeartButton>
         <CardBody>
           <CardTitle>{title}</CardTitle>
-          <CardDate>{formatDateRange(date.start, date.end)}</CardDate>
+          {hasDate && (
+            <CardDate>{formatDateRange(date.start, date.end)}</CardDate>
+          )}
           <CardPrice>
-            {formatPrice(price)} · {formatNights(nights)}
+            {formatPrice(price)}
+            {hasNights ? ` · ${formatNights(nights)}` : ' /박'}
           </CardPrice>
-          <CardRating>
-            <Star size={14} fill="currentColor" />
-            {rating.toFixed(2)}
-          </CardRating>
+          {hasRating && (
+            <CardRating>
+              <Star size={14} fill="currentColor" />
+              {rating.toFixed(2)}
+            </CardRating>
+          )}
         </CardBody>
       </CardContainer>
       <WishlistModal

@@ -1,16 +1,47 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import AccommodationSection from './AccommodationSection';
+import { fetchAccommodations } from '@/api/accommodation';
+import type { Accommodation } from '@/types/accommodation';
 import {
-  mockAccommodations,
-  busanAccommodations,
-  tokyoAccommodations,
-  osakaAccommodations,
-} from '@/data/mockAccommodations';
-import { MainContainer, SearchBarWrapper, Footer } from './MainPage.styles';
+  MainContainer,
+  SearchBarWrapper,
+  Footer,
+  StatusMessage,
+} from './MainPage.styles';
+
+const PLACEHOLDER_IMAGE =
+  'https://a0.muscache.com/im/pictures/miso/Hosting-598015/original/a0ea4842-d25e-4f9f-93ed-c85b5aad0a01.jpeg';
 
 const MainPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setHasError(false);
+
+    fetchAccommodations()
+      .then((data) => {
+        const mapped: Accommodation[] = data.map((item) => ({
+          id: item.accommodationId,
+          image: item.accommodationImage || PLACEHOLDER_IMAGE,
+          badge: '',
+          title: item.accommodationName,
+          price: item.accommodationPrice,
+        }));
+        setAccommodations(mapped);
+      })
+      .catch((err) => {
+        console.error('숙소 목록 조회 실패:', err);
+        setHasError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <MainContainer ref={containerRef}>
@@ -18,25 +49,26 @@ const MainPage = () => {
         <SearchBar />
       </SearchBarWrapper>
 
-      <AccommodationSection
-        title="서울의 인기 숙소"
-        accommodations={mockAccommodations}
-      />
+      {isLoading && (
+        <StatusMessage>숙소 목록을 불러오는 중입니다.</StatusMessage>
+      )}
 
-      <AccommodationSection
-        title="다음 주말에 예약 가능한 부산 숙소"
-        accommodations={busanAccommodations}
-      />
+      {!isLoading && hasError && (
+        <StatusMessage>
+          숙소 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
+        </StatusMessage>
+      )}
 
-      <AccommodationSection
-        title="도쿄의 숙소"
-        accommodations={tokyoAccommodations}
-      />
+      {!isLoading && !hasError && accommodations.length === 0 && (
+        <StatusMessage>아직 등록된 숙소가 없습니다.</StatusMessage>
+      )}
 
-      <AccommodationSection
-        title="다음 달에 예약 가능한 오사카시 숙소"
-        accommodations={osakaAccommodations}
-      />
+      {!isLoading && !hasError && accommodations.length > 0 && (
+        <AccommodationSection
+          title="등록된 숙소"
+          accommodations={accommodations}
+        />
+      )}
 
       <Footer>
         © {new Date().getFullYear()} CozyStay — Inspired by Airbnb

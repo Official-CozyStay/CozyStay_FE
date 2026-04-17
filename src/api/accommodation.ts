@@ -1,9 +1,91 @@
 import client from './client';
 import type {
   AccommodationDetailDTO,
+  AccommodationListItemDTO,
   HostelReviewDTO,
   ReviewListResponse,
+  CreateAccommodationRequest,
+  CreateAccommodationResponse,
+  CreateAccommodationDetailsRequest,
+  CreateAccommodationDetailsResponse,
+  CreateAmenityRequest,
+  CreateAmenitiesResponse,
+  CreateImageRequest,
+  CreateImagesResponse,
 } from './types';
+
+// ============================================
+// 숙소 등록 API
+// ============================================
+
+// 1. 숙소 생성
+export async function createAccommodation(
+  data: CreateAccommodationRequest,
+): Promise<CreateAccommodationResponse> {
+  const response = await client.post<
+    CreateAccommodationResponse,
+    CreateAccommodationResponse
+  >('/api/accommodations', data);
+  return response;
+}
+
+// 2. 숙소 상세정보 등록
+export async function createAccommodationDetails(
+  accommodationId: number,
+  data: CreateAccommodationDetailsRequest,
+): Promise<CreateAccommodationDetailsResponse> {
+  const response = await client.post<
+    CreateAccommodationDetailsResponse,
+    CreateAccommodationDetailsResponse
+  >(`/api/accommodations/details/${accommodationId}`, data);
+  return response;
+}
+
+// 3. 숙소 편의시설 추가
+export async function createAccommodationAmenities(
+  accommodationId: number,
+  amenities: CreateAmenityRequest[],
+): Promise<CreateAmenitiesResponse> {
+  const response = await client.post<
+    CreateAmenitiesResponse,
+    CreateAmenitiesResponse
+  >(`/api/accommodations/amenities/${accommodationId}`, amenities);
+  return response;
+}
+
+// 4. 숙소 이미지 추가
+export async function createAccommodationImages(
+  accommodationId: number,
+  images: CreateImageRequest[],
+): Promise<CreateImagesResponse> {
+  const response = await client.post<
+    CreateImagesResponse,
+    CreateImagesResponse
+  >(`/api/accommodations/images/${accommodationId}`, images);
+  return response;
+}
+
+// 5. 숙소 발행 (상태 변경)
+export async function publishAccommodation(
+  accommodationId: number,
+): Promise<void> {
+  await client.patch(`/api/accommodations/${accommodationId}/publish`);
+}
+
+// ============================================
+// 숙소 조회 API
+// ============================================
+
+// 숙소 목록 조회
+export async function fetchAccommodations(): Promise<
+  AccommodationListItemDTO[]
+> {
+  const response = await client.get<
+    AccommodationListItemDTO[],
+    AccommodationListItemDTO[]
+  >('/api/accommodations');
+  return response;
+}
 
 // 숙소 상세 조회
 export async function fetchAccommodationDetail(
@@ -14,9 +96,9 @@ export async function fetchAccommodationDetail(
     throw new Error(`Invalid id format: ${id}`);
   }
 
-  const data = await client.get(
-    `/api/accommodations/${encodeURIComponent(id)}`
-  ) as AccommodationDetailDTO;
+  const data = await client.get<AccommodationDetailDTO, AccommodationDetailDTO>(
+    `/api/accommodations/${encodeURIComponent(id)}`,
+  );
   return data;
 }
 
@@ -37,26 +119,28 @@ export async function fetchAccommodationReviews(
   let reviewsToUse: HostelReviewDTO[] = [];
 
   // 더미 데이터 정의
-  const MOCK_REVIEWS: HostelReviewDTO[] = Array.from({ length: 3 }).map((_, i) => ({
-    id: 100 + i,
-    bookingId: 200 + i,
-    userNickName: `더미 유저 ${i + 1}`,
-    userProfileImageUrl: `https://i.pravatar.cc/150?u=${100 + i}`,
-    ratingOverall: 4.5 + (i * 0.1),
-    ratingCleanliness: 5,
-    ratingAccuracy: 4,
-    ratingCheckin: 5,
-    ratingCommunication: 5,
-    ratingLocation: 4,
-    reviewComment: `정말 멋진 숙소였습니다! (테스트 후기 ${i + 1})`,
-    comment: null,
-  }));
+  const MOCK_REVIEWS: HostelReviewDTO[] = Array.from({ length: 3 }).map(
+    (_, i) => ({
+      id: 100 + i,
+      bookingId: 200 + i,
+      userNickName: `더미 유저 ${i + 1}`,
+      userProfileImageUrl: `https://i.pravatar.cc/150?u=${100 + i}`,
+      ratingOverall: 4.5 + i * 0.1,
+      ratingCleanliness: 5,
+      ratingAccuracy: 4,
+      ratingCheckin: 5,
+      ratingCommunication: 5,
+      ratingLocation: 4,
+      reviewComment: `정말 멋진 숙소였습니다! (테스트 후기 ${i + 1})`,
+      comment: null,
+    }),
+  );
 
   try {
     // client.ts의 인터셉터가 response.data를 반환하므로, payload 자체가 배열임
-    const reviews = await client.get(
-      `/api/review/accommodation/${safeAccId}`
-    ) as HostelReviewDTO[];
+    const reviews = await client.get<HostelReviewDTO[], HostelReviewDTO[]>(
+      `/api/review/accommodation/${safeAccId}`,
+    );
 
     if (Array.isArray(reviews)) {
       reviewsToUse = reviews;
@@ -110,7 +194,8 @@ export async function fetchAccommodationReviews(
       author: {
         userId: 0,
         nickName: r.userNickName || `게스트 ${r.id}`,
-        profileImageUrl: r.userProfileImageUrl || `https://i.pravatar.cc/150?u=${r.id}`,
+        profileImageUrl:
+          r.userProfileImageUrl || `https://i.pravatar.cc/150?u=${r.id}`,
       },
       rating: Number(r.ratingOverall),
       content: r.reviewComment,
