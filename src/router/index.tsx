@@ -15,6 +15,8 @@ import ReviewsPage from '../pages/profile/reviews/ReviewsPage';
 import PaymentPage from '../pages/payment/PaymentPage';
 import PaymentSuccessPage from '../pages/payment/PaymentSuccessPage';
 import PaymentFailPage from '../pages/payment/PaymentFailPage';
+import WishlistPage from '../pages/wishlist/WishlistPage';
+import WishlistDetailPage from '../pages/wishlist/WishlistDetailPage';
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +31,8 @@ export const router = createBrowserRouter([
       { path: 'payment/success', element: <PaymentSuccessPage /> },
       { path: 'payment/fail', element: <PaymentFailPage /> },
       { path: 'search', element: <SearchPage /> },
+      { path: 'wishlist', element: <WishlistPage /> },
+      { path: 'wishlist/:favoriteId', element: <WishlistDetailPage /> },
       { path: 'messages', element: <MessagePage /> },
       { path: 'account', element: <AccountPage /> },
       { path: 'profile', element: <ProfilePage /> },
