@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import 'react-day-picker/dist/style.css';
-import { ko } from 'date-fns/locale/ko';
+import ko from 'date-fns/locale/ko';
 import { DayPicker, type DateRange, type Matcher } from 'react-day-picker';
 import { format, parse, addDays, startOfDay } from 'date-fns';
 import { useTheme } from 'styled-components';

@@ -405,3 +405,39 @@ export type FavoriteUpdateRequestDTO = {
   description?: string;
   isPrivate?: boolean;
 };
+
+export interface AccommodationSearchRequest {
+  state?: string;
+  city?: string;
+  district?: string;
+  title?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  numberOfBeds?: number;
+  checkInDate?: string;
+  checkOutDate?: string;
+  page?: number;
+  size?: number;
+}
+
+export interface AccommodationInfo {
+  id: number;
+  title: string;
+  description: string;
+  address: string;
+  state?: string;
+  city: string;
+  district?: string;
+  pricePerNight: number;
+  mainImageUrl: string;
+  latitude?: number;
+  longitude?: number;
+  averageRating?: number;
+  reviewCount?: number;
+}
+
+export interface AccommodationSearchResponse {
+  accommodations: AccommodationInfo[];
+  totalElements: number;
+  totalPages: number;
+}
