@@ -95,14 +95,13 @@ const LoginModal = ({ open, onClose, onOpenSignup }: LoginModalProps) => {
       }
     } catch (error: unknown) {
       console.error('Login error:', error);
-      let errorMessage = '서버 오류가 발생했습니다.';
-      if (axios.isAxiosError(error)) {
-        errorMessage =
-          error.response?.data?.message || error.message || errorMessage;
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
+      if (axios.isAxiosError(error) && error.response) {
+        // 서버가 응답을 보냈고, 그 응답이 2xx 범위를 벗어난 경우
+        const errorMessage = error.response.data.message;
+        alert(errorMessage);
+      } else {
+        alert('서버와 통신 중 오류가 발생했습니다.');
       }
-      alert(errorMessage);
     }
   };
 
