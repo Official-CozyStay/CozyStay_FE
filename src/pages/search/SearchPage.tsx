@@ -500,6 +500,24 @@ const SearchPage = () => {
     };
   }, [accommodations]);
 
+  // Handle outside click for location filter
+  useEffect(() => {
+    const handleClickOutsideLocation = (event: MouseEvent) => {
+      if (
+        activeFilter === 'location' &&
+        locationButtonRef.current &&
+        !locationButtonRef.current.contains(event.target as Node)
+      ) {
+        setActiveFilter(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutsideLocation);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideLocation);
+    };
+  }, [activeFilter]);
+
   const handleFilterChange = (key: keyof FilterState, value: unknown) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
