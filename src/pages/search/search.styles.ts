@@ -99,17 +99,18 @@ export const ListCount = styled.p`
 
 export const AccommodationGrid = styled.div`
   display: grid;
-  /* 가변 그리드 설정: 최소 260px를 유지하며 여유 공간에 맞게 열 개수 자동 조절 */
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  /* 6개의 고정된 아이템을 위해 명시적인 3열 그리드 사용 */
+  grid-template-columns: repeat(3, 1fr);
   gap: ${({ theme }) => theme.spacing.xl};
 
-  /* 모바일/테블릿 등 작은 화면에서는 최소 너비를 더 작게 조절하여 공간 최적화 */
+  /* ListSection의 너비가 줄어들면 2열로 변경하여 카드가 너무 작아지는 것을 방지 */
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
 export const AccommodationCard = styled.article<{ $selected?: boolean }>`
+  min-width: 0;
   cursor: pointer;
   transition:
     ${({ theme }) => theme.transition.transform.fast},
@@ -198,6 +199,7 @@ export const CardTitle = styled.h3`
   font-weight: ${({ theme }) => theme.font.weight.medium};
   margin: 0;
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
