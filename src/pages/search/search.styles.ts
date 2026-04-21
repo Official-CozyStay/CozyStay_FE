@@ -7,7 +7,7 @@ export const SearchPageContainer = styled.div`
   min-height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default});
   padding-top: ${({ theme }) =>
     theme.spacing['5xl']}; /* 헤더 높이만큼 패딩 추가 */
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const FilterBar = styled.div`
@@ -16,7 +16,7 @@ export const FilterBar = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
   flex-shrink: 0;
   position: sticky;
   top: ${({ theme }) => theme.spacing['4xl']}; /* 헤더가 작아졌을 때의 높이 */
@@ -77,7 +77,7 @@ export const ListSection = styled.section`
   min-width: ${({ theme }) => theme.size.width.md};
   padding: ${({ theme }) => theme.spacing['20px']}
     ${({ theme }) => theme.spacing.xl};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const ListHeader = styled.div`
@@ -246,8 +246,7 @@ export const MapSection = styled.section`
   );
   padding: 0 ${({ theme }) => theme.spacing['40px']}
     ${({ theme }) => theme.spacing.xl} 0;
-  background: ${({ theme }) =>
-    theme.colors.common.white}; /* 배경색을 흰색으로 설정 */
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const MapContainer = styled.div`
