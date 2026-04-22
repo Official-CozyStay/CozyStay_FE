@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ComponentType } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import IntroSection from './sections/IntroSection';
 import PastTripsSection from './sections/PastTripsSection';
@@ -46,7 +47,29 @@ const menuItems: MenuItem[] = [
 
 const ProfilePage = () => {
   const { user } = useAuth();
-  const [activeMenu, setActiveMenu] = useState<MenuKey>('intro');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') as MenuKey | null;
+
+  const initialTab =
+    tabParam && menuItems.some((item) => item.key === tabParam)
+      ? tabParam
+      : 'intro';
+  const [activeMenu, setActiveMenu] = useState<MenuKey>(initialTab);
+
+  useEffect(() => {
+    if (
+      tabParam &&
+      tabParam !== activeMenu &&
+      menuItems.some((item) => item.key === tabParam)
+    ) {
+      setActiveMenu(tabParam);
+    }
+  }, [tabParam, activeMenu]);
+
+  const handleMenuClick = (key: MenuKey) => {
+    setActiveMenu(key);
+    setSearchParams({ tab: key });
+  };
 
   const userName = user?.nickname || '예은';
   const userInitial = userName.charAt(0);
@@ -89,7 +112,7 @@ const ProfilePage = () => {
               <SidebarMenuItem
                 key={item.key}
                 $active={activeMenu === item.key}
-                onClick={() => setActiveMenu(item.key)}
+                onClick={() => handleMenuClick(item.key)}
               >
                 {renderIcon(item.icon)}
                 <MenuItemText>{item.label}</MenuItemText>

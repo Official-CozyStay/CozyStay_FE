@@ -32,7 +32,7 @@ type ProfileDropdownProps = {
 // 메뉴 텍스트 상수 (향후 i18n 적용 시 쉽게 교체 가능)
 const MENU_LABELS = {
   wishlist: '위시리스트',
-  trips: '여행',
+  trips: '예약',
   messages: '메시지',
   profile: '프로필',
   accountSettings: '계정 관리',
@@ -82,7 +82,7 @@ const ProfileDropdown = ({ onClose, buttonRef }: ProfileDropdownProps) => {
           <Heart />
           {MENU_LABELS.wishlist}
         </DropdownItem>
-        <DropdownItem>
+        <DropdownItem onClick={() => handleNavigate('/profile?tab=trips')}>
           <Home />
           {MENU_LABELS.trips}
         </DropdownItem>
