@@ -125,7 +125,7 @@ export default function PaymentFailPage() {
         <PaymentFailLinkButton to="/">홈으로</PaymentFailLinkButton>
 
         {bookingId && (
-          <PaymentFailLinkButton to={`/bookings/${bookingId}`}>
+          <PaymentFailLinkButton to="/profile?tab=trips">
             예약 상세 보기
           </PaymentFailLinkButton>
         )}

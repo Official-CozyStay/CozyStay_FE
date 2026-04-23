@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import IntroSection from './sections/IntroSection';
 import PastTripsSection from './sections/PastTripsSection';
@@ -18,6 +19,10 @@ import {
 } from './profile.styles';
 
 type MenuKey = 'intro' | 'trips' | 'connections';
+
+const isMenuKey = (value: string | null): value is MenuKey => {
+  return value === 'intro' || value === 'trips' || value === 'connections';
+};
 
 interface MenuItem {
   key: MenuKey;
@@ -46,10 +51,34 @@ const menuItems: MenuItem[] = [
 
 const ProfilePage = () => {
   const { user } = useAuth();
-  const [activeMenu, setActiveMenu] = useState<MenuKey>('intro');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeMenu, setActiveMenu] = useState<MenuKey>(() => {
+    const tab = searchParams.get('tab');
+    return isMenuKey(tab) ? tab : 'intro';
+  });
 
   const userName = user?.nickname || '예은';
   const userInitial = userName.charAt(0);
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    const nextMenu = isMenuKey(tab) ? tab : 'intro';
+
+    setActiveMenu((prev) => (prev === nextMenu ? prev : nextMenu));
+  }, [searchParams]);
+
+  const handleMenuChange = (menuKey: MenuKey) => {
+    setActiveMenu(menuKey);
+
+    const nextParams = new URLSearchParams(searchParams);
+    if (menuKey === 'intro') {
+      nextParams.delete('tab');
+    } else {
+      nextParams.set('tab', menuKey);
+    }
+
+    setSearchParams(nextParams);
+  };
 
   const renderIcon = (iconType: string) => {
     switch (iconType) {
@@ -89,7 +118,7 @@ const ProfilePage = () => {
               <SidebarMenuItem
                 key={item.key}
                 $active={activeMenu === item.key}
-                onClick={() => setActiveMenu(item.key)}
+                onClick={() => handleMenuChange(item.key)}
               >
                 {renderIcon(item.icon)}
                 <MenuItemText>{item.label}</MenuItemText>
