@@ -43,7 +43,7 @@ const ReservationCard = styled.div`
   }
 `;
 
-const ReservationImage = styled.div`
+const ReservationImageFallback = styled.div`
   width: 200px;
   height: 150px;
   border-radius: ${({ theme }) => theme.radius.lg};
@@ -52,6 +52,19 @@ const ReservationImage = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 48px;
+
+  ${media.tablet} {
+    width: 100%;
+    height: 200px;
+  }
+`;
+
+const ReservationThumbnail = styled.img`
+  width: 200px;
+  height: 150px;
+  border-radius: ${({ theme }) => theme.radius.lg};
+  object-fit: cover;
+  background: ${({ theme }) => theme.colors.background.default};
 
   ${media.tablet} {
     width: 100%;
@@ -156,6 +169,21 @@ const SectionTitle = styled.h2`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
+type AccommodationPreview = {
+  title: string;
+  imageUrl: string | null;
+};
+
+const getPrimaryImageUrl = (
+  imageUrls: { imageUrl: string; isPrimary: boolean }[],
+) => {
+  return (
+    imageUrls.find((image) => image.isPrimary)?.imageUrl ??
+    imageUrls[0]?.imageUrl ??
+    null
+  );
+};
+
 const PastTripsSection = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -165,8 +193,8 @@ const PastTripsSection = () => {
   const [hostBookings, setHostBookings] = useState<
     HostBookingListItemResponse[]
   >([]);
-  const [accommodationNames, setAccommodationNames] = useState<
-    Record<number, string>
+  const [accommodationPreviews, setAccommodationPreviews] = useState<
+    Record<number, AccommodationPreview>
   >({});
 
   const [loading, setLoading] = useState(true);
@@ -181,31 +209,46 @@ const PastTripsSection = () => {
     const loadBookings = async () => {
       try {
         setLoading(true);
+        setError(null);
 
-        // 게스트의 내가 예약한 목록 조회
         const gBookings = await fetchUserBookings();
         setGuestBookings(gBookings || []);
 
-        // 내가 예약한 숙소의 이름 정보를 가져오기 위해 숙소 디테일 조회 (ReviewPage 참조)
-        if (gBookings && gBookings.length > 0) {
-          const accIds = [...new Set(gBookings.map((b) => b.accommodationId))];
-          const newNames: Record<number, string> = {};
-          const detailPromises = accIds.map(async (id) => {
-            try {
-              const detail = await fetchAccommodationDetail(String(id));
-              newNames[id] = detail.title;
-            } catch (e) {
-              console.error(`Failed to fetch title for accommodation ${id}`, e);
-            }
-          });
-          await Promise.all(detailPromises);
-          setAccommodationNames(newNames);
-        }
+        const hBookings = isHost ? await fetchHostBookings('CONFIRMED') : [];
+        setHostBookings(hBookings || []);
 
-        // 사용자가 호스트인 경우, 호스트의 예약 목록도 조회
-        if (isHost) {
-          const hBookings = await fetchHostBookings('CONFIRMED');
-          setHostBookings(hBookings || []);
+        const accommodationIds = [
+          ...new Set([
+            ...(gBookings || []).map((booking) => booking.accommodationId),
+            ...(hBookings || []).map((booking) => booking.accommodationId),
+          ]),
+        ];
+
+        if (accommodationIds.length > 0) {
+          const nextPreviews: Record<number, AccommodationPreview> = {};
+
+          await Promise.all(
+            accommodationIds.map(async (accommodationId) => {
+              try {
+                const detail = await fetchAccommodationDetail(
+                  String(accommodationId),
+                );
+                nextPreviews[accommodationId] = {
+                  title: detail.title,
+                  imageUrl: getPrimaryImageUrl(detail.images),
+                };
+              } catch (previewError) {
+                console.error(
+                  `Failed to fetch preview for accommodation ${accommodationId}`,
+                  previewError,
+                );
+              }
+            }),
+          );
+
+          setAccommodationPreviews(nextPreviews);
+        } else {
+          setAccommodationPreviews({});
         }
       } catch (err) {
         console.error('Failed to fetch bookings:', err);
@@ -242,12 +285,34 @@ const PastTripsSection = () => {
 
   const getStatusText = (status: string) => {
     const statusMap: Record<string, string> = {
-      PENDING: '승인 대기중',
+      PENDING: '결제 대기 중',
       CONFIRMED: '예약 확정',
       CANCELLED: '예약 취소',
       COMPLETED: '이용 완료',
     };
     return statusMap[status] || status;
+  };
+
+  const getAccommodationPreview = (accommodationId: number) => {
+    return accommodationPreviews[accommodationId];
+  };
+
+  const renderReservationImage = (
+    accommodationId: number,
+    fallbackTitle: string,
+  ) => {
+    const preview = getAccommodationPreview(accommodationId);
+
+    if (preview?.imageUrl) {
+      return (
+        <ReservationThumbnail
+          src={preview.imageUrl}
+          alt={preview.title || fallbackTitle}
+        />
+      );
+    }
+
+    return <ReservationImageFallback>🏨</ReservationImageFallback>;
   };
 
   if (loading) {
@@ -281,9 +346,9 @@ const PastTripsSection = () => {
         <EmptyState>
           <TripImage>🧳</TripImage>
           <EmptyText>
-            CozyStay에서 첫 예약 내역이 없습니다.
+            CozyStay에서 아직 예약 내역이 없습니다.
             <br />
-            원하는 숙소를 예약하여 멋진 여행을 시작해보세요!
+            마음에 드는 숙소를 예약하고 멋진 여행을 시작해보세요!
           </EmptyText>
           <PrimaryButton onClick={handleBookTrip}>여행 예약하기</PrimaryButton>
         </EmptyState>
@@ -292,79 +357,22 @@ const PastTripsSection = () => {
 
     return (
       <ReservationList>
-        {guestBookings.map((booking) => (
-          <ReservationCard key={`guest-${booking.bookingId}`}>
-            <ReservationImage>🏠</ReservationImage>
-            <ReservationInfo>
-              <ReservationHeader>
-                <AccommodationName>
-                  {accommodationNames[booking.accommodationId] ||
-                    `숙소 ID: ${booking.accommodationId}`}
-                </AccommodationName>
-                <ReservationStatus>
-                  {getStatusText(booking.bookingStatus || 'CONFIRMED')}
-                </ReservationStatus>
-              </ReservationHeader>
-              <ReservationDetails>
-                <DetailText>
-                  일정: {booking.checkInDate} ~ {booking.checkOutDate}
-                </DetailText>
-                <DetailText>인원: 게스트 {booking.numberOfGuests}명</DetailText>
-                <DetailText>
-                  총 결제 금액: {formatPrice(booking.totalPrice)}
-                </DetailText>
-              </ReservationDetails>
+        {guestBookings.map((booking) => {
+          const preview = getAccommodationPreview(booking.accommodationId);
 
-              <ButtonGroup>
-                <ActionButton
-                  onClick={() => handleViewDetails(booking.accommodationId)}
-                >
-                  숙소 상세보기
-                </ActionButton>
-                <ActionButton
-                  $primary
-                  onClick={() => handleInviteFriend(booking.bookingId)}
-                >
-                  친구 초대
-                </ActionButton>
-              </ButtonGroup>
-            </ReservationInfo>
-          </ReservationCard>
-        ))}
-      </ReservationList>
-    );
-  };
-
-  const renderHostBookings = () => {
-    if (!isHost) return null;
-
-    if (hostBookings.length === 0) {
-      return (
-        <>
-          <SectionTitle>호스트 예약 내역</SectionTitle>
-          <EmptyState>
-            <EmptyText>
-              아직 호스트님의 숙소에 예약된 내역이 없습니다.
-            </EmptyText>
-          </EmptyState>
-        </>
-      );
-    }
-
-    return (
-      <>
-        <SectionTitle>호스트 예약 내역</SectionTitle>
-        <ReservationList>
-          {hostBookings.map((booking) => (
-            <ReservationCard key={`host-${booking.bookingId}`}>
-              <ReservationImage>🏠</ReservationImage>
+          return (
+            <ReservationCard key={`guest-${booking.bookingId}`}>
+              {renderReservationImage(
+                booking.accommodationId,
+                preview?.title || `숙소 ${booking.accommodationId}`,
+              )}
               <ReservationInfo>
                 <ReservationHeader>
                   <AccommodationName>
-                    {booking.accommodationTitle}
+                    {preview?.title || `숙소 ID: ${booking.accommodationId}`}
                   </AccommodationName>
                   <ReservationStatus>
-                    {getStatusText(booking.status)}
+                    {getStatusText(booking.bookingStatus || 'CONFIRMED')}
                   </ReservationStatus>
                 </ReservationHeader>
                 <ReservationDetails>
@@ -385,10 +393,80 @@ const PastTripsSection = () => {
                   >
                     숙소 상세보기
                   </ActionButton>
+                  <ActionButton
+                    $primary
+                    onClick={() => handleInviteFriend(booking.bookingId)}
+                  >
+                    친구 초대
+                  </ActionButton>
                 </ButtonGroup>
               </ReservationInfo>
             </ReservationCard>
-          ))}
+          );
+        })}
+      </ReservationList>
+    );
+  };
+
+  const renderHostBookings = () => {
+    if (!isHost) return null;
+
+    if (hostBookings.length === 0) {
+      return (
+        <>
+          <SectionTitle>호스트 예약 내역</SectionTitle>
+          <EmptyState>
+            <EmptyText>아직 호스트 숙소에 대한 예약 내역이 없습니다.</EmptyText>
+          </EmptyState>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <SectionTitle>호스트 예약 내역</SectionTitle>
+        <ReservationList>
+          {hostBookings.map((booking) => {
+            const preview = getAccommodationPreview(booking.accommodationId);
+
+            return (
+              <ReservationCard key={`host-${booking.bookingId}`}>
+                {renderReservationImage(
+                  booking.accommodationId,
+                  preview?.title || booking.accommodationTitle,
+                )}
+                <ReservationInfo>
+                  <ReservationHeader>
+                    <AccommodationName>
+                      {preview?.title || booking.accommodationTitle}
+                    </AccommodationName>
+                    <ReservationStatus>
+                      {getStatusText(booking.status)}
+                    </ReservationStatus>
+                  </ReservationHeader>
+                  <ReservationDetails>
+                    <DetailText>
+                      일정: {booking.checkInDate} ~ {booking.checkOutDate}
+                    </DetailText>
+                    <DetailText>
+                      인원: 게스트 {booking.numberOfGuests}명
+                    </DetailText>
+                    <DetailText>
+                      총 결제 금액: {formatPrice(booking.totalPrice)}
+                    </DetailText>
+                  </ReservationDetails>
+
+                  <ButtonGroup>
+                    <ActionButton
+                      onClick={() => handleViewDetails(booking.accommodationId)}
+                    >
+                      숙소 상세보기
+                    </ActionButton>
+                  </ButtonGroup>
+                </ReservationInfo>
+              </ReservationCard>
+            );
+          })}
         </ReservationList>
       </>
     );
@@ -398,7 +476,7 @@ const PastTripsSection = () => {
     <>
       <ContentTitle>예약</ContentTitle>
 
-      <SectionTitle>내가 예약한 리스트</SectionTitle>
+      <SectionTitle>내 예약 리스트</SectionTitle>
       {renderGuestBookings()}
 
       {renderHostBookings()}
