@@ -183,7 +183,7 @@ const PastTripsSection = () => {
         setLoading(true);
 
         // 게스트의 내가 예약한 목록 조회
-        const gBookings = await fetchUserBookings('CONFIRMED');
+        const gBookings = await fetchUserBookings();
         setGuestBookings(gBookings || []);
 
         // 내가 예약한 숙소의 이름 정보를 가져오기 위해 숙소 디테일 조회 (ReviewPage 참조)
