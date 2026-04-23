@@ -1,6 +1,17 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchAccommodationDetail } from '@/api/accommodation';
+import {
+  fetchHostBookings,
+  fetchUserBookings,
+  type BookingResponse,
+  type HostBookingListItemResponse,
+} from '@/api/booking';
+import { getPaymentByBooking, type PaymentResponse } from '@/api/payment';
+import InviteFriendModal from '@/components/InviteFriendModal';
+import { useAuth } from '@/contexts/AuthContext';
 import { media } from '@/styles/media';
 import {
   ContentTitle,
@@ -8,15 +19,6 @@ import {
   EmptyText,
   PrimaryButton,
 } from '../profile.styles';
-import {
-  fetchHostBookings,
-  fetchUserBookings,
-  type HostBookingListItemResponse,
-  type BookingResponse,
-} from '@/api/booking';
-import { fetchAccommodationDetail } from '@/api/accommodation';
-import InviteFriendModal from '@/components/InviteFriendModal';
-import { useAuth } from '@/contexts/AuthContext';
 
 const ReservationList = styled.div`
   display: flex;
@@ -97,6 +99,16 @@ const AccommodationName = styled.h3`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
+const StatusGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.xs};
+
+  ${media.mobile} {
+    width: 100%;
+  }
+`;
+
 const ReservationStatus = styled.span`
   padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
   background: ${({ theme }) => theme.colors.background.hover};
@@ -119,6 +131,18 @@ const DetailText = styled.p`
   color: ${({ theme }) => theme.colors.text.secondary};
   line-height: 1.3;
   margin: 0;
+`;
+
+const PaymentStatusText = styled.span<{
+  $tone: 'success' | 'pending' | 'error';
+}>`
+  font-size: ${({ theme }) => theme.font.size.xs};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  color: ${({ $tone, theme }) => {
+    if ($tone === 'success') return theme.colors.primary.main;
+    if ($tone === 'error') return theme.colors.status.error;
+    return theme.colors.text.secondary;
+  }};
 `;
 
 const ButtonGroup = styled.div`
@@ -177,6 +201,11 @@ type AccommodationPreview = {
   imageUrl: string | null;
 };
 
+type BookingPaymentInfo = {
+  payment: PaymentResponse | null;
+  hasPayment: boolean;
+};
+
 const getPrimaryImageUrl = (
   imageUrls: { imageUrl: string; isPrimary: boolean }[],
 ) => {
@@ -199,6 +228,9 @@ const PastTripsSection = () => {
   const [accommodationPreviews, setAccommodationPreviews] = useState<
     Record<number, AccommodationPreview>
   >({});
+  const [paymentInfos, setPaymentInfos] = useState<
+    Record<number, BookingPaymentInfo>
+  >({});
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -216,6 +248,42 @@ const PastTripsSection = () => {
 
         const gBookings = await fetchUserBookings();
         setGuestBookings(gBookings || []);
+
+        if ((gBookings || []).length > 0) {
+          const nextPaymentInfos: Record<number, BookingPaymentInfo> = {};
+
+          await Promise.all(
+            gBookings.map(async (booking) => {
+              try {
+                const payment = await getPaymentByBooking(booking.bookingId);
+                nextPaymentInfos[booking.bookingId] = {
+                  payment,
+                  hasPayment: true,
+                };
+              } catch (paymentError) {
+                if (
+                  axios.isAxiosError(paymentError) &&
+                  paymentError.response?.status === 404
+                ) {
+                  nextPaymentInfos[booking.bookingId] = {
+                    payment: null,
+                    hasPayment: false,
+                  };
+                  return;
+                }
+
+                console.error(
+                  `Failed to fetch payment for booking ${booking.bookingId}`,
+                  paymentError,
+                );
+              }
+            }),
+          );
+
+          setPaymentInfos(nextPaymentInfos);
+        } else {
+          setPaymentInfos({});
+        }
 
         const hBookings = isHost ? await fetchHostBookings('CONFIRMED') : [];
         setHostBookings(hBookings || []);
@@ -279,6 +347,16 @@ const PastTripsSection = () => {
     navigate('/');
   };
 
+  const handleRetryPayment = (booking: BookingResponse) => {
+    const params = new URLSearchParams();
+    params.set('bookingId', String(booking.bookingId));
+    params.set('checkin', booking.checkInDate);
+    params.set('checkout', booking.checkOutDate);
+    params.set('numberOfGuests', String(booking.numberOfGuests));
+
+    navigate(`/payment/retry/${booking.accommodationId}?${params.toString()}`);
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('ko-KR', {
       style: 'currency',
@@ -286,14 +364,59 @@ const PastTripsSection = () => {
     }).format(price);
   };
 
-  const getStatusText = (status: string) => {
+  const getBookingStatusText = (status: string) => {
     const statusMap: Record<string, string> = {
-      PENDING: '결제 대기 중',
+      PENDING: '예약 대기 중',
       CONFIRMED: '예약 확정',
-      CANCELLED: '예약 취소',
+      REJECTED: '예약 거절됨',
+      CANCELLED: '예약 취소됨',
       COMPLETED: '이용 완료',
     };
     return statusMap[status] || status;
+  };
+
+  const getPaymentStatusText = (bookingId: number) => {
+    const paymentInfo = paymentInfos[bookingId];
+
+    if (!paymentInfo || !paymentInfo.hasPayment || !paymentInfo.payment) {
+      return {
+        text: '결제 정보 없음',
+        tone: 'pending' as const,
+      };
+    }
+
+    const paymentStatusMap: Record<
+      string,
+      { text: string; tone: 'success' | 'pending' | 'error' }
+    > = {
+      READY: { text: '결제 대기', tone: 'pending' },
+      SUCCESS: { text: '결제 완료', tone: 'success' },
+      FAILED: { text: '결제 실패', tone: 'error' },
+      CANCELLED: { text: '결제 취소', tone: 'error' },
+    };
+
+    return (
+      paymentStatusMap[paymentInfo.payment.paymentStatus] ?? {
+        text: paymentInfo.payment.paymentStatus,
+        tone: 'pending',
+      }
+    );
+  };
+
+  const canRetryPayment = (booking: BookingResponse) => {
+    if (booking.bookingStatus === 'CANCELLED') {
+      return false;
+    }
+
+    const paymentInfo = paymentInfos[booking.bookingId];
+
+    if (!paymentInfo || !paymentInfo.hasPayment || !paymentInfo.payment) {
+      return true;
+    }
+
+    return ['READY', 'FAILED', 'CANCELLED'].includes(
+      paymentInfo.payment.paymentStatus,
+    );
   };
 
   const getAccommodationPreview = (accommodationId: number) => {
@@ -362,6 +485,7 @@ const PastTripsSection = () => {
       <ReservationList>
         {guestBookings.map((booking) => {
           const preview = getAccommodationPreview(booking.accommodationId);
+          const paymentStatus = getPaymentStatusText(booking.bookingId);
 
           return (
             <ReservationCard key={`guest-${booking.bookingId}`}>
@@ -374,9 +498,13 @@ const PastTripsSection = () => {
                   <AccommodationName>
                     {preview?.title || `숙소 ID: ${booking.accommodationId}`}
                   </AccommodationName>
-                  <ReservationStatus>
-                    {getStatusText(booking.bookingStatus || 'CONFIRMED')}
-                  </ReservationStatus>
+                  <StatusGroup>
+                    <ReservationStatus>
+                      {getBookingStatusText(
+                        booking.bookingStatus || 'CONFIRMED',
+                      )}
+                    </ReservationStatus>
+                  </StatusGroup>
                 </ReservationHeader>
                 <ReservationDetails>
                   <DetailText>
@@ -384,6 +512,12 @@ const PastTripsSection = () => {
                   </DetailText>
                   <DetailText>
                     인원: 게스트 {booking.numberOfGuests}명
+                  </DetailText>
+                  <DetailText>
+                    결제 상태:{' '}
+                    <PaymentStatusText $tone={paymentStatus.tone}>
+                      {paymentStatus.text}
+                    </PaymentStatusText>
                   </DetailText>
                   <DetailText>
                     총 결제 금액: {formatPrice(booking.totalPrice)}
@@ -396,6 +530,11 @@ const PastTripsSection = () => {
                   >
                     숙소 상세보기
                   </ActionButton>
+                  {canRetryPayment(booking) && (
+                    <ActionButton onClick={() => handleRetryPayment(booking)}>
+                      재결제하기
+                    </ActionButton>
+                  )}
                   <ActionButton
                     $primary
                     onClick={() => handleInviteFriend(booking.bookingId)}
@@ -443,9 +582,11 @@ const PastTripsSection = () => {
                     <AccommodationName>
                       {preview?.title || booking.accommodationTitle}
                     </AccommodationName>
-                    <ReservationStatus>
-                      {getStatusText(booking.status)}
-                    </ReservationStatus>
+                    <StatusGroup>
+                      <ReservationStatus>
+                        {getBookingStatusText(booking.status)}
+                      </ReservationStatus>
+                    </StatusGroup>
                   </ReservationHeader>
                   <ReservationDetails>
                     <DetailText>

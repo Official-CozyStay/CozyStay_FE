@@ -55,3 +55,11 @@ export async function failPayment(paymentId: number): Promise<PaymentResponse> {
     `/api/payments/${paymentId}/fail`,
   );
 }
+
+export async function getPaymentByBooking(
+  bookingId: number,
+): Promise<PaymentResponse> {
+  return client.get<PaymentResponse, PaymentResponse>(
+    `/api/bookings/${bookingId}/payment`,
+  );
+}
