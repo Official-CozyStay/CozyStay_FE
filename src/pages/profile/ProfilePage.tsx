@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import IntroSection from './sections/IntroSection';
 import PastTripsSection from './sections/PastTripsSection';
@@ -46,10 +47,22 @@ const menuItems: MenuItem[] = [
 
 const ProfilePage = () => {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [activeMenu, setActiveMenu] = useState<MenuKey>('intro');
 
   const userName = user?.nickname || '예은';
   const userInitial = userName.charAt(0);
+
+  useEffect(() => {
+    const menuParam = searchParams.get('menu');
+    if (
+      menuParam === 'intro' ||
+      menuParam === 'trips' ||
+      menuParam === 'connections'
+    ) {
+      setActiveMenu(menuParam);
+    }
+  }, [searchParams]);
 
   const renderIcon = (iconType: string) => {
     switch (iconType) {

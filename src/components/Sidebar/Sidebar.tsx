@@ -40,7 +40,7 @@ const Sidebar = ({ isOpen, onClose, isScrolled = false }: SidebarProps) => {
 
   const menuItems = [
     { icon: Heart, text: '위시리스트', path: '/wishlist' },
-    { icon: Plane, text: '여행', path: undefined },
+    { icon: Plane, text: '예약', path: '/profile?menu=trips' },
     { icon: MessageSquare, text: '메시지', path: '/messages' },
     { icon: User, text: '프로필', path: '/profile' },
     { icon: Settings, text: '계정 관리', path: '/account' },
