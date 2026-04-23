@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import 'react-day-picker/dist/style.css';
+import { useEffect, useRef, useState } from 'react';
+import { format, differenceInCalendarDays } from 'date-fns';
+import { DayPicker, type DateRange } from 'react-day-picker';
 import ko from 'date-fns/locale/ko';
-import { DayPicker, type DateRange, type Matcher } from 'react-day-picker';
-import { format, parse, addDays, startOfDay } from 'date-fns';
-import { useTheme } from 'styled-components';
+import { X } from 'lucide-react';
+import 'react-day-picker/dist/style.css';
 
+import { useDateRangePicker } from '../date-range/useDateRangePicker';
 import * as S from './BookingDatePicker.styles';
 
 type Props = {
@@ -15,125 +15,160 @@ type Props = {
   minDate?: Date;
 };
 
-const FMT = 'yyyy-MM-dd';
-const toDate = (s?: string) => (s ? parse(s, FMT, new Date()) : undefined);
-const toStr = (d?: Date) => (d ? format(d, FMT) : undefined);
-
 export default function BookingDatePicker({
   checkIn,
   checkOut,
   onChange,
   minDate,
 }: Props) {
-  const theme = useTheme();
-  const today = useMemo(() => startOfDay(new Date()), []);
-  const minStart = useMemo(
-    () => startOfDay(minDate ?? today),
-    [minDate, today],
-  );
-
   const [open, setOpen] = useState(false);
-  const [buttonRect, setButtonRect] = useState<DOMRect | null>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const [range, setRange] = useState<DateRange | undefined>(() => {
-    const from = toDate(checkIn);
-    const to = toDate(checkOut);
-    return from || to ? { from, to } : undefined;
-  });
+  const { range, disabledMatchers, minStart, handleSelect, reset } =
+    useDateRangePicker({
+      checkIn,
+      checkOut,
+      minDate,
+      onChange,
+      onComplete: () => setOpen(false),
+    });
 
-  useEffect(() => {
-    const from = toDate(checkIn);
-    const to = toDate(checkOut);
-    setRange(from || to ? { from, to } : undefined);
-  }, [checkIn, checkOut]);
+  // 체크인 선택 중 vs 체크아웃 선택 중
+  const isPickingEnd = !!(range?.from && !range?.to);
 
-  // 스크롤 시 위치 업데이트
-  useEffect(() => {
-    if (!open || !buttonRef.current) return;
-
-    function updatePosition() {
-      if (buttonRef.current) {
-        setButtonRect(buttonRef.current.getBoundingClientRect());
-      }
-    }
-
-    updatePosition();
-    window.addEventListener('scroll', updatePosition, true);
-    window.addEventListener('resize', updatePosition);
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true);
-      window.removeEventListener('resize', updatePosition);
-    };
-  }, [open]);
-
-  // ESC 키만 처리
   useEffect(() => {
     if (!open) return;
+    function handleOutside(e: MouseEvent) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
     function handleEscape(e: KeyboardEvent) {
       if (e.key === 'Escape') setOpen(false);
     }
-
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, [open]);
 
-  const label =
+  // 체크인 박스 클릭: 초기화 후 체크인부터 다시 선택
+  const handleCheckInClick = () => {
+    reset();
+    setOpen(true);
+  };
+
+  // 체크아웃 박스 클릭: 체크인이 있으면 체크아웃만 재선택, 없으면 처음부터
+  const handleCheckOutClick = () => {
+    if (range?.from) {
+      handleSelect({ from: range.from, to: undefined } as DateRange);
+    } else {
+      reset();
+    }
+    setOpen(true);
+  };
+
+  const handleClearFrom = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    reset();
+    setOpen(false);
+  };
+
+  const handleClearTo = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // range.to가 있을 때만 버튼이 렌더링되므로 range.from도 반드시 존재
+    handleSelect({ from: range!.from, to: undefined } as DateRange);
+    setOpen(true);
+  };
+
+  const nights =
     range?.from && range?.to
-      ? `${format(range.from, 'MM.dd')} - ${format(range.to, 'MM.dd')}`
-      : range?.from
-        ? `${format(range.from, 'MM.dd')} - 체크아웃`
-        : '날짜 선택';
+      ? differenceInCalendarDays(range.to, range.from)
+      : 0;
 
-  const handleSelect = (newRange: DateRange | undefined) => {
-    setRange(newRange);
-    onChange(toStr(newRange?.from), toStr(newRange?.to));
+  const fmt = (d: Date) => format(d, 'yyyy. M. d.');
 
-    if (newRange?.from && newRange?.to) {
-      const isSameDay = newRange.from.getTime() === newRange.to.getTime();
-      if (!isSameDay) setTimeout(() => setOpen(false), 200);
-    }
-  };
+  return (
+    <S.Wrapper ref={wrapperRef}>
+      {/* 닫힌 상태: 컴팩트 트리거 — Wrapper 높이 기준 */}
+      <S.CompactRow>
+        <S.CompactBox type="button" onClick={handleCheckInClick}>
+          <S.DateFieldLabel>체크인</S.DateFieldLabel>
+          <S.DateFieldValue $placeholder={!range?.from}>
+            {range?.from ? fmt(range.from) : '날짜 선택'}
+          </S.DateFieldValue>
+        </S.CompactBox>
+        <S.CompactBox type="button" onClick={handleCheckOutClick}>
+          <S.DateFieldLabel>체크아웃</S.DateFieldLabel>
+          <S.DateFieldValue $placeholder={!range?.to}>
+            {range?.to ? fmt(range.to) : '날짜 선택'}
+          </S.DateFieldValue>
+        </S.CompactBox>
+      </S.CompactRow>
 
-  const toggleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!open) {
-      setRange(undefined);
-      onChange(undefined, undefined);
-    }
+      {/* 열린 상태: top:0으로 CompactRow를 덮으며 통합 패널 펼침 */}
+      <S.Panel $open={open}>
+        <S.PanelHeader>
+          {nights > 0 && range?.from && range?.to && (
+            <S.NightSummary>
+              <S.NightCount>{nights}박</S.NightCount>
+              <S.NightRange>
+                {format(range.from, 'yyyy년 M월 d일')} -{' '}
+                {format(range.to, 'yyyy년 M월 d일')}
+              </S.NightRange>
+            </S.NightSummary>
+          )}
 
-    setButtonRect(e.currentTarget.getBoundingClientRect());
-    setOpen((v) => !v);
-  };
+          <S.InputsGroup>
+            <S.InputBox
+              type="button"
+              $active={!isPickingEnd}
+              onClick={handleCheckInClick}
+            >
+              <S.DateFieldLabel>체크인</S.DateFieldLabel>
+              <S.InputValue $placeholder={!range?.from}>
+                {range?.from ? fmt(range.from) : '날짜 추가'}
+              </S.InputValue>
+              {range?.from && (
+                <S.ClearIconButton
+                  type="button"
+                  onClick={handleClearFrom}
+                  aria-label="체크인 날짜 지우기"
+                >
+                  <X size={10} />
+                </S.ClearIconButton>
+              )}
+            </S.InputBox>
 
-  const isPickingEnd = !!(range?.from && !range?.to);
+            <S.InputBox
+              type="button"
+              $active={isPickingEnd}
+              onClick={handleCheckOutClick}
+            >
+              <S.DateFieldLabel>체크아웃</S.DateFieldLabel>
+              <S.InputValue $placeholder={!range?.to}>
+                {range?.to ? fmt(range.to) : '날짜 추가'}
+              </S.InputValue>
+              {range?.to && (
+                <S.ClearIconButton
+                  type="button"
+                  onClick={handleClearTo}
+                  aria-label="체크아웃 날짜 지우기"
+                >
+                  <X size={10} />
+                </S.ClearIconButton>
+              )}
+            </S.InputBox>
+          </S.InputsGroup>
+        </S.PanelHeader>
 
-  const disabledMatchers: Matcher[] = useMemo(() => {
-    const base: Matcher[] = [{ before: minStart }];
-
-    if (isPickingEnd && range?.from) {
-      const checkInDay = startOfDay(range.from);
-      base.push({ before: addDays(checkInDay, 1) });
-    }
-
-    return base;
-  }, [isPickingEnd, range?.from, minStart]);
-
-  const popover =
-    open &&
-    buttonRect &&
-    createPortal(
-      <S.PopoverContainer
-        style={{
-          top:
-            buttonRect.top +
-            buttonRect.height +
-            Number(theme.spacing.sm.replace('px', '')) +
-            window.scrollY,
-          left: buttonRect.left + window.scrollX,
-        }}
-      >
         <DayPicker
           mode="range"
           numberOfMonths={2}
@@ -143,22 +178,26 @@ export default function BookingDatePicker({
           fromDate={minStart}
           disabled={disabledMatchers}
           pagedNavigation
-          styles={S.dayPickerStyles}
+          styles={S.calendarStyles}
         />
-      </S.PopoverContainer>,
-      document.body,
-    );
 
-  return (
-    <>
-      <S.Wrapper>
-        <S.TriggerButton ref={buttonRef} type="button" onClick={toggleOpen}>
-          <S.TriggerLabel>날짜</S.TriggerLabel>
-          <S.TriggerValue>{label}</S.TriggerValue>
-        </S.TriggerButton>
-      </S.Wrapper>
-
-      {popover}
-    </>
+        <S.FooterBar>
+          <S.FooterActions>
+            <S.ClearDatesButton
+              type="button"
+              onClick={() => {
+                reset();
+                setOpen(true);
+              }}
+            >
+              날짜 지우기
+            </S.ClearDatesButton>
+            <S.CloseButton type="button" onClick={() => setOpen(false)}>
+              닫기
+            </S.CloseButton>
+          </S.FooterActions>
+        </S.FooterBar>
+      </S.Panel>
+    </S.Wrapper>
   );
 }

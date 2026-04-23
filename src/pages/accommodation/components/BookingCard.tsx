@@ -63,7 +63,6 @@ export default function BookingCard({
 
         <S.FormSection>
           <S.InputGroup>
-            <S.Label>날짜</S.Label>
             <BookingDatePicker
               checkIn={checkIn ?? undefined}
               checkOut={checkOut ?? undefined}
