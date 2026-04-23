@@ -59,9 +59,7 @@ export default function AccommodationDetailPage() {
       });
     fetchAccommodationReviews(id)
       .then(setReviews)
-      .catch((err) => {
-        console.error('리뷰 로딩 실패:', err);
-      });
+      .catch(() => {});
   }, [id, load]);
 
   /* 
