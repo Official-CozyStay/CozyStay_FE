@@ -76,13 +76,14 @@ const ReservationInfo = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const ReservationHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: 4px;
 
   ${media.mobile} {
     flex-direction: column;
@@ -91,7 +92,7 @@ const ReservationHeader = styled.div`
 `;
 
 const AccommodationName = styled.h3`
-  font-size: ${({ theme }) => theme.font.size.xl};
+  font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
@@ -101,7 +102,7 @@ const ReservationStatus = styled.span`
   background: ${({ theme }) => theme.colors.background.hover};
   color: ${({ theme }) => theme.colors.primary.main};
   border-radius: ${({ theme }) => theme.radius.full};
-  font-size: ${({ theme }) => theme.font.size.sm};
+  font-size: 11px;
   font-weight: ${({ theme }) => theme.font.weight.bold};
   white-space: nowrap;
 `;
@@ -109,19 +110,21 @@ const ReservationStatus = styled.span`
 const ReservationDetails = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  gap: 8px;
+  margin-bottom: 6px;
 `;
 
 const DetailText = styled.p`
-  font-size: ${({ theme }) => theme.font.size.md};
+  font-size: ${({ theme }) => theme.font.size.xs};
   color: ${({ theme }) => theme.colors.text.secondary};
+  line-height: 1.3;
+  margin: 0;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-top: auto;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-top: ${({ theme }) => theme.spacing.sm};
 
   ${media.tablet} {
     flex-direction: column;
@@ -130,7 +133,7 @@ const ButtonGroup = styled.div`
 
 const ActionButton = styled.button<{ $primary?: boolean }>`
   flex: 1;
-  padding: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
   border: 1px solid
     ${({ $primary, theme }) =>
       $primary ? theme.colors.primary.main : theme.colors.border.primary};
@@ -139,7 +142,7 @@ const ActionButton = styled.button<{ $primary?: boolean }>`
     $primary ? theme.colors.primary.main : theme.colors.common.white};
   color: ${({ $primary, theme }) =>
     $primary ? theme.colors.common.white : theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.font.size.md};
+  font-size: ${({ theme }) => theme.font.size.xs};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   cursor: pointer;
   transition: ${({ theme }) => theme.transition.normal};
