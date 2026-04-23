@@ -1,5 +1,17 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { format, startOfDay } from 'date-fns';
+import { Search, Minus, Plus } from 'lucide-react';
+
+import { useDateRangePicker } from '../date-range/useDateRangePicker';
+import DateRangePopover from '../date-range/DateRangePopover';
+import RegionPopup from './RegionPopup';
 import {
   SearchBarContainer,
   SearchField,
@@ -17,10 +29,6 @@ import {
   CounterButton,
   CounterValue,
 } from './SearchBar.styles';
-import { Search, Minus, Plus } from 'lucide-react';
-import { format } from 'date-fns';
-import RegionPopup from './RegionPopup';
-import DatePopup from './DatePopup';
 
 interface SearchBarProps {
   isCompact?: boolean;
@@ -74,15 +82,12 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
   const [showGuestPopup, setShowGuestPopup] = useState(false);
   const [showRegionPopup, setShowRegionPopup] = useState(false);
   const [showDatePopup, setShowDatePopup] = useState(false);
+  const [dateFieldRect, setDateFieldRect] = useState<DOMRect | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<{
     province: string;
     city: string;
     district?: string;
-  } | null>(null);
-  const [dateRange, setDateRange] = useState<{
-    startDate: Date;
-    endDate: Date;
   } | null>(null);
   const [guests, setGuests] = useState({
     adults: 0,
@@ -90,33 +95,31 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
     infants: 0,
     pets: 0,
   });
-  const guestFieldRef = useRef<HTMLDivElement>(null);
-  const dateFieldRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
-  const datePopupRef = useRef<HTMLDivElement>(null);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dateFieldRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const regionPopupRef = useRef<HTMLDivElement>(null);
+
+  const today = useMemo(() => startOfDay(new Date()), []);
+  const { range, disabledMatchers, minStart, handleSelect, reset } =
+    useDateRangePicker({
+      minDate: today,
+      onComplete: () => setShowDatePopup(false),
+    });
+
+  // 여행자 팝업: 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-
       if (
         popupRef.current &&
-        !popupRef.current.contains(target) &&
-        !guestFieldRef.current?.contains(target)
+        !popupRef.current.contains(event.target as Node)
       ) {
         setShowGuestPopup(false);
       }
-      if (
-        datePopupRef.current &&
-        !datePopupRef.current.contains(target) &&
-        !dateFieldRef.current?.contains(target)
-      ) {
-        setShowDatePopup(false);
-      }
     };
 
-    if (showGuestPopup || showDatePopup) {
+    if (showGuestPopup) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -125,10 +128,21 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showGuestPopup, showDatePopup]);
+  }, [showGuestPopup]);
 
-  // Click outside for RegionPopup
-  const regionPopupRef = useRef<HTMLDivElement>(null);
+  // 날짜 팝업: ESC로 닫기 (portal 렌더링)
+  useEffect(() => {
+    if (!showDatePopup) return;
+
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === 'Escape') setShowDatePopup(false);
+    }
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [showDatePopup]);
+
+  // 지역 팝업: 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -138,10 +152,16 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
         setShowRegionPopup(false);
       }
     };
-    if (showRegionPopup)
+
+    if (showRegionPopup) {
       document.addEventListener('mousedown', handleClickOutside);
-    else document.removeEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [showRegionPopup]);
 
   const updateGuest = useCallback((type: GuestType, delta: number) => {
@@ -153,6 +173,30 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
 
   const totalGuests =
     guests.adults + guests.children + guests.infants + guests.pets;
+
+  const dateLabel = range?.from
+    ? range.to
+      ? `${format(range.from, 'M월 d일')} - ${format(range.to, 'M월 d일')}`
+      : `${format(range.from, 'M월 d일')} ~`
+    : '날짜 추가';
+
+  const compactDateLabel =
+    range?.from && range?.to
+      ? `${format(range.from, 'M.d')}-${format(range.to, 'M.d')}`
+      : '언제든지';
+
+  const handleDateFieldClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isCompact) return;
+
+    if (!showDatePopup && range?.from && range?.to) {
+      reset();
+    }
+
+    setDateFieldRect(e.currentTarget.getBoundingClientRect());
+    setShowDatePopup((prev) => !prev);
+    setShowRegionPopup(false);
+    setShowGuestPopup(false);
+  };
 
   return (
     <SearchBarContainer $isCompact={isCompact}>
@@ -215,7 +259,10 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
             onSelect={(province, city, district) => {
               setSelectedLocation({ province, city, district });
               setShowRegionPopup(false);
-              setShowDatePopup(true); // Automatically open date picker after region selection
+              if (dateFieldRef.current) {
+                setDateFieldRect(dateFieldRef.current.getBoundingClientRect());
+              }
+              setShowDatePopup(true);
             }}
           />
         )}
@@ -225,49 +272,20 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
 
       <SearchField
         ref={dateFieldRef}
-        onClick={() => {
-          setShowDatePopup(!showDatePopup);
-          setShowRegionPopup(false);
-          setShowGuestPopup(false);
-        }}
+        onClick={handleDateFieldClick}
         $hasPopup={showDatePopup}
         $isCompact={isCompact}
       >
         {!isCompact && <SearchFieldLabel>날짜</SearchFieldLabel>}
         <SearchFieldContent>
-          {!isCompact && (
-            <span>
-              {dateRange
-                ? `${format(dateRange.startDate, 'M월 d일')} - ${format(dateRange.endDate, 'M월 d일')}`
-                : '날짜 추가'}
-            </span>
-          )}
-          {isCompact && (
-            <span>
-              {dateRange
-                ? `${format(dateRange.startDate, 'M.d')}-${format(dateRange.endDate, 'M.d')}`
-                : '언제든지'}
-            </span>
-          )}
+          {!isCompact && <span>{dateLabel}</span>}
+          {isCompact && <span>{compactDateLabel}</span>}
         </SearchFieldContent>
-        {showDatePopup && (
-          <DatePopup
-            ref={datePopupRef}
-            startDate={dateRange?.startDate}
-            endDate={dateRange?.endDate}
-            onChange={(startDate, endDate) => {
-              setDateRange({ startDate, endDate });
-              setShowDatePopup(false);
-              setShowGuestPopup(true); // Automatically open guest popup after date selection
-            }}
-          />
-        )}
       </SearchField>
 
       <SearchDivider $isCompact={isCompact} />
 
       <SearchField
-        ref={guestFieldRef}
         onClick={() => {
           setShowGuestPopup(!showGuestPopup);
           setShowRegionPopup(false);
@@ -321,6 +339,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
         $isCompact={isCompact}
         onClick={() => {
           const params = new URLSearchParams();
+
           if (searchQuery.trim()) {
             params.append('title', searchQuery.trim());
           }
@@ -336,22 +355,16 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
           ) {
             params.append('district', selectedLocation.district);
           }
-          if (dateRange?.startDate) {
-            params.append(
-              'checkInDate',
-              format(dateRange.startDate, 'yyyy-MM-dd'),
-            );
+          if (range?.from) {
+            params.append('checkInDate', format(range.from, 'yyyy-MM-dd'));
           }
-          if (dateRange?.endDate) {
-            params.append(
-              'checkOutDate',
-              format(dateRange.endDate, 'yyyy-MM-dd'),
-            );
+          if (range?.to) {
+            params.append('checkOutDate', format(range.to, 'yyyy-MM-dd'));
           }
 
-          const totalGuests = guests.adults + guests.children;
-          if (totalGuests > 0) {
-            params.append('numberOfBeds', totalGuests.toString());
+          const bookingGuests = guests.adults + guests.children;
+          if (bookingGuests > 0) {
+            params.append('numberOfBeds', bookingGuests.toString());
           }
 
           navigate(`/search?${params.toString()}`);
@@ -360,6 +373,15 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
         <Search size={18} />
         {!isCompact && <span>검색</span>}
       </SearchButton>
+
+      <DateRangePopover
+        open={showDatePopup && !isCompact}
+        anchorRect={dateFieldRect}
+        range={range}
+        disabledMatchers={disabledMatchers}
+        minDate={minStart}
+        onSelect={handleSelect}
+      />
     </SearchBarContainer>
   );
 };

@@ -135,36 +135,6 @@ export const SearchButton = styled.button<{ $isCompact?: boolean }>`
   }
 `;
 
-// ── 날짜 팝업 ──────────────────────────────────────────────
-
-export const DatePopup = styled.div`
-  position: absolute;
-  top: calc(100% + ${({ theme }) => theme.spacing.md});
-  left: 50%;
-  transform: translateX(-50%);
-  background: ${({ theme }) => theme.colors.common.white};
-  border-radius: ${({ theme }) => theme.radius.lg};
-  box-shadow: ${({ theme }) => theme.shadow.lg};
-  padding: ${({ theme }) => theme.spacing.lg};
-  z-index: ${({ theme }) => theme.zIndex.searchBar};
-  white-space: normal;
-
-  ${media.mobile} {
-    left: 0;
-    transform: none;
-  }
-`;
-
-export const DayPickerWrapper = styled.div`
-  .rdp-root {
-    --rdp-accent-color: ${({ theme }) => theme.colors.primary.main};
-    --rdp-accent-color-dark: ${({ theme }) => theme.colors.primary.hover};
-    --rdp-background-color: ${({ theme }) => theme.colors.primary.main}20;
-    font-family: inherit;
-    font-size: ${({ theme }) => theme.font.size.sm};
-  }
-`;
-
 // ── 여행자 팝업 ────────────────────────────────────────────
 
 export const GuestPopup = styled.div`
