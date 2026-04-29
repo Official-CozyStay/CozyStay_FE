@@ -95,14 +95,16 @@ const LoginModal = ({ open, onClose, onOpenSignup }: LoginModalProps) => {
       }
     } catch (error: unknown) {
       console.error('Login error:', error);
-      let errorMessage = '서버 오류가 발생했습니다.';
       if (axios.isAxiosError(error)) {
-        errorMessage =
-          error.response?.data?.message || error.message || errorMessage;
+        const errorMessage =
+          error.response?.data?.message ||
+          '서버와 통신 중 오류가 발생했습니다.';
+        alert(errorMessage);
       } else if (error instanceof Error) {
-        errorMessage = error.message;
+        alert(error.message);
+      } else {
+        alert('서버와 통신 중 오류가 발생했습니다.');
       }
-      alert(errorMessage);
     }
   };
 
