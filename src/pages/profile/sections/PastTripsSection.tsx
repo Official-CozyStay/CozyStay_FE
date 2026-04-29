@@ -231,10 +231,8 @@ const PastTripsSection = () => {
   const [paymentInfos, setPaymentInfos] = useState<
     Record<number, BookingPaymentInfo>
   >({});
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(
     null,
@@ -438,7 +436,7 @@ const PastTripsSection = () => {
       );
     }
 
-    return <ReservationImageFallback>🏨</ReservationImageFallback>;
+    return <ReservationImageFallback>🏠</ReservationImageFallback>;
   };
 
   if (loading) {
@@ -470,7 +468,7 @@ const PastTripsSection = () => {
     if (guestBookings.length === 0) {
       return (
         <EmptyState>
-          <TripImage>🧳</TripImage>
+          <TripImage>✈️</TripImage>
           <EmptyText>
             CozyStay에서 아직 예약 내역이 없습니다.
             <br />

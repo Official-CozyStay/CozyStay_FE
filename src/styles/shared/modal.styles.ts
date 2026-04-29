@@ -1,8 +1,6 @@
-// 공통 모달 스타일
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
-// 모달 오버레이
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -17,7 +15,6 @@ export const ModalOverlay = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
 `;
 
-// 모달 컨테이너
 export const ModalContainer = styled.div`
   background: ${({ theme }) => theme.colors.common.white};
   border-radius: ${({ theme }) => theme.radius.lg};
@@ -35,7 +32,6 @@ export const ModalContainer = styled.div`
   }
 `;
 
-// 모달 헤더
 export const ModalHeader = styled.header`
   display: flex;
   align-items: center;
@@ -45,7 +41,6 @@ export const ModalHeader = styled.header`
   flex-shrink: 0;
 `;
 
-// 모달 헤더 (가운데 정렬용)
 export const ModalHeaderCentered = styled.header`
   display: flex;
   align-items: center;
@@ -56,7 +51,6 @@ export const ModalHeaderCentered = styled.header`
   position: relative;
 `;
 
-// 모달 닫기 버튼
 export const ModalCloseButton = styled.button`
   width: 32px;
   height: 32px;
@@ -75,13 +69,11 @@ export const ModalCloseButton = styled.button`
   }
 `;
 
-// 모달 닫기 버튼 (절대 위치)
 export const ModalCloseButtonAbsolute = styled(ModalCloseButton)`
   position: absolute;
   left: ${({ theme }) => theme.spacing.lg};
 `;
 
-// 모달 제목
 export const ModalTitle = styled.h2`
   font-size: ${({ theme }) => theme.font.size.lg};
   font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -89,14 +81,12 @@ export const ModalTitle = styled.h2`
   margin: 0;
 `;
 
-// 모달 본문
 export const ModalBody = styled.div`
   flex: 1;
   overflow-y: auto;
   padding: ${({ theme }) => theme.spacing.xl};
 `;
 
-// 모달 푸터
 export const ModalFooter = styled.footer`
   display: flex;
   align-items: center;
@@ -106,29 +96,25 @@ export const ModalFooter = styled.footer`
   flex-shrink: 0;
 `;
 
-// 모달 푸터 (전체 너비 버튼용)
 export const ModalFooterFullWidth = styled.footer`
   padding: ${({ theme }) => theme.spacing.lg};
   border-top: 1px solid ${({ theme }) => theme.colors.border.light};
   flex-shrink: 0;
 `;
 
-// 모달 설명
 export const ModalDescription = styled.p`
   font-size: ${({ theme }) => theme.font.size.sm};
   color: ${({ theme }) => theme.colors.text.secondary};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-// 선택 카운터
 export const SelectionCounter = styled.span`
   font-size: ${({ theme }) => theme.font.size.sm};
   color: ${({ theme }) => theme.colors.text.secondary};
 `;
 
-// 저장/완료 버튼
 export const SaveButton = styled.button`
-  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing["2xl"]}`};
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing['2xl']}`};
   border: none;
   border-radius: ${({ theme }) => theme.radius.sm};
   background: ${({ theme }) => theme.colors.primary.main};
@@ -148,12 +134,10 @@ export const SaveButton = styled.button`
   }
 `;
 
-// 전체 너비 버튼
 export const FullWidthButton = styled(SaveButton)`
   width: 100%;
 `;
 
-// 검색 입력창
 export const SearchInput = styled.div`
   display: flex;
   align-items: center;
@@ -181,7 +165,6 @@ export const SearchInput = styled.div`
   }
 `;
 
-// 모달 푸터 (오른쪽 정렬)
 export const FooterRight = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -189,7 +172,6 @@ export const FooterRight = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.border.light};
 `;
 
-// 체크박스
 export const Checkbox = styled.div<{ $checked?: boolean }>`
   width: 24px;
   height: 24px;
@@ -210,9 +192,7 @@ export const Checkbox = styled.div<{ $checked?: boolean }>`
   }
 `;
 
-// 리스트 아이템 텍스트
 export const ListItemText = styled.span`
   font-size: ${({ theme }) => theme.font.size.md};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
-
