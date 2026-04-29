@@ -176,6 +176,13 @@ const ActionButton = styled.button<{ $primary?: boolean }>`
     background: ${({ $primary, theme }) =>
       $primary ? theme.colors.primary.hover : theme.colors.background.hover};
   }
+
+  &:disabled {
+    border-color: ${({ theme }) => theme.colors.border.light};
+    background: ${({ theme }) => theme.colors.background.default};
+    color: ${({ theme }) => theme.colors.text.tertiary};
+    cursor: not-allowed;
+  }
 `;
 
 const TripImage = styled.div`
@@ -417,6 +424,10 @@ const PastTripsSection = () => {
     );
   };
 
+  const canInviteFriend = (bookingId: number) => {
+    return paymentInfos[bookingId]?.payment?.paymentStatus === 'SUCCESS';
+  };
+
   const getAccommodationPreview = (accommodationId: number) => {
     return accommodationPreviews[accommodationId];
   };
@@ -484,6 +495,7 @@ const PastTripsSection = () => {
         {guestBookings.map((booking) => {
           const preview = getAccommodationPreview(booking.accommodationId);
           const paymentStatus = getPaymentStatusText(booking.bookingId);
+          const inviteEnabled = canInviteFriend(booking.bookingId);
 
           return (
             <ReservationCard key={`guest-${booking.bookingId}`}>
@@ -536,6 +548,12 @@ const PastTripsSection = () => {
                   <ActionButton
                     $primary
                     onClick={() => handleInviteFriend(booking.bookingId)}
+                    disabled={!inviteEnabled}
+                    title={
+                      inviteEnabled
+                        ? undefined
+                        : '결제가 완료된 예약만 친구를 초대할 수 있습니다.'
+                    }
                   >
                     친구 초대
                   </ActionButton>
