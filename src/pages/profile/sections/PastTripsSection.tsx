@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchAccommodationDetail } from '@/api/accommodation';
@@ -245,10 +245,12 @@ const PastTripsSection = () => {
     null,
   );
 
-  useEffect(() => {
-    const loadBookings = async () => {
+  const loadBookings = useCallback(
+    async (showLoading = false) => {
       try {
-        setLoading(true);
+        if (showLoading) {
+          setLoading(true);
+        }
         setError(null);
 
         const gBookings = await fetchUserBookings();
@@ -330,14 +332,29 @@ const PastTripsSection = () => {
         console.error('Failed to fetch bookings:', err);
         setError('예약 목록을 불러오는데 실패했습니다.');
       } finally {
-        setLoading(false);
+        if (showLoading) {
+          setLoading(false);
+        }
       }
-    };
+    },
+    [isHost],
+  );
 
+  useEffect(() => {
     if (user) {
-      loadBookings();
+      loadBookings(true);
     }
-  }, [user, isHost]);
+  }, [user, loadBookings]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const intervalId = window.setInterval(() => {
+      loadBookings();
+    }, 60_000);
+
+    return () => window.clearInterval(intervalId);
+  }, [user, loadBookings]);
 
   const handleViewDetails = (id: number) => {
     navigate(`/accommodation/${id}`);
@@ -408,7 +425,7 @@ const PastTripsSection = () => {
     );
   };
 
-  const canRetryPayment = (booking: BookingResponse) => {
+  const canShowRetryPayment = (booking: BookingResponse) => {
     if (booking.bookingStatus === 'CANCELLED') {
       return false;
     }
@@ -496,6 +513,7 @@ const PastTripsSection = () => {
           const preview = getAccommodationPreview(booking.accommodationId);
           const paymentStatus = getPaymentStatusText(booking.bookingId);
           const inviteEnabled = canInviteFriend(booking.bookingId);
+          const showRetryPayment = canShowRetryPayment(booking);
 
           return (
             <ReservationCard key={`guest-${booking.bookingId}`}>
@@ -540,7 +558,7 @@ const PastTripsSection = () => {
                   >
                     숙소 상세보기
                   </ActionButton>
-                  {canRetryPayment(booking) && (
+                  {showRetryPayment && (
                     <ActionButton onClick={() => handleRetryPayment(booking)}>
                       재결제하기
                     </ActionButton>
