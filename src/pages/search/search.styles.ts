@@ -104,7 +104,7 @@ export const AccommodationGrid = styled.div`
   gap: ${({ theme }) => theme.spacing.xl};
 
   /* ListSection의 너비가 줄어들면 2열로 변경하여 카드가 너무 작아지는 것을 방지 */
-  @media (max-width: 1024px) {
+  @media (max-width: 1440px) {
     grid-template-columns: repeat(2, 1fr);
   }
 `;
