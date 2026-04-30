@@ -7,7 +7,7 @@ export const SearchPageContainer = styled.div`
   min-height: calc(100vh - ${({ theme }) => theme.layout.headerHeight.default});
   padding-top: ${({ theme }) =>
     theme.spacing['5xl']}; /* 헤더 높이만큼 패딩 추가 */
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const FilterBar = styled.div`
@@ -16,7 +16,7 @@ export const FilterBar = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border.light};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
   flex-shrink: 0;
   position: sticky;
   top: ${({ theme }) => theme.spacing['4xl']}; /* 헤더가 작아졌을 때의 높이 */
@@ -77,7 +77,7 @@ export const ListSection = styled.section`
   min-width: ${({ theme }) => theme.size.width.md};
   padding: ${({ theme }) => theme.spacing['20px']}
     ${({ theme }) => theme.spacing.xl};
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const ListHeader = styled.div`
@@ -99,17 +99,18 @@ export const ListCount = styled.p`
 
 export const AccommodationGrid = styled.div`
   display: grid;
-  /* 가변 그리드 설정: 최소 260px를 유지하며 여유 공간에 맞게 열 개수 자동 조절 */
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  /* 6개의 고정된 아이템을 위해 명시적인 3열 그리드 사용 */
+  grid-template-columns: repeat(3, 1fr);
   gap: ${({ theme }) => theme.spacing.xl};
 
-  /* 모바일/테블릿 등 작은 화면에서는 최소 너비를 더 작게 조절하여 공간 최적화 */
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  /* ListSection의 너비가 줄어들면 2열로 변경하여 카드가 너무 작아지는 것을 방지 */
+  @media (max-width: 1440px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
 export const AccommodationCard = styled.article<{ $selected?: boolean }>`
+  min-width: 0;
   cursor: pointer;
   transition:
     ${({ theme }) => theme.transition.transform.fast},
@@ -198,6 +199,7 @@ export const CardTitle = styled.h3`
   font-weight: ${({ theme }) => theme.font.weight.medium};
   margin: 0;
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -246,8 +248,7 @@ export const MapSection = styled.section`
   );
   padding: 0 ${({ theme }) => theme.spacing['40px']}
     ${({ theme }) => theme.spacing.xl} 0;
-  background: ${({ theme }) =>
-    theme.colors.common.white}; /* 배경색을 흰색으로 설정 */
+  background: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const MapContainer = styled.div`
