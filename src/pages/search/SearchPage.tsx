@@ -502,9 +502,10 @@ const SearchPage = () => {
 
   // Handle outside click for location filter
   useEffect(() => {
+    if (activeFilter !== 'location') return;
+
     const handleClickOutsideLocation = (event: MouseEvent) => {
       if (
-        activeFilter === 'location' &&
         locationButtonRef.current &&
         !locationButtonRef.current.contains(event.target as Node)
       ) {
