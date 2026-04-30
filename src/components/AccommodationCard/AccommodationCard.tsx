@@ -33,6 +33,7 @@ export interface AccommodationCardProps {
   rating?: number | null;
   isFavorite?: boolean;
   onFavoriteClick?: () => void;
+  onCardClick?: () => void;
 }
 
 const formatDateRange = (start: Date, end: Date): string => {
@@ -65,6 +66,7 @@ const AccommodationCard = ({
   rating,
   isFavorite = false,
   onFavoriteClick,
+  onCardClick,
 }: AccommodationCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const hasDate = !!date;
@@ -130,7 +132,7 @@ const AccommodationCard = ({
 
   return (
     <>
-      <CardContainer>
+      <CardContainer onClick={onCardClick}>
         <CardImage src={image} alt={title} />
         {badge && <CardBadge>{badge}</CardBadge>}
         <CardHeartButton onClick={handleHeartClick} $isFavorite={isFavorite}>

@@ -17,6 +17,42 @@ import type {
   AccommodationSearchResponse,
 } from './types';
 
+// TEMP MOCK: DB 연동 전 상세/달력 UI 검증용 (검증 후 삭제)
+const TEST_MOCK_ACCOMMODATION_ID = '999001';
+const TEST_MOCK_ACCOMMODATION_DETAIL: AccommodationDetailDTO = {
+  accommodationId: Number(TEST_MOCK_ACCOMMODATION_ID),
+  hostId: 1,
+  hostNickname: '테스트 호스트',
+  title: '테스트 숙소 (달력 검증용)',
+  description:
+    'DB 연결 전 상세 페이지 달력 동작 확인을 위한 임시 목 데이터입니다.',
+  accommodationType: 'entire_place',
+  address: '서울특별시 강남구 테헤란로 123',
+  city: '서울',
+  country: '대한민국',
+  maxGuests: 4,
+  pricePerNight: 120000,
+  cleaningFee: 15000,
+  serviceFeePercentage: 10,
+  instantBooking: false,
+  checkInTime: '15:00',
+  checkOutTime: '11:00',
+  images: [
+    {
+      imageId: 1,
+      imageUrl:
+        'https://a0.muscache.com/im/pictures/miso/Hosting-598015/original/a0ea4842-d25e-4f9f-93ed-c85b5aad0a01.jpeg',
+      isPrimary: true,
+      displayOrder: 0,
+    },
+  ],
+  amenities: [],
+  reviewSummary: {
+    average: 4.8,
+    count: 12,
+  },
+};
+
 // ============================================
 // 숙소 등록 API
 // ============================================
@@ -97,6 +133,10 @@ export async function fetchAccommodationDetail(
   // 입력값 검증: 숫자만 포함되어 있는지 확인 (Path Traversal 방지)
   if (!id || !/^\d+$/.test(id)) {
     throw new Error(`Invalid id format: ${id}`);
+  }
+
+  if (id === TEST_MOCK_ACCOMMODATION_ID) {
+    return TEST_MOCK_ACCOMMODATION_DETAIL;
   }
 
   const data = await client.get<AccommodationDetailDTO, AccommodationDetailDTO>(

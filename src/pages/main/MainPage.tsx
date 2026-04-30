@@ -13,6 +13,16 @@ import {
 const PLACEHOLDER_IMAGE =
   'https://a0.muscache.com/im/pictures/miso/Hosting-598015/original/a0ea4842-d25e-4f9f-93ed-c85b5aad0a01.jpeg';
 
+// TEMP MOCK: DB 연동 전 상세/달력 UI 검증용 (검증 후 삭제)
+const TEST_MOCK_ACCOMMODATION_ID = 999001;
+const TEST_MOCK_ACCOMMODATION: Accommodation = {
+  id: TEST_MOCK_ACCOMMODATION_ID,
+  image: PLACEHOLDER_IMAGE,
+  badge: '테스트',
+  title: '테스트 숙소 (달력 검증용)',
+  price: 120000,
+};
+
 const MainPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
@@ -32,11 +42,16 @@ const MainPage = () => {
           title: item.accommodationName,
           price: item.accommodationPrice,
         }));
-        setAccommodations(mapped);
+        const withoutMockDup = mapped.filter(
+          (item) => item.id !== TEST_MOCK_ACCOMMODATION_ID,
+        );
+        setAccommodations([TEST_MOCK_ACCOMMODATION, ...withoutMockDup]);
       })
       .catch((err) => {
         console.error('숙소 목록 조회 실패:', err);
-        setHasError(true);
+        // DB 연결이 어려운 상황에서도 상세/달력 테스트를 위해 목 카드 유지
+        setAccommodations([TEST_MOCK_ACCOMMODATION]);
+        setHasError(false);
       })
       .finally(() => {
         setIsLoading(false);

@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AccommodationCard from '@/components/AccommodationCard/AccommodationCard';
 import type { Accommodation } from '@/types/accommodation';
 import {
@@ -21,6 +22,7 @@ const AccommodationSection = ({
   title,
   accommodations,
 }: AccommodationSectionProps) => {
+  const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -100,6 +102,7 @@ const AccommodationSection = ({
               price={accommodation.price}
               nights={accommodation.nights}
               rating={accommodation.rating}
+              onCardClick={() => navigate(`/accommodation/${accommodation.id}`)}
             />
           ))}
         </CardList>
