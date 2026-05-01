@@ -1,6 +1,7 @@
-import { useState } from "react";
-import styled from "styled-components";
-import type { UserReviewCreateRequest } from "@/api/types";
+import { useState } from 'react';
+import styled from 'styled-components';
+import type { UserReviewCreateRequest } from '@/api/types';
+import axios from 'axios';
 
 // 재사용 가능한 모달 스타일들 (ReviewFormModal 참조)
 const ModalOverlay = styled.div`
@@ -68,7 +69,8 @@ const Button = styled.button<{ $primary?: boolean }>`
   border: none;
   background-color: ${({ $primary, theme }) =>
     $primary ? theme.colors.primary.main : theme.colors.background.active};
-  color: ${({ $primary, theme }) => ($primary ? theme.colors.common.white : theme.colors.text.primary)};
+  color: ${({ $primary, theme }) =>
+    $primary ? theme.colors.common.white : theme.colors.text.primary};
 
   &:hover {
     opacity: 0.9;
@@ -90,15 +92,20 @@ interface GuestReviewModalProps {
   onSubmit: (data: UserReviewCreateRequest) => Promise<void>;
 }
 
-const GuestReviewModal = ({ bookingId, guestId, onClose, onSubmit }: GuestReviewModalProps) => {
+const GuestReviewModal = ({
+  bookingId,
+  guestId,
+  onClose,
+  onSubmit,
+}: GuestReviewModalProps) => {
   const [rating, setRating] = useState<number>(5);
-  const [reviewComment, setReviewComment] = useState("");
+  const [reviewComment, setReviewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reviewComment.trim()) {
-      alert("리뷰 내용을 입력해주세요.");
+      alert('리뷰 내용을 입력해주세요.');
       return;
     }
 
@@ -112,8 +119,12 @@ const GuestReviewModal = ({ bookingId, guestId, onClose, onSubmit }: GuestReview
       });
       onClose();
     } catch (error) {
-      console.error("리뷰 제출 실패:", error);
-      alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
+      console.error('리뷰 제출 실패:', error);
+      let errorMessage = '리뷰 제출에 실패했습니다. 다시 시도해주세요.';
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -126,7 +137,10 @@ const GuestReviewModal = ({ bookingId, guestId, onClose, onSubmit }: GuestReview
         <form onSubmit={handleSubmit}>
           <FormGroup>
             <Label>평점</Label>
-            <Select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
+            <Select
+              value={rating}
+              onChange={(e) => setRating(Number(e.target.value))}
+            >
               <option value={5}>5 - 아주 훌륭해요!</option>
               <option value={4}>4 - 좋아요</option>
               <option value={3}>3 - 보통이에요</option>
@@ -149,7 +163,7 @@ const GuestReviewModal = ({ bookingId, guestId, onClose, onSubmit }: GuestReview
               취소
             </Button>
             <Button type="submit" $primary disabled={isSubmitting}>
-              {isSubmitting ? "제출 중..." : "제출하기"}
+              {isSubmitting ? '제출 중...' : '제출하기'}
             </Button>
           </ButtonGroup>
         </form>
