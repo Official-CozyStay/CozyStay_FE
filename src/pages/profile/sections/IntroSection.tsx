@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { ClipboardList } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 import {
   ContentTitle,
   EditButton,
@@ -13,11 +12,7 @@ import {
   ProfileCompleteTitle,
   ProfileCompleteDesc,
   PrimaryButton,
-  ReviewSection,
-  ReviewButton,
-  ReviewIcon,
-  ReviewText,
-} from "../profile.styles";
+} from '../profile.styles';
 
 interface IntroSectionProps {
   userName: string;
@@ -31,7 +26,7 @@ const IntroSection = ({ userName, userInitial }: IntroSectionProps) => {
     <>
       <ContentTitle>
         자기소개
-        <EditButton onClick={() => navigate("/profile/edit")}>수정</EditButton>
+        <EditButton onClick={() => navigate('/profile/edit')}>수정</EditButton>
       </ContentTitle>
 
       <ProfileCard>
@@ -50,21 +45,12 @@ const IntroSection = ({ userName, userInitial }: IntroSectionProps) => {
               다른 호스트와 게스트에게 나를 알릴 수 있도록 프로필 작성을 완료해
               주세요.
             </ProfileCompleteDesc>
-            <PrimaryButton onClick={() => navigate("/profile/edit")}>
+            <PrimaryButton onClick={() => navigate('/profile/edit')}>
               시작하기
             </PrimaryButton>
           </ProfileCompleteBox>
         </ProfileCardRight>
       </ProfileCard>
-
-      <ReviewSection>
-        <ReviewButton onClick={() => navigate("/profile/reviews")}>
-          <ReviewIcon>
-            <ClipboardList size={24} />
-          </ReviewIcon>
-          <ReviewText>내가 작성한 후기</ReviewText>
-        </ReviewButton>
-      </ReviewSection>
     </>
   );
 };
