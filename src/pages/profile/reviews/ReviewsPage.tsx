@@ -86,8 +86,8 @@ const ReviewsPage = () => {
     try {
       setIsLoading(true);
       if (activeTab === 'by-me') {
-        // 1. 내 전체 예약 목록 로드
-        const allBookings = await fetchUserBookings();
+        // 1. 내 전체 예약 목록 중 이용 완료된 예약만 로드
+        const allBookings = await fetchUserBookings('COMPLETED');
         setBookings(allBookings);
 
         // 2. 예약된 숙소(accId) 추출 및 중복 제거
@@ -125,10 +125,10 @@ const ReviewsPage = () => {
         setAccommodationNames(newNames);
         setWrittenReviewBookingIds(writtenBookingIds);
 
-        // 호스트인 경우 게스트 리뷰를 위해 hostBookings 도 추가 로드
+        // 호스트인 경우 게스트 리뷰를 위해 완료된 hostBookings 도 추가 로드
         if (isHost) {
           try {
-            const hBookings = await fetchHostBookings();
+            const hBookings = await fetchHostBookings('COMPLETED');
             setHostBookings(hBookings);
           } catch (err) {
             console.error('호스트 예약 정보 로드 실패:', err);
