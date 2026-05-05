@@ -126,15 +126,8 @@ const ProfilePage = () => {
                 key={item.key}
                 $active={activeMenu === item.key}
                 onClick={() => {
-                  if (item.path) {
-                    navigate(item.path);
-                  } else {
-                    if (location.pathname === '/profile/reviews') {
-                      navigate(`/profile?menu=${item.key}`);
-                    } else {
-                      setActiveMenu(item.key);
-                    }
-                  }
+                  const targetPath = item.path || `/profile?menu=${item.key}`;
+                  navigate(targetPath);
                 }}
               >
                 {renderIcon(item.icon)}
