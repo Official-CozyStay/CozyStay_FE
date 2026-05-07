@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Star } from "lucide-react";
-import type { AccommodationReviewRequest } from "@/api/types";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Star } from 'lucide-react';
+import type { AccommodationReviewRequest } from '@/api/types';
+import axios from 'axios';
 
 interface ReviewFormModalProps {
   bookingId: number;
@@ -10,11 +11,11 @@ interface ReviewFormModalProps {
 }
 
 const RATING_CATEGORIES = [
-  { id: "cleanliness", label: "청결도" },
-  { id: "accuracy", label: "정확성" },
-  { id: "checkin", label: "체크인" },
-  { id: "communication", label: "의사소통" },
-  { id: "location", label: "위치" },
+  { id: 'cleanliness', label: '청결도' },
+  { id: 'accuracy', label: '정확성' },
+  { id: 'checkin', label: '체크인' },
+  { id: 'communication', label: '의사소통' },
+  { id: 'location', label: '위치' },
 ] as const;
 
 type RatingState = {
@@ -39,7 +40,7 @@ export default function ReviewFormModal({
     communication: 0,
     location: 0,
   });
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRatingChange = (key: keyof RatingState, value: number) => {
@@ -51,11 +52,11 @@ export default function ReviewFormModal({
 
     // 간단한 유효성 검사
     if (Object.values(ratings).some((val) => val === 0)) {
-      alert("모든 항목에 별점을 입력해주세요.");
+      alert('모든 항목에 별점을 입력해주세요.');
       return;
     }
     if (comment.trim().length < 10) {
-      alert("리뷰 내용을 10자 이상 작성해주세요.");
+      alert('리뷰 내용을 10자 이상 작성해주세요.');
       return;
     }
 
@@ -73,8 +74,12 @@ export default function ReviewFormModal({
       });
       onClose();
     } catch (error) {
-      console.error("리뷰 제출 실패:", error);
-      alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
+      console.error('리뷰 제출 실패:', error);
+      let errorMessage = '리뷰 제출에 실패했습니다. 다시 시도해주세요.';
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -101,7 +106,7 @@ export default function ReviewFormModal({
             <RatingLabel>전체 평점</RatingLabel>
             <StarRating
               rating={ratings.overall}
-              onChange={(val) => handleRatingChange("overall", val)}
+              onChange={(val) => handleRatingChange('overall', val)}
               size={32}
             />
           </FormGroup>
@@ -138,7 +143,7 @@ export default function ReviewFormModal({
               취소
             </SecondaryButton>
             <SubmitButton type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "제출 중..." : "리뷰 제출"}
+              {isSubmitting ? '제출 중...' : '리뷰 제출'}
             </SubmitButton>
           </FormActions>
         </ModalBody>
@@ -169,7 +174,7 @@ function StarRating({ rating, onChange, size = 24 }: StarRatingProps) {
         >
           <Star
             size={size}
-            fill={star <= (hoverRating || rating) ? "currentColor" : "none"}
+            fill={star <= (hoverRating || rating) ? 'currentColor' : 'none'}
             stroke="currentColor"
           />
         </StarIconButton>
