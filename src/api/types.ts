@@ -17,6 +17,7 @@ export type CreateAccommodationRequest = {
   accommodationType: AccommodationTypeAPI;
   address: string;
   city: string;
+  district: string;
   state?: string;
   country: string;
   postalCode?: string;
@@ -25,7 +26,6 @@ export type CreateAccommodationRequest = {
   maxGuests: number;
   pricePerNight: number;
   cleaningFee?: number;
-  serviceFeePercentage?: number;
   instantBooking: boolean;
   checkInTime?: string;
   checkOutTime?: string;

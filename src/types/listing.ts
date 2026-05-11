@@ -8,7 +8,7 @@ export interface Listing {
   spaceType: SpaceType;
   location: {
     country: string;
-    province: string;
+    state: string;
     city: string;
     district: string;
     streetAddress: string;
@@ -59,7 +59,7 @@ export const defaultListing: Omit<Listing, 'id' | 'createdAt'> = {
   spaceType: '',
   location: {
     country: '한국',
-    province: '',
+    state: '',
     city: '',
     district: '',
     streetAddress: '',

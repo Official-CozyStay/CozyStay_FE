@@ -24,7 +24,7 @@ import type { StepProps } from '../BecomeHostPage';
 const HostDetails = ({ data, onDataChange }: StepProps) => {
   const location = data.location || {
     country: '한국',
-    province: '',
+    state: '',
     city: '',
     district: '',
     streetAddress: '',
@@ -119,7 +119,7 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
         location: {
           ...location,
           country: '한국',
-          province: addr.region_1depth_name,
+          state: addr.region_1depth_name,
           city: addr.region_2depth_name,
           district: addr.region_3depth_name,
           streetAddress: displayAddress,
