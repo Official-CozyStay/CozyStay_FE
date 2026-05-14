@@ -1,5 +1,5 @@
 export interface RegionData {
-  [province: string]: {
+  [state: string]: {
     [city: string]: string[];
   };
 }

@@ -72,27 +72,27 @@ const Divider = styled.div`
 `;
 
 interface RegionPopupProps {
-  onSelect: (province: string, city: string, district?: string) => void;
-  selectedProvince?: string;
+  onSelect: (state: string, city: string, district?: string) => void;
+  selectedState?: string;
   selectedCity?: string;
   selectedDistrict?: string;
 }
 
 const RegionPopup = React.forwardRef<HTMLDivElement, RegionPopupProps>(
-  ({ onSelect, selectedProvince, selectedCity, selectedDistrict }, ref) => {
-    const defaultProvince = selectedProvince || '서울';
+  ({ onSelect, selectedState, selectedCity, selectedDistrict }, ref) => {
+    const defaultState = selectedState || '서울';
     const defaultCity = selectedCity || '';
 
-    const [province, setProvince] = useState<string>(defaultProvince);
+    const [state, setState] = useState<string>(defaultState);
     const [city, setCity] = useState<string>(defaultCity);
 
-    const provinces = Object.keys(REGIONS);
-    const cities = Object.keys(REGIONS[province] || {});
-    const districts = city ? REGIONS[province]?.[city] || [] : [];
+    const statesList = Object.keys(REGIONS);
+    const cities = Object.keys(REGIONS[state] || {});
+    const districts = city ? REGIONS[state]?.[city] || [] : [];
 
-    const handleProvinceClick = (e: React.MouseEvent, p: string) => {
+    const handleStateClick = (e: React.MouseEvent, p: string) => {
       e.stopPropagation();
-      setProvince(p);
+      setState(p);
       setCity('');
     };
 
@@ -100,10 +100,10 @@ const RegionPopup = React.forwardRef<HTMLDivElement, RegionPopupProps>(
       e.stopPropagation();
       setCity(c);
 
-      const cityDistricts = REGIONS[province]?.[c] || [];
+      const cityDistricts = REGIONS[state]?.[c] || [];
       // If there are no districts, selecting the city completes the action
       if (cityDistricts.length === 0) {
-        onSelect(province, c);
+        onSelect(state, c);
       }
     };
 
@@ -111,9 +111,9 @@ const RegionPopup = React.forwardRef<HTMLDivElement, RegionPopupProps>(
       e.stopPropagation();
       // '전체' 옵션 처리
       if (d === '전체') {
-        onSelect(province, city);
+        onSelect(state, city);
       } else {
-        onSelect(province, city, d);
+        onSelect(state, city, d);
       }
     };
 
@@ -121,11 +121,11 @@ const RegionPopup = React.forwardRef<HTMLDivElement, RegionPopupProps>(
       <PopupContainer ref={ref} onClick={(e) => e.stopPropagation()}>
         <Column>
           <ColumnTitle>시/도</ColumnTitle>
-          {provinces.map((p) => (
+          {statesList.map((p) => (
             <ListItem
               key={p}
-              $isSelected={p === province}
-              onClick={(e) => handleProvinceClick(e, p)}
+              $isSelected={p === state}
+              onClick={(e) => handleStateClick(e, p)}
             >
               {p}
             </ListItem>
@@ -138,7 +138,7 @@ const RegionPopup = React.forwardRef<HTMLDivElement, RegionPopupProps>(
             <ListItem
               key={c}
               $isSelected={
-                province === selectedProvince &&
+                state === selectedState &&
                 c === selectedCity &&
                 !selectedDistrict
               }
@@ -155,7 +155,7 @@ const RegionPopup = React.forwardRef<HTMLDivElement, RegionPopupProps>(
               <ColumnTitle>동/읍/면</ColumnTitle>
               <ListItem
                 $isSelected={
-                  province === selectedProvince &&
+                  state === selectedState &&
                   city === selectedCity &&
                   !selectedDistrict
                 }
@@ -167,7 +167,7 @@ const RegionPopup = React.forwardRef<HTMLDivElement, RegionPopupProps>(
                 <ListItem
                   key={d}
                   $isSelected={
-                    province === selectedProvince &&
+                    state === selectedState &&
                     city === selectedCity &&
                     d === selectedDistrict
                   }

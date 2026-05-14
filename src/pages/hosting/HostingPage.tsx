@@ -125,7 +125,7 @@ const HostingPage = () => {
                 <ListingInfo>
                   <ListingTitle>{listing.title}</ListingTitle>
                   <ListingLocation>
-                    {listing.location.province} {listing.location.district}
+                    {listing.location.state} {listing.location.district}
                   </ListingLocation>
                   <ListingPrice>
                     ₩{formatPrice(listing.pricing.basePrice)} <span>/ 박</span>

@@ -85,7 +85,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
   const [dateFieldRect, setDateFieldRect] = useState<DOMRect | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<{
-    province: string;
+    state: string;
     city: string;
     district?: string;
   } | null>(null);
@@ -238,7 +238,7 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
           {!isCompact && (
             <span>
               {selectedLocation
-                ? `${selectedLocation.province} ${selectedLocation.city} ${selectedLocation.district || ''}`.trim()
+                ? `${selectedLocation.state} ${selectedLocation.city} ${selectedLocation.district || ''}`.trim()
                 : '여행지 검색'}
             </span>
           )}
@@ -253,11 +253,11 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
         {showRegionPopup && (
           <RegionPopup
             ref={regionPopupRef}
-            selectedProvince={selectedLocation?.province}
+            selectedState={selectedLocation?.state}
             selectedCity={selectedLocation?.city}
             selectedDistrict={selectedLocation?.district}
-            onSelect={(province, city, district) => {
-              setSelectedLocation({ province, city, district });
+            onSelect={(state, city, district) => {
+              setSelectedLocation({ state, city, district });
               setShowRegionPopup(false);
               if (dateFieldRef.current) {
                 setDateFieldRect(dateFieldRef.current.getBoundingClientRect());
@@ -343,8 +343,8 @@ const SearchBar = ({ isCompact = false }: SearchBarProps) => {
           if (searchQuery.trim()) {
             params.append('title', searchQuery.trim());
           }
-          if (selectedLocation?.province) {
-            params.append('state', selectedLocation.province);
+          if (selectedLocation?.state) {
+            params.append('state', selectedLocation.state);
           }
           if (selectedLocation?.city) {
             params.append('city', selectedLocation.city);

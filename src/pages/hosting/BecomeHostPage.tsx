@@ -180,7 +180,7 @@ const validateStep = (step: number, data: Partial<Listing>): string | null => {
 
 const getLocationDefaults = (): LocationData => ({
   country: '한국',
-  province: '',
+  state: '',
   city: '',
   district: '',
   streetAddress: '',
@@ -299,7 +299,8 @@ const BecomeHostPage = () => {
           accommodationType,
           address: `${location.streetAddress} ${location.detailAddress}`.trim(),
           city: resolvedCity,
-          state: location.province,
+          district: location.district?.trim() || resolvedCity,
+          state: location.state,
           country: location.country,
           postalCode: location.postalCode,
           latitude: location.latitude,
@@ -307,7 +308,6 @@ const BecomeHostPage = () => {
           maxGuests: listingData.guests || 1,
           pricePerNight: listingData.pricing?.basePrice || 50000,
           cleaningFee: listingData.pricing?.cleaningFee || 0,
-          serviceFeePercentage: 5.0,
           instantBooking: listingData.bookingSettings === 'instant',
           checkInTime: listingData.checkInTime || '15:00:00',
           checkOutTime: listingData.checkOutTime || '11:00:00',

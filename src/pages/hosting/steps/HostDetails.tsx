@@ -24,7 +24,7 @@ import type { StepProps } from '../BecomeHostPage';
 const HostDetails = ({ data, onDataChange }: StepProps) => {
   const location = data.location || {
     country: '한국',
-    province: '',
+    state: '',
     city: '',
     district: '',
     streetAddress: '',
@@ -115,13 +115,23 @@ const HostDetails = ({ data, onDataChange }: StepProps) => {
         markerRef.current?.setPosition(newLatLng);
       }
 
+      let parsedCity = addr.region_2depth_name;
+      let parsedDistrict = addr.region_3depth_name;
+
+      // '성남시 분당구'와 같이 시와 구가 함께 오는 경우 분리
+      if (addr.region_2depth_name.includes(' ')) {
+        const parts = addr.region_2depth_name.split(' ');
+        parsedCity = parts[0];
+        parsedDistrict = parts[1];
+      }
+
       onDataChange({
         location: {
           ...location,
           country: '한국',
-          province: addr.region_1depth_name,
-          city: addr.region_2depth_name,
-          district: addr.region_3depth_name,
+          state: addr.region_1depth_name,
+          city: parsedCity,
+          district: parsedDistrict,
           streetAddress: displayAddress,
           detailAddress: location.detailAddress || '',
           postalCode: roadAddr?.zone_no || '',
