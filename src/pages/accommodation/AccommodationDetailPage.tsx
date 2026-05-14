@@ -121,8 +121,15 @@ export default function AccommodationDetailPage() {
   if (error) return <S.Container>에러 : {error}</S.Container>;
   if (!detail) return <S.Container>데이터 없음</S.Container>;
 
-  const averageRating = reviews?.summary?.average ?? 0;
-  const reviewCount = reviews?.summary?.count ?? 0;
+  const reviewSummary = detail.reviewSummary ?? { average: 0, count: 0 };
+  const averageRating = reviewSummary.average;
+  const reviewCount = reviewSummary.count;
+  const reviewsForDisplay = reviews
+    ? {
+        ...reviews,
+        summary: reviewSummary,
+      }
+    : null;
 
   const handleGoToPayment = () => {
     const params = new URLSearchParams();
@@ -165,7 +172,7 @@ export default function AccommodationDetailPage() {
       <S.Main>
         <S.Left>
           <InfoSection detail={detail} />
-          {reviews && <ReviewSection reviews={reviews} />}
+          {reviewsForDisplay && <ReviewSection reviews={reviewsForDisplay} />}
         </S.Left>
 
         <S.Right>
