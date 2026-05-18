@@ -194,7 +194,7 @@ const validateStep = (step: number, data: Partial<Listing>): string | null => {
 
 const getLocationDefaults = (): LocationData => ({
   country: '한국',
-  province: '',
+  state: '',
   city: '',
   district: '',
   streetAddress: '',
@@ -314,7 +314,8 @@ const BecomeHostPage = () => {
           accommodationType,
           address: `${location.streetAddress} ${location.detailAddress}`.trim(),
           city: resolvedCity,
-          state: location.province,
+          district: location.district?.trim() || resolvedCity,
+          state: location.state,
           country: location.country,
           postalCode: location.postalCode,
           latitude: location.latitude,

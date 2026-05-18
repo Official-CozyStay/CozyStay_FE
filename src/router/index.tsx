@@ -11,7 +11,6 @@ import MessagePage from '../pages/chat/MessagePage';
 import AccountPage from '../pages/account/AccountPage';
 import ProfilePage from '../pages/profile/ProfilePage';
 import ProfileEditPage from '../pages/profile/edit/ProfileEditPage';
-import ReviewsPage from '../pages/profile/reviews/ReviewsPage';
 import PaymentPage from '../pages/payment/PaymentPage';
 import PaymentSuccessPage from '../pages/payment/PaymentSuccessPage';
 import PaymentFailPage from '../pages/payment/PaymentFailPage';
@@ -38,7 +37,7 @@ export const router = createBrowserRouter([
       { path: 'account', element: <AccountPage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: 'profile/edit', element: <ProfileEditPage /> },
-      { path: 'profile/reviews', element: <ReviewsPage /> },
+      { path: 'profile/reviews', element: <ProfilePage /> },
       { path: 'users/:id', element: <UserPage /> },
     ],
   },
