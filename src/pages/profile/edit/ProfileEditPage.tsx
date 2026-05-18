@@ -42,6 +42,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { updateMyProfile } from '@/api/user';
 import type { UpdateMyProfileRequest } from '@/api/types';
+import axios from 'axios';
 import {
   Camera,
   Briefcase,
@@ -239,16 +240,35 @@ const ProfileEditPage = () => {
     setSaveMessage(null);
     try {
       const updated = await updateMyProfile(payload);
-      setUser({
-        ...user!,
-        nickname: updated.nickName,
-        profileImage: updated.profileImageUrl || undefined,
-      });
+      if (user) {
+        setUser({
+          ...user,
+          nickname: updated.nickName,
+          profileImage: updated.profileImageUrl || undefined,
+        });
+      }
       setSaveMessage({ type: 'success', text: '프로필이 수정되었습니다.' });
-    } catch {
+    } catch (error: unknown) {
+      let errorMessage = '저장 중 오류가 발생했습니다. 다시 시도해 주세요.';
+
+      if (axios.isAxiosError<{ message?: string }>(error)) {
+        const status = error.response?.status;
+        const serverMessage = error.response?.data?.message;
+
+        if (status === 401) {
+          errorMessage = '로그인이 만료되었습니다. 다시 로그인해 주세요.';
+        } else if (status === 403) {
+          errorMessage = serverMessage || '프로필 수정 권한이 없습니다.';
+        } else if (status === 400) {
+          errorMessage = serverMessage || '입력값이 올바르지 않습니다.';
+        } else if (serverMessage) {
+          errorMessage = serverMessage;
+        }
+      }
+
       setSaveMessage({
         type: 'error',
-        text: '저장 중 오류가 발생했습니다. 다시 시도해 주세요.',
+        text: errorMessage,
       });
     } finally {
       setIsSaving(false);

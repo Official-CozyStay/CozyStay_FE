@@ -88,7 +88,8 @@ export const defaultListing: Omit<Listing, 'id' | 'createdAt'> = {
   extraAmenities: [],
   photos: [],
   pricing: {
-    basePrice: 50000,
+    basePrice: 0,
+    cleaningFee: 0,
   },
   bookingSettings: 'review',
   checkInTime: '15:00',

@@ -61,10 +61,16 @@ const TEST_MOCK_ACCOMMODATION_DETAIL: AccommodationDetailDTO = {
 export async function createAccommodation(
   data: CreateAccommodationRequest,
 ): Promise<CreateAccommodationResponse> {
+  const { pricePerNight, cleaningFee, ...rest } = data;
+  const payload = {
+    ...rest,
+    price_per_night: pricePerNight,
+    cleaning_fee: cleaningFee ?? 0,
+  };
   const response = await client.post<
     CreateAccommodationResponse,
     CreateAccommodationResponse
-  >('/api/accommodations', data);
+  >('/api/accommodations', payload);
   return response;
 }
 

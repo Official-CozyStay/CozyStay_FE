@@ -33,11 +33,11 @@ const formatPrice = (price: number): string => {
 };
 
 const Pricing = ({ data, onDataChange }: StepProps) => {
-  const price = data.pricing?.basePrice || 50000;
-  const cleaningFee = data.pricing?.cleaningFee || 0;
+  const price = data.pricing?.basePrice ?? 0;
+  const cleaningFee = data.pricing?.cleaningFee ?? 0;
   const pricing = {
-    basePrice: data.pricing?.basePrice ?? 50000,
-    cleaningFee: data.pricing?.cleaningFee ?? 0,
+    basePrice: price,
+    cleaningFee,
   };
 
   const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +81,7 @@ const Pricing = ({ data, onDataChange }: StepProps) => {
           <CurrencyLabel>₩</CurrencyLabel>
           <PriceInput
             type="text"
-            value={formatPrice(price)}
+            value={price > 0 ? formatPrice(price) : ''}
             onChange={handlePriceChange}
             placeholder="0"
           />

@@ -55,7 +55,9 @@ export async function fetchUserReviews(
         },
         rating: r.rating,
         content: r.reviewComment,
-        createdAt: '2024-01-01',
+        // 사용자 리뷰 API가 생성일을 내려주지 않아 빈 값으로 둔다.
+        // UI에서 createdAt이 없으면 날짜 표시를 생략한다.
+        createdAt: '',
         reply: r.comment,
       })),
     };

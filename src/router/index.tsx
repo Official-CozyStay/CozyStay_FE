@@ -17,6 +17,7 @@ import PaymentSuccessPage from '../pages/payment/PaymentSuccessPage';
 import PaymentFailPage from '../pages/payment/PaymentFailPage';
 import WishlistPage from '../pages/wishlist/WishlistPage';
 import WishlistDetailPage from '../pages/wishlist/WishlistDetailPage';
+import RequireAuth from '@/components/auth/RequireAuth';
 
 export const router = createBrowserRouter([
   {
@@ -43,11 +44,19 @@ export const router = createBrowserRouter([
   },
   {
     path: '/hosting',
-    element: <HostingPage />,
+    element: (
+      <RequireAuth>
+        <HostingPage />
+      </RequireAuth>
+    ),
   },
   {
     path: '/hosting/become-a-host',
-    element: <BecomeHostPage />,
+    element: (
+      <RequireAuth>
+        <BecomeHostPage />
+      </RequireAuth>
+    ),
   },
 ]);
 

@@ -11,6 +11,7 @@ import Photos from './steps/Photos';
 import TitleStep from './steps/Title';
 import Description from './steps/Description';
 import Phase3Intro from './steps/Phase3Intro';
+import Pricing from './steps/Pricing';
 import BookingSettings from './steps/BookingSettings';
 import HostDetails from './steps/HostDetails';
 import Alert from '@/components/Alert/Alert';
@@ -55,6 +56,7 @@ type StepId =
   | 'TITLE'
   | 'DESCRIPTION'
   | 'PHASE3_INTRO'
+  | 'PRICING'
   | 'BOOKING_SETTINGS'
   | 'HOST_DETAILS';
 
@@ -119,6 +121,12 @@ const STEPS: StepConfig[] = [
     needsData: false,
   },
   {
+    id: 'PRICING',
+    component: Pricing,
+    showProgress: true,
+    needsData: true,
+  },
+  {
     id: 'BOOKING_SETTINGS',
     component: BookingSettings,
     showProgress: true,
@@ -168,6 +176,12 @@ const validateStep = (step: number, data: Partial<Listing>): string | null => {
     case STEP.TITLE:
       if (!data.title?.trim()) return '숙소 이름을 입력해주세요.';
       break;
+    case STEP.PRICING:
+      if (!data.pricing?.basePrice || data.pricing.basePrice <= 0)
+        return '1박 요금을 입력해주세요. (1원 이상)';
+      if ((data.pricing.cleaningFee ?? 0) < 0)
+        return '청소비는 0원 이상이어야 합니다.';
+      break;
     case STEP.HOST_DETAILS:
       if (!data.location?.streetAddress?.trim())
         return '주소를 검색하여 숙소 위치를 설정해주세요.';
@@ -197,6 +211,7 @@ const validateBeforeSubmit = (data: Partial<Listing>): string | null => {
     STEP.GUEST_CAPACITY,
     STEP.AMENITIES,
     STEP.TITLE,
+    STEP.PRICING,
     STEP.HOST_DETAILS,
   ];
 
@@ -305,8 +320,8 @@ const BecomeHostPage = () => {
           latitude: location.latitude,
           longitude: location.longitude,
           maxGuests: listingData.guests || 1,
-          pricePerNight: listingData.pricing?.basePrice || 50000,
-          cleaningFee: listingData.pricing?.cleaningFee || 0,
+          pricePerNight: listingData.pricing?.basePrice ?? 0,
+          cleaningFee: listingData.pricing?.cleaningFee,
           serviceFeePercentage: 5.0,
           instantBooking: listingData.bookingSettings === 'instant',
           checkInTime: listingData.checkInTime || '15:00:00',
