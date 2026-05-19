@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { inviteGuest, type InviteGuestRequest } from '@/api/booking';
 import {
-  ModalOverlay,
-  ModalContainer,
-  ModalHeader,
-  ModalCloseButton,
-  ModalTitle,
-  ModalBody,
-  SaveButton,
+  ErrorText,
   FooterRight,
   InputGroup,
-  ErrorText,
+  ModalBody,
+  ModalCloseButton,
+  ModalContainer,
+  ModalHeader,
+  ModalOverlay,
+  ModalTitle,
+  SaveButton,
 } from './InviteFriendModal.styles';
 
 interface InviteFriendModalProps {
@@ -21,6 +22,12 @@ interface InviteFriendModalProps {
   bookingId: number | null;
   onSuccess?: () => void;
 }
+
+type InviteErrorResponse = {
+  message?: string;
+};
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const InviteFriendModal = ({
   isOpen,
@@ -36,9 +43,7 @@ const InviteFriendModal = ({
 
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        guestEmail: '',
-      });
+      setFormData({ guestEmail: '' });
       setError(null);
       setLoading(false);
     }
@@ -49,25 +54,42 @@ const InviteFriendModal = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (!bookingId) return;
 
-    // 간단한 유효성 검사
-    if (!formData.guestEmail.trim()) {
+    const guestEmail = formData.guestEmail.trim();
+
+    if (!guestEmail) {
       setError('이메일을 입력해주세요.');
+      return;
+    }
+
+    if (!EMAIL_PATTERN.test(guestEmail)) {
+      setError('올바른 이메일 형식으로 입력해주세요.');
       return;
     }
 
     try {
       setLoading(true);
       setError(null);
-      await inviteGuest(bookingId, formData);
-      alert('친구 초대가 완료되었습니다.');
-      if (onSuccess) onSuccess();
+      await inviteGuest(bookingId, { guestEmail });
+      alert('동반자 초대가 전송되었습니다.');
+      onSuccess?.();
       onClose();
     } catch (err) {
       console.error(err);
-      setError('친구 초대에 실패했습니다. 잠시 후 다시 시도해주세요.');
+
+      if (axios.isAxiosError<InviteErrorResponse>(err)) {
+        setError(
+          err.response?.data?.message ||
+            '가입된 회원의 이메일만 초대할 수 있습니다.',
+        );
+        return;
+      }
+
+      setError('동반자 초대에 실패했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
       setLoading(false);
     }
@@ -79,27 +101,28 @@ const InviteFriendModal = ({
     <ModalOverlay onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
-          <ModalCloseButton onClick={onClose}>
+          <ModalCloseButton onClick={onClose} aria-label="닫기">
             <X size={20} />
           </ModalCloseButton>
           <div />
         </ModalHeader>
 
-        <ModalBody>
+        <ModalBody as="form" id="invite-friend-form" onSubmit={handleSubmit}>
           <ModalTitle style={{ marginBottom: '24px' }}>
             동반 게스트 초대
           </ModalTitle>
 
           <InputGroup>
-            <label htmlFor="guestEmail">초대할 친구 이메일</label>
+            <label htmlFor="guestEmail">초대할 회원 이메일</label>
             <input
               id="guestEmail"
               name="guestEmail"
               type="email"
-              placeholder="예: friend@example.com"
+              placeholder="friend@example.com"
               value={formData.guestEmail}
               onChange={handleChange}
               disabled={loading}
+              autoFocus
             />
           </InputGroup>
 
@@ -107,7 +130,11 @@ const InviteFriendModal = ({
         </ModalBody>
 
         <FooterRight>
-          <SaveButton onClick={handleSubmit} disabled={loading}>
+          <SaveButton
+            type="submit"
+            form="invite-friend-form"
+            disabled={loading}
+          >
             {loading ? '초대 중...' : '초대하기'}
           </SaveButton>
         </FooterRight>
