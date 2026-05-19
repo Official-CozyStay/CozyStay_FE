@@ -201,7 +201,7 @@ const PastTripsSection = () => {
         setError(null);
 
         const [gBookings, cBookings, hBookings] = await Promise.all([
-          fetchUserBookings('CONFIRMED'),
+          fetchUserBookings(),
           fetchCompanionBookings(),
           isHost
             ? fetchHostBookings('CONFIRMED')
