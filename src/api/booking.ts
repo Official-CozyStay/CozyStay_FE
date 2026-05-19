@@ -35,6 +35,16 @@ export async function fetchUserBookings(
 }
 
 /**
+ * 내가 동반자로 참여한 예약 목록 조회
+ */
+export async function fetchCompanionBookings(): Promise<BookingResponse[]> {
+  const response = (await client.get(
+    `/api/booking-guests/me/bookings`,
+  )) as BookingResponse[];
+  return response;
+}
+
+/**
  * 호스트의 내 숙소 예약 목록 조회
  */
 export async function fetchHostBookings(
