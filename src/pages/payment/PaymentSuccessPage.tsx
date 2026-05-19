@@ -138,7 +138,7 @@ export default function PaymentSuccessPage() {
 
       <PaymentSuccessButtonGroup>
         {bookingId && (
-          <PaymentSuccessLink to={`/bookings/${bookingId}`}>
+          <PaymentSuccessLink to="/profile?menu=trips">
             예약 상세보기
           </PaymentSuccessLink>
         )}
