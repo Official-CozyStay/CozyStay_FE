@@ -30,7 +30,19 @@ import {
   AddInterestButton,
   SelectedInterestTag,
   AddInterestTextButton,
+  FormRow,
+  FormLabel,
+  FormInput,
+  ReadonlyField,
+  ReadonlyBadge,
+  FormFooter,
+  SaveMessage,
+  SaveProfileButton,
 } from './profileEdit.styles';
+import { useAuth } from '@/contexts/AuthContext';
+import { updateMyProfile } from '@/api/user';
+import type { UpdateMyProfileRequest } from '@/api/types';
+import axios from 'axios';
 import {
   Camera,
   Briefcase,
@@ -160,8 +172,17 @@ const PROFILE_MODAL_CONFIG: Record<TextInputProfileItemId, ProfileModalConfig> =
   };
 
 const ProfileEditPage = () => {
+  const { user, setUser } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    user?.profileImage ?? null,
+  );
+  const [nickName, setNickName] = useState(user?.nickname ?? '');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
   const [showTravelStamps, setShowTravelStamps] = useState(false);
   const [isInterestModalOpen, setIsInterestModalOpen] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -191,9 +212,67 @@ const ProfileEditPage = () => {
     favorites: '',
   });
 
-  const user = {
-    name: '예은',
-    initial: '예',
+  const initial = user?.nickname?.[0] ?? '?';
+
+  const handleSave = async () => {
+    if (nickName.length < 1 || nickName.length > 30) {
+      setSaveMessage({
+        type: 'error',
+        text: '닉네임은 1~30자 사이여야 합니다.',
+      });
+      return;
+    }
+
+    const payload: UpdateMyProfileRequest = {};
+    if (nickName !== user?.nickname) payload.nickName = nickName;
+    const imageUrl = profileImage?.startsWith('http')
+      ? profileImage
+      : undefined;
+    if (imageUrl && imageUrl !== user?.profileImage)
+      payload.profileImageUrl = imageUrl;
+
+    if (!payload.nickName && !payload.profileImageUrl) {
+      setSaveMessage({ type: 'error', text: '변경된 내용이 없습니다.' });
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveMessage(null);
+    try {
+      const updated = await updateMyProfile(payload);
+      if (user) {
+        setUser({
+          ...user,
+          nickname: updated.nickName,
+          profileImage: updated.profileImageUrl || undefined,
+        });
+      }
+      setSaveMessage({ type: 'success', text: '프로필이 수정되었습니다.' });
+    } catch (error: unknown) {
+      let errorMessage = '저장 중 오류가 발생했습니다. 다시 시도해 주세요.';
+
+      if (axios.isAxiosError<{ message?: string }>(error)) {
+        const status = error.response?.status;
+        const serverMessage = error.response?.data?.message;
+
+        if (status === 401) {
+          errorMessage = '로그인이 만료되었습니다. 다시 로그인해 주세요.';
+        } else if (status === 403) {
+          errorMessage = serverMessage || '프로필 수정 권한이 없습니다.';
+        } else if (status === 400) {
+          errorMessage = serverMessage || '입력값이 올바르지 않습니다.';
+        } else if (serverMessage) {
+          errorMessage = serverMessage;
+        }
+      }
+
+      setSaveMessage({
+        type: 'error',
+        text: errorMessage,
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // 관심사 라벨 매핑 (나중에 API 연동 시 대체)
@@ -331,7 +410,7 @@ const ProfileEditPage = () => {
               {profileImage ? (
                 <img src={profileImage} alt="프로필 이미지" />
               ) : (
-                user.initial
+                initial
               )}
             </AvatarCircle>
             <AddPhotoButton onClick={handleAddPhotoClick}>
@@ -350,6 +429,48 @@ const ProfileEditPage = () => {
 
         {/* 오른쪽: 메인 콘텐츠 */}
         <MainContent>
+          {/* 기본 프로필 섹션 */}
+          <Section>
+            <SectionHeader>
+              <SectionTitle>기본 프로필</SectionTitle>
+            </SectionHeader>
+
+            <FormRow>
+              <FormLabel htmlFor="nickname">닉네임</FormLabel>
+              <FormInput
+                id="nickname"
+                value={nickName}
+                onChange={(e) => {
+                  setNickName(e.target.value);
+                  setSaveMessage(null);
+                }}
+                placeholder="닉네임을 입력하세요"
+                maxLength={30}
+              />
+            </FormRow>
+
+            <FormRow>
+              <FormLabel>
+                이메일
+                <ReadonlyBadge>변경 불가</ReadonlyBadge>
+              </FormLabel>
+              <ReadonlyField>{user?.email ?? '-'}</ReadonlyField>
+            </FormRow>
+
+            <FormFooter>
+              <SaveProfileButton onClick={handleSave} disabled={isSaving}>
+                {isSaving ? '저장 중...' : '저장'}
+              </SaveProfileButton>
+              {saveMessage && (
+                <SaveMessage $type={saveMessage.type}>
+                  {saveMessage.text}
+                </SaveMessage>
+              )}
+            </FormFooter>
+          </Section>
+
+          <Divider />
+
           {/* 프로필 섹션 */}
           <Section>
             <SectionHeader>
@@ -387,14 +508,9 @@ const ProfileEditPage = () => {
               <SectionTitle>자기소개</SectionTitle>
             </SectionHeader>
 
-            <IntroBox
-              onClick={() => setIsIntroModalOpen(true)}
-              style={{ cursor: 'pointer' }}
-            >
+            <IntroBox onClick={() => setIsIntroModalOpen(true)}>
               {introduction ? (
-                <IntroPlaceholder style={{ color: 'inherit' }}>
-                  {introduction}
-                </IntroPlaceholder>
+                <IntroPlaceholder $filled>{introduction}</IntroPlaceholder>
               ) : (
                 <>
                   <IntroPlaceholder>

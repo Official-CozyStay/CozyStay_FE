@@ -9,7 +9,7 @@ import {
 } from 'react';
 import type { ReactNode } from 'react';
 
-export type UserRole = "USER" | "HOST" | "ADMIN";
+export type UserRole = 'USER' | 'HOST' | 'ADMIN';
 
 export type User = {
   id: string;
@@ -38,6 +38,7 @@ type UserProfileResponse = {
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
   accessToken: string | null;
   login: (token: string) => Promise<void>;
   logout: () => void;
@@ -107,6 +108,7 @@ const fetchUserProfile = async (token: string): Promise<User | null> => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const isLoadingRef = useRef(false);
 
   // 사용자 정보 로드 함수
@@ -137,26 +139,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // 초기 로드 및 URL 토큰 처리
   useEffect(() => {
-    // 1. URL에서 토큰을 받아온 경우 (로그인 직후)
-    const params = new URLSearchParams(window.location.search);
-    const urlToken = params.get('accessToken');
-    const refreshToken = params.get('refreshToken');
+    let isMounted = true;
 
-    if (urlToken && refreshToken) {
-      localStorage.setItem('accessToken', urlToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      loadUserInfo(urlToken);
-      // URL 정리
-      window.history.replaceState({}, document.title, window.location.pathname);
-      return;
-    }
+    const initializeAuth = async () => {
+      // 1. URL에서 토큰을 받아온 경우 (로그인 직후)
+      const params = new URLSearchParams(window.location.search);
+      const urlToken = params.get('accessToken');
+      const refreshToken = params.get('refreshToken');
 
-    // 2. localStorage에서 토큰 확인 (새로고침 시)
-    const storedToken = localStorage.getItem('accessToken');
-    if (storedToken && !user) {
-      loadUserInfo(storedToken);
-    }
-  }, [loadUserInfo, user]);
+      if (urlToken && refreshToken) {
+        localStorage.setItem('accessToken', urlToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        await loadUserInfo(urlToken);
+        // URL 정리
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        );
+        if (isMounted) {
+          setIsAuthLoading(false);
+        }
+        return;
+      }
+
+      // 2. localStorage에서 토큰 확인 (새로고침 시)
+      const storedToken = localStorage.getItem('accessToken');
+      if (storedToken) {
+        await loadUserInfo(storedToken);
+      }
+
+      if (isMounted) {
+        setIsAuthLoading(false);
+      }
+    };
+
+    initializeAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [loadUserInfo]);
 
   const login = async (token: string) => {
     localStorage.setItem('accessToken', token);
@@ -175,6 +198,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         user,
         isAuthenticated: !!user && !!accessToken,
+        isAuthLoading,
         accessToken,
         login,
         logout,

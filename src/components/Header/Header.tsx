@@ -69,6 +69,14 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
     return '숙소'; // 기본값
   }, [location.pathname]);
 
+  const handleHostNavigation = () => {
+    if (!isAuthenticated) {
+      setIsLoginOpen(true);
+      return;
+    }
+    navigate('/hosting');
+  };
+
   return (
     <>
       <HeaderContainer $isScrolled={isScrolled}>
@@ -99,7 +107,7 @@ const Header = ({ isScrolled = false }: HeaderProps) => {
         </HeaderCenter>
 
         <HeaderRight>
-          <HostButton type="button" onClick={() => navigate('/hosting')}>
+          <HostButton type="button" onClick={handleHostNavigation}>
             호스트로 등록하기
           </HostButton>
 

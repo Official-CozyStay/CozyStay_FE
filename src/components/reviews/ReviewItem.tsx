@@ -15,6 +15,10 @@ export default function ReviewItem({
   const authorName = review.author?.nickName || '익명';
   const profileImage =
     review.author?.profileImageUrl || 'https://via.placeholder.com/48';
+  const subInfoParts = [
+    review.createdAt?.trim(),
+    showAccommodationName ? review.accommodationName : undefined,
+  ].filter(Boolean) as string[];
 
   return (
     <Container>
@@ -22,12 +26,9 @@ export default function ReviewItem({
         <Avatar src={profileImage} alt={authorName} />
         <Meta>
           <Author>{authorName}</Author>
-          <SubInfo>
-            {review.createdAt}
-            {showAccommodationName && review.accommodationName && (
-              <> · {review.accommodationName}</>
-            )}
-          </SubInfo>
+          {subInfoParts.length > 0 && (
+            <SubInfo>{subInfoParts.join(' · ')}</SubInfo>
+          )}
         </Meta>
       </Header>
 

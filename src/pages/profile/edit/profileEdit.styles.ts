@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { media } from "@/styles/media";
+import styled from 'styled-components';
+import { media } from '@/styles/media';
 
 export {
   PageContainer,
@@ -19,16 +19,16 @@ export {
   SectionHeader,
   SectionTitle,
   SectionDescription,
-} from "@/styles/shared/pageLayout.styles";
+} from '@/styles/shared/pageLayout.styles';
 
-export { SaveButton as CompleteButton } from "@/styles/shared/modal.styles";
+export { SaveButton as CompleteButton } from '@/styles/shared/modal.styles';
 
 export const ContentWrapper = styled.div`
   display: flex;
   max-width: 1100px;
   margin: 0 auto;
-  padding: ${({ theme }) => `${theme.spacing["3xl"]} ${theme.spacing["2xl"]}`};
-  gap: ${({ theme }) => theme.spacing["6xl"]};
+  padding: ${({ theme }) => `${theme.spacing['3xl']} ${theme.spacing['2xl']}`};
+  gap: ${({ theme }) => theme.spacing['6xl']};
 
   ${media.tablet} {
     flex-direction: column;
@@ -56,7 +56,6 @@ export const AvatarWrapper = styled.div`
   position: relative;
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
-
 
 export const AddPhotoButton = styled.button`
   position: absolute;
@@ -87,7 +86,6 @@ export const MainContent = styled.main`
   flex: 1;
   min-width: 0;
 `;
-
 
 export const LearnMoreLink = styled.button`
   padding: 0;
@@ -155,11 +153,13 @@ export const IntroBox = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
   border: 1px dashed ${({ theme }) => theme.colors.border.primary};
   border-radius: ${({ theme }) => theme.radius.md};
+  cursor: pointer;
 `;
 
-export const IntroPlaceholder = styled.p`
+export const IntroPlaceholder = styled.p<{ $filled?: boolean }>`
   font-size: ${({ theme }) => theme.font.size.sm};
-  color: ${({ theme }) => theme.colors.text.secondary};
+  color: ${({ $filled, theme }) =>
+    $filled ? theme.colors.text.primary : theme.colors.text.secondary};
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
@@ -187,7 +187,6 @@ export const TravelHeader = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-
 export const TravelStamps = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md};
@@ -213,7 +212,9 @@ export const StampCard = styled.div`
   flex-shrink: 0;
 `;
 
-export const StampIcon = styled.div<{ $shape?: "square" | "rounded" | "hexagon" | "circle" }>`
+export const StampIcon = styled.div<{
+  $shape?: 'square' | 'rounded' | 'hexagon' | 'circle';
+}>`
   width: 120px;
   height: 100px;
   border: 2px solid ${({ theme }) => theme.colors.border.primary};
@@ -224,16 +225,16 @@ export const StampIcon = styled.div<{ $shape?: "square" | "rounded" | "hexagon" 
 
   ${({ $shape, theme }) => {
     switch ($shape) {
-      case "rounded":
+      case 'rounded':
         return `border-radius: ${theme.radius.xl};`;
-      case "hexagon":
+      case 'hexagon':
         return `
           clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
           border: none;
           background: ${theme.colors.border.primary};
           color: ${theme.colors.common.white};
         `;
-      case "circle":
+      case 'circle':
         return `border-radius: ${theme.radius.full};`;
       default:
         return `border-radius: ${theme.radius.md};`;
@@ -323,10 +324,80 @@ export const AddInterestTextButton = styled.button`
 export const Footer = styled.footer`
   display: flex;
   justify-content: flex-end;
-  padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing["2xl"]}`};
+  padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing['2xl']}`};
   border-top: 1px solid ${({ theme }) => theme.colors.border.light};
   background: ${({ theme }) => theme.colors.background.default};
   position: sticky;
   bottom: 0;
 `;
 
+// 기본 프로필 폼
+export const FormRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+export const FormLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.font.size.sm};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  color: ${({ theme }) => theme.colors.text.secondary};
+`;
+
+export const ReadonlyBadge = styled.span`
+  font-size: ${({ theme }) => theme.font.size.xs};
+  font-weight: ${({ theme }) => theme.font.weight.regular};
+  color: ${({ theme }) => theme.colors.text.tertiary};
+  background: ${({ theme }) => theme.colors.background.hover};
+  border: 1px solid ${({ theme }) => theme.colors.border.light};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  padding: 1px ${({ theme }) => theme.spacing.xs};
+`;
+
+export const FormInput = styled.input`
+  width: 100%;
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  border: 1px solid ${({ theme }) => theme.colors.border.primary};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.md};
+  color: ${({ theme }) => theme.colors.text.primary};
+  background: ${({ theme }) => theme.colors.common.white};
+  transition: ${({ theme }) => theme.transition.normal};
+  outline: none;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
+`;
+
+export const ReadonlyField = styled.div`
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  background: ${({ theme }) => theme.colors.background.hover};
+  border: 1px solid ${({ theme }) => theme.colors.border.light};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.font.size.md};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  word-break: break-all;
+`;
+
+export const FormFooter = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.lg};
+  margin-top: ${({ theme }) => theme.spacing.lg};
+`;
+
+// 저장 결과 메시지
+export const SaveMessage = styled.p<{ $type: 'success' | 'error' }>`
+  font-size: ${({ theme }) => theme.font.size.sm};
+  color: ${({ $type, theme }) =>
+    $type === 'success'
+      ? theme.colors.status.success
+      : theme.colors.status.error};
+`;
+
+export { SaveButton as SaveProfileButton } from '@/styles/shared/modal.styles';

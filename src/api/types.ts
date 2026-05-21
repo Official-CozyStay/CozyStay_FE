@@ -441,3 +441,19 @@ export interface AccommodationSearchResponse {
   totalElements: number;
   totalPages: number;
 }
+
+// [PATCH] /api/users/me/profile - 프로필 수정 요청
+export type UpdateMyProfileRequest = {
+  nickName?: string;
+  profileImageUrl?: string;
+};
+
+// [PATCH] /api/users/me/profile, [GET] /api/users/me - 내 프로필 응답
+export type MyProfileResponse = {
+  id: number;
+  email: string;
+  nickName: string;
+  profileImageUrl: string;
+  role: 'USER' | 'HOST' | 'ADMIN';
+  grade: 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM';
+};
