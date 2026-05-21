@@ -323,7 +323,6 @@ const BecomeHostPage = () => {
           maxGuests: listingData.guests || 1,
           pricePerNight: listingData.pricing?.basePrice ?? 0,
           cleaningFee: listingData.pricing?.cleaningFee,
-          serviceFeePercentage: 5.0,
           instantBooking: listingData.bookingSettings === 'instant',
           checkInTime: listingData.checkInTime || '15:00:00',
           checkOutTime: listingData.checkOutTime || '11:00:00',
