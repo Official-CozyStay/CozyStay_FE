@@ -333,11 +333,7 @@ export type ReviewSummryDTO = {
 };
 
 export interface InviteGuestRequest {
-  guestUserId?: number;
-  guestName?: string;
   guestEmail: string;
-  guestPhone?: string;
-  guestIdentityValid?: boolean;
 }
 
 export interface InviteGuestResponse {
@@ -362,6 +358,12 @@ export interface MyInvitationResponse {
   invitationStatus: string;
   invitedAt: string;
   respondedAt?: string;
+}
+
+export interface BookingGuestConnectionResponse {
+  userId: number;
+  nickName: string;
+  profileImageUrl: string | null;
 }
 // --- Favorite (즐겨찾기) API ---
 export type FavoriteResponseDTO = {

@@ -7,6 +7,7 @@ import type {
   InviteGuestResponse,
   PageResponse,
   MyInvitationResponse,
+  BookingGuestConnectionResponse,
 } from './types';
 
 export type {
@@ -17,6 +18,7 @@ export type {
   InviteGuestResponse,
   PageResponse,
   MyInvitationResponse,
+  BookingGuestConnectionResponse,
 };
 
 /**
@@ -29,6 +31,16 @@ export async function fetchUserBookings(
   const response = (await client.get(`/api/bookings`, {
     params,
   })) as BookingResponse[];
+  return response;
+}
+
+/**
+ * 내가 동반자로 참여한 예약 목록 조회
+ */
+export async function fetchCompanionBookings(): Promise<BookingResponse[]> {
+  const response = (await client.get(
+    `/api/booking-guests/me/bookings`,
+  )) as BookingResponse[];
   return response;
 }
 
@@ -79,6 +91,18 @@ export async function getMyInvitations(
   const response = (await client.get(`/api/booking-guests/me`, {
     params,
   })) as PageResponse<MyInvitationResponse>;
+  return response;
+}
+
+/**
+ * 내 인연 목록 조회
+ */
+export async function getBookingGuestConnections(): Promise<
+  BookingGuestConnectionResponse[]
+> {
+  const response = (await client.get(
+    `/api/booking-guests/connections`,
+  )) as BookingGuestConnectionResponse[];
   return response;
 }
 
