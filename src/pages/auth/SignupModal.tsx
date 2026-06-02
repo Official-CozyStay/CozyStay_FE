@@ -148,7 +148,7 @@ const SignupModal = ({ open, onClose }: SignupModalProps) => {
         nickName: formData.nickName,
       })) as { success?: boolean; message?: string } | null;
 
-      if (result?.success || result) {
+      if (result?.success !== false) {
         alert('회원가입이 완료되었습니다!');
         onClose();
       } else {
