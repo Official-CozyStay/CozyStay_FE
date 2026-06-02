@@ -26,18 +26,95 @@ export const router = createBrowserRouter([
       { index: true, element: <MainPage /> },
       { path: 'landing', element: <LandingPage /> },
       { path: 'accommodation/:id', element: <AccommodationDetailPage /> },
-      { path: 'payment/:id', element: <PaymentPage /> },
-      { path: 'payment/retry/:id', element: <PaymentPage /> },
-      { path: 'payment/success', element: <PaymentSuccessPage /> },
-      { path: 'payment/fail', element: <PaymentFailPage /> },
+      {
+        path: 'payment/:id',
+        element: (
+          <RequireAuth>
+            <PaymentPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'payment/retry/:id',
+        element: (
+          <RequireAuth>
+            <PaymentPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'payment/success',
+        element: (
+          <RequireAuth>
+            <PaymentSuccessPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'payment/fail',
+        element: (
+          <RequireAuth>
+            <PaymentFailPage />
+          </RequireAuth>
+        ),
+      },
       { path: 'search', element: <SearchPage /> },
-      { path: 'wishlist', element: <WishlistPage /> },
-      { path: 'wishlist/:favoriteId', element: <WishlistDetailPage /> },
-      { path: 'messages', element: <MessagePage /> },
-      { path: 'account', element: <AccountPage /> },
-      { path: 'profile', element: <ProfilePage /> },
-      { path: 'profile/edit', element: <ProfileEditPage /> },
-      { path: 'profile/reviews', element: <ProfilePage /> },
+      {
+        path: 'wishlist',
+        element: (
+          <RequireAuth>
+            <WishlistPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'wishlist/:favoriteId',
+        element: (
+          <RequireAuth>
+            <WishlistDetailPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'messages',
+        element: (
+          <RequireAuth>
+            <MessagePage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'account',
+        element: (
+          <RequireAuth>
+            <AccountPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <RequireAuth>
+            <ProfilePage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'profile/edit',
+        element: (
+          <RequireAuth>
+            <ProfileEditPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'profile/reviews',
+        element: (
+          <RequireAuth>
+            <ProfilePage />
+          </RequireAuth>
+        ),
+      },
       { path: 'users/:id', element: <UserPage /> },
     ],
   },
