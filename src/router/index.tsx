@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import PublicLayout from '../layouts/PublicLayout/PublicLayout';
 import LandingPage from '../pages/landing/LandingPage';
 import MainPage from '../pages/main/MainPage';
@@ -26,36 +26,41 @@ export const router = createBrowserRouter([
       { index: true, element: <MainPage /> },
       { path: 'landing', element: <LandingPage /> },
       { path: 'accommodation/:id', element: <AccommodationDetailPage /> },
-      { path: 'payment/:id', element: <PaymentPage /> },
-      { path: 'payment/retry/:id', element: <PaymentPage /> },
-      { path: 'payment/success', element: <PaymentSuccessPage /> },
-      { path: 'payment/fail', element: <PaymentFailPage /> },
       { path: 'search', element: <SearchPage /> },
-      { path: 'wishlist', element: <WishlistPage /> },
-      { path: 'wishlist/:favoriteId', element: <WishlistDetailPage /> },
-      { path: 'messages', element: <MessagePage /> },
-      { path: 'account', element: <AccountPage /> },
-      { path: 'profile', element: <ProfilePage /> },
-      { path: 'profile/edit', element: <ProfileEditPage /> },
-      { path: 'profile/reviews', element: <ProfilePage /> },
       { path: 'users/:id', element: <UserPage /> },
+      {
+        element: (
+          <RequireAuth>
+            <Outlet />
+          </RequireAuth>
+        ),
+        children: [
+          { path: 'payment/:id', element: <PaymentPage /> },
+          { path: 'payment/retry/:id', element: <PaymentPage /> },
+          { path: 'payment/success', element: <PaymentSuccessPage /> },
+          { path: 'payment/fail', element: <PaymentFailPage /> },
+          { path: 'wishlist', element: <WishlistPage /> },
+          { path: 'wishlist/:favoriteId', element: <WishlistDetailPage /> },
+          { path: 'messages', element: <MessagePage /> },
+          { path: 'account', element: <AccountPage /> },
+          { path: 'profile', element: <ProfilePage /> },
+          { path: 'profile/edit', element: <ProfileEditPage /> },
+          { path: 'profile/reviews', element: <ProfilePage /> },
+        ],
+      },
     ],
   },
   {
     path: '/hosting',
     element: (
       <RequireAuth>
-        <HostingPage />
+        <Outlet />
       </RequireAuth>
     ),
-  },
-  {
-    path: '/hosting/become-a-host',
-    element: (
-      <RequireAuth>
-        <BecomeHostPage />
-      </RequireAuth>
-    ),
+    children: [
+      { index: true, element: <HostingPage /> },
+      { path: 'become-a-host', element: <BecomeHostPage /> },
+    ],
   },
 ]);
 
