@@ -461,7 +461,9 @@ const PastTripsSection = () => {
   };
 
   const canShowRetryPayment = (booking: BookingResponse) => {
-    if (booking.bookingStatus === 'CANCELLED') {
+    if (
+      ['CANCELLED', 'COMPLETED', 'REJECTED'].includes(booking.bookingStatus)
+    ) {
       return false;
     }
 
