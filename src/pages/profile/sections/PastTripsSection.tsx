@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchAccommodationDetail } from '@/api/accommodation';
@@ -242,6 +242,9 @@ const PastTripsSection = () => {
   const [accommodationPreviews, setAccommodationPreviews] = useState<
     Record<number, AccommodationPreview>
   >({});
+  const accommodationPreviewsRef = useRef<Record<number, AccommodationPreview>>(
+    {},
+  );
   const [paymentInfos, setPaymentInfos] = useState<
     Record<number, BookingPaymentInfo>
   >({});
@@ -250,6 +253,53 @@ const PastTripsSection = () => {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(
     null,
+  );
+
+  const loadMissingAccommodationPreviews = useCallback(
+    async (accommodationIds: number[]) => {
+      const uniqueIds = [...new Set(accommodationIds)];
+
+      if (uniqueIds.length === 0) {
+        accommodationPreviewsRef.current = {};
+        setAccommodationPreviews({});
+        return;
+      }
+
+      const missingIds = uniqueIds.filter(
+        (accommodationId) => !accommodationPreviewsRef.current[accommodationId],
+      );
+
+      if (missingIds.length === 0) {
+        return;
+      }
+
+      const nextPreviews: Record<number, AccommodationPreview> = {};
+      await Promise.all(
+        missingIds.map(async (accommodationId) => {
+          try {
+            const detail = await fetchAccommodationDetail(
+              String(accommodationId),
+            );
+            nextPreviews[accommodationId] = {
+              title: detail.title,
+              imageUrl: getPrimaryImageUrl(detail.images),
+            };
+          } catch (previewError) {
+            console.error(
+              `Failed to fetch preview for accommodation ${accommodationId}`,
+              previewError,
+            );
+          }
+        }),
+      );
+
+      accommodationPreviewsRef.current = {
+        ...accommodationPreviewsRef.current,
+        ...nextPreviews,
+      };
+      setAccommodationPreviews(accommodationPreviewsRef.current);
+    },
+    [],
   );
 
   const loadBookings = useCallback(
@@ -308,40 +358,11 @@ const PastTripsSection = () => {
           setPaymentInfos({});
         }
 
-        const accommodationIds = [
-          ...new Set([
-            ...(gBookings || []).map((booking) => booking.accommodationId),
-            ...(cBookings || []).map((booking) => booking.accommodationId),
-            ...(hBookings || []).map((booking) => booking.accommodationId),
-          ]),
-        ];
-
-        if (accommodationIds.length === 0) {
-          setAccommodationPreviews({});
-          return;
-        }
-
-        const nextPreviews: Record<number, AccommodationPreview> = {};
-        await Promise.all(
-          accommodationIds.map(async (accommodationId) => {
-            try {
-              const detail = await fetchAccommodationDetail(
-                String(accommodationId),
-              );
-              nextPreviews[accommodationId] = {
-                title: detail.title,
-                imageUrl: getPrimaryImageUrl(detail.images),
-              };
-            } catch (previewError) {
-              console.error(
-                `Failed to fetch preview for accommodation ${accommodationId}`,
-                previewError,
-              );
-            }
-          }),
-        );
-
-        setAccommodationPreviews(nextPreviews);
+        await loadMissingAccommodationPreviews([
+          ...(gBookings || []).map((booking) => booking.accommodationId),
+          ...(cBookings || []).map((booking) => booking.accommodationId),
+          ...(hBookings || []).map((booking) => booking.accommodationId),
+        ]);
       } catch (err) {
         console.error('Failed to fetch bookings:', err);
         setError('예약 목록을 불러오지 못했습니다.');
@@ -351,7 +372,7 @@ const PastTripsSection = () => {
         }
       }
     },
-    [isHost],
+    [isHost, loadMissingAccommodationPreviews],
   );
 
   useEffect(() => {
