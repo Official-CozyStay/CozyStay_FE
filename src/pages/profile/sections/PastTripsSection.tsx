@@ -218,11 +218,11 @@ type BookingPaymentInfo = {
 };
 
 const getPrimaryImageUrl = (
-  images: { imageUrl: string; isPrimary: boolean }[],
+  images?: { imageUrl: string; isPrimary: boolean }[] | null,
 ) => {
   return (
-    images.find((image) => image.isPrimary)?.imageUrl ??
-    images[0]?.imageUrl ??
+    images?.find((image) => image.isPrimary)?.imageUrl ??
+    images?.[0]?.imageUrl ??
     null
   );
 };
