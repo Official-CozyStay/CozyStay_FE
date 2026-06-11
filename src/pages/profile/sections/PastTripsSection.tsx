@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchAccommodationDetail } from '@/api/accommodation';
@@ -9,6 +10,7 @@ import {
   type BookingResponse,
   type HostBookingListItemResponse,
 } from '@/api/booking';
+import { getPaymentByBooking, type PaymentResponse } from '@/api/payment';
 import InviteFriendModal from '@/components/InviteFriendModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { media } from '@/styles/media';
@@ -44,7 +46,7 @@ const ReservationCard = styled.div`
   }
 `;
 
-const ReservationImage = styled.div`
+const ReservationImageFallback = styled.div`
   width: 200px;
   height: 150px;
   border-radius: ${({ theme }) => theme.radius.lg};
@@ -60,10 +62,24 @@ const ReservationImage = styled.div`
   }
 `;
 
+const ReservationThumbnail = styled.img`
+  width: 200px;
+  height: 150px;
+  border-radius: ${({ theme }) => theme.radius.lg};
+  object-fit: cover;
+  background: ${({ theme }) => theme.colors.background.default};
+
+  ${media.tablet} {
+    width: 100%;
+    height: 200px;
+  }
+`;
+
 const ReservationInfo = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const ReservationHeader = styled.div`
@@ -79,7 +95,7 @@ const ReservationHeader = styled.div`
 `;
 
 const AccommodationName = styled.h3`
-  font-size: ${({ theme }) => theme.font.size.xl};
+  font-size: ${({ theme }) => theme.font.size.md};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
@@ -87,8 +103,8 @@ const AccommodationName = styled.h3`
 const StatusGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.xs};
   justify-content: flex-end;
+  gap: ${({ theme }) => theme.spacing.xs};
 
   ${media.mobile} {
     justify-content: flex-start;
@@ -100,7 +116,7 @@ const ReservationStatus = styled.span`
   background: ${({ theme }) => theme.colors.background.hover};
   color: ${({ theme }) => theme.colors.primary.main};
   border-radius: ${({ theme }) => theme.radius.full};
-  font-size: ${({ theme }) => theme.font.size.sm};
+  font-size: 11px;
   font-weight: ${({ theme }) => theme.font.weight.bold};
   white-space: nowrap;
 `;
@@ -109,18 +125,32 @@ const ReservationDetails = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 const DetailText = styled.p`
-  font-size: ${({ theme }) => theme.font.size.md};
+  margin: 0;
+  font-size: ${({ theme }) => theme.font.size.xs};
+  line-height: 1.3;
   color: ${({ theme }) => theme.colors.text.secondary};
+`;
+
+const PaymentStatusText = styled.span<{
+  $tone: 'success' | 'pending' | 'error';
+}>`
+  font-size: ${({ theme }) => theme.font.size.xs};
+  font-weight: ${({ theme }) => theme.font.weight.medium};
+  color: ${({ $tone, theme }) => {
+    if ($tone === 'success') return theme.colors.primary.main;
+    if ($tone === 'error') return theme.colors.status.error;
+    return theme.colors.text.secondary;
+  }};
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-top: auto;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-top: ${({ theme }) => theme.spacing.sm};
 
   ${media.tablet} {
     flex-direction: column;
@@ -129,7 +159,7 @@ const ButtonGroup = styled.div`
 
 const ActionButton = styled.button<{ $primary?: boolean }>`
   flex: 1;
-  padding: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
   border: 1px solid
     ${({ $primary, theme }) =>
       $primary ? theme.colors.primary.main : theme.colors.border.primary};
@@ -138,7 +168,7 @@ const ActionButton = styled.button<{ $primary?: boolean }>`
     $primary ? theme.colors.primary.main : theme.colors.common.white};
   color: ${({ $primary, theme }) =>
     $primary ? theme.colors.common.white : theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.font.size.md};
+  font-size: ${({ theme }) => theme.font.size.xs};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   cursor: pointer;
   transition: ${({ theme }) => theme.transition.normal};
@@ -147,6 +177,13 @@ const ActionButton = styled.button<{ $primary?: boolean }>`
   &:hover {
     background: ${({ $primary, theme }) =>
       $primary ? theme.colors.primary.hover : theme.colors.background.hover};
+  }
+
+  &:disabled {
+    border-color: ${({ theme }) => theme.colors.border.light};
+    background: ${({ theme }) => theme.colors.background.default};
+    color: ${({ theme }) => theme.colors.text.tertiary};
+    cursor: not-allowed;
   }
 `;
 
@@ -170,6 +207,26 @@ const SectionTitle = styled.h2`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
+type AccommodationPreview = {
+  title: string;
+  imageUrl: string | null;
+};
+
+type BookingPaymentInfo = {
+  payment: PaymentResponse | null;
+  hasPayment: boolean;
+};
+
+const getPrimaryImageUrl = (
+  images?: { imageUrl: string; isPrimary: boolean }[] | null,
+) => {
+  return (
+    images?.find((image) => image.isPrimary)?.imageUrl ??
+    images?.[0]?.imageUrl ??
+    null
+  );
+};
+
 const PastTripsSection = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -182,22 +239,75 @@ const PastTripsSection = () => {
   const [hostBookings, setHostBookings] = useState<
     HostBookingListItemResponse[]
   >([]);
-  const [accommodationNames, setAccommodationNames] = useState<
-    Record<number, string>
+  const [accommodationPreviews, setAccommodationPreviews] = useState<
+    Record<number, AccommodationPreview>
   >({});
-
+  const accommodationPreviewsRef = useRef<Record<number, AccommodationPreview>>(
+    {},
+  );
+  const [paymentInfos, setPaymentInfos] = useState<
+    Record<number, BookingPaymentInfo>
+  >({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(
     null,
   );
 
-  useEffect(() => {
-    const loadBookings = async () => {
+  const loadMissingAccommodationPreviews = useCallback(
+    async (accommodationIds: number[]) => {
+      const uniqueIds = [...new Set(accommodationIds)];
+
+      if (uniqueIds.length === 0) {
+        accommodationPreviewsRef.current = {};
+        setAccommodationPreviews({});
+        return;
+      }
+
+      const missingIds = uniqueIds.filter(
+        (accommodationId) => !accommodationPreviewsRef.current[accommodationId],
+      );
+
+      if (missingIds.length === 0) {
+        return;
+      }
+
+      const nextPreviews: Record<number, AccommodationPreview> = {};
+      await Promise.all(
+        missingIds.map(async (accommodationId) => {
+          try {
+            const detail = await fetchAccommodationDetail(
+              String(accommodationId),
+            );
+            nextPreviews[accommodationId] = {
+              title: detail.title,
+              imageUrl: getPrimaryImageUrl(detail.images),
+            };
+          } catch (previewError) {
+            console.error(
+              `Failed to fetch preview for accommodation ${accommodationId}`,
+              previewError,
+            );
+          }
+        }),
+      );
+
+      accommodationPreviewsRef.current = {
+        ...accommodationPreviewsRef.current,
+        ...nextPreviews,
+      };
+      setAccommodationPreviews(accommodationPreviewsRef.current);
+    },
+    [],
+  );
+
+  const loadBookings = useCallback(
+    async (showLoading = false) => {
       try {
-        setLoading(true);
+        if (showLoading) {
+          setLoading(true);
+        }
         setError(null);
 
         const [gBookings, cBookings, hBookings] = await Promise.all([
@@ -212,48 +322,74 @@ const PastTripsSection = () => {
         setCompanionBookings(cBookings || []);
         setHostBookings(hBookings || []);
 
-        const accommodationIds = [
-          ...new Set([
-            ...(gBookings || []).map((booking) => booking.accommodationId),
-            ...(cBookings || []).map((booking) => booking.accommodationId),
-          ]),
-        ];
+        if ((gBookings || []).length > 0) {
+          const nextPaymentInfos: Record<number, BookingPaymentInfo> = {};
 
-        if (accommodationIds.length === 0) {
-          setAccommodationNames({});
-          return;
+          await Promise.all(
+            gBookings.map(async (booking) => {
+              try {
+                const payment = await getPaymentByBooking(booking.bookingId);
+                nextPaymentInfos[booking.bookingId] = {
+                  payment,
+                  hasPayment: true,
+                };
+              } catch (paymentError) {
+                if (
+                  axios.isAxiosError(paymentError) &&
+                  paymentError.response?.status === 404
+                ) {
+                  nextPaymentInfos[booking.bookingId] = {
+                    payment: null,
+                    hasPayment: false,
+                  };
+                  return;
+                }
+
+                console.error(
+                  `Failed to fetch payment for booking ${booking.bookingId}`,
+                  paymentError,
+                );
+              }
+            }),
+          );
+
+          setPaymentInfos(nextPaymentInfos);
+        } else {
+          setPaymentInfos({});
         }
 
-        const nextNames: Record<number, string> = {};
-        await Promise.all(
-          accommodationIds.map(async (accommodationId) => {
-            try {
-              const detail = await fetchAccommodationDetail(
-                String(accommodationId),
-              );
-              nextNames[accommodationId] = detail.title;
-            } catch (e) {
-              console.error(
-                `Failed to fetch title for accommodation ${accommodationId}`,
-                e,
-              );
-            }
-          }),
-        );
-
-        setAccommodationNames(nextNames);
+        await loadMissingAccommodationPreviews([
+          ...(gBookings || []).map((booking) => booking.accommodationId),
+          ...(cBookings || []).map((booking) => booking.accommodationId),
+          ...(hBookings || []).map((booking) => booking.accommodationId),
+        ]);
       } catch (err) {
         console.error('Failed to fetch bookings:', err);
         setError('예약 목록을 불러오지 못했습니다.');
       } finally {
-        setLoading(false);
+        if (showLoading) {
+          setLoading(false);
+        }
       }
-    };
+    },
+    [isHost, loadMissingAccommodationPreviews],
+  );
 
+  useEffect(() => {
     if (user) {
-      loadBookings();
+      loadBookings(true);
     }
-  }, [user, isHost]);
+  }, [user, loadBookings]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const intervalId = window.setInterval(() => {
+      loadBookings();
+    }, 60_000);
+
+    return () => window.clearInterval(intervalId);
+  }, [user, loadBookings]);
 
   const handleViewDetails = (id: number) => {
     navigate(`/accommodation/${id}`);
@@ -268,6 +404,16 @@ const PastTripsSection = () => {
     navigate('/');
   };
 
+  const handleRetryPayment = (booking: BookingResponse) => {
+    const params = new URLSearchParams();
+    params.set('bookingId', String(booking.bookingId));
+    params.set('checkin', booking.checkInDate);
+    params.set('checkout', booking.checkOutDate);
+    params.set('numberOfGuests', String(booking.numberOfGuests));
+
+    navigate(`/payment/retry/${booking.accommodationId}?${params.toString()}`);
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('ko-KR', {
       style: 'currency',
@@ -275,19 +421,87 @@ const PastTripsSection = () => {
     }).format(price);
   };
 
-  const getStatusText = (status: string) => {
+  const getBookingStatusText = (status: string) => {
     const statusMap: Record<string, string> = {
-      PENDING: '승인 대기중',
+      PENDING: '예약 대기 중',
       CONFIRMED: '예약 확정',
-      CANCELLED: '예약 취소',
+      CANCELLED: '예약 취소됨',
       COMPLETED: '이용 완료',
-      REJECTED: '예약 거절',
+      REJECTED: '예약 거절됨',
     };
     return statusMap[status] || status;
   };
 
-  const getAccommodationName = (accommodationId: number) => {
-    return accommodationNames[accommodationId] || `숙소 ID: ${accommodationId}`;
+  const getPaymentStatusText = (bookingId: number) => {
+    const paymentInfo = paymentInfos[bookingId];
+
+    if (!paymentInfo || !paymentInfo.hasPayment || !paymentInfo.payment) {
+      return {
+        text: '결제 정보 없음',
+        tone: 'pending' as const,
+      };
+    }
+
+    const paymentStatusMap: Record<
+      string,
+      { text: string; tone: 'success' | 'pending' | 'error' }
+    > = {
+      READY: { text: '결제 대기', tone: 'pending' },
+      SUCCESS: { text: '결제 완료', tone: 'success' },
+      FAILED: { text: '결제 실패', tone: 'error' },
+      CANCELLED: { text: '결제 취소', tone: 'error' },
+    };
+
+    return (
+      paymentStatusMap[paymentInfo.payment.paymentStatus] ?? {
+        text: paymentInfo.payment.paymentStatus,
+        tone: 'pending',
+      }
+    );
+  };
+
+  const canShowRetryPayment = (booking: BookingResponse) => {
+    if (
+      ['CANCELLED', 'COMPLETED', 'REJECTED'].includes(booking.bookingStatus)
+    ) {
+      return false;
+    }
+
+    const paymentInfo = paymentInfos[booking.bookingId];
+
+    if (!paymentInfo || !paymentInfo.hasPayment || !paymentInfo.payment) {
+      return true;
+    }
+
+    return ['READY', 'FAILED', 'CANCELLED'].includes(
+      paymentInfo.payment.paymentStatus,
+    );
+  };
+
+  const canInviteFriend = (bookingId: number) => {
+    return paymentInfos[bookingId]?.payment?.paymentStatus === 'SUCCESS';
+  };
+
+  const getAccommodationPreview = (accommodationId: number) => {
+    return accommodationPreviews[accommodationId];
+  };
+
+  const renderReservationImage = (
+    accommodationId: number,
+    fallbackTitle: string,
+  ) => {
+    const preview = getAccommodationPreview(accommodationId);
+
+    if (preview?.imageUrl) {
+      return (
+        <ReservationThumbnail
+          src={preview.imageUrl}
+          alt={preview.title || fallbackTitle}
+        />
+      );
+    }
+
+    return <ReservationImageFallback>숙소</ReservationImageFallback>;
   };
 
   const renderBookingCard = (
@@ -296,52 +510,87 @@ const PastTripsSection = () => {
     options?: {
       companion?: boolean;
       inviteEnabled?: boolean;
+      paymentVisible?: boolean;
+      retryVisible?: boolean;
     },
-  ) => (
-    <ReservationCard key={`${keyPrefix}-${booking.bookingId}`}>
-      <ReservationImage>집</ReservationImage>
-      <ReservationInfo>
-        <ReservationHeader>
-          <AccommodationName>
-            {getAccommodationName(booking.accommodationId)}
-          </AccommodationName>
-          <StatusGroup>
-            {options?.companion && (
-              <ReservationStatus>동반자 예약</ReservationStatus>
-            )}
-            <ReservationStatus>
-              {getStatusText(booking.bookingStatus || 'CONFIRMED')}
-            </ReservationStatus>
-          </StatusGroup>
-        </ReservationHeader>
-        <ReservationDetails>
-          <DetailText>
-            일정: {booking.checkInDate} ~ {booking.checkOutDate}
-          </DetailText>
-          <DetailText>인원: 게스트 {booking.numberOfGuests}명</DetailText>
-          <DetailText>
-            총 결제 금액: {formatPrice(booking.totalPrice)}
-          </DetailText>
-        </ReservationDetails>
+  ) => {
+    const preview = getAccommodationPreview(booking.accommodationId);
+    const paymentStatus = options?.paymentVisible
+      ? getPaymentStatusText(booking.bookingId)
+      : null;
+    const inviteEnabled =
+      !!options?.inviteEnabled && canInviteFriend(booking.bookingId);
+    const showRetryPayment =
+      !!options?.retryVisible && canShowRetryPayment(booking);
 
-        <ButtonGroup>
-          <ActionButton
-            onClick={() => handleViewDetails(booking.accommodationId)}
-          >
-            숙소 상세보기
-          </ActionButton>
-          {options?.inviteEnabled && (
+    return (
+      <ReservationCard key={`${keyPrefix}-${booking.bookingId}`}>
+        {renderReservationImage(
+          booking.accommodationId,
+          preview?.title || `숙소 ${booking.accommodationId}`,
+        )}
+        <ReservationInfo>
+          <ReservationHeader>
+            <AccommodationName>
+              {preview?.title || `숙소 ID: ${booking.accommodationId}`}
+            </AccommodationName>
+            <StatusGroup>
+              {options?.companion && (
+                <ReservationStatus>동반자 예약</ReservationStatus>
+              )}
+              <ReservationStatus>
+                {getBookingStatusText(booking.bookingStatus || 'CONFIRMED')}
+              </ReservationStatus>
+            </StatusGroup>
+          </ReservationHeader>
+          <ReservationDetails>
+            <DetailText>
+              일정: {booking.checkInDate} ~ {booking.checkOutDate}
+            </DetailText>
+            <DetailText>인원: 게스트 {booking.numberOfGuests}명</DetailText>
+            {paymentStatus && (
+              <DetailText>
+                결제 상태:{' '}
+                <PaymentStatusText $tone={paymentStatus.tone}>
+                  {paymentStatus.text}
+                </PaymentStatusText>
+              </DetailText>
+            )}
+            <DetailText>
+              총 결제 금액: {formatPrice(booking.totalPrice)}
+            </DetailText>
+          </ReservationDetails>
+
+          <ButtonGroup>
             <ActionButton
-              $primary
-              onClick={() => handleInviteFriend(booking.bookingId)}
+              onClick={() => handleViewDetails(booking.accommodationId)}
             >
-              친구 초대
+              숙소 상세보기
             </ActionButton>
-          )}
-        </ButtonGroup>
-      </ReservationInfo>
-    </ReservationCard>
-  );
+            {showRetryPayment && (
+              <ActionButton onClick={() => handleRetryPayment(booking)}>
+                재결제하기
+              </ActionButton>
+            )}
+            {options?.inviteEnabled && (
+              <ActionButton
+                $primary
+                onClick={() => handleInviteFriend(booking.bookingId)}
+                disabled={!inviteEnabled}
+                title={
+                  inviteEnabled
+                    ? undefined
+                    : '결제가 완료된 예약만 친구를 초대할 수 있습니다.'
+                }
+              >
+                친구 초대
+              </ActionButton>
+            )}
+          </ButtonGroup>
+        </ReservationInfo>
+      </ReservationCard>
+    );
+  };
 
   if (loading) {
     return (
@@ -387,10 +636,14 @@ const PastTripsSection = () => {
       <>
         {guestBookings.length > 0 && (
           <>
-            <SectionTitle>내가 예약한 리스트</SectionTitle>
+            <SectionTitle>내 예약 리스트</SectionTitle>
             <ReservationList>
               {guestBookings.map((booking) =>
-                renderBookingCard(booking, 'guest', { inviteEnabled: true }),
+                renderBookingCard(booking, 'guest', {
+                  inviteEnabled: true,
+                  paymentVisible: true,
+                  retryVisible: true,
+                }),
               )}
             </ReservationList>
           </>
@@ -428,40 +681,49 @@ const PastTripsSection = () => {
       <>
         <SectionTitle>호스트 예약 내역</SectionTitle>
         <ReservationList>
-          {hostBookings.map((booking) => (
-            <ReservationCard key={`host-${booking.bookingId}`}>
-              <ReservationImage>집</ReservationImage>
-              <ReservationInfo>
-                <ReservationHeader>
-                  <AccommodationName>
-                    {booking.accommodationTitle}
-                  </AccommodationName>
-                  <ReservationStatus>
-                    {getStatusText(booking.status)}
-                  </ReservationStatus>
-                </ReservationHeader>
-                <ReservationDetails>
-                  <DetailText>
-                    일정: {booking.checkInDate} ~ {booking.checkOutDate}
-                  </DetailText>
-                  <DetailText>
-                    인원: 게스트 {booking.numberOfGuests}명
-                  </DetailText>
-                  <DetailText>
-                    총 결제 금액: {formatPrice(booking.totalPrice)}
-                  </DetailText>
-                </ReservationDetails>
+          {hostBookings.map((booking) => {
+            const preview = getAccommodationPreview(booking.accommodationId);
 
-                <ButtonGroup>
-                  <ActionButton
-                    onClick={() => handleViewDetails(booking.accommodationId)}
-                  >
-                    숙소 상세보기
-                  </ActionButton>
-                </ButtonGroup>
-              </ReservationInfo>
-            </ReservationCard>
-          ))}
+            return (
+              <ReservationCard key={`host-${booking.bookingId}`}>
+                {renderReservationImage(
+                  booking.accommodationId,
+                  preview?.title || booking.accommodationTitle,
+                )}
+                <ReservationInfo>
+                  <ReservationHeader>
+                    <AccommodationName>
+                      {preview?.title || booking.accommodationTitle}
+                    </AccommodationName>
+                    <StatusGroup>
+                      <ReservationStatus>
+                        {getBookingStatusText(booking.status)}
+                      </ReservationStatus>
+                    </StatusGroup>
+                  </ReservationHeader>
+                  <ReservationDetails>
+                    <DetailText>
+                      일정: {booking.checkInDate} ~ {booking.checkOutDate}
+                    </DetailText>
+                    <DetailText>
+                      인원: 게스트 {booking.numberOfGuests}명
+                    </DetailText>
+                    <DetailText>
+                      총 결제 금액: {formatPrice(booking.totalPrice)}
+                    </DetailText>
+                  </ReservationDetails>
+
+                  <ButtonGroup>
+                    <ActionButton
+                      onClick={() => handleViewDetails(booking.accommodationId)}
+                    >
+                      숙소 상세보기
+                    </ActionButton>
+                  </ButtonGroup>
+                </ReservationInfo>
+              </ReservationCard>
+            );
+          })}
         </ReservationList>
       </>
     );
